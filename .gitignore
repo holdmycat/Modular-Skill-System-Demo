@@ -97,3 +97,14 @@ InitTestScene*.unity*
 
 # Auto-generated scenes by play mode tests
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
+
+# --- User Added: OS Junk Files (Keep project clean) ---
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# --- User Added: VS Code (If you or teammates use it) ---
+.vscode/
+
+# --- User Added: JetBrains Rider (Extra safety) ---
+.idea/

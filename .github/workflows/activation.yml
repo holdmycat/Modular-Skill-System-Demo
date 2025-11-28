@@ -6,14 +6,28 @@ jobs:
   activation:
     name: Request Manual Activation File
     runs-on: ubuntu-latest
-    container: unityci/editor:ubuntu-2022.3.60f1-base-3.0.0
+    container: unityci/editor:ubuntu-2022.3.60f1-base-3.2.0
     steps:
       # Request the manual activation file (Raw Command)
       - name: Request manual activation file
         run: |
-          chmod +x /usr/bin/unity-editor
-          unity-editor -batchmode -nographics -createManualActivationFile -logfile /dev/stdout || true
-          ls -la *.alf
+          echo "Locating Unity..."
+          ls -la /opt/unity/Editor/Unity
+          
+          echo "Generating License..."
+          /opt/unity/Editor/Unity -batchmode -nographics -createManualActivationFile -logfile /dev/stdout || true
+          
+          echo "Searching for .alf file..."
+          ALF_PATH=$(find / -name "*.alf" 2>/dev/null | head -n 1)
+          
+          if [ -z "$ALF_PATH" ]; then
+            echo "Error: ALF file not found anywhere!"
+            exit 1
+          fi
+          
+          echo "Found ALF at: $ALF_PATH"
+          cp "$ALF_PATH" ./Unity_v2022.3.60f1.alf
+          ls -la Unity_v2022.3.60f1.alf
 
       # Upload the file as an artifact
       - name: Upload activation file

@@ -26,7 +26,7 @@ jobs:
       # Basic check for .meta file consistency (simple heuristic)
       - name: Check for missing meta files
         run: |
-          find Assets -name "*" -not -name "*.meta" -not -name ".*" -print0 | while IFS= read -r -d '' file; do
+          find Assets -name "*" -not -name "*.meta" -not -name ".*" -type f -print0 | while IFS= read -r -d '' file; do
             if [ ! -f "$file.meta" ]; then
               echo "Error: Missing meta file for $file"
               exit 1

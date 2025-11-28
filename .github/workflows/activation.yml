@@ -27,7 +27,8 @@ jobs:
           
           echo "Found ALF at: $ALF_PATH"
           DEST=./Unity_v2022.3.60f1.alf
-          if [ "$ALF_PATH" != "$DEST" ]; then
+          # Avoid copying onto itself when paths resolve to the same location
+          if [ "$(realpath "$ALF_PATH")" != "$(realpath "$DEST")" ]; then
             cp "$ALF_PATH" "$DEST"
           else
             echo "ALF already at destination path, skip copy."

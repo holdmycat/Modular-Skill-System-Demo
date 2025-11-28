@@ -11,16 +11,19 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Request the manual activation file
+      # Request the manual activation file using test-runner (workaround for deprecated action)
       - name: Request manual activation file
-        uses: game-ci/unity-request-activation-file@v2
+        uses: game-ci/unity-test-runner@v4
         id: getManualLicenseFile
         with:
           unityVersion: 2022.3.60f1
+          testMode: editmode
+          customParameters: -createManualActivationFile
+        continue-on-error: true
 
       # Upload the file as an artifact
       - name: Upload activation file
         uses: actions/upload-artifact@v4
         with:
           name: Unity_v2022.3.60f1.alf
-          path: ${{ steps.getManualLicenseFile.outputs.filePath }}
+          path: "**/*.alf"

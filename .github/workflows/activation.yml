@@ -26,8 +26,13 @@ jobs:
           fi
           
           echo "Found ALF at: $ALF_PATH"
-          cp "$ALF_PATH" ./Unity_v2022.3.60f1.alf
-          ls -la Unity_v2022.3.60f1.alf
+          DEST=./Unity_v2022.3.60f1.alf
+          if [ "$ALF_PATH" != "$DEST" ]; then
+            cp "$ALF_PATH" "$DEST"
+          else
+            echo "ALF already at destination path, skip copy."
+          fi
+          ls -la "$DEST"
 
       # Upload the file as an artifact
       - name: Upload activation file

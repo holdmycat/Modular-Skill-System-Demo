@@ -6,20 +6,14 @@ jobs:
   activation:
     name: Request Manual Activation File
     runs-on: ubuntu-latest
+    container: unityci/editor:ubuntu-2022.3.60f1-base-3.0.0
     steps:
-      # Checkout repository
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      # Request the manual activation file using test-runner (workaround for deprecated action)
+      # Request the manual activation file (Raw Command)
       - name: Request manual activation file
-        uses: game-ci/unity-test-runner@v4
-        id: getManualLicenseFile
-        with:
-          unityVersion: 2022.3.60f1
-          testMode: editmode
-          customParameters: -createManualActivationFile
-        continue-on-error: true
+        run: |
+          chmod +x /usr/bin/unity-editor
+          unity-editor -batchmode -nographics -createManualActivationFile -logfile /dev/stdout || true
+          ls -la *.alf
 
       # Upload the file as an artifact
       - name: Upload activation file

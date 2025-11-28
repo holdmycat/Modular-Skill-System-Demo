@@ -21,11 +21,11 @@ jobs:
         with:
           lfs: true
 
-      # Ensure no large files were committed without LFS
+      # Ensure no large files were committed without LFS (excluding Library/Temp which are generated)
       - name: Check for large files
         run: |
-          find . -type f -size +100M -not -path "./.git/*" -exec ls -lh {} \; | awk '{ print $9 ": " $5 }'
-          if [ $(find . -type f -size +100M -not -path "./.git/*" | wc -l) -gt 0 ]; then
+          find . -type f -size +100M -not -path "./.git/*" -not -path "./Library/*" -not -path "./Temp/*" -exec ls -lh {} \; | awk '{ print $9 ": " $5 }'
+          if [ $(find . -type f -size +100M -not -path "./.git/*" -not -path "./Library/*" -not -path "./Temp/*" | wc -l) -gt 0 ]; then
             echo "Error: Found files larger than 100MB. Please use Git LFS."
             exit 1
           fi

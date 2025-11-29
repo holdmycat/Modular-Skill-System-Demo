@@ -151,6 +151,8 @@ namespace Plugins.NodeEditor
         public static bool OnBaseGraphOpened(int instanceID, int line)
         {
             var baseGraph = EditorUtility.InstanceIDToObject(instanceID) as BaseGraph;
+            // Only handle node graph assets; let Unity handle everything else so scene double-click works.
+            if (baseGraph == null) return false;
             return InitializeGraph(baseGraph);
         }
 

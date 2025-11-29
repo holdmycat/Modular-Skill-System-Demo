@@ -1,0 +1,82 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using MongoDB.Bson.Serialization;
+using Ebonor.DataCtrl;
+using UnityEngine;
+
+namespace Ebonor.DataCtrl
+{
+    public static class AttributesNodeDataSerializerRegister
+    {
+        private static readonly Dictionary<string, Type> _typeMap;
+        public static Dictionary<string, Type> TypeMap => _typeMap;
+
+        static AttributesNodeDataSerializerRegister()
+        {
+            // 通过反射自动注册所有子类
+            _typeMap = Assembly.GetAssembly(typeof(UnitAttributesNodeDataBase))
+                .GetTypes()
+                .Where(t => 
+                        t.IsSubclassOf(typeof(UnitAttributesNodeDataBase)) //|| 
+                        // t.IsSubclassOf(typeof(SkillAttributesNodeDataBase)) ||
+                        // t.IsSubclassOf(typeof(DropAttributesNodeDataBase)) ||
+                        // t.IsSubclassOf(typeof(SummonAttributesNodeDataBase)) ||
+                        // t.IsSubclassOf(typeof(BulletAttributesNodeDataBase))
+                        )
+                .ToDictionary(t => t.Name, t => t);
+            
+#if UNITY_EDITOR
+            var str = $"注册反射类型数量:{TypeMap.Count}:\n";
+            int index = 0;
+            foreach (var variable in _typeMap)
+            {
+                str += $"{index}, key:  {variable.Key}\n";
+                index++;
+            }
+            Debug.Log(str);
+#endif
+        }
+        
+    
+        public static void RegisterClassMaps()
+        {
+            if (null == BsonSerializer.SerializerRegistry.GetSerializer(typeof(UnitAttributesNodeDataBase)))
+            {
+                // BsonSerializer.RegisterSerializer(typeof(UnitAttributesNodeDataBase), new AttributesDataSerializer<UnitAttributesNodeDataBase>());
+                BsonClassMap.RegisterClassMap<UnitAttributesNodeDataBase>(cm =>
+                {
+                    cm.AutoMap();
+                    cm.SetIsRootClass(true); // 支持继承
+                });
+            }
+            
+            // if (null == BsonSerializer.SerializerRegistry.GetSerializer(typeof(SkillAttributesNodeDataBase)))
+            // {
+            //     BsonSerializer.RegisterSerializer(typeof(SkillAttributesNodeDataBase), new AttributesDataSerializer<SkillAttributesNodeDataBase>());
+            // }
+            //
+            //
+            // if (null == BsonSerializer.SerializerRegistry.GetSerializer(typeof(DropAttributesNodeDataBase)))
+            // {
+            //     BsonSerializer.RegisterSerializer(typeof(DropAttributesNodeDataBase), new AttributesDataSerializer<DropAttributesNodeDataBase>());
+            // }
+            
+            if (null == BsonSerializer.SerializerRegistry.GetSerializer(typeof(UnityEngine.Vector2)))
+            {
+                BsonSerializer.RegisterSerializer(typeof(UnityEngine.Vector2), new VectorSerializer<UnityEngine.Vector2>());
+            }
+            
+            if (null == BsonSerializer.SerializerRegistry.GetSerializer(typeof(UnityEngine.Vector3)))
+            {
+                BsonSerializer.RegisterSerializer(typeof(UnityEngine.Vector3), new VectorSerializer<UnityEngine.Vector3>());
+            }
+            if (null == BsonSerializer.SerializerRegistry.GetSerializer(typeof(UnityEngine.AnimationCurve)))
+            {
+                BsonSerializer.RegisterSerializer(typeof(UnityEngine.AnimationCurve), new AnimationCurveSerializer());
+            }
+            
+        }
+    }
+}

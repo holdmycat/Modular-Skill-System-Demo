@@ -1,0 +1,16 @@
+{
+    "name": "Ebonor.DataCtrl",
+    "rootNamespace": "",
+    "references": [
+        "GUID:33ec46febc79c46658e91c3279515980"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": false,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

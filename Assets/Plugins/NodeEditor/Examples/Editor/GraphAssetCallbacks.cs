@@ -1,6 +1,7 @@
 ﻿using UnityEditor;
 using GraphProcessor;
 using UnityEditor.Callbacks;
+using UnityEngine;
 
 namespace Plugins.NodeEditor
 {
@@ -104,44 +105,44 @@ namespace Plugins.NodeEditor
     //     }
     // }
     //
-    // //attributes
-    // public partial class GraphAssetCallbacks
-    // {
-    //     [MenuItem("Assets/Create/AllHeroAttributesData", false, 10)]
-    //     public static void CreateGraphPorcessor_AllHeroAttributesData()
-    //     {
-    //         var graph = ScriptableObject.CreateInstance<UnitAttributesDataGraph>();
-    //         ProjectWindowUtil.CreateAsset(graph, "AllHeroAttriDataGraph.asset");
-    //     }
-    //     
-    //     [MenuItem("Assets/Create/AllWeaponAttributesData", false, 10)]
-    //     public static void CreateGraphPorcessor_AllWeaponAttributesData()
-    //     {
-    //         var graph = ScriptableObject.CreateInstance<WeaponAttributesDataGraph>();
-    //         ProjectWindowUtil.CreateAsset(graph, "AllWeaponAttriDataGraph.asset");
-    //     }
-    //     
-    //     [MenuItem("Assets/Create/All Drop Attributes Data", false, 10)]
-    //     public static void CreateGraphPorcessor_AllDropAttributesData()
-    //     {
-    //         var graph = ScriptableObject.CreateInstance<DropAttributesDataGraph>();
-    //         ProjectWindowUtil.CreateAsset(graph, "AllDropAttriDataGraph.asset");
-    //     }
-    //     
-    //     [MenuItem("Assets/Create/MPServerData", false, 10)]
-    //     public static void CreateGraphPorcessor_MPServerData()
-    //     {
-    //         var graph = ScriptableObject.CreateInstance<MPServerDataGraph>();
-    //         ProjectWindowUtil.CreateAsset(graph, "MPServerDataGraph.asset");
-    //     }
-    //          
-    //     [MenuItem("Assets/Create/AllGameAttributesData", false, 10)]
-    //     public static void CreateGraphPorcessor_AllGameAttributesData()
-    //     {
-    //         var graph = ScriptableObject.CreateInstance<GameAttributesDataGraph>();
-    //         ProjectWindowUtil.CreateAsset(graph, "AllGameAttriDataGraph.asset");
-    //     }
-    // }
+    //attributes
+    public partial class GraphAssetCallbacks
+    {
+        [MenuItem("Assets/Create/AllHeroAttributesData", false, 10)]
+        public static void CreateGraphPorcessor_AllHeroAttributesData()
+        {
+            var graph = ScriptableObject.CreateInstance<UnitAttributesDataGraph>();
+            ProjectWindowUtil.CreateAsset(graph, "AllHeroAttriDataGraph.asset");
+        }
+        
+        // [MenuItem("Assets/Create/AllWeaponAttributesData", false, 10)]
+        // public static void CreateGraphPorcessor_AllWeaponAttributesData()
+        // {
+        //     var graph = ScriptableObject.CreateInstance<WeaponAttributesDataGraph>();
+        //     ProjectWindowUtil.CreateAsset(graph, "AllWeaponAttriDataGraph.asset");
+        // }
+        //
+        // [MenuItem("Assets/Create/All Drop Attributes Data", false, 10)]
+        // public static void CreateGraphPorcessor_AllDropAttributesData()
+        // {
+        //     var graph = ScriptableObject.CreateInstance<DropAttributesDataGraph>();
+        //     ProjectWindowUtil.CreateAsset(graph, "AllDropAttriDataGraph.asset");
+        // }
+        //
+        // [MenuItem("Assets/Create/MPServerData", false, 10)]
+        // public static void CreateGraphPorcessor_MPServerData()
+        // {
+        //     var graph = ScriptableObject.CreateInstance<MPServerDataGraph>();
+        //     ProjectWindowUtil.CreateAsset(graph, "MPServerDataGraph.asset");
+        // }
+        //      
+        // [MenuItem("Assets/Create/AllGameAttributesData", false, 10)]
+        // public static void CreateGraphPorcessor_AllGameAttributesData()
+        // {
+        //     var graph = ScriptableObject.CreateInstance<GameAttributesDataGraph>();
+        //     ProjectWindowUtil.CreateAsset(graph, "AllGameAttriDataGraph.asset");
+        // }
+    }
     
     
     //system
@@ -158,43 +159,19 @@ namespace Plugins.NodeEditor
 
         public static bool InitializeGraph(BaseGraph baseGraph)
         {
-            // if (baseGraph == null) return false;
-            //
-            // switch (baseGraph)
-            // {
-            //     case SkillGraph skillGraph:
-            //         NodeGraphWindowHelper.GetAndShowNodeGraphWindow<SkillGraphWindow>(skillGraph)
-            //             .InitializeGraph(skillGraph);
-            //         break;
-            //     case SupportSkillGraph skillGraph:
-            //         NodeGraphWindowHelper.GetAndShowNodeGraphWindow<SupportSkillGraphWindow>(skillGraph)
-            //             .InitializeGraph(skillGraph);
-            //         break;
-            //     case PassiveWeaponSkillGraph passiveWeaponSkillGraph:
-            //     {
-            //         NodeGraphWindowHelper.GetAndShowNodeGraphWindow<PassiveWeaponSkillGraphWindow>(passiveWeaponSkillGraph)
-            //             .InitializeGraph(passiveWeaponSkillGraph);
-            //         break;
-            //     }
-            //     
-            //         
-            //     case NpcBehaviourGraph npcBehaviourGraph:
-            //     {
-            //         NodeGraphWindowHelper.GetAndShowNodeGraphWindow<NpcBehaviourGraphWindow>(npcBehaviourGraph)
-            //             .InitializeGraph(npcBehaviourGraph);
-            //         break;
-            //     }
-            //     // case NPBehaveGraph npBehaveGraph:
-            //     //     NodeGraphWindowHelper.GetAndShowNodeGraphWindow<NPBehaveGraphWindow>(npBehaveGraph)
-            //     //         .InitializeGraph(npBehaveGraph);
-            //     //     break;
-            //     default:
-            //         NodeGraphWindowHelper.GetAndShowNodeGraphWindow<FallbackGraphWindow>(baseGraph)
-            //             .InitializeGraph(baseGraph);
-            //         break;
-            // }
+            if (baseGraph == null) return false;
 
-            return true;
+            switch (baseGraph)
+            {
+                case UnitAttributesDataGraph unitAttributesGraph:
+                    NodeGraphWindowHelper.GetAndShowNodeGraphWindow<UnitAttributesDataGraphWindow>(unitAttributesGraph)
+                        .InitializeGraph(unitAttributesGraph);
+                    return true;
+                default:
+                    NodeGraphWindowHelper.GetAndShowNodeGraphWindow<FallbackGraphWindow>(baseGraph)
+                        .InitializeGraph(baseGraph);
+                    return true;
+            }
         }
     }
 }

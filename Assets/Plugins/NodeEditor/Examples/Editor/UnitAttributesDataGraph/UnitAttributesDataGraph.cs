@@ -32,7 +32,7 @@ namespace Plugins.NodeEditor
         }
         
         /// <summary>
-        /// 节点数据载体，用以搜集所有本SO文件的数据
+        /// Node data container used to collect all data in this ScriptableObject.
         /// </summary>
         public UnitAttributesDataSupportor m_TestDic = new UnitAttributesDataSupportor();
         
@@ -62,8 +62,7 @@ namespace Plugins.NodeEditor
                 }
             }
             
-            
-            Debug.Log("保存成功");
+            Debug.Log("Save succeeded");
         }
         
         public override void OneKeySet()

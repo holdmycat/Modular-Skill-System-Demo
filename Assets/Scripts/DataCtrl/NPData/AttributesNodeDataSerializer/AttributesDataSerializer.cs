@@ -21,7 +21,7 @@ namespace Ebonor.DataCtrl
             string discriminator = null;
             ICommonAttributeBase instance = null;
 
-            // 读取文档内容，寻找 typeStr 字段以确定具体类型
+            // Read document content to find the typeStr field to determine the concrete type
             while (reader.State != BsonReaderState.EndOfDocument)
             {
                 reader.ReadBsonType();
@@ -35,7 +35,7 @@ namespace Ebonor.DataCtrl
                     }
                     else
                     {
-                        // 跳过其他字段
+                        // Skip other fields
                         reader.SkipValue();
                     }
                 }
@@ -53,7 +53,7 @@ namespace Ebonor.DataCtrl
 
             instance = (ICommonAttributeBase)Activator.CreateInstance(type);
 
-            // 继续读取剩余的文档内容
+            // Continue reading the remaining document content
             while (reader.State != BsonReaderState.EndOfDocument)
             {
                 reader.ReadBsonType();
@@ -76,7 +76,7 @@ namespace Ebonor.DataCtrl
                     }
                     else
                     {
-                        // 如果字段或属性没有找到，跳过其值
+                        // If the field or property is not found, skip its value
                         reader.SkipValue();
                     }
                 }
@@ -91,11 +91,11 @@ namespace Ebonor.DataCtrl
             var writer = context.Writer;
             writer.WriteStartDocument();
 
-            // 写入类型信息
+            // Write type information
             writer.WriteName("typeStr");
             writer.WriteString(value.GetType().Name);
 
-            // 序列化字段和属性
+            // Serialize fields and properties
             var members = value.GetType().GetMembers(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance)
                 .Where(m => m.MemberType == MemberTypes.Field || m.MemberType == MemberTypes.Property);
 

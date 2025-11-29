@@ -15,7 +15,7 @@ namespace Ebonor.DataCtrl
 
         static AttributesNodeDataSerializerRegister()
         {
-            // 通过反射自动注册所有子类
+            // Auto-register all subclasses via reflection
             _typeMap = Assembly.GetAssembly(typeof(UnitAttributesNodeDataBase))
                 .GetTypes()
                 .Where(t => 
@@ -28,7 +28,7 @@ namespace Ebonor.DataCtrl
                 .ToDictionary(t => t.Name, t => t);
             
 #if UNITY_EDITOR
-            var str = $"注册反射类型数量:{TypeMap.Count}:\n";
+            var str = $"Registered types via reflection: {TypeMap.Count}:\n";
             int index = 0;
             foreach (var variable in _typeMap)
             {
@@ -48,7 +48,7 @@ namespace Ebonor.DataCtrl
                 BsonClassMap.RegisterClassMap<UnitAttributesNodeDataBase>(cm =>
                 {
                     cm.AutoMap();
-                    cm.SetIsRootClass(true); // 支持继承
+                    cm.SetIsRootClass(true); // supports inheritance
                 });
             }
             

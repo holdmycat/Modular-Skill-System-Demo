@@ -70,7 +70,7 @@ namespace Ebonor.DataCtrl
                         {
                             weightedMode = doc.Contains("WeightedMode") 
                                 ? (WeightedMode)doc["WeightedMode"].ToInt32() 
-                                : WeightedMode.None // 默认值，处理字段缺失
+                                : WeightedMode.None // default value to handle missing fields
                         };
                     })
                     .ToArray();

@@ -7,7 +7,7 @@ using UnityEngine;
 
 public class GradientSerializer : SerializerBase<Gradient>
 {
-    // 反序列化
+    // Deserialize
     public override Gradient Deserialize(BsonDeserializationContext context, BsonDeserializationArgs args)
     {
         var document = BsonSerializer.Deserialize<BsonDocument>(context.Reader);
@@ -43,7 +43,7 @@ public class GradientSerializer : SerializerBase<Gradient>
         return gradient;
     }
 
-    // 序列化
+    // Serialize
     public override void Serialize(BsonSerializationContext context, BsonSerializationArgs args, Gradient value)
     {
         if (value == null || context == null)

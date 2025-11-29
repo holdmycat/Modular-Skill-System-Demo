@@ -14,12 +14,12 @@ namespace Ebonor.DataCtrl
 {
    
     /// <summary>
-    /// Unit基本属性数据（优化版）
+    /// Unit base attribute data (optimized version)
     /// </summary>
     [BsonSerializer(typeof(AttributesDataSerializer<UnitAttributesNodeDataBase>))]
     public abstract class UnitAttributesNodeDataBase : ICommonAttributeBase
     {
-        #region 构造和初始化
+        #region ConstructionAndInitialization
         
         public UnitAttributesNodeDataBase()
         {
@@ -35,7 +35,7 @@ namespace Ebonor.DataCtrl
         
         #endregion
         
-        #region 工具属性
+        #region UtilityProperties
         
         [BsonElement("typeStr")]
         [HideInInspector]
@@ -43,9 +43,9 @@ namespace Ebonor.DataCtrl
 
         #endregion
         
-        #region ========== 主要配置区域 ==========
+        #region ========== PrimaryConfigurationArea ==========
        
-        // ===== Tab 1: 基础属性 =====
+        // ===== Tab 1: Base Attributes =====
         [BsonElement("UnitDataNodeId")]
         public uint UnitDataNodeId;
         
@@ -55,7 +55,7 @@ namespace Ebonor.DataCtrl
         // [BsonElement("ActorSide")]
         // public eSide ActorSide;
         //
-        // // 英雄专用
+        // // Hero only
         // [BsonElement("HeroProfession")]
         // public eHeroProfession HeroProfession;
         //
@@ -63,11 +63,11 @@ namespace Ebonor.DataCtrl
         //
         // public eCoreAttributeType CharacterCoreAttributeType;
         //
-        // // NPC专用
+        // // NPC only
         // [BsonElement("NpcProfession")]
         // public eNpcProfession NpcProfession;
         //
-        // 基本信息
+        // Basic info
         [BsonElement("UnitName")]
         public string UnitName;
 
@@ -86,7 +86,7 @@ namespace Ebonor.DataCtrl
         [BsonElement("CanChase")]
         public bool CanChase;
         
-        // 物理尺寸
+        // Physical dimensions
         [BsonElement("Height")]
         public float Height;
         
@@ -108,7 +108,7 @@ namespace Ebonor.DataCtrl
         [BsonElement("NpcActorIndex")]
         public int NpcActorIndex;
         
-        // ===== Tab 2: 核心属性 =====
+        // ===== Tab 2: Core Attributes =====
         [BsonElement("Power")]
         public float Power;
         
@@ -125,7 +125,7 @@ namespace Ebonor.DataCtrl
         
         public float VitalityGrowthRate;
 
-        // ===== Tab 3: 战斗属性 =====
+        // ===== Tab 3: Combat Attributes =====
         public float AttackDamge;
         
         public float LifeStealRate;
@@ -152,7 +152,7 @@ namespace Ebonor.DataCtrl
         public float RotationSpeed;
 
         
-        // ===== Tab 5: 组件配置 =====
+        // ===== Tab 5: Component Configuration =====
         [BsonElement("HostInstallNavMeshAgent")]
         public bool HostInstallNavMeshAgent;
         
@@ -189,7 +189,7 @@ namespace Ebonor.DataCtrl
         [BsonElement("ServerInstallRigidBody")]
         public bool ServerInstallRigidBody;
 
-        // ===== Tab 6: 行为树配置 =====
+        // ===== Tab 6: Behavior Tree Configuration =====
         [BsonElement("HasBehaviourTree")]
         public bool HasBehaviourTree;
         
@@ -203,7 +203,7 @@ namespace Ebonor.DataCtrl
         
        
 
-        // ===== Tab 7: 视觉特效 =====
+        // ===== Tab 7: Visual Effects =====
         [BsonElement("ActorBirthEffectName")]
         public string ActorBirthEffectName;
 
@@ -212,7 +212,7 @@ namespace Ebonor.DataCtrl
         
       
         
-        // 出生配置
+        // Spawn configuration
         [BsonElement("BirthDuration")]
         public float BirthDuration;
         
@@ -225,7 +225,7 @@ namespace Ebonor.DataCtrl
         [BsonElement("BirthCanbeSeen")]
         public bool BirthCanbeSeen;
         
-        // 死亡配置
+        // Death configuration
         [BsonElement("DeathDelayDuration")]
         public float DeathDelayDuration;
         

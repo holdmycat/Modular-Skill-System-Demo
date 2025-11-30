@@ -1,7 +1,7 @@
 # Designer-First Skill Framework
 **Zero code duplication · 100+ skill variants fully owned by designers**
 
-![Designer-First Demo](https://raw.githubusercontent.com/holdmycat/Modular-Skill-System-Demo/tree/feature/readme-positioning/Images/SkillTree.png)
+![Designer-First Demo](images/banner.png) ← 38-second uncut demo
 
 Duplicate one data row → tweak 4 values → new skill instantly works.  
 No graph duplication. No new script.

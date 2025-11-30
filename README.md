@@ -16,8 +16,8 @@ Try it in 20 seconds: open `Scenes/DesignerWorkflow_Showcase.unity` → Play
 - Measured output when I wore both hats: **25–40 balanced variants/day**  
   (vs. 4–6 with traditional copy-paste workflow)
 
-**Bonus 2025 killer feature**  
-SkillForge AI – natural language → playable skill in <3 min  
-→ 60-second demo: [`/SkillForge-AI/README.md`](./SkillForge-AI/README.md)
+### Bonus 2025 killer feature (coming late Dec 2025)
 
-Unity 2022.3 + URP • MIT License • No external dependencies
+SkillForge AI – type natural language → get a fully playable skill in <3 min
+60-second live demo + full integration will be shipped by end of Dec 2025.
+Already works locally – polishing editor UI and safeguards before open-source drop.

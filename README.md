@@ -1,7 +1,7 @@
 # Designer-First Skill Framework
 **Zero code duplication · 100+ skill variants fully owned by designers**
 
-![Designer-First Demo](images/banner.png) ← 38-second uncut demo
+![Designer-First Demo](Images/banner.png) ← 38-second uncut demo
 
 Duplicate one data row → tweak 4 values → new skill instantly works.  
 No graph duplication. No new script.

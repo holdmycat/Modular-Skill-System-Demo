@@ -16,8 +16,63 @@ Open `Scenes/ShowcaseScene.unity` → Play
 - Measured output when I wore both hats: **25–40 balanced variants/day**  
   (vs. 4–6 with traditional copy-paste workflow)
 
-### Bonus 2025 killer feature (coming late Dec 2025)
+---
 
-SkillForge AI – type natural language → get a fully playable skill in <3 min
-60-second live demo + full integration will be shipped by end of Dec 2025.
-Already works locally – polishing editor UI and safeguards before open-source drop.
+## Project Overview
+
+This project is a **production-ready, modular skill system** extracted from an in-development Steam game. It demonstrates a **data-driven architecture** where skill data is strictly separated from runtime logic.
+
+**The Core Philosophy:**
+1.  **Designer Autonomy**: Designers should be able to create, tweak, and test skill variants without writing a single line of code.
+2.  **Zero Duplication**: Logic is written once in generic processors; data defines the specific behavior.
+3.  **Performance**: Visual graphs are compiled into compact binary data (`.bytes`) for zero-parsing runtime loading.
+
+## Folder Structure
+
+*   `Assets/Scripts/DataCtrl`: Contains the data definitions and serialization logic.
+    *   `NPData`: Node Processor Data, including `ICommonAttributeBase` and specific attribute types.
+*   `Assets/Scripts/Core`: The core runtime game logic that consumes the data.
+*   `Assets/Plugins/NodeEditor`: The visual graph editor tool (based on `NodeGraphProcessor`).
+*   `Assets/Scenes`: Demo scenes (e.g., `ShowcaseScene.unity`) to test the workflow.
+
+## Workflows
+
+### Designer Workflow (No Code)
+1.  **Open Graph**: Navigate to `Assets/Resources/SkillData` and open a `AllSkillAttributesDataGraph`.
+2.  **Create/Edit**:
+    *   **New Variant**: Duplicate an existing node group.
+    *   **Tweak**: Adjust values (damage, range, cooldown) in the inspector.
+3.  **Compile**: Click the **"OneKeySet"** button in the graph toolbar. This serializes the graph to binary.
+4.  **Play**: Run the game. The new data is instantly live.
+
+### Engineer Workflow
+1.  **Define Data**: Create a new class implementing `ICommonAttributeBase` if a new attribute type is needed.
+2.  **Implement Logic**: Write the runtime logic in `Assets/Scripts/Core` to handle the new attribute.
+3.  **Expose**: The system uses reflection to automatically expose new data types to the graph editor.
+
+## Technical Highlights
+
+*   **Visual Data Editor**: Built on top of `NodeGraphProcessor`, allowing for a node-based visual scripting environment tailored for data.
+*   **Binary Serialization**: Uses `MongoDB.Bson` for high-performance, type-safe binary serialization. This ensures that complex polymorphic data structures are saved and loaded efficiently.
+*   **Polymorphic Data**: The system handles nested and polymorphic data types naturally, allowing for extensible skill attributes without custom parsers.
+
+---
+
+## About Ebonor (context)
+
+- **Ebonor** is my in-development Steam action roguelite project.  
+- This skill framework was used daily for about a year to build and balance skills.
+- The project is **currently paused before public playtest**:
+  - After building a near-vertical-slice, I reassessed the commercial risk of
+    shipping a large-scale solo game in today’s AI-accelerated market.
+    Tools like GenAI are rapidly lowering content production costs,
+    which makes strong systems, tooling and team execution even more important.
+  - I decided to pause the public release plan, extract the most reusable systems
+    (like this skill framework), and focus on bringing this experience into a team.
+
+Steam store page (for context and screenshots):  
+<https://store.steampowered.com/app/3680960/Ebonor/>
+
+---
+
+

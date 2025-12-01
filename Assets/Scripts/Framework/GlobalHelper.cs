@@ -1,3 +1,9 @@
+//------------------------------------------------------------
+// File: GlobalHelper.cs
+// Created: 2025-11-29
+// Purpose: Utility helpers for file paths, time, networking, math, and editor tooling.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 using System.Collections.Generic;
 //using Cysharp.Threading.Tasks;
 using UnityEngine;

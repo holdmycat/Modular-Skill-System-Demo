@@ -1,4 +1,10 @@
-﻿/*
+//------------------------------------------------------------
+// File: ILogFactory.cs
+// Created: 2025-11-29
+// Purpose: Factory interface for building log instances.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+/*
  * MIT License
  *
  * Copyright (c) 2018 Clark Yang

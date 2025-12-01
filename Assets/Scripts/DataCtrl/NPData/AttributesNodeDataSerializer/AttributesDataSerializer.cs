@@ -1,3 +1,9 @@
+//------------------------------------------------------------
+// File: AttributesDataSerializer.cs
+// Created: 2025-11-29
+// Purpose: Polymorphic BSON serializer resolving attribute node data by discriminator.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 using System;
 using System.Collections;
 using System.Linq;

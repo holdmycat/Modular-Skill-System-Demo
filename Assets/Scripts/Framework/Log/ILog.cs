@@ -1,4 +1,10 @@
-﻿/*
+//------------------------------------------------------------
+// File: ILog.cs
+// Created: 2025-11-29
+// Purpose: Logging interface abstraction.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+/*
  * MIT License
  *
  * Copyright (c) 2018 Clark Yang

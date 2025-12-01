@@ -18,7 +18,6 @@ namespace Plugins.NodeEditor
         {
             base.OnGraphEnabled();
             Debug.LogFormat("UnitAttributesDataGraph-OnGraphEnabled, node count:{0}", nodes.Count);
-            //onGraphChanges += GraphChangesCallback;
            
             foreach (var variable in nodes)
             {
@@ -28,7 +27,7 @@ namespace Plugins.NodeEditor
                     skillData.OnInit();
                 }
             }
-            //SkillAttributesNodeDataBase.OnEnableGlobalSkillAttributes(mList);
+            
         }
         
         /// <summary>

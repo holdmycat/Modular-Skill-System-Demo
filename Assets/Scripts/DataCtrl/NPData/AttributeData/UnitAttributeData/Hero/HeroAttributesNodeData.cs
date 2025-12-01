@@ -1,9 +1,9 @@
 //------------------------------------------------------------
-// Author: Xueifei Zhao
-// Mail: clashancients@gmail.com
-// Date: 2025-12-01 14:37:37
+// File: HeroAttributesNodeData.cs
+// Created: 2025-12-01
+// Purpose: Hero attribute node data definitions and editor utilities.
+// Author: Xuefei Zhao (clashancients@gmail.com)
 //------------------------------------------------------------
-
 using System.Collections.Generic;
 using System.Text;
 using MongoDB.Bson.Serialization.Attributes;
@@ -15,13 +15,8 @@ using UnityEngine;
 
 namespace Ebonor.DataCtrl
 {
-
-    [BsonDeserializerRegister]
-    public class HeroUpgradeResData
-    {
-        public int Count;
-    }
     
+    [System.Serializable]
     [BsonSerializer(typeof(AttributesDataSerializer<UnitAttributesNodeDataBase>))]
     public class HeroAttributesNodeData: UnitAttributesNodeDataBase
     {
@@ -29,35 +24,11 @@ namespace Ebonor.DataCtrl
         public  override void OnInit()
         {
             base.OnInit();
-            //DicNpcStackAnimConfig ??= new Dictionary<eBuffBindAnimStackState, PlayAnimInfo>();
-
-            DicBuffLayerConfig ??= new Dictionary<eBuffLayerType, BuffLayerRuntimeHeroConfig>();
-            DicBuffLayerConfig.Clear();
-            
-            DicBuffLayerConfig.Add(eBuffLayerType.ICE, new BuffLayerRuntimeHeroConfig(eBuffLayerType.ICE));
-            DicBuffLayerConfig.Add(eBuffLayerType.FIRE, new BuffLayerRuntimeHeroConfig(eBuffLayerType.FIRE));
-            DicBuffLayerConfig.Add(eBuffLayerType.POISON, new BuffLayerRuntimeHeroConfig(eBuffLayerType.POISON));
-
-
-           
-
             DicPlayerStackAnimConfig ??= new Dictionary<eBuffBindAnimStackState, PlayAnimInfo>();
-
-            if (DicPlayerStackAnimConfig.Count == 0)
-            {
-                var tmp = new PlayAnimInfo();
-                tmp.ClipTransAssetName = "Die_MACHAO";
-                DicPlayerStackAnimConfig.Add(eBuffBindAnimStackState.Die, tmp);
-            }
-
         }
         
         #region Hero Base Attributes
 
-        [Header("Hero Base Attributes")]
-        [Tooltip("Compatible weapon type for this hero.")]
-        [BsonElement("WeaponType")]
-        public eWeaponType WeaponType;
 
         
         [Tooltip("Pickup radius in meters.")]
@@ -96,20 +67,10 @@ namespace Ebonor.DataCtrl
         [BsonElement("BirthWeaponSpot")]
         public float BirthWeaponSpot;
 
-        [Tooltip("Attack mode assigned at spawn.")]
-        [BsonElement("BirthWeaponMode")]
-        public eAttackMode BirthWeaponMode;
-        
+      
         #endregion
 
-        #region Hero Exclusive Attributes
-        
-        [Header("Hero Exclusive Attributes")]
-        [Tooltip("Hero-specific attribute container.")]
-        [BsonElement("HeroAttrClass")]
-        public HeroAttrStoreClass HeroAttrClass;
-
-        #endregion
+      
         
         #region Stack Animation Config
 
@@ -118,14 +79,7 @@ namespace Ebonor.DataCtrl
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
         public Dictionary<eBuffBindAnimStackState, PlayAnimInfo> DicPlayerStackAnimConfig = new Dictionary<eBuffBindAnimStackState, PlayAnimInfo>();
         #endregion
-        #region Hero Buff Layer Coefficients
-
-        [Header("Hero Buff Layer Coefficients")]
-        [Tooltip("Runtime config per buff layer type.")]
-        [BsonElement("DicSkillWeaponSlotInfo")]
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
-        public Dictionary<eBuffLayerType, BuffLayerRuntimeHeroConfig> DicBuffLayerConfig;
-        #endregion
+    
         
         #region Editor Utilities
 #if UNITY_EDITOR

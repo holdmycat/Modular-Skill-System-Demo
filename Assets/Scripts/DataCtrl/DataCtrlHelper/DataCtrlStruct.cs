@@ -1,110 +1,307 @@
+//------------------------------------------------------------
+// File: DataCtrlStruct.cs
+// Created: 2025-12-01
+// Purpose: Shared data-control enums and animation configuration structures.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using MongoDB.Bson.Serialization.Attributes;
 using UnityEngine;
 
 namespace Ebonor.DataCtrl
 {
-    
+    #region Enums
+    /// <summary>
+    /// Buff animation stack states and their priorities.
+    /// </summary>
     [Flags]
-    public enum eBuffBindAnimStackState 
+    public enum eBuffBindAnimStackState
     {
-        
         /// <summary>
         /// Death
         /// </summary>
-        [LabelText("Death")]
-        Die = 1<<20, // Highest priority
+        [InspectorName("Death")]
+        Die = 1 << 20, // Highest priority
 
-        [LabelText("Victory")]
-        Victory = 1<<19, // Second highest priority
+        [InspectorName("Victory")]
+        Victory = 1 << 19, // Second highest priority
         
         /// <summary>
         /// Invincible
         /// </summary>
-        [LabelText("Invincible")]
-        Invincible = 1<<16, // High priority
+        [InspectorName("Invincible")]
+        Invincible = 1 << 16, // High priority
 
         /// <summary>
         /// Waiting for buff execution; do nothing else. Highest priority.
         /// </summary>
         //WaitForBuff = 1<<15,
         
-        // [LabelText("Teleport")]
+        // [InspectorName("Teleport")]
         // Teleport = 1<<14, // Directly teleport the target to a position
 
-        [LabelText("Frozen")]
-        Frozen = 1<<13, // Frozen
+        [InspectorName("Frozen")]
+        Frozen = 1 << 13, // Frozen
         
         /// <summary>
         /// Knock up
         /// </summary>
-        [LabelText("Knock Up")]
-        KnockUp = 1<<12, // High priority
+        [InspectorName("Knock Up")]
+        KnockUp = 1 << 12, // High priority
 
         /// <summary>
         /// Repulse
         /// </summary>
-        [LabelText("Repulse")]
-        Repulse = 1<<11, // Medium priority
+        [InspectorName("Repulse")]
+        Repulse = 1 << 11, // Medium priority
 
-        // [LabelText("Drag")]
+        // [InspectorName("Drag")]
         // Drag = 1<<10, // Drag target along a specific trajectory
         
-        [LabelText("Pull")]
-        Pull = 1<<9, // Pull target to caster position
+        [InspectorName("Pull")]
+        Pull = 1 << 9, // Pull target to caster position
         
         /// <summary>
         /// Stun
         /// </summary>
-        [LabelText("Stunned")]
-        Stunned = 1<<8, // Medium priority
+        [InspectorName("Stunned")]
+        Stunned = 1 << 8, // Medium priority
 
         /// <summary>
         /// Hurt
         /// </summary>
-        [LabelText("Hurt")]
-        GetHurt = 1<<7, // Medium priority
+        [InspectorName("Hurt")]
+        GetHurt = 1 << 7, // Medium priority
 
         /// <summary>
         /// Disarm
         /// </summary>
-        [LabelText("Disarmed")]
-        Disarmed = 1<<6, // Medium priority
+        [InspectorName("Disarmed")]
+        Disarmed = 1 << 6, // Medium priority
         
-        // [LabelText("Request Cast Skill")]
+        // [InspectorName("Request Cast Skill")]
         // RequestCastSkill = 1<<5,  // Low priority
         
         /// <summary>
         /// Cast skill
         /// </summary>
-        [LabelText("Cast Skill")]
-        CastSkill = 1<<4, // Low priority
+        [InspectorName("Cast Skill")]
+        CastSkill = 1 << 4, // Low priority
 
         /// <summary>
         /// Normal attack
         /// </summary>
-        [LabelText("Normal Attack")]
-        NormalAttack = 1<<3, // Low priority
+        [InspectorName("Normal Attack")]
+        NormalAttack = 1 << 3, // Low priority
 
         /// <summary>
         /// Move
         /// </summary>
-        [LabelText("Move")]
-        Chasing = 1<<2, // Low priority
+        [InspectorName("Move")]
+        Chasing = 1 << 2, // Low priority
 
         /// <summary>
         /// Idle: can move and play movement animation
         /// </summary>
-        [LabelText("Idle")]
-        Idle = 1<<1, // Low priority
+        [InspectorName("Idle")]
+        Idle = 1 << 1, // Low priority
 
         /// <summary>
         /// Birth
         /// </summary>
-        [LabelText("Birth")]
-        Birth = 1<< 0, // Lowest priority
+        [InspectorName("Birth")]
+        Birth = 1 << 0, // Lowest priority
         
         NullStateID = 0,
     }
+    
+    /// <summary>
+    /// Battle side identifiers.
+    /// </summary>
+    public enum eSide {
+        Null = 0,
+        /// <summary>
+        /// Player side.
+        /// </summary>
+        Player = 1,
+        /// <summary>
+        /// Enemy side.
+        /// </summary>
+        Enemy = 2,
+        /// <summary>
+        /// Neutral side, cannot be attacked.
+        /// </summary>
+        Neutral = 3,
+        /// <summary>
+        /// Aggressive toward both player and enemy.
+        /// </summary>
+        Terrorist = 4,
+    }
+    
+    /// <summary>
+    /// Actor model categories used for runtime configuration and IDs.
+    /// </summary>
+    //[Flags]
+    public enum eActorModelType: byte
+    {
+        [InspectorName("Unknown Model Type")]
+        eNULL = 0,
+        [InspectorName("Hero")]
+        eHero = 1,
+        [InspectorName("NPC")]
+        eNpc = 2,
+        [InspectorName("Weapon Spirit")]
+        eSoulModel = 3, // Summon from weapon
+        [InspectorName("Architecture")]
+        eArchitecture = 4,
+        [InspectorName("Drop Item")]
+        eDrop = 5,
+        [InspectorName("Skill Manager")]
+        eSkillActor = 6,
+        [InspectorName("Bullet")]
+        eBullet = 7, 
+        [InspectorName("Event Skill Manager")]
+        eEventSkillActor = 8, 
+        [InspectorName("Bullet Skill Manager")]
+        eBulletSkillActor = 9, 
+        [InspectorName("Summon Target")]
+        eSummon = 10,                                     
+        [InspectorName("Summon Skill Manager")]
+        eSummonSkillActor = 11,
+        [InspectorName("Passive Weapon")]
+        ePasssiveWeapon = 12,
+    }
+
+    /// <summary>
+    /// Hero professions (combinable flags).
+    /// </summary>
+    [Flags]
+    public enum eHeroProfession
+    {
+        [InspectorName("Berserker")]
+        Berserker = 1 << 0,
+
+        [InspectorName("Duelist")]
+        Duelist = 1 << 1,
+
+        [InspectorName("Paladin")]
+        Paladin = 1 << 2,
+    
+        [InspectorName("Assassin")]
+        Assassin = 1 << 3,
+    
+        [InspectorName("Ranger")]
+        Ranger = 1 << 4,
+    
+        [InspectorName("Blade Dancer")]
+        BladeDancer = 1 << 5,
+
+        [InspectorName("Elementalist")]
+        Elementalist = 1 << 6,
+
+        [InspectorName("Arcanist")]
+        Arcanist = 1 << 7,
+
+        [InspectorName("Necromancer")]
+        Necromancer = 1 << 8,
+        
+        [InspectorName("Omni")]
+        OMNI = 1 << 9,
+    }
+    
+    #endregion
+    
+    #region Data Classes
+
+    /// <summary>
+    /// Animation playback configuration for skills and actors.
+    /// </summary>
+    [BsonDeserializerRegister]
+    public class PlayAnimInfo
+    {
+        public PlayAnimInfo()
+        {
+            AnimCurve = new AnimationCurve();
+        }
+
+        [Tooltip("Is this a passive weapon animation?")]
+        public bool IsPassiveWeaponAnim;
+        
+        [Tooltip("Whether to play a baked animation.")]
+        public bool IsPlayBakAnim;
+        
+        [Tooltip("Baked animation name to play.")]
+        public string ClipBakeAnimName;
+        
+        [Tooltip("Transition asset name for the animation clip.")]
+        public string ClipTransAssetName;
+
+        [Tooltip("Force refresh animation data.")]
+        public bool IsForceRefreshAnimData;
+        
+        [Tooltip("Normalized start time for the animation (0-1).")]
+        [Range(0f, 1f)]
+        public float AnimationStartNormalizedTime;
+        
+        [Tooltip("Use single collision data.")]
+        public bool IsOnceCollideData;
+        
+        [Tooltip("Animation collision start time (normalized 0-1).")]
+        [Range(0f, 1f)]
+        public float AnimationCollideStartTime;
+        
+        [Tooltip("Animation collision end time (normalized 0-1).")]
+        [Range(0f, 1f)]
+        public float AnimationCollideEndTime;
+
+        [Tooltip("Animation clip length (read-only).")]
+        public float AnimationClipLength;
+
+        [Tooltip("Configure animation event list.")]
+        public bool IsRegisterAnimEventNode;
+        
+        [Tooltip("Animation event list.")]
+        public List<System.Numerics.Vector3> ListAnimEvents;
+        
+        [Tooltip("Use animation event hit list.")]
+        public bool IsUseAnimHitEvents;
+        
+        [Tooltip("Animation event hit list.")]
+        public List<System.Numerics.Vector2> ListAnimHitEvents;
+        
+        [HideInInspector]
+        public float AnimationRunTimeClipLength;
+
+        [HideInInspector] 
+        public Vector3 RepulseDir;
+
+        [HideInInspector] 
+        public AnimationCurve AnimCurve;
+        
+        [HideInInspector] 
+        public Vector3 DestinationPosition;
+        [HideInInspector] 
+        public Vector3 InitialPosition;
+        
+        [HideInInspector]
+        public float RepulseDuration;
+        [HideInInspector]
+        public float RepulseDistance;
+
+        [Tooltip("Animation end time (normalized 0-1).")]
+        [Range(0f, 1f)]
+        public float AnimationEndTime;
+        
+        [HideInInspector]
+        public short StackLevel;
+        
+        /// <summary>
+        /// Transition time.
+        /// </summary>
+        [Tooltip("Time to transition from other animations into this one.")]
+        public float FadeOutTime;
+    }
+    
+    #endregion
 }

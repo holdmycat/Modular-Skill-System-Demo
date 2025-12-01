@@ -3,6 +3,7 @@ using GraphProcessor;
 
 namespace Plugins.NodeEditor
 {
+    [System.Serializable]
     public class UnitAttributesNodeBase: BaseNode
     {
         public override bool isRenamable => true;

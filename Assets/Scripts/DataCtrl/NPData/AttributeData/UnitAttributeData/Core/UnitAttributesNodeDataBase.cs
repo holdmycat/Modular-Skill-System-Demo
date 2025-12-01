@@ -1,3 +1,9 @@
+//------------------------------------------------------------
+// File: UnitAttributesNodeDataBase.cs
+// Created: 2025-11-29
+// Purpose: Base class for unit attribute node data and shared metadata.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 using System.Collections.Generic;
 using System.Text;
 using MongoDB.Bson.Serialization.Attributes;
@@ -16,6 +22,7 @@ namespace Ebonor.DataCtrl
     /// <summary>
     /// Unit base attribute data (optimized version)
     /// </summary>
+    [System.Serializable]
     [BsonSerializer(typeof(AttributesDataSerializer<UnitAttributesNodeDataBase>))]
     public abstract class UnitAttributesNodeDataBase : ICommonAttributeBase
     {
@@ -49,15 +56,15 @@ namespace Ebonor.DataCtrl
         [BsonElement("UnitDataNodeId")]
         public uint UnitDataNodeId;
         
-        // [BsonElement("ActorModelType")]
-        // public eActorModelType ActorModelType;
-        //
-        // [BsonElement("ActorSide")]
-        // public eSide ActorSide;
+        [BsonElement("ActorModelType")]
+        public eActorModelType ActorModelType;
+        
+        [BsonElement("ActorSide")]
+        public eSide ActorSide;
         //
         // // Hero only
-        // [BsonElement("HeroProfession")]
-        // public eHeroProfession HeroProfession;
+        [BsonElement("HeroProfession")]
+        public eHeroProfession HeroProfession;
         //
         // public eHeroType HeroType;
         //

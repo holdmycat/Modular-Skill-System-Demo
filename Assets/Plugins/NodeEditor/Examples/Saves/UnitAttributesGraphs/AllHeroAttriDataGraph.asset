@@ -19,10 +19,10 @@ MonoBehaviour:
   exposedParameters: []
   serializedParameterList: []
   stickyNotes: []
-  position: {x: 227, y: 193, z: 0}
-  scale: {x: 0.43232757, y: 0.43232757, z: 1}
+  position: {x: 335, y: 243, z: 0}
+  scale: {x: 0.375937, y: 0.375937, z: 1}
   Name: HeroData
-  SavePath: 
+  SavePath: Assets/Resources/AllCharacterData
   references:
     version: 2
     RefIds: []

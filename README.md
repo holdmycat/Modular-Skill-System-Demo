@@ -1,10 +1,8 @@
 # Designer-First Skill Framework
 **Zero code duplication · 100+ skill variants fully owned by designers**
 
-![Designer-First Demo](Images/banner.png)
-**38-second uncut live demo ** 
-(recorded in the actual Steam project, link: https://store.steampowered.com/app/3680960/Ebonor/)
-
+![Designer-First Demo](Images/banner.png) 
+**38-second uncut live demo drops Dec 5, 2025** (this Friday)  
 → Duplicate one data row → tweak 4 values → new skill instantly works  
 → No graph duplication · No new script · Zero engineer bottleneck
 

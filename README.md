@@ -2,7 +2,7 @@
 **Zero code duplication · 100+ skill variants fully owned by designers**
 
 [![Designer-First Demo](Images/banner.png)](https://www.youtube.com/watch?v=h6gxAE1EmuE)
-**38-second uncut live demo drops Dec 5, 2025** (this Friday)  
+**4-minute uncut live demo**  
 → Duplicate one data row → tweak 4 values → new skill instantly works  
 → No graph duplication · No new script · Zero engineer bottleneck
 

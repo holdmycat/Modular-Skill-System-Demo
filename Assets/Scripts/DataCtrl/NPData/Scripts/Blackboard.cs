@@ -1,4 +1,10 @@
-﻿using System.Collections.Generic;
+//------------------------------------------------------------
+// File: Blackboard.cs
+// Created: 2025-12-05
+// Purpose: Shared blackboard storage with observer dispatching for behavior tree nodes.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+using System.Collections.Generic;
 using Ebonor.Framework;
 using UnityEngine;
 
@@ -156,7 +162,7 @@ namespace Ebonor.DataCtrl
             NP_BBValueBase<T> finalResult = result as NP_BBValueBase<T>;
             if (finalResult == null)
             {
-                log.Error($"黑板获取值转型失败，Key：{key}，Type：{typeof(NP_BBValueBase<T>)}");
+                log.Error($"Blackboard value cast failed. Key: {key}, Type: {typeof(NP_BBValueBase<T>)}");
                 return default;
             }
             

@@ -1,4 +1,10 @@
-﻿namespace Ebonor.DataCtrl
+//------------------------------------------------------------
+// File: Succeeder.cs
+// Created: 2025-12-05
+// Purpose: Decorator that forces its child result to succeed.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+namespace Ebonor.DataCtrl
 {
     public class Succeeder : Decorator
     {

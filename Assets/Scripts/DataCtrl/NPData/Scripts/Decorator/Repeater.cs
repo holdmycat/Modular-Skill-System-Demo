@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+//------------------------------------------------------------
+// File: Repeater.cs
+// Created: 2025-12-05
+// Purpose: Decorator repeating its child execution a set number of times.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+using UnityEngine;
 
 namespace Ebonor.DataCtrl
 {

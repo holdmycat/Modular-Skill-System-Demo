@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+//------------------------------------------------------------
+// File: Debugger.cs
+// Created: 2025-12-05
+// Purpose: MonoBehaviour exposing debugging blackboards for behavior tree inspection.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+using UnityEngine;
 using System.Collections.Generic;
 
 namespace Ebonor.DataCtrl

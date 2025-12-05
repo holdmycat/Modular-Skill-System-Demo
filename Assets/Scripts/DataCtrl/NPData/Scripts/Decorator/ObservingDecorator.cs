@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+//------------------------------------------------------------
+// File: ObservingDecorator.cs
+// Created: 2025-12-05
+// Purpose: Base decorator that observes changes to pause or restart children.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+using UnityEngine;
 using System.Collections;
 using UnityEngine.Assertions;
 

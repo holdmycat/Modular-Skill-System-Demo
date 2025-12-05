@@ -1,4 +1,10 @@
-﻿using UnityEngine.Assertions;
+//------------------------------------------------------------
+// File: Cooldown.cs
+// Created: 2025-12-05
+// Purpose: Decorator enforcing a cooldown window between child runs.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+using UnityEngine.Assertions;
 
 namespace Ebonor.DataCtrl
 {

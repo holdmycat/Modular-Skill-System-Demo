@@ -1,3 +1,9 @@
+//------------------------------------------------------------
+// File: Operator.cs
+// Created: 2025-12-05
+// Purpose: Comparison operators used by condition decorators.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 namespace Ebonor.DataCtrl
 {
     public enum Operator

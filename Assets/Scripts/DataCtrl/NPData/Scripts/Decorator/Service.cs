@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+//------------------------------------------------------------
+// File: Service.cs
+// Created: 2025-12-05
+// Purpose: Decorator that runs a service callback alongside a child.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+using UnityEngine;
 namespace Ebonor.DataCtrl
 {
     public class Service : Decorator

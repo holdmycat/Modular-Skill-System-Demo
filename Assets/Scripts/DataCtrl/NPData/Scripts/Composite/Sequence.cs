@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+//------------------------------------------------------------
+// File: Sequence.cs
+// Created: 2025-12-05
+// Purpose: Sequence composite running children in order until one fails.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections;
 

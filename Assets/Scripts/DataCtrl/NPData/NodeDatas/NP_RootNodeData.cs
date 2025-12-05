@@ -5,11 +5,13 @@
 // Author: Xuefei Zhao (clashancients@gmail.com)
 //------------------------------------------------------------
 
+using UnityEngine;
+
 namespace Ebonor.DataCtrl
 {
     public class NP_RootNodeData : NP_NodeDataBase
     {
-        [HideInEditorMode] 
+        [HideInInspector]
         public Root m_Root;
         
         public override Decorator CreateDecoratorNode(uint unit, NP_RuntimeTree runtimeTree, Node node)

@@ -9,7 +9,7 @@ namespace Ebonor.DataCtrl
 {
     public class NP_ActionNodeData : NP_NodeDataBase
     {
-        [HideInEditorMode] private Action m_ActionNode;
+        private Action m_ActionNode;
 
         public NP_ClassForStoreAction NpClassForStoreAction;
 

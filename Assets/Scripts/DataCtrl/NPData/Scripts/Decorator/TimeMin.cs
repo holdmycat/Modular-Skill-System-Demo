@@ -1,4 +1,10 @@
-﻿using UnityEngine.Assertions;
+//------------------------------------------------------------
+// File: TimeMin.cs
+// Created: 2025-12-05
+// Purpose: Decorator that enforces a minimum runtime before returning.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+using UnityEngine.Assertions;
 
 namespace Ebonor.DataCtrl
 {

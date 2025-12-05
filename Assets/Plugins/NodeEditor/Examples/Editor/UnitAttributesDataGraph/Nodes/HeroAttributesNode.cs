@@ -17,7 +17,7 @@ namespace Plugins.NodeEditor
         public override bool isRenamable => true;
         public override bool needsInspector => true;
     
-       
+        [SerializeReference]
         private HeroAttributesNodeData heroAttributesNodeData = new HeroAttributesNodeData();
         public override UnitAttributesNodeDataBase UnitAttributesData_GetNodeData()
         {

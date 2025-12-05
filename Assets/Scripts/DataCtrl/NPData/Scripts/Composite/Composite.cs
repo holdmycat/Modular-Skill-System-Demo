@@ -1,4 +1,10 @@
-﻿using UnityEngine.Assertions;
+//------------------------------------------------------------
+// File: Composite.cs
+// Created: 2025-12-05
+// Purpose: Abstract composite node coordinating multiple child nodes.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+using UnityEngine.Assertions;
 
 namespace Ebonor.DataCtrl
 {

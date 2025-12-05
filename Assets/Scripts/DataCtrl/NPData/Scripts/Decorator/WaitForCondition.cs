@@ -1,4 +1,10 @@
-﻿using UnityEngine.Assertions;
+//------------------------------------------------------------
+// File: WaitForCondition.cs
+// Created: 2025-12-05
+// Purpose: Decorator waiting for a condition to become true before continuing.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+using UnityEngine.Assertions;
 using System;
 
 namespace Ebonor.DataCtrl

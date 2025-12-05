@@ -1,3 +1,9 @@
+//------------------------------------------------------------
+// File: NavMoveTo.cs
+// Created: 2025-12-05
+// Purpose: Task moving a NavMesh agent toward a blackboard target.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 using UnityEngine;
 
 namespace Ebonor.DataCtrl

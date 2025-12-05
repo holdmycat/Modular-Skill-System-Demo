@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+//------------------------------------------------------------
+// File: Selector.cs
+// Created: 2025-12-05
+// Purpose: Selector composite running children until one succeeds.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections;
 

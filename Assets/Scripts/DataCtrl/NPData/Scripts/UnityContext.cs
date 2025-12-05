@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+//------------------------------------------------------------
+// File: UnityContext.cs
+// Created: 2025-12-05
+// Purpose: Singleton Unity helper that provides shared clocks and blackboards.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+using UnityEngine;
 using System.Collections.Generic;
 
 namespace Ebonor.DataCtrl

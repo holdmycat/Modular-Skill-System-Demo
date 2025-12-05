@@ -1,4 +1,10 @@
-﻿namespace Ebonor.DataCtrl
+//------------------------------------------------------------
+// File: Inverter.cs
+// Created: 2025-12-05
+// Purpose: Decorator that inverts the success state of its child.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+namespace Ebonor.DataCtrl
 {
     public class Inverter : Decorator
     {

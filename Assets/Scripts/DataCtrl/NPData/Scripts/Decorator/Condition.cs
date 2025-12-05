@@ -1,4 +1,10 @@
-﻿using System;
+//------------------------------------------------------------
+// File: Condition.cs
+// Created: 2025-12-05
+// Purpose: Decorator evaluating a predicate to gate child execution.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+using System;
 
 namespace Ebonor.DataCtrl
 {

@@ -1,17 +1,22 @@
-using UnityEngine.Assertions;
+//------------------------------------------------------------
+// File: Parallel.cs
+// Created: 2025-12-05
+// Purpose: Parallel composite controlling success/failure based on policy rules.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 using System.Collections.Generic;
-using Sirenix.OdinInspector;
+using UnityEngine;
+using UnityEngine.Assertions;
 
 namespace Ebonor.DataCtrl
 {
     public class Parallel : Composite
     {
-        [EnumPaging]
         public enum Policy
         {
-            [LabelText("一个XX就返回XX")]
+            [InspectorName("Return when any child meets condition")]
             ONE,
-            [LabelText("全部XX才返回XX")]
+            [InspectorName("Return only when all children meet condition")]
             ALL,
         }
 

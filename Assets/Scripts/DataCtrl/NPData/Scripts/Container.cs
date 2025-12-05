@@ -1,3 +1,9 @@
+//------------------------------------------------------------
+// File: Container.cs
+// Created: 2025-12-05
+// Purpose: Base class for nodes that host children and forward lifecycle events.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 using UnityEngine.Assertions;
 
 namespace Ebonor.DataCtrl

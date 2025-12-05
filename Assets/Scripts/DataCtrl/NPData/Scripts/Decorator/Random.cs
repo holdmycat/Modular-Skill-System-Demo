@@ -1,4 +1,10 @@
-﻿namespace Ebonor.DataCtrl
+//------------------------------------------------------------
+// File: Random.cs
+// Created: 2025-12-05
+// Purpose: Decorator that randomly selects whether to run its child.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+namespace Ebonor.DataCtrl
 {
     public class Random : Decorator
     {

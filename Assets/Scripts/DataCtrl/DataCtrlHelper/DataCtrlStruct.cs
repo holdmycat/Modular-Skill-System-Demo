@@ -210,6 +210,36 @@ namespace Ebonor.DataCtrl
         OMNI = 1 << 9,
     }
     
+    /// <summary>
+    /// Skill event hooks used to trigger behaviour tree logic.
+    /// </summary>
+    [Flags]
+    public enum eSkillEventNode {
+        [InspectorName("None")]
+        ESkillEventNull = 0,
+        
+        [InspectorName("Channel Start")]
+        ESkillEventChannel = 1,
+        
+        [InspectorName("Channel Hit")]
+        ESkillEventChannelHit = 2,
+        
+        [InspectorName("Instant Hit")]
+        ESkillEventHit = 4,
+        
+        [InspectorName("Animation Event")]
+        ESkillAnimEvent = 8,
+        
+        [InspectorName("Animation Start")]
+        ESkillAnimStart = 16,
+        
+        [InspectorName("Animation End")]
+        ESkillAnimEnd = 32,
+        
+        [InspectorName("Size Sentinel")]
+        Size = 64,
+    }
+    
     #endregion
     
     #region Data Classes
@@ -304,4 +334,95 @@ namespace Ebonor.DataCtrl
     }
     
     #endregion
+    
+    
+    #region Buff
+    public class CSupportBuffInfo
+    {
+        
+        // public eSkillEventNode SkillEventNode;
+        // public int ParagraphIndex;
+        // public NP_SupportSkillDataSupportor SupportSkillDataSupportor;
+        // public SupportSkillNumericComponent SupportSkillNumeric;
+        // public SkillNumericComponent ActiveSkillNumeric;
+        // public CSupportBuffInfo(){}
+        // public CSupportBuffInfo(eSkillEventNode node, int index, SkillNumericComponent active,  NP_SupportSkillDataSupportor supportor, SupportSkillNumericComponent numeric)
+        // {
+        //     OnInitSupportBuffInfo(node, index, active, supportor, numeric);
+        // }
+        //
+        // public void OnInitSupportBuffInfo(eSkillEventNode node, int index, SkillNumericComponent active,  NP_SupportSkillDataSupportor supportor, SupportSkillNumericComponent numeric)
+        // {
+        //     SkillEventNode = node;
+        //     ParagraphIndex = index;
+        //     SupportSkillDataSupportor = supportor;
+        //     SupportSkillNumeric = numeric;
+        //     ActiveSkillNumeric = active;
+        // }
+        
+    }
+    
+    public class CDynamicBuffMgr
+    {
+
+        private eSkillEventNode mSkillEventNode;
+        public eSkillEventNode SkillEventNodeInst => mSkillEventNode;
+        
+        private DynamicParallel mDynamicParallelInst;
+        public DynamicParallel DynamicParallelInst => mDynamicParallelInst;
+        
+        // [Obsolete]
+        // private Dictionary<int, List<VTD_BuffInfo>> mDicBuffInfo;
+        // [Obsolete]
+        // public Dictionary<int, List<VTD_BuffInfo>> DicBuffInfo => mDicBuffInfo;
+        
+        private Dictionary<int, List<CSupportBuffInfo>> mDicSupportSkillId;
+        
+        public Dictionary<int, List<CSupportBuffInfo>> DicSupportSkillId => mDicSupportSkillId;
+        
+        
+        public CDynamicBuffMgr(DynamicParallel parallel, eSkillEventNode eventNode)
+        {
+            mDynamicParallelInst = parallel;
+
+            mSkillEventNode = eventNode;
+            
+            //mDicBuffInfo = new Dictionary<int, List<VTD_BuffInfo>>();
+
+            mDicSupportSkillId = new Dictionary<int, List<CSupportBuffInfo>>();
+        }
+    }
+    
+    // public class CDynamicSupportSkillNumeric
+    // {
+    //     public Dictionary<int, List<SupportSkillNumericComponent>> DicParaGraphSupportSkill;
+    //     
+    //     
+    //     
+    //     private eSkillEventNode mSkillEventNode;
+    //     public eSkillEventNode SkillEventNodeInst => mSkillEventNode;
+    //
+    //     private int mMaxParagrapNum;
+    //     
+    //     public int MaxParagrapNum => mMaxParagrapNum;
+    //     
+    //     private int mMaxSupportNum;
+    //     
+    //     public int MaxSupportNum => mMaxSupportNum;
+    //     
+    //     public CDynamicSupportSkillNumeric(eSkillEventNode eventNode, int maxParagrapNum, int maxSupportNum)
+    //     {
+    //         mSkillEventNode = eventNode;
+    //
+    //         mMaxParagrapNum = maxParagrapNum;
+    //
+    //         mMaxSupportNum = maxSupportNum;
+    //         
+    //         DicParaGraphSupportSkill = new Dictionary<int, List<SupportSkillNumericComponent>>();
+    //     }
+    // }
+
+    #endregion
+    
+    
 }

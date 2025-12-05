@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+//------------------------------------------------------------
+// File: WaitUntilStopped.cs
+// Created: 2025-12-05
+// Purpose: Task that stays running until explicitly stopped.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+using UnityEngine;
 namespace Ebonor.DataCtrl
 {
     public class WaitUntilStopped : Task

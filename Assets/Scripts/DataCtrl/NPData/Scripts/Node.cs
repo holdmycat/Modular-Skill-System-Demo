@@ -1,4 +1,10 @@
-﻿using UnityEngine.Assertions;
+//------------------------------------------------------------
+// File: Node.cs
+// Created: 2025-12-05
+// Purpose: Base behavior tree node handling state transitions and parent links.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+using UnityEngine.Assertions;
 
 namespace Ebonor.DataCtrl
 {

@@ -1,4 +1,10 @@
-﻿namespace Ebonor.DataCtrl
+//------------------------------------------------------------
+// File: Wait.cs
+// Created: 2025-12-05
+// Purpose: Task that waits for a duration before reporting success.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+namespace Ebonor.DataCtrl
 {
     public class Wait : Task
     {

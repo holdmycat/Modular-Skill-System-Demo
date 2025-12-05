@@ -1,4 +1,10 @@
-﻿namespace Ebonor.DataCtrl
+//------------------------------------------------------------
+// File: Decorator.cs
+// Created: 2025-12-05
+// Purpose: Base decorator node wrapping a single child.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+namespace Ebonor.DataCtrl
 {
 
     public abstract class Decorator : Container

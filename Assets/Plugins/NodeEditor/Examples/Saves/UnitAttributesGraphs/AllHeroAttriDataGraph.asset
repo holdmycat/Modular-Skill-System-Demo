@@ -13,6 +13,18 @@ MonoBehaviour:
   m_Name: AllHeroAttriDataGraph
   m_EditorClassIdentifier: 
   serializedNodes: []
+  serializedGraph:
+    nodes:
+    - type: Plugins.NodeEditor.HeroAttributesNode, NodeGraphProcessor.Examples, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      jsonDatas: '{"nodeCustomName":"","GUID":"c0df03f4-1332-4730-b759-3e9939c282b6","computeOrder":0,"position":{"serializedVersion":"2","x":66.50047302246094,"y":-199.50152587890626,"width":100.0,"height":100.0},"expanded":false,"debug":false,"nodeLock":false,"heroAttributesNodeData":{"rid":1000},"references":{"version":2,"RefIds":[{"rid":1000,"type":{"class":"HeroAttributesNodeData","ns":"Ebonor.DataCtrl","asm":"Ebonor.DataCtrl"},"data":{"typeStr":"Plugins.NodeEditor.HeroAttributesNode","UnitDataNodeId":0,"ActorModelType":1,"ActorSide":0,"HeroProfession":0,"UnitName":"","UnitSprite":"","UnitAvatar":"","UnitMaxLV":0,"ActiveSkillNum":0,"CanChase":false,"Height":0.0,"Radius":0.0,"Scale":0.0,"SummonActorIndex":0,"WeaponTypeIndex":0,"HeroActorIndex":0,"NpcActorIndex":0,"Power":0.0,"Agility":0.0,"Vitality":0.0,"PowerGrowthRate":0.0,"AgilityGrowthRate":0.0,"VitalityGrowthRate":0.0,"AttackDamge":0.0,"LifeStealRate":0.0,"BaseAttackTime":1.7000000476837159,"BaseAttackSpeed":0.0,"MagicAttackDamageBonus":0.0,"Armour":0.0,"ElementsResistance":0.0,"DodgeRate":0.0,"MovementSpeed":0.0,"RotationSpeed":0.0,"HasBehaviourTree":false,"HasNormalAttackTree":false,"HasSkillTree":false,"ActorBirthEffectName":"","ActorFootStepName":"","BirthDuration":0.0,"HasBirthAnimation":false,"BirthCanbeLocked":false,"BirthCanbeSeen":false,"DeathDelayDuration":0.0,"DeathRepulseDistance":0.0,"DeathRepulseDuration":0.0,"PickupRadius":0.0,"EquipSkillNum":0.0,"BirthDashNum":0,"LuckyRate":0.0,"HarvestRate":0.0,"IsDefaultUnlock":false,"MaxWeaponSpot":0.0,"BirthWeaponSpot":0.0}}]}}'
+    edges: []
+    stackNodes: []
+    pinnedElements: []
+    exposedParameters: []
+    stickyNotes: []
+    position: {x: 335, y: 243, z: 0}
+    scale: {x: 0.375937, y: 0.375937, z: 1}
   edges: []
   stackNodes: []
   pinnedElements: []

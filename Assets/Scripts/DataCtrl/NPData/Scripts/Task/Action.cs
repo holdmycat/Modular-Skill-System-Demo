@@ -1,4 +1,10 @@
-﻿using UnityEngine.Assertions;
+//------------------------------------------------------------
+// File: Action.cs
+// Created: 2025-12-05
+// Purpose: Task wrapper for synchronous and multi-frame delegate actions.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+using UnityEngine.Assertions;
 
 namespace Ebonor.DataCtrl
 {

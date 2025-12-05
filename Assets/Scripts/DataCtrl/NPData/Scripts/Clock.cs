@@ -1,3 +1,9 @@
+//------------------------------------------------------------
+// File: Clock.cs
+// Created: 2025-12-05
+// Purpose: Lightweight scheduler handling timed callbacks for behavior tree nodes.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 using System.Collections.Generic;
 using Ebonor.Framework;
 using Unity.Profiling;

@@ -7,6 +7,7 @@
 using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.Options;
+using UnityEngine;
 
 namespace Ebonor.DataCtrl
 {
@@ -17,9 +18,9 @@ namespace Ebonor.DataCtrl
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
         public Dictionary<string,long> Ids = new Dictionary<string, long>();
 
-        [Tooltip("Buff node data within the skill.")]
-        [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
-        public Dictionary<long, BuffNodeDataBase> BuffNodeDataDic = new Dictionary<long, BuffNodeDataBase>();
+        // [Tooltip("Buff node data within the skill.")]
+        // [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
+        // public Dictionary<long, BuffNodeDataBase> BuffNodeDataDic = new Dictionary<long, BuffNodeDataBase>();
 
     }
     

@@ -5,6 +5,7 @@
 // Author: Xuefei Zhao (clashancients@gmail.com)
 //------------------------------------------------------------
 using MongoDB.Bson.Serialization.Attributes;
+using UnityEngine;
 
 namespace Ebonor.DataCtrl
 {

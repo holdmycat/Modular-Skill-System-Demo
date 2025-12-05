@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+//------------------------------------------------------------
+// File: RandomSelector.cs
+// Created: 2025-12-05
+// Purpose: Composite selecting children in random order until one succeeds.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections;
 

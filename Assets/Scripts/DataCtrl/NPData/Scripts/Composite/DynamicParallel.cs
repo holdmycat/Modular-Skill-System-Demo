@@ -1,5 +1,12 @@
+//------------------------------------------------------------
+// File: DynamicParallel.cs
+// Created: 2025-12-05
+// Purpose: Parallel composite supporting runtime addition and removal of children.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 using System.Collections.Generic;
 using Ebonor.Framework;
+using UnityEngine;
 
 namespace Ebonor.DataCtrl
 {
@@ -7,7 +14,7 @@ namespace Ebonor.DataCtrl
     {
         static readonly ILog log = LogManager.GetLogger(typeof(DynamicParallel));
 
-        [LabelText("技能事件动态节点类型")]
+        [InspectorName("Skill Event Node Type")]
         public eSkillEventNode SkillEventNode;
         
         private List<Node> dynamicChildren;
@@ -28,7 +35,7 @@ namespace Ebonor.DataCtrl
         {
             dynamicChildren.Add(child);
             AllChildren.Clear();
-            // 重新设置 children 数组和相关数据结构
+            // Rebuild the children array and related bookkeeping.
             foreach (var variable in Children)
             {
                 AllChildren.Add(variable);
@@ -36,8 +43,10 @@ namespace Ebonor.DataCtrl
 
             foreach (var variable in dynamicChildren)
             {
-                if(AllChildren.Contains(variable))
+                if (AllChildren.Contains(variable))
+                {
                     continue;
+                }
                 AllChildren.Add(variable);
             }
             child.SetParent(this);
@@ -59,11 +68,13 @@ namespace Ebonor.DataCtrl
             }
             dynamicChildren.Remove(child);
             
-            // 重新设置 children 数组和相关数据结构
+            // Rebuild the children array and related bookkeeping.
             foreach (var variable in Children)
             {
-                if(variable == child)
+                if (variable == child)
+                {
                     continue;
+                }
                 AllChildren.Add(variable);
             }
 
@@ -82,7 +93,7 @@ namespace Ebonor.DataCtrl
         protected override void DoStart()
         {
             base.DoStart();
-            // // 启动所有动态添加的子节点
+            // Start all dynamically added child nodes.
             // foreach (var child in dynamicChildren)
             // {
             //     if (!child.IsActive)
@@ -95,7 +106,7 @@ namespace Ebonor.DataCtrl
         protected override void DoStop()
         {
             base.DoStop();
-            // // 停止所有子节点
+            // Stop every child node.
             // foreach (var child in dynamicChildren)
             // {
             //     if (child.IsActive)
@@ -104,7 +115,5 @@ namespace Ebonor.DataCtrl
             //     }
             // }
         }
-
-        
     }
 }

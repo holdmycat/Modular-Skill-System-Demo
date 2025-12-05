@@ -9,7 +9,7 @@ namespace Ebonor.DataCtrl
 {
     public class NP_WaitNodeData : NP_NodeDataBase
     {
-        [HideInEditorMode] private Wait m_WaitNode;
+        private Wait m_WaitNode;
         
         public NP_BlackBoardRelationData NPBalckBoardRelationData = new NP_BlackBoardRelationData();
         

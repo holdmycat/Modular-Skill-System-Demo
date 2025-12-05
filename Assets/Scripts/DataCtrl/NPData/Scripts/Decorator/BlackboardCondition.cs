@@ -1,4 +1,10 @@
-﻿
+//------------------------------------------------------------
+// File: BlackboardCondition.cs
+// Created: 2025-12-05
+// Purpose: Decorator that checks blackboard values against expected criteria.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+
 using UnityEngine;
 namespace Ebonor.DataCtrl
 {

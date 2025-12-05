@@ -1,15 +1,12 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
-using UnityEditor.UIElements;
 using UnityEngine.UIElements;
 using UnityEditor.Experimental.GraphView;
 using System.Linq;
 using System;
 using UnityEditor.SceneManagement;
 using System.Reflection;
-
 using Status = UnityEngine.UIElements.DropdownMenuAction.Status;
 using Object = UnityEngine.Object;
 
@@ -154,13 +151,30 @@ namespace GraphProcessor
 				nodeInspector = CreateNodeInspectorObject();
 			
 			this.StretchToParentSize();
+
+			// Track selection changes to keep inspector in sync.
+			lastSelectionSnapshot = new List<ISelectable>();
+			this.schedule.Execute(CheckSelectionChanged).Every(100);
+		}
+
+		List<ISelectable> lastSelectionSnapshot;
+
+		void CheckSelectionChanged()
+		{
+			// Compare current selection with last snapshot
+			if (selection.Count != lastSelectionSnapshot.Count || selection.Except(lastSelectionSnapshot).Any())
+			{
+				lastSelectionSnapshot = selection.ToList();
+				UpdateNodeInspectorSelection();
+			}
 		}
 
 		protected virtual NodeInspectorObject CreateNodeInspectorObject()
 		{
 			var inspector = ScriptableObject.CreateInstance<NodeInspectorObject>();
 			inspector.name = "Node Inspector";
-			inspector.hideFlags = HideFlags.HideAndDontSave ^ HideFlags.NotEditable;
+			// Keep editable; just hide from hierarchy.
+			inspector.hideFlags = HideFlags.HideInHierarchy;
 
 			return inspector;
 		}
@@ -593,8 +607,9 @@ namespace GraphProcessor
 		bool DoesSelectionContainsInspectorNodes()
 		{
 			var selectedNodes = selection.Where(s => s is BaseNodeView).ToList();
-			var selectedNodesNotInInspector = selectedNodes.Except(nodeInspector.selectedNodes).ToList();
-			var nodeInInspectorWithoutSelectedNodes = nodeInspector.selectedNodes.Except(selectedNodes).ToList();
+			var selectedNodeTargets = selectedNodes.OfType<BaseNodeView>().Select(v => v.nodeTarget).ToList();
+			var selectedNodesNotInInspector = selectedNodeTargets.Except(nodeInspector.selectedNodeData).ToList();
+			var nodeInInspectorWithoutSelectedNodes = nodeInspector.selectedNodeData.Except(selectedNodeTargets).ToList();
 			// Edge case: selecting an asset in Project window switches active object; re-selecting a node should still refresh inspector.
 			return selectedNodesNotInInspector.Any() || nodeInInspectorWithoutSelectedNodes.Any() || 
 			       Selection.activeObject != nodeInspector;
@@ -906,17 +921,38 @@ namespace GraphProcessor
 
 		public void UpdateNodeInspectorSelection()
 		{
-			nodeInspector.selectedNodes.Clear();
-			foreach (var e in selection)
+			nodeInspector.selectedNodeData.Clear();
+			var selectedNodeViews = selection.OfType<BaseNodeView>().Where(v => this.Contains(v) && v.nodeTarget.needsInspector).ToList();
+			foreach (var v in selectedNodeViews)
 			{
-				if (e is BaseNodeView v && this.Contains(v) && v.nodeTarget.needsInspector)
-					nodeInspector.selectedNodes.Add(v);
+				if (v.nodeTarget != null)
+					nodeInspector.selectedNodeData.Add(v.nodeTarget);
+			}
+			nodeInspector.selectedNodeData.RemoveAll(n => n == null);
+			if ((nodeInspector.hideFlags & HideFlags.NotEditable) != 0)
+				nodeInspector.hideFlags = HideFlags.HideAndDontSave;
+
+			// Populate currentData when exactly one node exposes UnitAttributesData_GetNodeData
+			if (selectedNodeViews.Count == 1)
+			{
+				var node = selectedNodeViews[0].nodeTarget;
+				var dataGetter = node.GetType().GetMethod("UnitAttributesData_GetNodeData", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+				if (dataGetter != null)
+				{
+					nodeInspector.currentData = dataGetter.Invoke(node, null);
+				}
+				else
+				{
+					nodeInspector.currentData = null;
+				}
+			}
+			else
+			{
+				nodeInspector.currentData = null;
 			}
 
-			if (nodeInspector.selectedNodes.Count > 0)
-			{
-				Selection.activeObject = nodeInspector;
-			}
+			// Show the inspector object itself (SerializeReference drawer will render selectedNodeData / currentData)
+			Selection.activeObject = nodeInspector.selectedNodeData.Count > 0 ? nodeInspector : null;
 		}
 
 		public BaseNodeView AddNode(BaseNode node)
@@ -932,6 +968,9 @@ namespace GraphProcessor
 			ExceptionToLog.Call(() => view.OnCreated());
 
 			UpdateComputeOrder();
+
+			// Ensure inspector reflects the newly created node when selected.
+			UpdateNodeInspectorSelection();
 
 			return view;
 		}

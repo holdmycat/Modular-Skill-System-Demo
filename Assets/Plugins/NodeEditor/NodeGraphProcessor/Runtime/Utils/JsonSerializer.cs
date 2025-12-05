@@ -31,6 +31,11 @@ namespace GraphProcessor
 			JsonElement	elem = new JsonElement();
 
 			elem.type = obj.GetType().AssemblyQualifiedName;
+			if (obj == null)
+			{
+				elem.jsonDatas = null;
+				return elem;
+			}
 #if UNITY_EDITOR
 			elem.jsonDatas = EditorJsonUtility.ToJson(obj);
 #else

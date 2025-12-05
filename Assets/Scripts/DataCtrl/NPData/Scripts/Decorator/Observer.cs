@@ -1,3 +1,9 @@
+//------------------------------------------------------------
+// File: Observer.cs
+// Created: 2025-12-05
+// Purpose: Decorator that runs callbacks when its child starts and stops.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 using System;
 
 namespace Ebonor.DataCtrl

@@ -1,4 +1,10 @@
-﻿using UnityEngine;
+//------------------------------------------------------------
+// File: RandomSequence.cs
+// Created: 2025-12-05
+// Purpose: Composite executing children in random order until all succeed.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+using UnityEngine;
 using UnityEngine.Assertions;
 using System.Collections;
 

@@ -1,3 +1,9 @@
+//------------------------------------------------------------
+// File: AnimationCurveSerializer.cs
+// Created: 2025-11-29
+// Purpose: BSON serializer for Unity AnimationCurve values.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 using System;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;

@@ -1,0 +1,94 @@
+//------------------------------------------------------------
+// File: BlackboardCondition.cs
+// Created: 2025-12-05
+// Purpose: Decorator that checks blackboard values against expected criteria.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+
+using UnityEngine;
+namespace Ebonor.DataCtrl
+{
+    public class BlackboardCondition : ObservingDecorator
+    {
+        private string key;
+        private ANP_BBValue value;
+        private Operator op;
+
+        public string Key
+        {
+            get
+            {
+                return key;
+            }
+        }
+
+        public object Value
+        {
+            get
+            {
+                return value;
+            }
+        }
+
+        public Operator Operator
+        {
+            get
+            {
+                return op;
+            }
+        }
+
+        public BlackboardCondition(string key, Operator op, ANP_BBValue value, Stops stopsOnChange, Node decoratee) : base("BlackboardCondition", stopsOnChange, decoratee)
+        {
+            this.op = op;
+            this.key = key;
+            this.value = value;
+            this.stopsOnChange = stopsOnChange;
+        }
+        
+        public BlackboardCondition(string key, Operator op, Stops stopsOnChange, Node decoratee) : base("BlackboardCondition", stopsOnChange, decoratee)
+        {
+            this.op = op;
+            this.key = key;
+            this.stopsOnChange = stopsOnChange;
+        }
+
+
+        override protected void StartObserving()
+        {
+            this.RootNode.Blackboard.AddObserver(key, onValueChanged);
+        }
+
+        override protected void StopObserving()
+        {
+            this.RootNode.Blackboard.RemoveObserver(key, onValueChanged);
+        }
+
+        private void onValueChanged(Blackboard.Type type, object newValue)
+        {
+            Evaluate();
+        }
+
+        override protected bool IsConditionMet()
+        {
+            if (op == Operator.ALWAYS_TRUE)
+            {
+                return true;
+            }
+
+            if (!this.RootNode.Blackboard.Isset(key))
+            {
+                return op == Operator.IS_NOT_SET;
+            }
+
+            ANP_BBValue bbValue = this.RootNode.Blackboard.Get(key);
+
+            return NP_BBValueHelper.Compare(this.value, bbValue, op);
+        }
+
+        override public string ToString()
+        {
+            return "(" + this.op + ") " + this.key + " ? " + this.value;
+        }
+    }
+}

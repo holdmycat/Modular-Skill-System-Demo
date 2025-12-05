@@ -1,3 +1,9 @@
+//------------------------------------------------------------
+// File: GlobalHelper.cs
+// Created: 2025-11-29
+// Purpose: Utility helpers for file paths, time, networking, math, and editor tooling.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 using System.Collections.Generic;
 //using Cysharp.Threading.Tasks;
 using UnityEngine;
@@ -677,8 +683,6 @@ namespace Ebonor.Framework
         }
         #endregion
         
-
-        
         #region encrypt/decrypt byte array
         
         public static byte[] Encrypt(byte[] bytesToEncrypt, string password)
@@ -773,8 +777,6 @@ namespace Ebonor.Framework
             return new Vector3(v3.X, v3.Y, v3.Z);
         }
         #endregion
-
-    
         
         #region Floating Text
 
@@ -789,8 +791,6 @@ namespace Ebonor.Framework
         }
         #endregion
         
-
-
         #region Enums
 
         public static string GetEnumName<T>(T enumValue)

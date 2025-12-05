@@ -1,3 +1,9 @@
+//------------------------------------------------------------
+// File: VectorSerializer.cs
+// Created: 2025-11-29
+// Purpose: BSON serializer for Unity Vector2/Vector3 values.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;

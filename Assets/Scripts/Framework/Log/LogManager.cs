@@ -1,4 +1,10 @@
-﻿/*
+//------------------------------------------------------------
+// File: LogManager.cs
+// Created: 2025-11-29
+// Purpose: Central manager for logger creation and configuration toggles.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+/*
  * MIT License
  *
  * Copyright (c) 2018 Clark Yang

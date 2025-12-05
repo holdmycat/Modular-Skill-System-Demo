@@ -1,4 +1,10 @@
-﻿/*
+//------------------------------------------------------------
+// File: DefaultLogFactory.cs
+// Created: 2025-11-29
+// Purpose: Default implementation of the logging factory.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
+/*
  * MIT License
  *
  * Copyright (c) 2018 Clark Yang

@@ -1,3 +1,9 @@
+//------------------------------------------------------------
+// File: UnityEngineExtention.cs
+// Created: 2025-11-29
+// Purpose: Utility extensions for Unity components and UI helpers.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;

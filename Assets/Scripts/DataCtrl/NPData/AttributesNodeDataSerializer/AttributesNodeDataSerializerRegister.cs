@@ -1,3 +1,9 @@
+//------------------------------------------------------------
+// File: AttributesNodeDataSerializerRegister.cs
+// Created: 2025-11-29
+// Purpose: Registers BSON class maps and type mappings for attribute node data.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 using System;
 using System.Collections.Generic;
 using System.Linq;

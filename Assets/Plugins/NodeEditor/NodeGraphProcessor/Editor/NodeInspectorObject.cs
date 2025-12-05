@@ -3,6 +3,7 @@ using UnityEngine.UIElements;
 using UnityEditor;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Object = UnityEngine.Object;
 
 namespace GraphProcessor
@@ -76,25 +77,31 @@ namespace GraphProcessor
     public class NodeInspectorObject : ScriptableObject
     {
         /// <summary>List of currently selected nodes</summary>
-        public List<BaseNodeView> selectedNodes = new List<BaseNodeView>();
+        [SerializeReference]
+        public List<BaseNode> selectedNodeData = new List<BaseNode>();
+
+        [SerializeReference]
+        public object currentData;
 
         public virtual void NodeViewRemoved(BaseNodeView view)
         {
-            selectedNodes.Remove(view);
+            selectedNodeData.Remove(view?.nodeTarget);
+            currentData = null;
         }
     }
 
     /// <summary>
     /// Clean up NodeInspectorObject selection on reload to avoid editing stale node views.
     /// </summary>
-    public class ResetSelectNodeInfo : Editor
+    public class ResetSelectNodeInfo : UnityEditor.Editor
     {
         [InitializeOnLoadMethod]
         public static void _ResetSelectNodeInfo()
         {
             if (Selection.activeObject is NodeInspectorObject nodeInspectorObject)
             {
-                nodeInspectorObject.selectedNodes.Clear();
+                nodeInspectorObject.selectedNodeData.Clear();
+                nodeInspectorObject.currentData = null;
             }
         }
     }

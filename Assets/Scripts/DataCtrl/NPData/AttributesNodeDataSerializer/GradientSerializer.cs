@@ -1,3 +1,9 @@
+//------------------------------------------------------------
+// File: GradientSerializer.cs
+// Created: 2025-11-29
+// Purpose: BSON serializer for Unity Gradient values.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 using System;
 using System.Linq;
 using MongoDB.Bson;

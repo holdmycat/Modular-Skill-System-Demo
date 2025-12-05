@@ -1,6 +1,6 @@
 // using Disloginserverconfigpackage;
 // using Ebonor.DataCtrl;
-// using Soul.Frameworks;
+// using Ebonor.Framework;
 // using Weaponposconfigpackage;
 namespace Plugins.NodeEditor
 {

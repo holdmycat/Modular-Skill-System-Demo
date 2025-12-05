@@ -1,3 +1,9 @@
+//------------------------------------------------------------
+// File: LayerMaskSerializer.cs
+// Created: 2025-11-29
+// Purpose: BSON serializer for Unity LayerMask values.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 using MongoDB.Bson;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;

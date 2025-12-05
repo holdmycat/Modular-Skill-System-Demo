@@ -35,6 +35,20 @@ namespace GraphProcessor
 	}
 
 	//btns
+	[Serializable]
+	public struct GraphSerializedData
+	{
+		public List<JsonElement> nodes;
+		public List<SerializableEdge> edges;
+		public List<Group> groups;
+		public List<BaseStackNode> stackNodes;
+		public List<PinnedElement> pinnedElements;
+		public List<ExposedParameter> exposedParameters;
+		public List<StickyNote> stickyNotes;
+		public Vector3 position;
+		public Vector3 scale;
+	}
+
 	public partial class BaseGraph : ScriptableObject, ISerializationCallbackReceiver
 	{
 		
@@ -80,11 +94,28 @@ namespace GraphProcessor
 		[HideInInspector]
 		public List< JsonElement >						serializedNodes = new List< JsonElement >();
 
+		// Packed graph data to emulate Odin SerializedScriptableObject behaviour.
+		[SerializeField, HideInInspector]
+		public GraphSerializedData serializedGraph = new GraphSerializedData
+		{
+			nodes = new List<JsonElement>(),
+			edges = new List<SerializableEdge>(),
+			groups = new List<Group>(),
+			stackNodes = new List<BaseStackNode>(),
+			pinnedElements = new List<PinnedElement>(),
+			exposedParameters = new List<ExposedParameter>(),
+			stickyNotes = new List<StickyNote>(),
+			position = Vector3.zero,
+			scale = Vector3.one
+		};
+
 		/// <summary>
 		/// List of all the nodes in the graph.
 		/// </summary>
 		/// <typeparam name="BaseNode"></typeparam>
 		/// <returns></returns>
+		[SerializeField, SerializeReference]
+		[HideInInspector]
 		public List< BaseNode >							nodes = new List< BaseNode >();
 
 		/// <summary>
@@ -493,11 +524,65 @@ namespace GraphProcessor
 		{
 			stackNodes.RemoveAll(s => s == null);
 			nodes.RemoveAll(n => n == null);
+
+			// Keep Unity's SerializeReference data as the primary source of truth.
+			// serializedGraph is maintained for backward compatibility or external consumers.
+			serializedGraph.nodes.Clear();
+			if (nodes != null)
+			{
+				foreach (var node in nodes)
+				{
+					if (node == null) continue;
+					serializedGraph.nodes.Add(JsonSerializer.SerializeNode(node));
+				}
+			}
+
+			serializedGraph.edges = edges?.Where(e => e != null).ToList() ?? new List<SerializableEdge>();
+			serializedGraph.groups = groups?.Where(g => g != null).ToList() ?? new List<Group>();
+			serializedGraph.stackNodes = stackNodes?.Where(s => s != null).ToList() ?? new List<BaseStackNode>();
+			serializedGraph.pinnedElements = pinnedElements?.Where(p => p != null).ToList() ?? new List<PinnedElement>();
+			serializedGraph.exposedParameters = exposedParameters?.Where(p => p != null).ToList() ?? new List<ExposedParameter>();
+			serializedGraph.stickyNotes = stickyNotes?.Where(s => s != null).ToList() ?? new List<StickyNote>();
+			serializedGraph.position = position;
+			serializedGraph.scale = scale;
 		}
 
 		public void OnAfterDeserialize()
 		{
-			// No-op: graph initialization is handled via explicit calls; implement to satisfy ISerializationCallbackReceiver.
+			// If serializedGraph contains packed data (older assets or external), rebuild from it.
+			if (serializedGraph.nodes != null && serializedGraph.nodes.Count > 0)
+			{
+				nodes = new List<BaseNode>();
+				if (serializedGraph.nodes != null)
+				{
+					foreach (var elem in serializedGraph.nodes)
+					{
+						var node = JsonSerializer.DeserializeNode(elem);
+						if (node != null)
+							nodes.Add(node);
+					}
+				}
+				edges = serializedGraph.edges ?? new List<SerializableEdge>();
+				groups = serializedGraph.groups ?? new List<Group>();
+				stackNodes = serializedGraph.stackNodes ?? new List<BaseStackNode>();
+				pinnedElements = serializedGraph.pinnedElements ?? new List<PinnedElement>();
+				exposedParameters = serializedGraph.exposedParameters ?? new List<ExposedParameter>();
+				serializedParameterList = exposedParameters;
+				stickyNotes = serializedGraph.stickyNotes ?? new List<StickyNote>();
+				position = serializedGraph.position;
+				scale = serializedGraph.scale;
+			}
+
+			nodesPerGUID = new Dictionary<string, BaseNode>();
+			edgesPerGUID = new Dictionary<string, SerializableEdge>();
+			nodes ??= new List<BaseNode>();
+			edges ??= new List<SerializableEdge>();
+			groups ??= new List<Group>();
+			stackNodes ??= new List<BaseStackNode>();
+			pinnedElements ??= new List<PinnedElement>();
+			exposedParameters ??= new List<ExposedParameter>();
+			serializedParameterList = exposedParameters;
+			stickyNotes ??= new List<StickyNote>();
 		}
 
 		// We can deserialize data here because it's called in a unity context

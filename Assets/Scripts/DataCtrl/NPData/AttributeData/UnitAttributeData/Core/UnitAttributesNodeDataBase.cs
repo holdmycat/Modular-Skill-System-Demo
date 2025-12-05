@@ -1,3 +1,9 @@
+//------------------------------------------------------------
+// File: UnitAttributesNodeDataBase.cs
+// Created: 2025-11-29
+// Purpose: Base class for unit attribute node data and shared metadata.
+// Author: Xuefei Zhao (clashancients@gmail.com)
+//------------------------------------------------------------
 using System.Collections.Generic;
 using System.Text;
 using MongoDB.Bson.Serialization.Attributes;
@@ -16,6 +22,7 @@ namespace Ebonor.DataCtrl
     /// <summary>
     /// Unit base attribute data (optimized version)
     /// </summary>
+    [System.Serializable]
     [BsonSerializer(typeof(AttributesDataSerializer<UnitAttributesNodeDataBase>))]
     public abstract class UnitAttributesNodeDataBase : ICommonAttributeBase
     {
@@ -49,15 +56,15 @@ namespace Ebonor.DataCtrl
         [BsonElement("UnitDataNodeId")]
         public uint UnitDataNodeId;
         
-        // [BsonElement("ActorModelType")]
-        // public eActorModelType ActorModelType;
-        //
-        // [BsonElement("ActorSide")]
-        // public eSide ActorSide;
+        [BsonElement("ActorModelType")]
+        public eActorModelType ActorModelType;
+        
+        [BsonElement("ActorSide")]
+        public eSide ActorSide;
         //
         // // Hero only
-        // [BsonElement("HeroProfession")]
-        // public eHeroProfession HeroProfession;
+        [BsonElement("HeroProfession")]
+        public eHeroProfession HeroProfession;
         //
         // public eHeroType HeroType;
         //
@@ -152,42 +159,7 @@ namespace Ebonor.DataCtrl
         public float RotationSpeed;
 
         
-        // ===== Tab 5: Component Configuration =====
-        [BsonElement("HostInstallNavMeshAgent")]
-        public bool HostInstallNavMeshAgent;
         
-        [BsonElement("HostPInstallCapsuleCollider")]
-        public bool HostPInstallCapsuleCollider;
-        
-        [BsonElement("HostInstallRigidBody")]
-        public bool HostInstallRigidBody;
-        
-        [BsonElement("CliLPInstallNavMeshAgent")]
-        public bool CliLPInstallNavMeshAgent;
-        
-        [BsonElement("CliLPInstallCapsuleCollider")]
-        public bool CliLPInstallCapsuleCollider;
-        
-        [BsonElement("CliLPInstallRigidBody")]
-        public bool CliLPInstallRigidBody;
-        
-        [BsonElement("CliOnlyInstallNavMeshAgent")]
-        public bool CliOnlyInstallNavMeshAgent;
-        
-        [BsonElement("CliOnlyInstallCapsuleCollider")]
-        public bool CliOnlyInstallCapsuleCollider;
-        
-        [BsonElement("CliOnlyInstallRigidBody")]
-        public bool CliOnlyInstallRigidBody;
-        
-        [BsonElement("ServerInstallNavMeshAgent")]
-        public bool ServerInstallNavMeshAgent;
-        
-        [BsonElement("ServerInstallCapsuleCollider")]
-        public bool ServerInstallCapsuleCollider;
-        
-        [BsonElement("ServerInstallRigidBody")]
-        public bool ServerInstallRigidBody;
 
         // ===== Tab 6: Behavior Tree Configuration =====
         [BsonElement("HasBehaviourTree")]

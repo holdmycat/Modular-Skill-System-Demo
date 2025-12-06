@@ -25,7 +25,7 @@ namespace Tests.EditMode
         {
             var manager = CreateComponent<GameClientManager>();
             manager.EnsureDataCtrl();
-            Assert.IsNotNull(manager.GetComponentInChildren<DataCtrl.DataCtrl>(), "DataCtrl should be created and parented.");
+            Assert.IsNotNull(DataCtrl.Inst, "DataCtrl should be created and parented.");
             Object.DestroyImmediate(manager.gameObject);
         }
 
@@ -52,8 +52,7 @@ namespace Tests.EditMode
         public void PauseAndQuit_AreForwarded()
         {
             var manager = CreateComponent<GameClientManager>();
-            var sm = CreateComponent<TestSceneManager>("PauseSM");
-            manager.SwitchSceneManager(sm);
+            var sm = manager.SwitchSceneManager<TestSceneManager>();
 
             var pauseMethod = typeof(GameClientManager).GetMethod("OnApplicationPause", BindingFlags.Instance | BindingFlags.NonPublic);
             pauseMethod.Invoke(manager, new object[] { true });

@@ -213,7 +213,7 @@ namespace Tests.EditMode
         public void GraphRestore_FromPackedData_RebuildsNodes()
         {
             var graph = ScriptableObject.CreateInstance<Plugins.NodeEditor.UnitAttributesDataGraph>();
-            var node = ScriptableObject.CreateInstance<Plugins.NodeEditor.HeroAttributesNode>();
+            var node = System.Activator.CreateInstance<Plugins.NodeEditor.HeroAttributesNode>();
 
             graph.AddNode(node);
             graph.OnBeforeSerialize();

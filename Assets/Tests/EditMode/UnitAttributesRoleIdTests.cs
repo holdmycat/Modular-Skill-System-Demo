@@ -1,6 +1,5 @@
 using System.Reflection;
 using Ebonor.DataCtrl;
-using Ebonor.Manager;
 using NUnit.Framework;
 using UnityEditor;
 using UnityEngine;
@@ -14,12 +13,6 @@ namespace Tests.EditMode
     /// </summary>
     public class UnitAttributesRoleIdTests
     {
-    private static T CreateComponent<T>(string name = null) where T : MonoBehaviour
-    {
-        var go = new GameObject(name ?? typeof(T).Name);
-        return go.AddComponent<T>();
-    }
-
         private static string InvokeDrawerBuildRoleKey(SerializedProperty property)
         {
             MethodInfo method = typeof(UnitAttributesNodeDataBaseDrawer).GetMethod(
@@ -231,56 +224,6 @@ namespace Tests.EditMode
         [Test]
         public void UnitAttributesDataSupportor_BsonRoundtrip_PreservesLongKeys()
         {
-        [Test]
-        public void GameClientManager_EnsureDataCtrl_AddsComponent()
-        {
-            var manager = CreateComponent<GameClientManager>();
-            manager.EnsureDataCtrl();
-            Assert.IsNotNull(manager.GetComponentInChildren<Ebonor.DataCtrl.DataCtrl>(), "DataCtrl should be created and parented.");
-            Object.DestroyImmediate(manager.gameObject);
-        }
-
-        [Test]
-        public void GameClientManager_SwitchSceneManager_EnterExitSequence()
-        {
-            var manager = CreateComponent<GameClientManager>();
-            var first = CreateComponent<TestSceneManager>("FirstSM");
-            var second = CreateComponent<TestSceneManager>("SecondSM");
-
-            manager.SwitchSceneManager(first);
-            Assert.IsTrue(first.Entered, "First scene manager should Enter.");
-
-            manager.SwitchSceneManager(second);
-            Assert.IsTrue(first.Exited, "First scene manager should Exit when switching.");
-            Assert.IsTrue(second.Entered, "Second scene manager should Enter.");
-
-            Object.DestroyImmediate(manager.gameObject);
-            Object.DestroyImmediate(first.gameObject);
-            Object.DestroyImmediate(second.gameObject);
-        }
-
-        [Test]
-        public void GameClientManager_PauseAndQuit_AreForwarded()
-        {
-            var manager = CreateComponent<GameClientManager>();
-            var sm = CreateComponent<TestSceneManager>("PauseSM");
-            manager.SwitchSceneManager(sm);
-
-            var pauseMethod = typeof(GameClientManager).GetMethod("OnApplicationPause", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-            pauseMethod.Invoke(manager, new object[] { true });
-            pauseMethod.Invoke(manager, new object[] { false });
-
-            var quitMethod = typeof(GameClientManager).GetMethod("OnApplicationQuit", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
-            quitMethod.Invoke(manager, null);
-
-            Assert.IsTrue(sm.Paused, "Pause should be forwarded.");
-            Assert.IsTrue(sm.Resumed, "Resume should be forwarded.");
-            Assert.IsTrue(sm.Exited, "Exit should be forwarded on quit.");
-
-            Object.DestroyImmediate(manager.gameObject);
-            Object.DestroyImmediate(sm.gameObject);
-        }
-
             const long key = 876543210123456789L;
             var supportor = new UnitAttributesDataSupportor();
             supportor.UnitAttributesDataSupportorDic[key] = new HeroAttributesNodeData { UnitDataNodeId = key };

@@ -16,6 +16,6 @@ namespace Ebonor.DataCtrl
     public class UnitAttributesDataSupportor
     {
         [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
-        public Dictionary<uint, UnitAttributesNodeDataBase> UnitAttributesDataSupportorDic = new Dictionary<uint, UnitAttributesNodeDataBase>();
+        public Dictionary<long, UnitAttributesNodeDataBase> UnitAttributesDataSupportorDic = new Dictionary<long, UnitAttributesNodeDataBase>();
     }
 }

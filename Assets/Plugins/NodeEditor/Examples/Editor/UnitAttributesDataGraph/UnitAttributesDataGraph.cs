@@ -4,6 +4,9 @@ using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using Ebonor.DataCtrl;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Plugins.NodeEditor
 {
@@ -62,6 +65,12 @@ namespace Plugins.NodeEditor
             }
             
             Debug.Log("Save succeeded");
+#if UNITY_EDITOR
+            // Persist graph asset changes so edits survive script recompiles.
+            EditorUtility.SetDirty(this);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+#endif
         }
         
         public override void OneKeySet()

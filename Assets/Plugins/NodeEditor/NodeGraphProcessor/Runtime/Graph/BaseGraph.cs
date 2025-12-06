@@ -231,6 +231,9 @@ namespace GraphProcessor
 			if (isEnabled)
 				return;
 
+			// If SerializeReference data was lost (e.g., domain reload) but packed data exists, restore it.
+			RestoreNodesFromPackedDataIfNeeded();
+
 			MigrateGraphIfNeeded();
 			InitializeGraphElements();
 			DestroyBrokenGraphElements();
@@ -525,8 +528,15 @@ namespace GraphProcessor
 			stackNodes.RemoveAll(s => s == null);
 			nodes.RemoveAll(n => n == null);
 
-			// Keep Unity's SerializeReference data as the primary source of truth.
-			// serializedGraph is maintained for backward compatibility or external consumers.
+			// Always refresh the packed fallback graph so data can be restored if SerializeReference is lost.
+			if (serializedGraph.nodes == null) serializedGraph.nodes = new List<JsonElement>();
+			if (serializedGraph.edges == null) serializedGraph.edges = new List<SerializableEdge>();
+			if (serializedGraph.groups == null) serializedGraph.groups = new List<Group>();
+			if (serializedGraph.stackNodes == null) serializedGraph.stackNodes = new List<BaseStackNode>();
+			if (serializedGraph.pinnedElements == null) serializedGraph.pinnedElements = new List<PinnedElement>();
+			if (serializedGraph.exposedParameters == null) serializedGraph.exposedParameters = new List<ExposedParameter>();
+			if (serializedGraph.stickyNotes == null) serializedGraph.stickyNotes = new List<StickyNote>();
+
 			serializedGraph.nodes.Clear();
 			if (nodes != null)
 			{
@@ -583,6 +593,32 @@ namespace GraphProcessor
 			exposedParameters ??= new List<ExposedParameter>();
 			serializedParameterList = exposedParameters;
 			stickyNotes ??= new List<StickyNote>();
+
+			// Safety: if SerializeReference nodes list is empty but we have packed data, restore from it.
+			RestoreNodesFromPackedDataIfNeeded();
+		}
+
+		private void RestoreNodesFromPackedDataIfNeeded()
+		{
+			if ((nodes == null || nodes.Count == 0) && serializedGraph.nodes != null && serializedGraph.nodes.Count > 0)
+			{
+				nodes = new List<BaseNode>();
+				foreach (var elem in serializedGraph.nodes)
+				{
+					var node = JsonSerializer.DeserializeNode(elem);
+					if (node != null)
+						nodes.Add(node);
+				}
+
+				edges = serializedGraph.edges ?? edges;
+				groups = serializedGraph.groups ?? groups;
+				stackNodes = serializedGraph.stackNodes ?? stackNodes;
+				pinnedElements = serializedGraph.pinnedElements ?? pinnedElements;
+				exposedParameters = serializedGraph.exposedParameters ?? exposedParameters;
+				stickyNotes = serializedGraph.stickyNotes ?? stickyNotes;
+				position = serializedGraph.position;
+				scale = serializedGraph.scale;
+			}
 		}
 
 		// We can deserialize data here because it's called in a unity context

@@ -81,51 +81,6 @@ namespace Ebonor.DataCtrl
         #endregion
     
         
-        #region Editor Utilities
-#if UNITY_EDITOR
-        private const int ActorPrefix = 1;
-
-        [ContextMenu("Generate Hero ID")]
-        private void BtnGenerateUniqueID()
-        {
-            mStrBld ??= new StringBuilder();
-            mStrBld.Clear();
-            
-            // Hero prefix number
-            mStrBld.Append(ActorPrefix);
-            
-            // Model type
-            var modelType = (int)ActorModelType;
-            mStrBld.Append(modelType);
-
-            // Profession
-            var pro = (int)HeroProfession;
-            mStrBld.Append(pro);
-            
-            // Hero index
-            int index = (int)HeroActorIndex;
-            if (index < 10)
-            {
-                mStrBld.Append(0);
-            }
-            mStrBld.Append(index);
-            
-            
-            uint.TryParse(mStrBld.ToString(), out UnitDataNodeId);
-            
-            Debug.LogFormat("Hero Id:{0}", UnitDataNodeId);
-        }
-        
-        [ContextMenu("Copy Hero ID")]
-        private void BtnCopySkillIdAndLocateFile()
-        {
-            var str = UnitDataNodeId.ToString();
-            EditorGUIUtility.systemCopyBuffer = str;
-            Debug.Log($"Actor ID {UnitDataNodeId} copied to clipboard.");
-        }
-        
-#endif
-        #endregion
         
     }
 }

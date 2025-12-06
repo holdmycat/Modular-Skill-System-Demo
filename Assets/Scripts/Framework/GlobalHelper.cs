@@ -201,7 +201,11 @@ namespace Ebonor.Framework
             return (long)(hash & 0x7FFFFFFFFFFFFFFF); // Keep positive
         }
         
-       
+        public static long GetRoleID(string roleName)
+        {
+            return GetSkillID("Character_" + roleName);
+        }
+        
         #endregion
         
         #region Time Helpers

@@ -43,13 +43,13 @@ namespace Ebonor.DataCtrl
             }
             Debug.Log(str);
 #endif
-        }
+        } 
         
     
         public static void RegisterClassMaps()
         {
             if (null == BsonSerializer.SerializerRegistry.GetSerializer(typeof(UnitAttributesNodeDataBase)))
-            {
+            { 
                 // BsonSerializer.RegisterSerializer(typeof(UnitAttributesNodeDataBase), new AttributesDataSerializer<UnitAttributesNodeDataBase>());
                 BsonClassMap.RegisterClassMap<UnitAttributesNodeDataBase>(cm =>
                 {

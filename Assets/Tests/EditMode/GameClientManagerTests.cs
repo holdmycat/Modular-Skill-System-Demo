@@ -66,7 +66,7 @@ namespace Tests.EditMode
             Assert.IsTrue(sm.Exited, "Exit should be forwarded on quit.");
 
             Object.DestroyImmediate(manager.gameObject);
-            Object.DestroyImmediate(sm.gameObject);
+            // sm is destroyed with manager; no separate destroy to avoid MissingReference.
         }
     }
 

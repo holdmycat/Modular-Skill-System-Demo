@@ -43,14 +43,16 @@ namespace Ebonor.DataCtrl
         public string typeStr = "";
 
         /// <summary>
-        /// Compose a role key from the profession and sprite values.
+        /// Compose a role key from profession, side, model type, sprite, and name.
         /// </summary>
         public virtual string BuildRoleKey()
         {
             string profession = HeroProfession.ToString();
+            string side = ActorSide.ToString();
+            string model = ActorModelType.ToString();
             string sprite = string.IsNullOrEmpty(UnitSprite) ? "UnknownSprite" : UnitSprite;
             string name = string.IsNullOrEmpty(UnitName) ? "Unnamed" : UnitName;
-            return $"{profession}_{sprite}_{name}";
+            return $"{profession}_{side}_{model}_{sprite}_{name}";
         }
 
         /// <summary>
@@ -599,8 +601,10 @@ namespace Ebonor.DataCtrl
                 return "UnknownProfession";
             }
 
-            int index = Mathf.Clamp(enumProperty.enumValueIndex, 0, enumProperty.enumDisplayNames.Length - 1);
-            return enumProperty.enumDisplayNames[index];
+            // Use raw enum names (not display names) to match runtime BuildRoleKey().
+            string[] names = enumProperty.enumNames;
+            int index = Mathf.Clamp(enumProperty.enumValueIndex, 0, names.Length - 1);
+            return names[index];
         }
     }
 #endif

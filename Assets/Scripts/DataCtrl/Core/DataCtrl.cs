@@ -12,6 +12,22 @@ namespace Ebonor.DataCtrl
     public class DataCtrl : MonoBehaviour
     {
        
+        
+        private static DataCtrl _inst;
+        public static DataCtrl Inst => _inst;
+        
+        
+        public void InitializeDataCtrl()
+        {
+            _inst = this;
+        }
+        
+        private void OnDestroy()
+        {
+            _inst = null;
+        }
+        
+        
     #if UNITY_EDITOR
             [InitializeOnLoadMethod]
             static void OnLoadMPBattleGraphDataV2()

@@ -237,15 +237,17 @@ namespace Tests.EditMode
 
             byte[] data;
             using (var ms = new MemoryStream())
+            using (var writer = new MongoDB.Bson.IO.BsonBinaryWriter(ms))
             {
-                BsonSerializer.Serialize(ms, supportor);
+                BsonSerializer.Serialize(writer, supportor);
                 data = ms.ToArray();
             }
 
             UnitAttributesDataSupportor deserialized;
             using (var ms = new MemoryStream(data))
+            using (var reader = new MongoDB.Bson.IO.BsonBinaryReader(ms))
             {
-                deserialized = BsonSerializer.Deserialize<UnitAttributesDataSupportor>(ms);
+                deserialized = BsonSerializer.Deserialize<UnitAttributesDataSupportor>(reader);
             }
 
             Assert.IsTrue(deserialized.UnitAttributesDataSupportorDic.ContainsKey(key), "Long key should survive BSON roundtrip.");

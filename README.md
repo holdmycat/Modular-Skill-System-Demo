@@ -56,6 +56,26 @@ This project is a **production-ready, modular skill system** extracted from an i
 *   **Binary Serialization**: Uses `MongoDB.Bson` for high-performance, type-safe binary serialization. This ensures that complex polymorphic data structures are saved and loaded efficiently.
 *   **Polymorphic Data**: The system handles nested and polymorphic data types naturally, allowing for extensible skill attributes without custom parsers.
 
+## Testing (Edit Mode)
+
+We use **Unity Test Framework** for edit-mode coverage.
+
+- **Test Runner**: `Window → General → Test Runner` → `Edit Mode` tab → select `EditModeTests` → Run All.
+- **Command line (example)**:
+  ```
+  /Applications/Unity/Hub/Editor/<UNITY_VERSION>/Unity \
+    -batchmode -projectPath /Users/domi/SoulMaster/Modular-Skill-System-Demo \
+    -runTests -testPlatform editmode \
+    -testResults /tmp/editmode-results.xml \
+    -quit
+  ```
+  Replace `<UNITY_VERSION>` with your installed Unity version.
+
+### Role ID generation rules
+- Role key format: `Profession_Side_Model_Sprite_Name`.
+- Empty Sprite/Name use fallbacks: `UnknownSprite` / `Unnamed`.
+- ID is read-only in the Inspector; use the **Generate Role ID** button to update it.
+
 ---
 
 ## About Ebonor (context)
@@ -74,5 +94,4 @@ Steam store page (for context and screenshots):
 <https://store.steampowered.com/app/3680960/Ebonor/>
 
 ---
-
 

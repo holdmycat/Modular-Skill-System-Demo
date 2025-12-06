@@ -528,7 +528,13 @@ namespace GraphProcessor
 			stackNodes.RemoveAll(s => s == null);
 			nodes.RemoveAll(n => n == null);
 
-			// Always refresh the packed fallback graph so data can be restored if SerializeReference is lost.
+			// If nodes are empty/null, keep existing packed data as a backup to avoid wiping it during domain reload.
+			if (nodes == null || nodes.Count == 0)
+			{
+				return;
+			}
+
+			// Refresh the packed fallback graph so data can be restored if SerializeReference is lost.
 			if (serializedGraph.nodes == null) serializedGraph.nodes = new List<JsonElement>();
 			if (serializedGraph.edges == null) serializedGraph.edges = new List<SerializableEdge>();
 			if (serializedGraph.groups == null) serializedGraph.groups = new List<Group>();

@@ -25,6 +25,11 @@ namespace Ebonor.Manager
         {
             // Keep empty; creation/ownership is handled by scene.
         }
+        
+        private void OnDestroy()
+        {
+            // No singleton cleanup required.
+        }
 
         private void Start()
         {
@@ -36,17 +41,14 @@ namespace Ebonor.Manager
             _currentSceneManager?.Tick(Time.deltaTime);
         }
 
-        private void OnDestroy()
-        {
-            // No singleton cleanup required.
-        }
-
+        
         private void OnApplicationQuit()
         {
+            
             log.Info("Application quitting. Exiting current scene manager.");
             _currentSceneManager?.Exit();
         }
-
+        
         private void OnApplicationPause(bool pauseStatus)
         {
             if (pauseStatus)
@@ -60,7 +62,7 @@ namespace Ebonor.Manager
                 _currentSceneManager?.Pause(false);
             }
         }
-
+        
         /// <summary>
         /// Ensure DataCtrl component exists and performs BSON registration.
         /// </summary>
@@ -71,6 +73,7 @@ namespace Ebonor.Manager
             var go = new GameObject(nameof(DataCtrl));
             _dataCtrlInst = go.AddComponent<DataCtrl.DataCtrl>();
             _dataCtrlInst.transform.SetParent(transform);
+            _dataCtrlInst.InitializeDataCtrl();
             DataCtrlHelper.OnInitDataCtrlHelper();
             log.Info("DataCtrl initialized.");
         }
@@ -89,7 +92,11 @@ namespace Ebonor.Manager
             if (_currentSceneManager != null)
             {
                 _currentSceneManager.Exit();
-                Destroy(_currentSceneManager.gameObject);
+                // In edit mode, Destroy throws; use DestroyImmediate to keep tests safe.
+                if (Application.isPlaying)
+                    Destroy(_currentSceneManager.gameObject);
+                else
+                    DestroyImmediate(_currentSceneManager.gameObject);
             }
 
             _currentSceneManager = newSceneManagerInstance;

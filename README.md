@@ -76,6 +76,11 @@ We use **Unity Test Framework** for edit-mode coverage.
 - Empty Sprite/Name use fallbacks: `UnknownSprite` / `Unnamed`.
 - ID is read-only in the Inspector; use the **Generate Role ID** button to update it.
 
+### Not yet covered
+- Play Mode tests (runtime/asset loading, prefab behaviors)
+- Resource loading paths and failure handling
+- Full asset export/import pipeline (beyond edit-mode serialization tests)
+
 ---
 
 ## About Ebonor (context)
@@ -94,4 +99,3 @@ Steam store page (for context and screenshots):
 <https://store.steampowered.com/app/3680960/Ebonor/>
 
 ---
-

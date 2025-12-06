@@ -744,13 +744,13 @@ namespace GraphProcessor
 		/// <returns>an enumerable of node</returns>
 		public IEnumerable< BaseNode > GetOutputNodes()
 		{
-			if (null == outputPorts)
+			if (null != outputPorts)
 			{
-				int a = 0;
-			}
-			foreach (var port in outputPorts)
+				foreach (var port in outputPorts)
 				foreach (var edge in port.GetEdges())
 					yield return edge.inputNode;
+			}
+			
 		}
 
 		/// <summary>

@@ -163,22 +163,22 @@ namespace Ebonor.Framework
             
         public virtual void Info(object message)
         {
-//             if (this._factory.InUnity)
-//                 UnityEngine.Debug.Log(Format(message, "INFO"));
-// #if !NETFX_CORE
-//             else
-//                 Console.WriteLine(Format(message, "INFO"));
-// #endif
+            if (this._factory.InUnity)
+                UnityEngine.Debug.Log(Format(message, "INFO"));
+#if !NETFX_CORE
+            else
+                Console.WriteLine(Format(message, "INFO"));
+#endif
         }
 
         public virtual void Info(object message, Exception exception)
         {
-            //Info(string.Format("{0} Exception:{1}", message, exception));
+            Info(string.Format("{0} Exception:{1}", message, exception));
         }
 
         public virtual void InfoFormat(string format, params object[] args)
         {
-            //Info(string.Format(format, args));
+            Info(string.Format(format, args));
         }
 
         public virtual void Warn(object message)
@@ -198,7 +198,7 @@ namespace Ebonor.Framework
 
         public virtual void WarnFormat(string format, params object[] args)
         {
-            //Warn(string.Format(format, args));
+            Warn(string.Format(format, args));
         }
 
         public virtual void Error(object message)

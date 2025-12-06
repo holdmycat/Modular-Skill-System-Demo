@@ -33,19 +33,15 @@ namespace Tests.EditMode
         public void SwitchSceneManager_EnterExitSequence()
         {
             var manager = CreateComponent<GameClientManager>();
-            var first = CreateComponent<TestSceneManager>("FirstSM");
-            var second = CreateComponent<TestSceneManager>("SecondSM");
-
-            manager.SwitchSceneManager(first);
+            TestSceneManager.ExitCount = 0;
+            var first = manager.SwitchSceneManager<TestSceneManager>();
             Assert.IsTrue(first.Entered, "First scene manager should Enter.");
 
-            manager.SwitchSceneManager(second);
-            Assert.IsTrue(first.Exited, "First scene manager should Exit when switching.");
+            var second = manager.SwitchSceneManager<TestSceneManager>();
+            Assert.AreEqual(1, TestSceneManager.ExitCount, "First scene manager should Exit when switching.");
             Assert.IsTrue(second.Entered, "Second scene manager should Enter.");
 
             Object.DestroyImmediate(manager.gameObject);
-            Object.DestroyImmediate(first.gameObject);
-            Object.DestroyImmediate(second.gameObject);
         }
 
         [Test]
@@ -79,9 +75,14 @@ namespace Tests.EditMode
         public bool Exited;
         public bool Paused;
         public bool Resumed;
+        public static int ExitCount;
 
         public override void Enter() => Entered = true;
-        public override void Exit() => Exited = true;
+        public override void Exit()
+        {
+            Exited = true;
+            ExitCount++;
+        }
 
         public override void Pause(bool paused)
         {

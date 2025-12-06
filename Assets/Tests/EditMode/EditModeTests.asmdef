@@ -4,6 +4,7 @@
     "references": [
         "Ebonor.DataCtrl",
         "Ebonor.Framework",
+        "Ebonor.Manager",
         "NodeGraphProcessor.Examples",
         "com.alelievr.NodeGraphProcessor.Runtime",
         "UnityEngine.TestRunner",

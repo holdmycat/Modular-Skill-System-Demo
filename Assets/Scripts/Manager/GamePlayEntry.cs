@@ -4,6 +4,8 @@
 // Purpose: Scene entry point to bootstrap GameClientManager and initial scene manager.
 // Author: Xuefei Zhao (clashancients@gmail.com)
 //------------------------------------------------------------
+
+using Cysharp.Threading.Tasks;
 using Ebonor.Framework;
 using UnityEngine;
 
@@ -16,7 +18,7 @@ namespace Ebonor.Manager
 
         static readonly ILog log = LogManager.GetLogger(typeof(GamePlayEntry));
         
-        private void Start()
+        private async void Start()
         {
             var clientManager = gameObject.GetComponent<GameClientManager>() ?? gameObject.AddComponent<GameClientManager>();
 
@@ -27,7 +29,7 @@ namespace Ebonor.Manager
             if (initialSceneManagerPrefab != null)
             {
                 log.Info($"Switching to initial scene manager: {initialSceneManagerPrefab.GetType().Name}");
-                clientManager.SwitchSceneManager(initialSceneManagerPrefab);
+                await clientManager.SwitchSceneManager(initialSceneManagerPrefab);
                 return;
             }
             

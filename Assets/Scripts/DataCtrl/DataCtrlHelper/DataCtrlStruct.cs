@@ -209,6 +209,19 @@ namespace Ebonor.DataCtrl
         [InspectorName("Omni")]
         OMNI = 1 << 9,
     }
+
+    /// <summary>
+    /// Input control flag for enabling/disabling input groups.
+    /// </summary>
+    [Flags]
+    public enum eInputControlFlag : byte
+    {
+        None = 0,
+        Movement = 1 << 0,
+        Skills = 1 << 1,
+        Ui = 1 << 2,
+        All = Movement | Skills | Ui
+    }
     
     /// <summary>
     /// Skill event hooks used to trigger behaviour tree logic.

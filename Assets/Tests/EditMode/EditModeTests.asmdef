@@ -8,7 +8,8 @@
         "NodeGraphProcessor.Examples",
         "com.alelievr.NodeGraphProcessor.Runtime",
         "UnityEngine.TestRunner",
-        "UnityEditor.TestRunner"
+        "UnityEditor.TestRunner",
+        "UniTask"
     ],
     "includePlatforms": [
         "Editor"

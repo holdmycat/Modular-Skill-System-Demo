@@ -4,26 +4,29 @@
 // Purpose: Scene manager for the ShowcaseScene sandbox.
 // Author: Xuefei Zhao (clashancients@gmail.com)
 //------------------------------------------------------------
+using Cysharp.Threading.Tasks;
+
 namespace Ebonor.Manager
 {
     
     public class ShowCaseSceneManager : SceneManagerBase
     {
-        public override void Enter()
+        protected override UniTask OnEnter()
         {
-            base.Enter();
             log.Debug("Enter showcase scene.");
+            return UniTask.CompletedTask;
         }
 
-        public override void Exit()
+        protected override UniTask OnExit()
         {
-            base.Exit();
             log.Debug("Exit showcase scene.");
+            return UniTask.CompletedTask;
         }
 
-        public override void ResetScene()
+        protected override UniTask OnResetScene()
         {
             log.Debug("Reset showcase scene to defaults.");
+            return UniTask.CompletedTask;
         }
     }
 

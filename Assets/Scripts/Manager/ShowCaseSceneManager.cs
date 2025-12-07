@@ -46,6 +46,8 @@ namespace Ebonor.Manager
             }
             
             await LoadRoom();
+            
+            await _roomInstance.LoadPlayer();
         }
 
         protected override async UniTask OnExit()

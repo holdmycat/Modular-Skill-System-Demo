@@ -45,11 +45,13 @@ namespace Tests.EditMode
             Object.DestroyImmediate(manager.gameObject);
         }
 
-        [Test]
-        public async System.Threading.Tasks.Task PauseAndQuit_AreForwarded()
+        [UnityTest]
+        public System.Collections.IEnumerator PauseAndQuit_AreForwarded()
         {
             var manager = CreateComponent<GameClientManager>();
-            var sm = await manager.SwitchSceneManager<TestSceneManager>();
+            var smTask = manager.SwitchSceneManager<TestSceneManager>();
+            yield return smTask.ToCoroutine();
+            var sm = smTask.Result;
 
             var pauseMethod = typeof(GameClientManager).GetMethod("OnApplicationPause", BindingFlags.Instance | BindingFlags.NonPublic);
             if (pauseMethod != null)
@@ -58,11 +60,11 @@ namespace Tests.EditMode
                 pauseMethod.Invoke(manager, new object[] { false });
             }
 
-            await UniTask.Yield();
+            yield return null;
 
             var quitMethod = typeof(GameClientManager).GetMethod("OnApplicationQuit", BindingFlags.Instance | BindingFlags.NonPublic);
             if (quitMethod != null) quitMethod.Invoke(manager, null);
-            await UniTask.Yield();
+            yield return null;
 
             Assert.IsTrue(sm.Paused, "Pause should be forwarded.");
             Assert.IsTrue(sm.Resumed, "Resume should be forwarded.");

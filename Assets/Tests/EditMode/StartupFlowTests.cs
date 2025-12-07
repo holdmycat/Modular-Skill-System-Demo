@@ -2,13 +2,13 @@
 // File: StartupFlowTests.cs
 // Purpose: EditMode tests for startup/config/resource loading pipeline.
 //------------------------------------------------------------
+using System.Collections;
 using System.Reflection;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Manager;
 using NUnit.Framework;
 using UnityEngine;
-using System.Threading.Tasks;
 
 namespace Tests.EditMode
 {
@@ -43,17 +43,17 @@ namespace Tests.EditMode
             Assert.AreEqual(ResourceLoadMode.Resources, GetLoaderMode(GlobalServices.ResourceLoader));
         }
 
-        [Test]
-        public async Task SceneManagerBase_LifecycleInvokesHooks()
+        [UnityTest]
+        public IEnumerator SceneManagerBase_LifecycleInvokesHooks()
         {
             var go = new GameObject("TestSceneManager");
             var sm = go.AddComponent<TestSceneManagerHooks>();
 
-            await sm.Enter();
-            await sm.Pause(true);
-            await sm.Pause(false);
-            await sm.ResetScene();
-            await sm.Exit();
+            yield return sm.Enter().ToCoroutine();
+            yield return sm.Pause(true).ToCoroutine();
+            yield return sm.Pause(false).ToCoroutine();
+            yield return sm.ResetScene().ToCoroutine();
+            yield return sm.Exit().ToCoroutine();
 
             Assert.IsTrue(sm.Entered);
             Assert.IsTrue(sm.Exited);
@@ -61,10 +61,12 @@ namespace Tests.EditMode
             Assert.IsTrue(sm.ResumedOnce);
 
             Object.DestroyImmediate(go);
+
+           
         }
 
-        [Test]
-        public async Task ShowCaseSceneManager_LoadsRoomAndRoots()
+        [UnityTest]
+        public IEnumerator ShowCaseSceneManager_LoadsRoomAndRoots()
         {
             SetStaticField(typeof(GlobalServices), "resourceLoader", new ResourceLoader(ResourceLoadMode.Resources));
 
@@ -74,7 +76,7 @@ namespace Tests.EditMode
 
             SetInstanceField(sm, "_sceneConfig", sceneConfig);
 
-            await sm.Enter();
+            yield return sm.Enter().ToCoroutine();
 
             var roomMgr = go.GetComponent<Ebonor.GamePlay.GamePlayRoomManager>();
             Assert.IsNotNull(roomMgr, "Room manager should be created.");

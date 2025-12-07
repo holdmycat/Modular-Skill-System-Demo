@@ -18,14 +18,24 @@ namespace Ebonor.Manager
         [SerializeField] private SceneManagerBase initialSceneManagerPrefab;
         [SerializeField] private GlobalGameConfig globalConfig;
 
+        private GameClientManager _gameClientManager;
+        
         static readonly ILog log = LogManager.GetLogger(typeof(GamePlayEntry));
         
         private async void Start()
         {
-            var clientManager = gameObject.GetComponent<GameClientManager>() ?? gameObject.AddComponent<GameClientManager>();
 
+            if (null != _gameClientManager)
+            {
+                Destroy(_gameClientManager.gameObject);
+                _gameClientManager = null;
+            }
+            
+            var go = new GameObject("GameClientManager");
+            _gameClientManager = go.AddComponent<GameClientManager>();
+            
             // Ensure DataCtrl and default setup are ready.
-            clientManager.EnsureDataCtrl();
+            _gameClientManager.EnsureDataCtrl();
 
             GlobalServices.SetGlobalGameConfig(globalConfig);
             
@@ -45,7 +55,9 @@ namespace Ebonor.Manager
             if (initialSceneManagerPrefab != null)
             {
                 log.Info($"Switching to initial scene manager: {initialSceneManagerPrefab.GetType().Name}");
-                await clientManager.SwitchSceneManager(initialSceneManagerPrefab);
+                await _gameClientManager.SwitchSceneManager(initialSceneManagerPrefab);
+                await UniTask.DelayFrame(1);
+                Destroy(gameObject);
                 return;
             }
             

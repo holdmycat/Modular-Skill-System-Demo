@@ -12,20 +12,19 @@ namespace Ebonor.GamePlay
     /// </summary>
     public class PlayerInputRouter : MonoBehaviour, IPlayerInputSource
     {
-        
         private IPlayerInputSource _current;
         
         [Header("Enable Flags")]
         [SerializeField] private eInputControlFlag controlFlags = eInputControlFlag.All;
-        
+
         /// <summary>Global toggle state (read-only). Use SetInputEnabled to change.</summary>
-        public bool InputEnabled => controlFlags != eInputControlFlag.None;
+        public bool InputEnabled => (controlFlags & ~GetBlockedFlags()) != eInputControlFlag.None;
         /// <summary>Skill input state (read-only). Use SetSkillsEnabled to change.</summary>
-        public bool SkillsEnabled => InputEnabled && controlFlags.HasFlag(eInputControlFlag.Skills);
+        public bool SkillsEnabled => (controlFlags & eInputControlFlag.Skills) != 0 && !IsBlocked(eInputControlFlag.Skills);
         /// <summary>Movement input state (read-only). Use SetMovementEnabled to change.</summary>
-        public bool MovementEnabled => InputEnabled && controlFlags.HasFlag(eInputControlFlag.Movement);
+        public bool MovementEnabled => (controlFlags & eInputControlFlag.Movement) != 0 && !IsBlocked(eInputControlFlag.Movement);
         /// <summary>UI input state (read-only). Use SetUiEnabled to change.</summary>
-        public bool UiEnabled => InputEnabled && controlFlags.HasFlag(eInputControlFlag.Ui);
+        public bool UiEnabled => (controlFlags & eInputControlFlag.Ui) != 0 && !IsBlocked(eInputControlFlag.Ui);
 
         /// <summary>Set all group toggles from a flag mask (overwrites previous state).</summary>
         private void ApplyControlFlags(eInputControlFlag flags)
@@ -33,19 +32,19 @@ namespace Ebonor.GamePlay
             controlFlags = flags;
         }
         
-        public void InitPlayerInputRouter(IPlayerInputSource _source)
+        public void InitPlayerInputRouter(IPlayerInputSource source)
         {
             if (_current != null)
             {
                 return;
             }
   
-            _current = _source;
+            _current = source;
 
             // Initialize booleans from the flag mask for consistency.
             ApplyControlFlags(controlFlags);
         }
-        
+
         public void EnableAllInputControlFlags()
         {
             ApplyControlFlags(eInputControlFlag.All);
@@ -64,6 +63,18 @@ namespace Ebonor.GamePlay
         public void SetInputSource(IPlayerInputSource source)
         {
             _current = source;
+        }
+
+        private static bool IsBlocked(eInputControlFlag flag)
+        {
+            var src = InputBlockRegistry.Source;
+            return src != null && src.IsBlocked(flag);
+        }
+
+        private static eInputControlFlag GetBlockedFlags()
+        {
+            var src = InputBlockRegistry.Source;
+            return src != null ? src.BlockedFlags : eInputControlFlag.None;
         }
 
         // ISkillInputSource

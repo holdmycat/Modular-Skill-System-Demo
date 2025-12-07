@@ -10,6 +10,7 @@ using Ebonor.DataCtrl;
 using Ebonor.Manager;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Tests.EditMode
 {
@@ -51,7 +52,7 @@ namespace Tests.EditMode
             var manager = CreateComponent<GameClientManager>();
             var smTask = manager.SwitchSceneManager<TestSceneManager>();
             yield return smTask.ToCoroutine();
-            var sm = smTask.Result;
+            var sm = smTask.GetAwaiter().GetResult();
 
             var pauseMethod = typeof(GameClientManager).GetMethod("OnApplicationPause", BindingFlags.Instance | BindingFlags.NonPublic);
             if (pauseMethod != null)

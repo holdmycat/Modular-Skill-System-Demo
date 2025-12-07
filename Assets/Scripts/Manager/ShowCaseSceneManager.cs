@@ -11,21 +11,19 @@ namespace Ebonor.Manager
     
     public class ShowCaseSceneManager : SceneManagerBase
     {
-        public override UniTask Enter()
+        protected override UniTask OnEnter()
         {
-            base.Enter();
             log.Debug("Enter showcase scene.");
             return UniTask.CompletedTask;
         }
 
-        public override UniTask Exit()
+        protected override UniTask OnExit()
         {
-            base.Exit();
             log.Debug("Exit showcase scene.");
             return UniTask.CompletedTask;
         }
 
-        public override UniTask ResetScene()
+        protected override UniTask OnResetScene()
         {
             log.Debug("Reset showcase scene to defaults.");
             return UniTask.CompletedTask;

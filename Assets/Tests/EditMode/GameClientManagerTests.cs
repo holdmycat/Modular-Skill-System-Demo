@@ -84,19 +84,19 @@ namespace Tests.EditMode
         public bool Resumed;
         public static int ExitCount;
 
-        public override UniTask Enter()
+        protected override UniTask OnEnter()
         {
             Entered = true;
             return UniTask.CompletedTask;
         }
-        public override UniTask Exit()
+        protected override UniTask OnExit()
         {
             Exited = true;
             ExitCount++;
             return UniTask.CompletedTask;
         }
 
-        public override UniTask Pause(bool paused)
+        protected override UniTask OnPause(bool paused)
         {
             if (paused) Paused = true;
             else Resumed = true;

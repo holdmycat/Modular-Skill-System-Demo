@@ -37,17 +37,21 @@ namespace Tests.EditMode
             Object.DestroyImmediate(manager.gameObject);
         }
 
-        [Test]
-        public async UniTask SwitchSceneManager_EnterExitSequence()
+        [UnityTest]
+        public System.Collections.IEnumerator SwitchSceneManager_EnterExitSequence()
         {
             var manager = CreateComponent<GameClientManager>();
             TestSceneManager.ExitCount = 0;
             var prefab1 = CreatePrefabComponent<TestSceneManager>();
-            var first = await manager.SwitchSceneManager(prefab1);
+            var firstTask = manager.SwitchSceneManager(prefab1);
+            yield return firstTask.ToCoroutine();
+            var first = firstTask.GetAwaiter().GetResult();
             Assert.IsTrue(first.Entered, "First scene manager should Enter.");
 
             var prefab2 = CreatePrefabComponent<TestSceneManager>();
-            var second = await manager.SwitchSceneManager(prefab2);
+            var secondTask = manager.SwitchSceneManager(prefab2);
+            yield return secondTask.ToCoroutine();
+            var second = secondTask.GetAwaiter().GetResult();
             Assert.AreEqual(1, TestSceneManager.ExitCount, "First scene manager should Exit when switching.");
             Assert.IsTrue(second.Entered, "Second scene manager should Enter.");
 

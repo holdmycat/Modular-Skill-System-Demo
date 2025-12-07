@@ -3,6 +3,7 @@
 // Purpose: Simple global service locator for shared systems (e.g., ResourceLoader).
 //------------------------------------------------------------
 
+using System.Threading;
 using Ebonor.Framework;
 
 namespace Ebonor.DataCtrl
@@ -28,6 +29,19 @@ namespace Ebonor.DataCtrl
         {
             globalGameConfig = config;
         }
+        #endregion
+
+
+        #region MyRegion
+
+        private static int _counter = -1;
+
+        /// <summary>Get the next unique actor ID (uint, starts at 0).</summary>
+        public static uint NextId()
+        {
+            return unchecked((uint)Interlocked.Increment(ref _counter));
+        }
+
         #endregion
         
     }

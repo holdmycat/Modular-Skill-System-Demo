@@ -500,13 +500,10 @@ namespace Ebonor.DataCtrl
     public struct CharacterRuntimeData
     {
         public long _numericId;//character type id
-        public uint _netId;//unique id
         public bool _canChase;
-        public CharacterRuntimeData(long numericId, uint netId, bool canChase = true)
+        public CharacterRuntimeData(long numericId, bool canChase = true)
         {
-           
             _numericId = numericId;
-            _netId = netId;
             _canChase = canChase;
         }
     }

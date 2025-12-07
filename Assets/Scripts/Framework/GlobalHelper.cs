@@ -360,6 +360,15 @@ namespace Ebonor.Framework
             go.transform.localScale = Vector3.one * scale;
         }
         
+        public static void ResetLocalGameObject(GameObject parent, GameObject go, bool active = false, float scale = 1f)
+        {
+            go.transform.SetParent(parent.transform);
+            go.transform.localPosition = Vector3.zero;
+            go.transform.localRotation = Quaternion.identity;
+            go.transform.localScale = Vector3.one * scale;
+            go.SetActive(active);
+        }
+        
         #endregion
         
         

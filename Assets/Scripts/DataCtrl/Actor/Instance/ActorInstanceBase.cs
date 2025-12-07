@@ -21,6 +21,8 @@ namespace Ebonor.DataCtrl
         /// </summary>
         public virtual async UniTask<bool> LoadAsync<T>(CharacterRuntimeData characterdata) where T : ActorNumericComponentBase
         {
+            var _netId = GlobalServices.NextId();
+            
             return true;
         }
 

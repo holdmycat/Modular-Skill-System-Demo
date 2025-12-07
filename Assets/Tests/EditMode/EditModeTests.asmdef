@@ -9,7 +9,8 @@
         "com.alelievr.NodeGraphProcessor.Runtime",
         "UnityEngine.TestRunner",
         "UnityEditor.TestRunner",
-        "UniTask"
+        "UniTask",
+        "Ebonor.GamePlay"
     ],
     "includePlatforms": [
         "Editor"

@@ -8,6 +8,7 @@ using Ebonor.DataCtrl;
 using Ebonor.Manager;
 using NUnit.Framework;
 using UnityEngine;
+using System.Threading.Tasks;
 
 namespace Tests.EditMode
 {
@@ -43,7 +44,7 @@ namespace Tests.EditMode
         }
 
         [Test]
-        public async UniTask SceneManagerBase_LifecycleInvokesHooks()
+        public async Task SceneManagerBase_LifecycleInvokesHooks()
         {
             var go = new GameObject("TestSceneManager");
             var sm = go.AddComponent<TestSceneManagerHooks>();
@@ -63,7 +64,7 @@ namespace Tests.EditMode
         }
 
         [Test]
-        public async UniTask ShowCaseSceneManager_LoadsRoomAndRoots()
+        public async Task ShowCaseSceneManager_LoadsRoomAndRoots()
         {
             SetStaticField(typeof(GlobalServices), "resourceLoader", new ResourceLoader(ResourceLoadMode.Resources));
 

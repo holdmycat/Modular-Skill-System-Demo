@@ -230,16 +230,12 @@ namespace Ebonor.DataCtrl
     {
         /// <summary>ScriptableObjects, typically under Resources/ScriptableObjects/</summary>
         ScriptableObject,
-        /// <summary>Prefabs under Resources/Prefabs/</summary>
-        Prefab,
-        /// <summary>Audio clips under Resources/Audio/</summary>
-        Audio,
-        /// <summary>UI assets under Resources/UI/</summary>
-        UI,
-        /// <summary>Generic data under Resources/Data/</summary>
-        Data,
-        /// <summary>Fallback or custom path</summary>
-        Other
+        /// <summary>UI prefabs under Resources/UI/</summary>
+        UiPrefab,
+        /// <summary>Hero model prefabs under Resources/Models/Hero/</summary>
+        HeroModelPrefab,
+        /// <summary>All character data under Resources/AllCharacterData/</summary>
+        AllCharacterData
     }
     
     /// <summary>

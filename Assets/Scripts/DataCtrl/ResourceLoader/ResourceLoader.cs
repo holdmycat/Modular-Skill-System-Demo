@@ -7,7 +7,7 @@ using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using UnityEngine;
 
-namespace Ebonor.Framework
+namespace Ebonor.DataCtrl
 {
     public enum ResourceLoadMode
     {
@@ -94,16 +94,13 @@ namespace Ebonor.Framework
             switch (type)
             {
                 case ResourceAssetType.ScriptableObject:
-                    return $"ScriptableObjects/{assetName}";
-                case ResourceAssetType.Prefab:
-                    return $"Prefabs/{assetName}";
-                case ResourceAssetType.Audio:
-                    return $"Audio/{assetName}";
-                case ResourceAssetType.UI:
+                    return $"ScriptableObject/{assetName}";
+                case ResourceAssetType.UiPrefab:
                     return $"UI/{assetName}";
-                case ResourceAssetType.Data:
-                    return $"Data/{assetName}";
-                case ResourceAssetType.Other:
+                case ResourceAssetType.HeroModelPrefab:
+                    return $"Models/Hero/{assetName}";
+                case ResourceAssetType.AllCharacterData:
+                    return $"AllCharacterData/{assetName}";
                 default:
                     return assetName;
             }

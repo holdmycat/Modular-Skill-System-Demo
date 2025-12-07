@@ -8,8 +8,8 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using UnityEngine;
-using Ebonor.Framework;
 using Ebonor.GamePlay;
+using ResourceLoader = Ebonor.DataCtrl.ResourceLoader;
 
 namespace Ebonor.Manager
 {
@@ -31,10 +31,10 @@ namespace Ebonor.Manager
 
         protected override async UniTask OnEnter()
         {
-            
-            GlobalServices.ResourceLoader.LoadAsset<>()
-            
+
             log.Info("Enter showcase scene: loading content (data-driven).");
+            
+            _sceneConfig = await GlobalServices.ResourceLoader.LoadAsset<SceneLoadConfig>(this.name, ResourceAssetType.ScriptableObject);
             if (_sceneConfig == null)
             {
                 log.Error("Scene config is missing; skipping content load.");
@@ -75,14 +75,14 @@ namespace Ebonor.Manager
             }
             _roomInstance = gameObject.AddComponent<GamePlayRoomManager>();
             _roomRoot = _roomInstance.transform;
-            _characterRoot = _characterRoot ?? new GameObject("Characters").transform;
-            _characterRoot.SetParent(transform);
-            _uiRoot = _uiRoot ?? new GameObject("UI").transform;
-            _uiRoot.SetParent(transform);
-            _audioRoot = _audioRoot ?? new GameObject("Audio").transform;
-            _audioRoot.SetParent(transform);
-            _logicRoot = _logicRoot ?? new GameObject("Logic").transform;
-            _logicRoot.SetParent(transform);
+            // _characterRoot = _characterRoot ?? new GameObject("Characters").transform;
+            // _characterRoot.SetParent(transform);
+            // _uiRoot = _uiRoot ?? new GameObject("UI").transform;
+            // _uiRoot.SetParent(transform);
+            // _audioRoot = _audioRoot ?? new GameObject("Audio").transform;
+            // _audioRoot.SetParent(transform);
+            // _logicRoot = _logicRoot ?? new GameObject("Logic").transform;
+            // _logicRoot.SetParent(transform);
         }
 
         private async UniTask UnloadRoom()

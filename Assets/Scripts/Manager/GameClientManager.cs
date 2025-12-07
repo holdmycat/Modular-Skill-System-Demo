@@ -87,7 +87,7 @@ namespace Ebonor.Manager
         /// <summary>
         /// Switch to a new scene manager instance. Destroys the previous manager.
         /// </summary>
-        public async UniTask<SceneManagerBase> SwitchSceneManager(SceneManagerBase newSceneManagerInstance)
+        private async UniTask<SceneManagerBase> SwitchSceneManager(SceneManagerBase newSceneManagerInstance)
         {
             if (newSceneManagerInstance == null)
             {
@@ -118,9 +118,14 @@ namespace Ebonor.Manager
         /// </summary>
         public async UniTask<T> SwitchSceneManager<T>(T prefab = null) where T : SceneManagerBase
         {
-            SceneManagerBase instance = prefab != null
-                ? Instantiate(prefab, transform)
-                : new GameObject(typeof(T).Name).AddComponent<T>();
+            if (null == prefab)
+            {
+                log.Error("Fatal error, prefab is null");
+                return null;
+            }
+            SceneManagerBase instance = Instantiate(prefab, transform);
+            instance.name = prefab.name;
+            
             instance.transform.SetParent(transform);
             return await SwitchSceneManager(instance) as T;
         }

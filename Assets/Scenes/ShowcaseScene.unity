@@ -423,6 +423,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   initialSceneManagerPrefab: {fileID: 8520905411159703496, guid: 29d00fc35cd9a433e96c610859ca18bc,
     type: 3}
+  globalConfig: {fileID: 11400000, guid: 825c17351cd7e4fad8041fc75d1f7655, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

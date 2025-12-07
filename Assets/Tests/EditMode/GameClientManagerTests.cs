@@ -22,6 +22,12 @@ namespace Tests.EditMode
             return go.AddComponent<T>();
         }
 
+        private static T CreatePrefabComponent<T>(string name = null) where T : MonoBehaviour
+        {
+            var go = new GameObject(name ?? typeof(T).Name);
+            return go.AddComponent<T>();
+        }
+
         [Test]
         public void EnsureDataCtrl_AddsComponent()
         {
@@ -36,21 +42,26 @@ namespace Tests.EditMode
         {
             var manager = CreateComponent<GameClientManager>();
             TestSceneManager.ExitCount = 0;
-            var first = await manager.SwitchSceneManager<TestSceneManager>();
+            var prefab1 = CreatePrefabComponent<TestSceneManager>();
+            var first = await manager.SwitchSceneManager(prefab1);
             Assert.IsTrue(first.Entered, "First scene manager should Enter.");
 
-            var second = await manager.SwitchSceneManager<TestSceneManager>();
+            var prefab2 = CreatePrefabComponent<TestSceneManager>();
+            var second = await manager.SwitchSceneManager(prefab2);
             Assert.AreEqual(1, TestSceneManager.ExitCount, "First scene manager should Exit when switching.");
             Assert.IsTrue(second.Entered, "Second scene manager should Enter.");
 
             Object.DestroyImmediate(manager.gameObject);
+            Object.DestroyImmediate(prefab1.gameObject);
+            Object.DestroyImmediate(prefab2.gameObject);
         }
 
         [UnityTest]
         public System.Collections.IEnumerator PauseAndQuit_AreForwarded()
         {
             var manager = CreateComponent<GameClientManager>();
-            var smTask = manager.SwitchSceneManager<TestSceneManager>();
+            var prefab = CreatePrefabComponent<TestSceneManager>();
+            var smTask = manager.SwitchSceneManager(prefab);
             yield return smTask.ToCoroutine();
             var sm = smTask.GetAwaiter().GetResult();
 
@@ -72,6 +83,7 @@ namespace Tests.EditMode
             Assert.IsTrue(sm.Exited, "Exit should be forwarded on quit.");
 
             Object.DestroyImmediate(manager.gameObject);
+            Object.DestroyImmediate(prefab.gameObject);
             // sm is destroyed with manager; no separate destroy to avoid MissingReference.
         }
     }

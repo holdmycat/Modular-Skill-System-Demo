@@ -9,7 +9,16 @@ namespace Ebonor.DataCtrl
 {
     public static class GlobalServices
     {
-        public static ResourceLoader ResourceLoader { get; set; }
+        private static ResourceLoader resourceLoader;
+        public static ResourceLoader ResourceLoader => resourceLoader;
+        public static void InitResourceLoader(ResourceLoader loader)
+        {
+            if (resourceLoader != null)
+            {
+                return;
+            }
+            resourceLoader = loader;
+        }
 
 
         #region GlobalGameConfig

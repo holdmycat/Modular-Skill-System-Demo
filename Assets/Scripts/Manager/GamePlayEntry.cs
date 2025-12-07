@@ -18,36 +18,29 @@ namespace Ebonor.Manager
         [SerializeField] private SceneManagerBase initialSceneManagerPrefab;
         [SerializeField] private GlobalGameConfig globalConfig;
 
-        private GameClientManager _gameClientManager;
         
         static readonly ILog log = LogManager.GetLogger(typeof(GamePlayEntry));
         
         private async void Start()
         {
 
-            if (null != _gameClientManager)
-            {
-                Destroy(_gameClientManager.gameObject);
-                _gameClientManager = null;
-            }
-            
-            var go = new GameObject("GameClientManager");
-            _gameClientManager = go.AddComponent<GameClientManager>();
+            var clientManager = GameClientManager.Instance ? GameClientManager.Instance : FindObjectOfType<GameClientManager>()
+                ?? new GameObject("GameClientManager").AddComponent<GameClientManager>();
             
             // Ensure DataCtrl and default setup are ready.
-            _gameClientManager.EnsureDataCtrl();
+            clientManager.EnsureDataCtrl();
 
             GlobalServices.SetGlobalGameConfig(globalConfig);
             
-            // Apply global config for resource loading.
-            if (globalConfig != null)
+            // Apply global config for resource loading (only first initialization takes effect).
+            if (GlobalServices.ResourceLoader == null && globalConfig != null)
             {
-                GlobalServices.ResourceLoader = new ResourceLoader(globalConfig.loadMode);
+                GlobalServices.InitResourceLoader(new ResourceLoader(globalConfig.loadMode));
                 log.Info($"Global load mode set to {globalConfig.loadMode}.");
             }
-            else
+            else if (GlobalServices.ResourceLoader == null)
             {
-                GlobalServices.ResourceLoader = new ResourceLoader(ResourceLoadMode.Resources);
+                GlobalServices.InitResourceLoader(new ResourceLoader(ResourceLoadMode.Resources));
                 log.Warn("Global config missing; defaulting load mode to Resources.");
             }
 
@@ -55,9 +48,7 @@ namespace Ebonor.Manager
             if (initialSceneManagerPrefab != null)
             {
                 log.Info($"Switching to initial scene manager: {initialSceneManagerPrefab.GetType().Name}");
-                await _gameClientManager.SwitchSceneManager(initialSceneManagerPrefab);
-                await UniTask.DelayFrame(1);
-                Destroy(gameObject);
+                await clientManager.SwitchSceneManager(initialSceneManagerPrefab);
                 return;
             }
             

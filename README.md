@@ -31,7 +31,11 @@ This project is a **production-ready, modular skill system** extracted from an i
 
 *   `Assets/Scripts/DataCtrl`: Contains the data definitions and serialization logic.
     *   `NPData`: Node Processor Data, including `ICommonAttributeBase` and specific attribute types.
+    *   `DataScriptableObject`: Global config (`GlobalGameConfig`), scene load config, etc.
+    *   `ResourceLoader`: Unified resource loader (Resources/Addressables) with `ResourceAssetType` folder mapping.
 *   `Assets/Scripts/Core`: The core runtime game logic that consumes the data.
+*   `Assets/Scripts/Manager`: Game client lifecycle (`GameClientManager`), entry (`GamePlayEntry`), scene managers.
+*   `Assets/Scripts/GamePlay`: Room manager, input routing, etc.
 *   `Assets/Plugins/NodeEditor`: The visual graph editor tool (based on `NodeGraphProcessor`).
 *   `Assets/Scenes`: Demo scenes (e.g., `ShowcaseScene.unity`) to test the workflow.
 
@@ -75,6 +79,13 @@ We use **Unity Test Framework** for edit-mode coverage.
 - Role key format: `Profession_Side_Model_Sprite_Name`.
 - Empty Sprite/Name use fallbacks: `UnknownSprite` / `Unnamed`.
 - ID is read-only in the Inspector; use the **Generate Role ID** button to update it.
+
+### Startup & resource loading
+- Global config: `Assets/Resources/ScriptableObject/GlobalGameConfig.asset` selects load mode (Resources/Addressables).
+- Entry: `GamePlayEntry` initializes `GlobalServices` and switches to the initial scene manager (defaults to `ShowCaseSceneManager` asset).
+- Resource loader: `ResourceLoader` builds paths from `ResourceAssetType` (e.g., `ScriptableObject/{name}`, `UI/{name}`, `Models/Hero/{name}`, `AllCharacterData/{name}`) in Resources mode; in Addressables mode it uses the asset name as key.
+- Addressables: requires `ADDRESSABLES_AVAILABLE` compile symbol; otherwise Addressables loads return null with a warning.
+- Scene content: `SceneLoadConfig` drives data-only scene loading; scene managers use the loader for all assets.
 
 ### Not yet covered
 - Play Mode tests (runtime/asset loading, prefab behaviors)

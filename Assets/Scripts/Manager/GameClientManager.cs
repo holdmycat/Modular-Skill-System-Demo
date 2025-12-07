@@ -4,7 +4,6 @@
 // Purpose: Central runtime controller for global data, scene managers, and lifecycle.
 // Author: Xuefei Zhao (clashancients@gmail.com)
 //------------------------------------------------------------
-using System;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
@@ -19,17 +18,24 @@ namespace Ebonor.Manager
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(GameClientManager));
 
+        private static GameClientManager instance;
+        
+        public static GameClientManager Instance => instance;
+
+        
         private SceneManagerBase _currentSceneManager;
         private DataCtrl.DataCtrl _dataCtrlInst;
 
         private void Awake()
         {
             // Keep empty; creation/ownership is handled by scene.
+            instance = this;
         }
         
         private void OnDestroy()
         {
             // No singleton cleanup required.
+            instance = null;
         }
 
         private void Start()

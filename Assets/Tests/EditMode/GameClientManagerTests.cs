@@ -46,7 +46,7 @@ namespace Tests.EditMode
         }
 
         [Test]
-        public async UniTask PauseAndQuit_AreForwarded()
+        public async System.Threading.Tasks.Task PauseAndQuit_AreForwarded()
         {
             var manager = CreateComponent<GameClientManager>();
             var sm = await manager.SwitchSceneManager<TestSceneManager>();

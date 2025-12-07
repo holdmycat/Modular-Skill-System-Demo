@@ -18,8 +18,10 @@ namespace Ebonor.DataCtrl
         /// <summary>Description text for the attribute.</summary>
         string AttrDesc { get; }
 
+        uint NetId { get; }
+        
         //first time initialization
-        void OnInitActorNumericComponent(CharacterRuntimeData characterRuntimeData);
+        void OnInitActorNumericComponent(CharacterRuntimeData characterRuntimeData, uint netid);
 
         void OnUnInitActorNumericComponent();
         

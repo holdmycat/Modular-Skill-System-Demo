@@ -13,7 +13,7 @@ namespace Ebonor.DataCtrl
 {
     #region Enums
     /// <summary>
-    /// Buff animation stack states and their priorities.
+    /// Buff animation stack states and their priorities (higher bit = higher priority).
     /// </summary>
     [Flags]
     public enum eBuffBindAnimStackState
@@ -121,21 +121,13 @@ namespace Ebonor.DataCtrl
     /// </summary>
     public enum eSide {
         Null = 0,
-        /// <summary>
-        /// Player side.
-        /// </summary>
+        /// <summary>Player side.</summary>
         Player = 1,
-        /// <summary>
-        /// Enemy side.
-        /// </summary>
+        /// <summary>Enemy side.</summary>
         Enemy = 2,
-        /// <summary>
-        /// Neutral side, cannot be attacked.
-        /// </summary>
+        /// <summary>Neutral side, cannot be attacked.</summary>
         Neutral = 3,
-        /// <summary>
-        /// Aggressive toward both player and enemy.
-        /// </summary>
+        /// <summary>Aggressive toward both player and enemy.</summary>
         Terrorist = 4,
     }
     
@@ -221,6 +213,21 @@ namespace Ebonor.DataCtrl
         Skills = 1 << 1,
         Ui = 1 << 2,
         All = Movement | Skills | Ui
+    }
+
+    /// <summary>
+    /// Asset category used by the resource loader to build paths/keys.
+    /// </summary>
+    public enum ResourceAssetType
+    {
+        /// <summary>ScriptableObjects, typically under Resources/ScriptableObject/</summary>
+        ScriptableObject,
+        /// <summary>UI prefabs under Resources/UI/</summary>
+        UiPrefab,
+        /// <summary>Hero model prefabs under Resources/Models/Hero/</summary>
+        HeroModelPrefab,
+        /// <summary>All character data under Resources/AllCharacterData/</summary>
+        AllCharacterData
     }
     
     /// <summary>
@@ -348,7 +355,6 @@ namespace Ebonor.DataCtrl
     
     #endregion
     
-    
     #region Buff
     public class CSupportBuffInfo
     {
@@ -435,6 +441,72 @@ namespace Ebonor.DataCtrl
     //     }
     // }
 
+    #endregion
+    
+    #region Character Numeric Type
+    public enum eNumericType
+    {
+        Min = 10000,
+        
+        #region Base Attributes : 1001 - 1020
+        // UnitId = 1001, // hero id
+        UnityProfession = 1001, // profession
+        ActorSide = 1002, // faction/side
+        UnitLv = 1003, // level (in-session)
+        UnitMaxLV = 1004, // max level
+        Height = 1005,
+        Radius = 1006,
+        #endregion
+        
+        #region Core Base Attributes - 1021 ～ 1040
+        // Strength
+        Power = 1021,
+        PowerBase = Power * 10 + 1,
+        PowerAdd = Power * 10 + 2,
+        
+        // Agility
+        Agility = 1022,
+        AgilityBase = Agility * 10 + 1,
+        AgilityAdd = Agility * 10 + 2,
+        
+        // //智力
+        // Intelligence = 1012,
+        // IntelligenceBase = Intelligence * 10 + 1,
+        // IntelligenceAdd = Intelligence * 10 + 2,
+        
+        // Vitality
+        Vitality = 1023,
+        VitalityBase = Vitality * 10 + 1,
+        VitalityAdd = Vitality * 10 + 2,
+        
+        // Life
+        Life = 1024,
+        MaxLife = 1025,
+        #endregion
+
+        #region Mobility - 1041 ～ 1060
+        MovementSpeed = 1041,
+        MovementSpeedBase = MovementSpeed * 10 + 1,
+        MovementSpeedAdd = MovementSpeed * 10 + 2,
+        
+        RotationSpeed = 1042,
+        RotationSpeedBase = RotationSpeed * 10 + 1,
+        RotationSpeedAdd = RotationSpeed * 10 + 2,
+        RunningAnimSpeed = 1043, // animation speed
+        DropFlyingDuration = 1044, // drop flight duration
+        #endregion
+    }
+    
+    public struct CharacterRuntimeData
+    {
+        public long _numericId;//character type id
+        public bool _canChase;
+        public CharacterRuntimeData(long numericId, bool canChase = true)
+        {
+            _numericId = numericId;
+            _canChase = canChase;
+        }
+    }
     #endregion
     
     

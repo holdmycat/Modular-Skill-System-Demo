@@ -10,12 +10,19 @@ using Ebonor.DataCtrl;
 using Ebonor.Manager;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Tests.EditMode
 {
     public class GameClientManagerTests
     {
         private static T CreateComponent<T>(string name = null) where T : MonoBehaviour
+        {
+            var go = new GameObject(name ?? typeof(T).Name);
+            return go.AddComponent<T>();
+        }
+
+        private static T CreatePrefabComponent<T>(string name = null) where T : MonoBehaviour
         {
             var go = new GameObject(name ?? typeof(T).Name);
             return go.AddComponent<T>();
@@ -30,26 +37,37 @@ namespace Tests.EditMode
             Object.DestroyImmediate(manager.gameObject);
         }
 
-        [Test]
-        public async UniTask SwitchSceneManager_EnterExitSequence()
+        [UnityTest]
+        public System.Collections.IEnumerator SwitchSceneManager_EnterExitSequence()
         {
             var manager = CreateComponent<GameClientManager>();
             TestSceneManager.ExitCount = 0;
-            var first = await manager.SwitchSceneManager<TestSceneManager>();
+            var prefab1 = CreatePrefabComponent<TestSceneManager>();
+            var firstTask = manager.SwitchSceneManager(prefab1);
+            yield return firstTask.ToCoroutine();
+            var first = firstTask.GetAwaiter().GetResult();
             Assert.IsTrue(first.Entered, "First scene manager should Enter.");
 
-            var second = await manager.SwitchSceneManager<TestSceneManager>();
+            var prefab2 = CreatePrefabComponent<TestSceneManager>();
+            var secondTask = manager.SwitchSceneManager(prefab2);
+            yield return secondTask.ToCoroutine();
+            var second = secondTask.GetAwaiter().GetResult();
             Assert.AreEqual(1, TestSceneManager.ExitCount, "First scene manager should Exit when switching.");
             Assert.IsTrue(second.Entered, "Second scene manager should Enter.");
 
             Object.DestroyImmediate(manager.gameObject);
+            Object.DestroyImmediate(prefab1.gameObject);
+            Object.DestroyImmediate(prefab2.gameObject);
         }
 
-        [Test]
-        public async UniTask PauseAndQuit_AreForwarded()
+        [UnityTest]
+        public System.Collections.IEnumerator PauseAndQuit_AreForwarded()
         {
             var manager = CreateComponent<GameClientManager>();
-            var sm = await manager.SwitchSceneManager<TestSceneManager>();
+            var prefab = CreatePrefabComponent<TestSceneManager>();
+            var smTask = manager.SwitchSceneManager(prefab);
+            yield return smTask.ToCoroutine();
+            var sm = smTask.GetAwaiter().GetResult();
 
             var pauseMethod = typeof(GameClientManager).GetMethod("OnApplicationPause", BindingFlags.Instance | BindingFlags.NonPublic);
             if (pauseMethod != null)
@@ -58,17 +76,18 @@ namespace Tests.EditMode
                 pauseMethod.Invoke(manager, new object[] { false });
             }
 
-            await UniTask.Yield();
+            yield return null;
 
             var quitMethod = typeof(GameClientManager).GetMethod("OnApplicationQuit", BindingFlags.Instance | BindingFlags.NonPublic);
             if (quitMethod != null) quitMethod.Invoke(manager, null);
-            await UniTask.Yield();
+            yield return null;
 
             Assert.IsTrue(sm.Paused, "Pause should be forwarded.");
             Assert.IsTrue(sm.Resumed, "Resume should be forwarded.");
             Assert.IsTrue(sm.Exited, "Exit should be forwarded on quit.");
 
             Object.DestroyImmediate(manager.gameObject);
+            Object.DestroyImmediate(prefab.gameObject);
             // sm is destroyed with manager; no separate destroy to avoid MissingReference.
         }
     }

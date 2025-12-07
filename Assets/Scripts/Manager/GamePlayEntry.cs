@@ -6,6 +6,7 @@
 //------------------------------------------------------------
 
 using Cysharp.Threading.Tasks;
+using Ebonor.DataCtrl;
 using Ebonor.Framework;
 using UnityEngine;
 
@@ -15,15 +16,33 @@ namespace Ebonor.Manager
     {
         [Header("Bootstrap")]
         [SerializeField] private SceneManagerBase initialSceneManagerPrefab;
+        [SerializeField] private GlobalGameConfig globalConfig;
 
+        
         static readonly ILog log = LogManager.GetLogger(typeof(GamePlayEntry));
         
         private async void Start()
         {
-            var clientManager = gameObject.GetComponent<GameClientManager>() ?? gameObject.AddComponent<GameClientManager>();
 
+            var clientManager = GameClientManager.Instance ? GameClientManager.Instance : FindObjectOfType<GameClientManager>()
+                ?? new GameObject("GameClientManager").AddComponent<GameClientManager>();
+            
             // Ensure DataCtrl and default setup are ready.
             clientManager.EnsureDataCtrl();
+
+            GlobalServices.SetGlobalGameConfig(globalConfig);
+            
+            // Apply global config for resource loading (only first initialization takes effect).
+            if (GlobalServices.ResourceLoader == null && globalConfig != null)
+            {
+                GlobalServices.InitResourceLoader(new ResourceLoader(globalConfig.loadMode));
+                log.Info($"Global load mode set to {globalConfig.loadMode}.");
+            }
+            else if (GlobalServices.ResourceLoader == null)
+            {
+                GlobalServices.InitResourceLoader(new ResourceLoader(ResourceLoadMode.Resources));
+                log.Warn("Global config missing; defaulting load mode to Resources.");
+            }
 
             // If specified, switch to the provided scene manager; otherwise rely on GameClientManager default.
             if (initialSceneManagerPrefab != null)

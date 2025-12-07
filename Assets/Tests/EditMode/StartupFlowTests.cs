@@ -9,6 +9,7 @@ using Ebonor.DataCtrl;
 using Ebonor.Manager;
 using NUnit.Framework;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Tests.EditMode
 {

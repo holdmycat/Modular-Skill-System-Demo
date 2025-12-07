@@ -7,6 +7,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Ebonor.Framework;
+using Ebonor.GamePlay;
 using UnityEngine;
 
 namespace Ebonor.Manager
@@ -20,6 +21,8 @@ namespace Ebonor.Manager
         
         protected GameClientManager ClientManager { get; private set; }
 
+        protected GamePlayRoomManager _roomInstance;
+        
         /// <summary>
         /// Called once when the scene manager is created.
         /// </summary>

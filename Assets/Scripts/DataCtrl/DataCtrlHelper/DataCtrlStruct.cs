@@ -222,6 +222,25 @@ namespace Ebonor.DataCtrl
         Ui = 1 << 2,
         All = Movement | Skills | Ui
     }
+
+    /// <summary>
+    /// Asset category used by the resource loader to build paths/keys.
+    /// </summary>
+    public enum ResourceAssetType
+    {
+        /// <summary>ScriptableObjects, typically under Resources/ScriptableObjects/</summary>
+        ScriptableObject,
+        /// <summary>Prefabs under Resources/Prefabs/</summary>
+        Prefab,
+        /// <summary>Audio clips under Resources/Audio/</summary>
+        Audio,
+        /// <summary>UI assets under Resources/UI/</summary>
+        UI,
+        /// <summary>Generic data under Resources/Data/</summary>
+        Data,
+        /// <summary>Fallback or custom path</summary>
+        Other
+    }
     
     /// <summary>
     /// Skill event hooks used to trigger behaviour tree logic.

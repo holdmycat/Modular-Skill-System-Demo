@@ -5,6 +5,7 @@
 // Author: Xuefei Zhao (clashancients@gmail.com)
 //------------------------------------------------------------
 using System;
+using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
 using UnityEngine;
@@ -38,28 +39,33 @@ namespace Ebonor.Manager
 
         private void Update()
         {
-            _currentSceneManager?.Tick(Time.deltaTime);
+            _currentSceneManager?.Tick(Time.deltaTime).Forget();
         }
 
-        
-        private void OnApplicationQuit()
+
+        private async void OnApplicationQuit()
         {
             
             log.Info("Application quitting. Exiting current scene manager.");
-            _currentSceneManager?.Exit();
+            if (_currentSceneManager != null)
+            {
+                await _currentSceneManager.Exit();
+            }
         }
         
-        private void OnApplicationPause(bool pauseStatus)
+        private async void OnApplicationPause(bool pauseStatus)
         {
             if (pauseStatus)
             {
                 log.Info("Application paused. Notifying scene manager.");
-                _currentSceneManager?.Pause(true);
+                if (_currentSceneManager != null)
+                    await _currentSceneManager.Pause(true);
             }
             else
             {
                 log.Info("Application resumed. Notifying scene manager.");
-                _currentSceneManager?.Pause(false);
+                if (_currentSceneManager != null)
+                    await _currentSceneManager.Pause(false);
             }
         }
         
@@ -81,7 +87,7 @@ namespace Ebonor.Manager
         /// <summary>
         /// Switch to a new scene manager instance. Destroys the previous manager.
         /// </summary>
-        public SceneManagerBase SwitchSceneManager(SceneManagerBase newSceneManagerInstance)
+        public async UniTask<SceneManagerBase> SwitchSceneManager(SceneManagerBase newSceneManagerInstance)
         {
             if (newSceneManagerInstance == null)
             {
@@ -91,17 +97,18 @@ namespace Ebonor.Manager
 
             if (_currentSceneManager != null)
             {
-                _currentSceneManager.Exit();
+                var previous = _currentSceneManager;
+                await previous.Exit();
                 // In edit mode, Destroy throws; use DestroyImmediate to keep tests safe.
                 if (Application.isPlaying)
-                    Destroy(_currentSceneManager.gameObject);
+                    Destroy(previous.gameObject);
                 else
-                    DestroyImmediate(_currentSceneManager.gameObject);
+                    DestroyImmediate(previous.gameObject);
             }
 
             _currentSceneManager = newSceneManagerInstance;
-            _currentSceneManager.Init(this);
-            _currentSceneManager.Enter();
+            await _currentSceneManager.Init(this);
+            await _currentSceneManager.Enter();
             log.Info($"Switched to scene manager: {_currentSceneManager.GetType().Name}");
             return _currentSceneManager;
         }
@@ -109,21 +116,21 @@ namespace Ebonor.Manager
         /// <summary>
         /// Instantiate a scene manager (from prefab if provided) and switch to it.
         /// </summary>
-        public T SwitchSceneManager<T>(T prefab = null) where T : SceneManagerBase
+        public async UniTask<T> SwitchSceneManager<T>(T prefab = null) where T : SceneManagerBase
         {
             SceneManagerBase instance = prefab != null
                 ? Instantiate(prefab, transform)
                 : new GameObject(typeof(T).Name).AddComponent<T>();
             instance.transform.SetParent(transform);
-            return SwitchSceneManager(instance) as T;
+            return await SwitchSceneManager(instance) as T;
         }
 
         /// <summary>
         /// Reset the active scene manager (if any).
         /// </summary>
-        public void ResetActiveScene()
+        public UniTask ResetActiveScene()
         {
-            _currentSceneManager?.ResetScene();
+            return _currentSceneManager != null ? _currentSceneManager.ResetScene() : UniTask.CompletedTask;
         }
     }
 }

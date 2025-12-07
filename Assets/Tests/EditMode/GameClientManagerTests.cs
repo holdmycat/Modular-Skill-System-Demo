@@ -5,6 +5,7 @@
 // Author: Xuefei Zhao (clashancients@gmail.com)
 //------------------------------------------------------------
 using System.Reflection;
+using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Manager;
 using NUnit.Framework;
@@ -30,14 +31,14 @@ namespace Tests.EditMode
         }
 
         [Test]
-        public void SwitchSceneManager_EnterExitSequence()
+        public async UniTask SwitchSceneManager_EnterExitSequence()
         {
             var manager = CreateComponent<GameClientManager>();
             TestSceneManager.ExitCount = 0;
-            var first = manager.SwitchSceneManager<TestSceneManager>();
+            var first = await manager.SwitchSceneManager<TestSceneManager>();
             Assert.IsTrue(first.Entered, "First scene manager should Enter.");
 
-            var second = manager.SwitchSceneManager<TestSceneManager>();
+            var second = await manager.SwitchSceneManager<TestSceneManager>();
             Assert.AreEqual(1, TestSceneManager.ExitCount, "First scene manager should Exit when switching.");
             Assert.IsTrue(second.Entered, "Second scene manager should Enter.");
 
@@ -45,17 +46,23 @@ namespace Tests.EditMode
         }
 
         [Test]
-        public void PauseAndQuit_AreForwarded()
+        public async UniTask PauseAndQuit_AreForwarded()
         {
             var manager = CreateComponent<GameClientManager>();
-            var sm = manager.SwitchSceneManager<TestSceneManager>();
+            var sm = await manager.SwitchSceneManager<TestSceneManager>();
 
             var pauseMethod = typeof(GameClientManager).GetMethod("OnApplicationPause", BindingFlags.Instance | BindingFlags.NonPublic);
-            pauseMethod.Invoke(manager, new object[] { true });
-            pauseMethod.Invoke(manager, new object[] { false });
+            if (pauseMethod != null)
+            {
+                pauseMethod.Invoke(manager, new object[] { true });
+                pauseMethod.Invoke(manager, new object[] { false });
+            }
+
+            await UniTask.Yield();
 
             var quitMethod = typeof(GameClientManager).GetMethod("OnApplicationQuit", BindingFlags.Instance | BindingFlags.NonPublic);
-            quitMethod.Invoke(manager, null);
+            if (quitMethod != null) quitMethod.Invoke(manager, null);
+            await UniTask.Yield();
 
             Assert.IsTrue(sm.Paused, "Pause should be forwarded.");
             Assert.IsTrue(sm.Resumed, "Resume should be forwarded.");
@@ -77,17 +84,23 @@ namespace Tests.EditMode
         public bool Resumed;
         public static int ExitCount;
 
-        public override void Enter() => Entered = true;
-        public override void Exit()
+        public override UniTask Enter()
+        {
+            Entered = true;
+            return UniTask.CompletedTask;
+        }
+        public override UniTask Exit()
         {
             Exited = true;
             ExitCount++;
+            return UniTask.CompletedTask;
         }
 
-        public override void Pause(bool paused)
+        public override UniTask Pause(bool paused)
         {
             if (paused) Paused = true;
             else Resumed = true;
+            return UniTask.CompletedTask;
         }
     }
 }

@@ -19,27 +19,27 @@ namespace Ebonor.DataCtrl
         /// <summary>
         /// Load/prepare actor data and resources. Override to provide concrete numeric component creation.
         /// </summary>
-        public virtual UniTask LoadAsync()
+        public virtual async UniTask<bool> LoadAsync<T>(CharacterRuntimeData characterdata) where T : ActorNumericComponentBase
         {
-            return UniTask.CompletedTask;
+            return true;
         }
 
         /// <summary>Cleanup resources.</summary>
-        public virtual UniTask UnloadAsync()
+        public virtual async UniTask<bool> UnloadAsync()
         {
-            return UniTask.CompletedTask;
+            return true;
         }
 
         /// <summary>Spawn/enter the scene.</summary>
-        public virtual UniTask SpawnAsync()
+        public virtual async UniTask<bool> SpawnAsync()
         {
-            return UniTask.CompletedTask;
+            return true;
         }
 
         /// <summary>Despawn/recycle.</summary>
-        public virtual UniTask DespawnAsync()
+        public virtual async UniTask<bool> DespawnAsync()
         {
-            return UniTask.CompletedTask;
+            return true;
         }
     }
 }

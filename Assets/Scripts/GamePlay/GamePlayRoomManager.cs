@@ -1,39 +1,33 @@
+//------------------------------------------------------------
+// File: GamePlayRoomManager.cs
+// Purpose: Room-level coordinator (bootstrap/cleanup hooks for the active room).
+//------------------------------------------------------------
 using Cysharp.Threading.Tasks;
 using Ebonor.Framework;
 using UnityEngine;
 
 namespace Ebonor.GamePlay
 {
-
-    //npc
-    public partial class GamePlayRoomManager : MonoBehaviour
-    {
-        
-    }
-    
-
-    //player
-    public partial class GamePlayRoomManager : MonoBehaviour
-    {
-        
-    }
-    
-    //system
-    public partial class GamePlayRoomManager : MonoBehaviour
+    public class GamePlayRoomManager : MonoBehaviour
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(GamePlayRoomManager));
-        
-        public async UniTask OnInitRoomManager()
+
+        /// <summary>
+        /// Initialize room-level systems (placeholder for future expansion).
+        /// </summary>
+        public virtual UniTask OnInitRoomManager()
         {
-                   
-        }
-        
-        public async UniTask OnUnInitRoomManager()
-        {
-            
+            log.Info("RoomManager init.");
+            return UniTask.CompletedTask;
         }
 
-        
-        
+        /// <summary>
+        /// Cleanup room-level systems (placeholder for future expansion).
+        /// </summary>
+        public virtual UniTask OnUnInitRoomManager()
+        {
+            log.Info("RoomManager uninit.");
+            return UniTask.CompletedTask;
+        }
     }
 }

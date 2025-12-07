@@ -13,3 +13,4 @@ MonoBehaviour:
   m_Name: GlobalGameConfig
   m_EditorClassIdentifier: 
   loadMode: 0
+  defaultPlayerHeroId: 6070748851497539930

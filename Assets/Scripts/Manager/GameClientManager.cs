@@ -86,7 +86,11 @@ namespace Ebonor.Manager
             _dataCtrlInst = go.AddComponent<DataCtrl.DataCtrl>();
             _dataCtrlInst.transform.SetParent(transform);
             _dataCtrlInst.InitializeDataCtrl();
+            
             DataCtrlHelper.OnInitDataCtrlHelper();
+            
+            
+            
             log.Info("DataCtrl initialized.");
         }
 

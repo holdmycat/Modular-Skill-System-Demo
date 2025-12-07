@@ -10,6 +10,9 @@ namespace Ebonor.DataCtrl
         
         public static void OnInitDataCtrlHelper()
         {
+            //load all hero data
+            
+            
             
         }
         

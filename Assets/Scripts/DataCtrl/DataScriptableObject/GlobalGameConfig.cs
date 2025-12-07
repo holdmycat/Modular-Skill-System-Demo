@@ -12,5 +12,8 @@ namespace Ebonor.DataCtrl
     {
         [Header("Resource Loading")]
         public ResourceLoadMode loadMode = ResourceLoadMode.Resources;
+        
+        [Header("Default Player Id")]
+        public long defaultPlayerHeroId;
     }
 }

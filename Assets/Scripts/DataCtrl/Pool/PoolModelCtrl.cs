@@ -14,6 +14,7 @@ namespace Ebonor.DataCtrl
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(PoolModelCtrl));
         
+        /// <summary>Pooled actor instances by model id.</summary>
         private readonly Dictionary<uint, List<IActorInstance>> _pooledActors = new Dictionary<uint, List<IActorInstance>>();
         
         public override void ClearAllPoolItem()
@@ -47,6 +48,7 @@ namespace Ebonor.DataCtrl
                 return result as T;
             }
             
+            // Fallback: generate a new instance.
             MethodInfo methodInfo = typeof(PoolModelCtrl).GetMethod(nameof(GenerateModel), BindingFlags.Instance | BindingFlags.NonPublic)?.MakeGenericMethod(typeof(T));
             if (methodInfo != null)
             {

@@ -303,6 +303,9 @@ namespace Ebonor.Manager
                 return null;
             }
 
+            // Ensure DataCtrl exists before instantiating scene managers in tests/CI that skip InitGameClientManager.
+            EnsureDataCtrl();
+
             SceneManagerBase instance = Instantiate(prefab, transform);
             
             instance.name = prefab.name;

@@ -1,15 +1,67 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
 using Cysharp.Threading.Tasks;
 using Ebonor.Framework;
+using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using UnityEditor;
 using UnityEngine;
 
 namespace Ebonor.DataCtrl
 {
+    //all character data
+    public partial class DataCtrl : MonoBehaviour
+    {
+        private Dictionary<long, UnitAttributesNodeDataBase> _dicUnitAttriDatas;
+        private Dictionary<eActorModelType, List<UnitAttributesNodeDataBase>> _dicListUnitDatas;
+        
+        private async UniTask LoadAllCharacterDataAsync(GlobalGameConfig config)
+        {
+            
+            _dicUnitAttriDatas ??= new Dictionary<long, UnitAttributesNodeDataBase>();
+            _dicUnitAttriDatas.Clear();
 
+            _dicListUnitDatas ??= new Dictionary<eActorModelType, List<UnitAttributesNodeDataBase>>();
+            _dicListUnitDatas.Clear();
+
+            for (var i = eActorModelType.eHero; i <= eActorModelType.eEventSkillActor; i++)
+            {
+                _dicListUnitDatas.Add(i, new List<UnitAttributesNodeDataBase>());
+            }
+            
+            var globalConfig =config.allCharacterDataPath;
+            
+            var heroData = await GlobalServices.ResourceLoader.LoadAsset<TextAsset>(globalConfig, ResourceAssetType.AllCharacterData);
+            using var bsonReader = new BsonBinaryReader(new MemoryStream(heroData.bytes));
+            var heroItems = BsonSerializer.Deserialize<UnitAttributesDataSupportor>(bsonReader);
+            foreach (var hero in heroItems.UnitAttributesDataSupportorDic.Values)  
+            {                    
+                _dicUnitAttriDatas.Add(hero.UnitDataNodeId, hero);  
+                _dicListUnitDatas[hero.ActorModelType].Add(hero);  
+                log.Debug("heroId:" + hero.UnitDataNodeId);
+            }
+        }
+
+        private void UnLoadAllCharacterDataAsync()
+        {
+            _dicUnitAttriDatas.Clear();
+            _dicListUnitDatas.Clear();
+        }
+
+        public UnitAttributesNodeDataBase GetUnitAttributeNodeData(long id)
+        {
+            if (_dicUnitAttriDatas.TryGetValue(id, out var attr))
+            {
+                return attr;
+            }
+
+            return null;
+        }
+        
+    }
+    
     //load all system data
     public partial class DataCtrl : MonoBehaviour
     {
@@ -61,12 +113,33 @@ namespace Ebonor.DataCtrl
             // Currently just finishing up
             progress?.Report(1.0f);
         }
+
+
+        public async UniTask LoadAllGameDataAsync(IProgress<float> progress)
+        {
+            
+            var globalConfig = GlobalServices.GlobalGameConfig;
+            
+            //all character data
+            await LoadAllCharacterDataAsync(globalConfig);
+            progress?.Report(0.1f);
+            
+            //
+            
+            //
+            
+            
+            progress?.Report(1.0f);
+            
+        }
+        
     }
     
     //system
     public partial class DataCtrl : MonoBehaviour
     {
        
+        private static readonly ILog log = LogManager.GetLogger(typeof(DataCtrl));
         
         private static DataCtrl _inst;
         public static DataCtrl Inst => _inst;
@@ -79,6 +152,7 @@ namespace Ebonor.DataCtrl
         
         private void OnDestroy()
         {
+            UnLoadAllCharacterDataAsync();
             _inst = null;
         }
         

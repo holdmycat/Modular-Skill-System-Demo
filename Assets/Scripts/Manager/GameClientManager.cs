@@ -251,25 +251,32 @@ namespace Ebonor.Manager
             }
 
             // Ensure core data controller exists before any loading.
-            EnsureDataCtrl();
+            //EnsureDataCtrl();
 
             //load necessary resources
             if (!GlobalServices.IsAppInitialized)
             {
                 log.Info("First time initialization: Loading global resources...");
+
+                var uiLoading = await _uiManager.OpenUIAsync<UIScene_Loading>();
+
+                if (null == uiLoading)
+                    return null;
                 
                 // Create a progress reporter. In a real scenario, this would update a UI slider.
                 var progressReporter = new System.Progress<float>(progress =>
                 {
                     log.Info($"Global Loading Progress: {progress * 100:F0}%");
+                    uiLoading.SetPercent(progress);
                 });
                 
                 // Execute the loading pipeline
+                uiLoading.SetTitle("Loading DLL");
                 await _dataCtrlInst.LoadAllSystemDataAsync(progressReporter);
-
                 
-                //Execute the character data
-                
+                //Execute the game data
+                uiLoading.SetTitle("Loading Game Data");
+                await _dataCtrlInst.LoadAllGameDataAsync(progressReporter);
                 
                 // Mark as initialized to prevent future re-loading
                 GlobalServices.MarkAppInitialized();
@@ -304,8 +311,9 @@ namespace Ebonor.Manager
             }
 
             // Ensure DataCtrl exists before instantiating scene managers in tests/CI that skip InitGameClientManager.
+#if UNITY_EDITOR
             EnsureDataCtrl();
-
+#endif
             SceneManagerBase instance = Instantiate(prefab, transform);
             
             instance.name = prefab.name;

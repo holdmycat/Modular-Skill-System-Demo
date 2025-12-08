@@ -1,7 +1,7 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using Cysharp.Threading.Tasks;
 using Ebonor.Framework;
 using MongoDB.Bson.Serialization;
 using UnityEditor;
@@ -9,7 +9,62 @@ using UnityEngine;
 
 namespace Ebonor.DataCtrl
 {
-    public class DataCtrl : MonoBehaviour
+
+    //load all system data
+    public partial class DataCtrl : MonoBehaviour
+    {
+        /// <summary>
+        /// Async method to load all system data (BSON registration, etc.)
+        /// </summary>
+        public async UniTask LoadAllSystemDataAsync(IProgress<float> progress)
+        {
+            if (IsInitedBsonClassMap)
+            {
+                progress?.Report(1.0f);
+                return;
+            }
+
+            progress?.Report(0.1f);
+                    
+            // Find assemblies
+            Assembly _dataCtrl = null;
+            Assembly _multiPlayer = null;
+            Assembly _manager = null;
+
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            foreach (var assembly in assemblies)
+            {
+                if (assembly.FullName.Contains(ConstData.AD_DATACTRL))
+                {
+                    _dataCtrl = assembly;
+                }
+                else if (assembly.FullName.Contains(ConstData.AD_MULTIPLAYER))
+                {
+                    _multiPlayer = assembly;
+                }
+                else if (assembly.FullName.Contains(ConstData.AD_MANAGER))
+                {
+                    _manager = assembly;
+                }
+            }
+                    
+            progress?.Report(0.3f);
+
+            // Perform BSON registration
+            // Note: BsonClassMap and other MongoDB types are generally thread-safe for registration 
+            // as long as we don't access Unity APIs here.
+            OnLoadMPBattleGraphData(_dataCtrl, _multiPlayer, _manager);
+                    
+            progress?.Report(0.8f);
+
+            // Stage 2: Main thread finalization (if any Unity assets need loading)
+            // Currently just finishing up
+            progress?.Report(1.0f);
+        }
+    }
+    
+    //system
+    public partial class DataCtrl : MonoBehaviour
     {
        
         
@@ -199,6 +254,7 @@ namespace Ebonor.DataCtrl
                     }
                 }
             }
+
             
     }
 }

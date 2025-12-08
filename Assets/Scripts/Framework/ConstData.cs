@@ -26,5 +26,11 @@ namespace Ebonor.Framework
         
         public const string BB_ISTreeStoped = "IsTreeStoped";
         #endregion
+        
+        #region ui const
+
+        public const string UI_PLAYERACTION = "PlayerInput";
+
+        #endregion
     }
 }

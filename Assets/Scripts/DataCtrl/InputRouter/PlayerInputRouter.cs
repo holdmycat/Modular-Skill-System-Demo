@@ -5,13 +5,25 @@
 using UnityEngine;
 using Ebonor.DataCtrl;
 
-namespace Ebonor.GamePlay
+namespace Ebonor.DataCtrl
 {
     /// <summary>
     /// Stores the active input source so gameplay systems can read from one surface.
     /// </summary>
     public class PlayerInputRouter : MonoBehaviour, IPlayerInputSource
     {
+        // Managed by GameClientManager, no self-singleton.
+        
+        public void OnUpdate(float deltaTime)
+        {
+            // Update logic if needed (currently input is event/poll based, but good to have the hook)
+        }
+
+        public void Exit()
+        {
+            // Cleanup logic
+        }
+
         private IPlayerInputSource _current;
         
         [Header("Enable Flags")]

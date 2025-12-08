@@ -11,6 +11,8 @@ namespace Ebonor.DataCtrl
     {
         ActorNumericComponentBase ActorNumericComponentBase { get; }
 
+        uint NetId { get; }
+        
         /// <summary>Load/prepare actor data and resources.</summary>
         UniTask<bool> LoadAsync<T>(CharacterRuntimeData characterdata) where T : ActorNumericComponentBase;
 

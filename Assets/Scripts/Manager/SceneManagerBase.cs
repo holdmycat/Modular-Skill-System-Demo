@@ -43,7 +43,7 @@ namespace Ebonor.Manager
         /// <summary>
         /// Called once per frame by the client manager.
         /// </summary>
-        public  UniTask Tick(float deltaTime) => OnTick(deltaTime);
+        public  void Tick(float deltaTime) => OnTick(deltaTime);
 
         /// <summary>
         /// Called when switching away from this scene. Input is auto-blocked during execution.

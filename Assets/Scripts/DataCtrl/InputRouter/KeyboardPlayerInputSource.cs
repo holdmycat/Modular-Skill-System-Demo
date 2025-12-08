@@ -4,7 +4,7 @@
 //------------------------------------------------------------
 using UnityEngine;
 
-namespace Ebonor.GamePlay
+namespace Ebonor.DataCtrl
 {
     /// <summary>
     /// Keyboard + mouse input source. Swap out via PlayerInputRouter when new devices are added.

@@ -14,18 +14,18 @@ namespace Ebonor.DataCtrl
         protected string attrDesc;
         protected string attrIconName;
         protected string attrAvatarName;
-
+        protected uint _netId;
         public string AttrName => attrName;
         public string AttrDesc => attrDesc;
         public string AttrIconName => attrIconName;
         public string AttrAvatarName => attrAvatarName;
+        public uint NetId => _netId;
         
-        
-        public void OnInitActorNumericComponent(CharacterRuntimeData characterRuntimeData)
+        public void OnInitActorNumericComponent(CharacterRuntimeData characterRuntimeData, uint netid)
         {
-            
+            _netId = netid;
         }
-
+        
         public void OnUnInitActorNumericComponent()
         {
             
@@ -35,6 +35,5 @@ namespace Ebonor.DataCtrl
         {
            
         }
-        
     }
 }

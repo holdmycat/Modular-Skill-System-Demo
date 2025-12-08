@@ -43,7 +43,7 @@ namespace Ebonor.UI
 
         public void OnUpdate(float deltaTime, PlayerInputRouter router)
         {
-            HandleInput(router);
+            HandleInput(deltaTime, router);
         }
 
         public void Exit()
@@ -62,11 +62,13 @@ namespace Ebonor.UI
         /// <summary>
         /// Open a UI panel. Loads it if not already cached.
         /// </summary>
-        public async UniTask<T> OpenUIAsync<T>(string prefabPath = null) where T : UIBase
+        public async UniTask<T> OpenUIAsync<T>() where T : UIBase
         {
             Type type = typeof(T);
             T ui = null;
 
+            var prefabPath = type.Name;
+            
             // 1. Check Cache
             if (_uiDict.TryGetValue(type, out var baseUI))
             {
@@ -74,14 +76,8 @@ namespace Ebonor.UI
             }
             else
             {
-                // 2. Load & Create
-                if (string.IsNullOrEmpty(prefabPath))
-                {
-                    // Convention: Prefab name matches Class name
-                    prefabPath = $"UI/Panels/{type.Name}"; 
-                }
-
-                var prefab = Resources.Load<GameObject>(prefabPath);
+                var prefab = await GlobalServices.ResourceLoader.LoadAsset<GameObject>(prefabPath, ResourceAssetType.UiPrefab);
+                
                 if (prefab == null)
                 {
                     log.Error($"Failed to load UI prefab at path: {prefabPath}");
@@ -103,29 +99,37 @@ namespace Ebonor.UI
 
             // 3. Open
             // Bring to front
-            ui.transform.SetAsLastSibling();
-            
-            if (!_activeStack.Contains(ui))
+            if (ui != null)
             {
-                _activeStack.Add(ui);
+                ui.transform.SetAsLastSibling();
+
+                if (!_activeStack.Contains(ui))
+                {
+                    _activeStack.Add(ui);
+                }
+
+                await ui.InternalOpenAsync();
+                return ui;
             }
 
-            await ui.InternalOpenAsync();
-            return ui;
+            
+            log.Error("Fatal error, fail to load:" + prefabPath);
+            
+            return null;
         }
 
         /// <summary>
         /// Close a UI panel.
         /// </summary>
-        public async UniTask CloseUIAsync<T>() where T : UIBase
+        public async UniTask CloseUIAsync<T>(bool destroy = false) where T : UIBase
         {
             if (_uiDict.TryGetValue(typeof(T), out var ui))
             {
-                await CloseUIAsync(ui);
+                await CloseUIAsync(ui, destroy);
             }
         }
 
-        public async UniTask CloseUIAsync(UIBase ui)
+        public async UniTask CloseUIAsync(UIBase ui, bool destroy = false)
         {
             if (ui == null) return;
 
@@ -134,6 +138,12 @@ namespace Ebonor.UI
             if (_activeStack.Contains(ui))
             {
                 _activeStack.Remove(ui);
+            }
+
+            if (destroy)
+            {
+                _uiDict.Remove(ui.GetType());
+                await ui.InternalDestroyAsync();
             }
         }
 
@@ -150,7 +160,7 @@ namespace Ebonor.UI
 
         #region Input Handling
 
-        private void HandleInput(PlayerInputRouter router)
+        private void HandleInput(float deltaTime, PlayerInputRouter router)
         {
             // 1. Check Global Permission via PlayerInputRouter
             if (router != null && !router.UiEnabled)
@@ -183,6 +193,7 @@ namespace Ebonor.UI
             if (topUI.IsActive)
             {
                 topUI.HandleInput(router);
+                topUI.OnUpdate(deltaTime);
             }
         }
 

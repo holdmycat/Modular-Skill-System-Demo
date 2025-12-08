@@ -4,6 +4,8 @@
 // Purpose: Central runtime controller for global data, scene managers, and lifecycle.
 // Author: Xuefei Zhao (clashancients@gmail.com)
 //------------------------------------------------------------
+
+using System;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
@@ -188,6 +190,7 @@ namespace Ebonor.Manager
         public async UniTask InitGameClientManager()
         {
             // Ensure DataCtrl and default setup are ready.
+            // Reason: We need BSON registration + data controller in place before any services boot.
             EnsureDataCtrl();
 
             await InitPlayerRouterService();
@@ -250,27 +253,46 @@ namespace Ebonor.Manager
                 return null;
             }
 
+#if UNITY_EDITOR
             // Ensure core data controller exists before any loading.
             EnsureDataCtrl();
+#endif
 
             //load necessary resources
             if (!GlobalServices.IsAppInitialized)
             {
                 log.Info("First time initialization: Loading global resources...");
-                
-                // Create a progress reporter. In a real scenario, this would update a UI slider.
-                var progressReporter = new System.Progress<float>(progress =>
+
+                UIScene_Loading uiLoading = null;
+                IProgress<float> progressReporter;
+                if (_uiManager != null)
                 {
-                    log.Info($"Global Loading Progress: {progress * 100:F0}%");
-                });
+                    uiLoading = await _uiManager.OpenUIAsync<UIScene_Loading>();
+                    progressReporter = new System.Progress<float>(progress =>
+                    {
+                        log.Info($"Global Loading Progress: {progress * 100:F0}%");
+                        uiLoading?.SetPercent(progress);
+                    });
+                }
+                else
+                {
+                    // Fallback for edit-mode tests that don't bootstrap UI.
+                    progressReporter = new System.Progress<float>(_ => { });
+                }
                 
                 // Execute the loading pipeline
+                uiLoading?.SetTitle("Loading DLL");
                 await _dataCtrlInst.LoadAllSystemDataAsync(progressReporter);
+                
+                //Execute the game data
+                uiLoading?.SetTitle("Loading Game Data");
+                await _dataCtrlInst.LoadAllGameDataAsync(progressReporter);
 
-                
-                //Execute the character data
-                
-                
+                if (null != uiLoading)
+                {
+                    await _uiManager.CloseUIAsync<UIScene_Loading>(true);
+                }
+
                 // Mark as initialized to prevent future re-loading
                 GlobalServices.MarkAppInitialized();
             }
@@ -303,9 +325,8 @@ namespace Ebonor.Manager
                 return null;
             }
 
-            // Ensure DataCtrl exists before instantiating scene managers in tests/CI that skip InitGameClientManager.
+            // Reason: Tests/CI may call SwitchSceneManager directly; ensure DataCtrl is present for data loading.
             EnsureDataCtrl();
-
             SceneManagerBase instance = Instantiate(prefab, transform);
             
             instance.name = prefab.name;

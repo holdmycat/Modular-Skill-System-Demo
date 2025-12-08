@@ -12,6 +12,10 @@ namespace Ebonor.DataCtrl
     {
         [Header("Resource Loading")]
         public ResourceLoadMode loadMode = ResourceLoadMode.Resources;
+
+        [Header("Input")]
+        [Tooltip("Path used by ResourceLoader to load the PlayerInput prefab.")]
+        public string playerInputPrefabPath = "UI/PlayerInput";
         
         [Header("Default Player Id")]
         public long defaultPlayerHeroId;

@@ -30,12 +30,6 @@ namespace Ebonor.Manager
             if (!GlobalServices.IsAppInitialized)
             {
 
-                clientManager.InitGameClientManager();
-                
-                
-                
-                GlobalServices.SetGlobalGameConfig(globalConfig);
-                
                 // Apply global config for resource loading (only first initialization takes effect).
                 if (GlobalServices.ResourceLoader == null && globalConfig != null)
                 {
@@ -47,6 +41,14 @@ namespace Ebonor.Manager
                     GlobalServices.InitResourceLoader(new ResourceLoader(ResourceLoadMode.Resources));
                     log.Warn("Global config missing; defaulting load mode to Resources.");
                 }
+                
+                await clientManager.InitGameClientManager();
+                
+                
+                
+                GlobalServices.SetGlobalGameConfig(globalConfig);
+                
+               
             }
             
             // If specified, switch to the provided scene manager; otherwise rely on GameClientManager default.

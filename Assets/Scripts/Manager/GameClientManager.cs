@@ -65,8 +65,10 @@ namespace Ebonor.Manager
     public partial class GameClientManager : MonoBehaviour
     {
         private PlayerInputRouter _inputRouter;
+        private GameObject _inputSourceInstance;
+        private MonoBehaviour _inputSourceBehaviour;
         
-        private void InitPlayerRouterService()
+        private async UniTask InitPlayerRouterService()
         {
             if (null == _inputRouter)
             {
@@ -74,7 +76,8 @@ namespace Ebonor.Manager
                 var inputGo = new GameObject("GlobalInputRouter");
                 inputGo.transform.SetParent(transform);
                 _inputRouter = inputGo.AddComponent<PlayerInputRouter>();
-                var source = gameObject.AddComponent<KeyboardPlayerInputSource>();
+
+                var source = await CreateInputSource();
                 _inputRouter.InitPlayerInputRouter(source);
                 GlobalServices.SetPlayerInputSource(_inputRouter);
                 log.Info("GlobalInputRouter initialized.");
@@ -85,11 +88,58 @@ namespace Ebonor.Manager
             }
         }
 
+        private async UniTask<IPlayerInputSource> CreateInputSource()
+        {
+            // Prefer Unity Input System prefab if present; otherwise fall back to legacy keyboard input.
+            string prefabPath = GlobalServices.GlobalGameConfig != null
+                ? GlobalServices.GlobalGameConfig.playerInputPrefabPath
+                : ConstData.UI_PLAYERACTION;
+
+            if (GlobalServices.ResourceLoader == null)
+            {
+                log.Error("Fatal error, GlobalServices.ResourceLoader is null");
+                return null;
+            }
+
+            var prefab = await GlobalServices.ResourceLoader.LoadAsset<GameObject>(prefabPath, ResourceAssetType.UiPrefab);
+            
+            if (prefab != null)
+            {
+                _inputSourceInstance = Instantiate(prefab, transform);
+                _inputSourceInstance.name = prefab.name;
+
+                var inputSource = _inputSourceInstance.GetComponent<InputSystemPlayerInputSource>();
+                if (inputSource == null)
+                {
+                    inputSource = _inputSourceInstance.AddComponent<InputSystemPlayerInputSource>();
+                }
+
+                _inputSourceBehaviour = inputSource;
+                return inputSource;
+            }
+
+            var keyboardSource = gameObject.AddComponent<KeyboardPlayerInputSource>();
+            _inputSourceBehaviour = keyboardSource;
+            return keyboardSource;
+        }
+
         private void UnInitPlayerRouterService()
         {
             if (_inputRouter != null) 
                 _inputRouter.Exit();
             GlobalServices.SetPlayerInputSource(null);
+
+            if (_inputSourceInstance != null)
+            {
+                Destroy(_inputSourceInstance);
+                _inputSourceInstance = null;
+            }
+            else if (_inputSourceBehaviour != null)
+            {
+                Destroy(_inputSourceBehaviour);
+            }
+
+            _inputSourceBehaviour = null;
             _inputRouter = null;
         }
     }
@@ -135,12 +185,12 @@ namespace Ebonor.Manager
             }
         }
         
-        public void InitGameClientManager()
+        public async UniTask InitGameClientManager()
         {
             // Ensure DataCtrl and default setup are ready.
             EnsureDataCtrl();
 
-            InitPlayerRouterService();
+            await InitPlayerRouterService();
 
             InitUIManagerService();
         }

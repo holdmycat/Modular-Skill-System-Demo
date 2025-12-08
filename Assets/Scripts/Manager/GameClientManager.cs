@@ -250,6 +250,9 @@ namespace Ebonor.Manager
                 return null;
             }
 
+            // Ensure core data controller exists before any loading.
+            EnsureDataCtrl();
+
             //load necessary resources
             if (!GlobalServices.IsAppInitialized)
             {

@@ -86,6 +86,7 @@ We use **Unity Test Framework** for edit-mode coverage.
 - Resource loader: `ResourceLoader` builds paths from `ResourceAssetType` (e.g., `ScriptableObject/{name}`, `UI/{name}`, `Models/Hero/{name}`, `AllCharacterData/{name}`) in Resources mode; in Addressables mode it uses the asset name as key.
 - Addressables: requires `ADDRESSABLES_AVAILABLE` compile symbol; otherwise Addressables loads return null with a warning.
 - Scene content: `SceneLoadConfig` drives data-only scene loading; scene managers use the loader for all assets.
+- Player input: `GlobalGameConfig.playerInputPrefabPath` points to the Input System prefab (default `PlayerInput` under `Resources/UI/`). `GameClientManager` loads it through `ResourceLoader`, falling back to the legacy keyboard source if not found. Global UI keys are routed through `UIManager` to `GameClientManager`.
 
 ### Not yet covered
 - Play Mode tests (runtime/asset loading, prefab behaviors)

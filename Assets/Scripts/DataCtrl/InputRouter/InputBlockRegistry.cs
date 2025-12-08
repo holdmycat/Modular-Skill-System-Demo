@@ -2,9 +2,8 @@
 // File: InputBlockRegistry.cs
 // Purpose: Allows systems to query global input block state without depending on Manager assembly.
 //------------------------------------------------------------
-using Ebonor.DataCtrl;
 
-namespace Ebonor.GamePlay
+namespace Ebonor.DataCtrl
 {
     public interface IInputBlockSource
     {

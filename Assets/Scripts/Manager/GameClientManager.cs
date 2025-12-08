@@ -251,31 +251,36 @@ namespace Ebonor.Manager
             }
 
             // Ensure core data controller exists before any loading.
-            //EnsureDataCtrl();
+            EnsureDataCtrl();
 
             //load necessary resources
             if (!GlobalServices.IsAppInitialized)
             {
                 log.Info("First time initialization: Loading global resources...");
 
-                var uiLoading = await _uiManager.OpenUIAsync<UIScene_Loading>();
-
-                if (null == uiLoading)
-                    return null;
-                
-                // Create a progress reporter. In a real scenario, this would update a UI slider.
-                var progressReporter = new System.Progress<float>(progress =>
+                UIScene_Loading uiLoading = null;
+                IProgress<float> progressReporter;
+                if (_uiManager != null)
                 {
-                    log.Info($"Global Loading Progress: {progress * 100:F0}%");
-                    uiLoading.SetPercent(progress);
-                });
+                    uiLoading = await _uiManager.OpenUIAsync<UIScene_Loading>();
+                    progressReporter = new System.Progress<float>(progress =>
+                    {
+                        log.Info($"Global Loading Progress: {progress * 100:F0}%");
+                        uiLoading?.SetPercent(progress);
+                    });
+                }
+                else
+                {
+                    // Fallback for edit-mode tests that don't bootstrap UI.
+                    progressReporter = new System.Progress<float>(_ => { });
+                }
                 
                 // Execute the loading pipeline
-                uiLoading.SetTitle("Loading DLL");
+                uiLoading?.SetTitle("Loading DLL");
                 await _dataCtrlInst.LoadAllSystemDataAsync(progressReporter);
                 
                 //Execute the game data
-                uiLoading.SetTitle("Loading Game Data");
+                uiLoading?.SetTitle("Loading Game Data");
                 await _dataCtrlInst.LoadAllGameDataAsync(progressReporter);
                 
                 // Mark as initialized to prevent future re-loading

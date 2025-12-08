@@ -190,6 +190,7 @@ namespace Ebonor.Manager
         public async UniTask InitGameClientManager()
         {
             // Ensure DataCtrl and default setup are ready.
+            // Reason: We need BSON registration + data controller in place before any services boot.
             EnsureDataCtrl();
 
             await InitPlayerRouterService();
@@ -324,7 +325,7 @@ namespace Ebonor.Manager
                 return null;
             }
 
-            // Ensure DataCtrl exists before instantiating scene managers in tests/CI that skip InitGameClientManager.
+            // Reason: Tests/CI may call SwitchSceneManager directly; ensure DataCtrl is present for data loading.
             EnsureDataCtrl();
             SceneManagerBase instance = Instantiate(prefab, transform);
             

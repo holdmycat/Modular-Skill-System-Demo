@@ -12,6 +12,17 @@ using UnityEngine;
 namespace Ebonor.DataCtrl
 {
     #region Enums
+    
+    public enum ePoolObjectType
+    {
+        eEffect = 0,
+        eModel = 1,
+        eFloatingText = 2,
+        ePoolSize = 3,
+        
+    }
+    
+    
     /// <summary>
     /// Buff animation stack states and their priorities (higher bit = higher priority).
     /// </summary>
@@ -509,5 +520,17 @@ namespace Ebonor.DataCtrl
     }
     #endregion
     
+    #region Pool Manager
+    [Serializable]
+    public class ResourcePoolConfig
+    {
+        public int MaxSimultaneousEffects;
+
+        public int MaxSimultaneousSounds;
+
+        public int MaxFloatingTextCount;
+    }
+    
+    #endregion
     
 }

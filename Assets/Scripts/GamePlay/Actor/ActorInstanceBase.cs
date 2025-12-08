@@ -3,10 +3,11 @@
 // Purpose: Base actor instance providing numeric access and lifecycle hooks.
 //------------------------------------------------------------
 using Cysharp.Threading.Tasks;
+using Ebonor.DataCtrl;
 using Ebonor.Framework;
 using UnityEngine;
 
-namespace Ebonor.DataCtrl
+namespace Ebonor.GamePlay
 {
 
     //ActorNumericComponentBase

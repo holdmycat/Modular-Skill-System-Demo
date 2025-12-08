@@ -286,7 +286,12 @@ namespace Ebonor.Manager
                 //Execute the game data
                 uiLoading?.SetTitle("Loading Game Data");
                 await _dataCtrlInst.LoadAllGameDataAsync(progressReporter);
-                
+
+                if (null != uiLoading)
+                {
+                    await _uiManager.CloseUIAsync<UIScene_Loading>(true);
+                }
+
                 // Mark as initialized to prevent future re-loading
                 GlobalServices.MarkAppInitialized();
             }
@@ -320,9 +325,7 @@ namespace Ebonor.Manager
             }
 
             // Ensure DataCtrl exists before instantiating scene managers in tests/CI that skip InitGameClientManager.
-#if UNITY_EDITOR
             EnsureDataCtrl();
-#endif
             SceneManagerBase instance = Instantiate(prefab, transform);
             
             instance.name = prefab.name;

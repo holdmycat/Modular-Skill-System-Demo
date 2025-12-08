@@ -19,7 +19,12 @@ namespace Ebonor.DataCtrl
         
         private async UniTask LoadAllCharacterDataAsync(GlobalGameConfig config)
         {
-            
+            if (config == null)
+            {
+                log.Warn("GlobalGameConfig is null; skipping character data load.");
+                return;
+            }
+
             _dicUnitAttriDatas ??= new Dictionary<long, UnitAttributesNodeDataBase>();
             _dicUnitAttriDatas.Clear();
 
@@ -31,9 +36,19 @@ namespace Ebonor.DataCtrl
                 _dicListUnitDatas.Add(i, new List<UnitAttributesNodeDataBase>());
             }
             
-            var globalConfig =config.allCharacterDataPath;
+            var globalConfig = config.allCharacterDataPath;
+            if (GlobalServices.ResourceLoader == null)
+            {
+                log.Warn("ResourceLoader is null; skipping character data load.");
+                return;
+            }
             
             var heroData = await GlobalServices.ResourceLoader.LoadAsset<TextAsset>(globalConfig, ResourceAssetType.AllCharacterData);
+            if (heroData == null)
+            {
+                log.Warn($"Character data not found at path: {globalConfig}");
+                return;
+            }
             using var bsonReader = new BsonBinaryReader(new MemoryStream(heroData.bytes));
             var heroItems = BsonSerializer.Deserialize<UnitAttributesDataSupportor>(bsonReader);
             foreach (var hero in heroItems.UnitAttributesDataSupportorDic.Values)  
@@ -332,4 +347,3 @@ namespace Ebonor.DataCtrl
             
     }
 }
-

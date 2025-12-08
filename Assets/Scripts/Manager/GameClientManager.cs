@@ -270,7 +270,7 @@ namespace Ebonor.Manager
                     progressReporter = new System.Progress<float>(progress =>
                     {
                         log.Info($"Global Loading Progress: {progress * 100:F0}%");
-                        uiLoading.SetPercent(progress);
+                        uiLoading?.SetPercent(progress);
                     });
                 }
                 else
@@ -278,19 +278,13 @@ namespace Ebonor.Manager
                     // Fallback for edit-mode tests that don't bootstrap UI.
                     progressReporter = new System.Progress<float>(_ => { });
                 }
-
-                if (null == uiLoading)
-                {
-                    log.Error("uiLoading is null");
-                    return null;
-                }
                 
                 // Execute the loading pipeline
-                uiLoading.SetTitle("Loading DLL");
+                uiLoading?.SetTitle("Loading DLL");
                 await _dataCtrlInst.LoadAllSystemDataAsync(progressReporter);
                 
                 //Execute the game data
-                uiLoading.SetTitle("Loading Game Data");
+                uiLoading?.SetTitle("Loading Game Data");
                 await _dataCtrlInst.LoadAllGameDataAsync(progressReporter);
                 
                 // Mark as initialized to prevent future re-loading

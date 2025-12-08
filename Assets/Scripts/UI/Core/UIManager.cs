@@ -121,15 +121,15 @@ namespace Ebonor.UI
         /// <summary>
         /// Close a UI panel.
         /// </summary>
-        public async UniTask CloseUIAsync<T>() where T : UIBase
+        public async UniTask CloseUIAsync<T>(bool destroy = false) where T : UIBase
         {
             if (_uiDict.TryGetValue(typeof(T), out var ui))
             {
-                await CloseUIAsync(ui);
+                await CloseUIAsync(ui, destroy);
             }
         }
 
-        public async UniTask CloseUIAsync(UIBase ui)
+        public async UniTask CloseUIAsync(UIBase ui, bool destroy = false)
         {
             if (ui == null) return;
 
@@ -138,6 +138,12 @@ namespace Ebonor.UI
             if (_activeStack.Contains(ui))
             {
                 _activeStack.Remove(ui);
+            }
+
+            if (destroy)
+            {
+                _uiDict.Remove(ui.GetType());
+                await ui.InternalDestroyAsync();
             }
         }
 

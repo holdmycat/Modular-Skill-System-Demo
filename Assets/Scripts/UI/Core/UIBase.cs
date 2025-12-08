@@ -165,6 +165,10 @@ namespace Ebonor.UI
         #endregion
 
         #region Input
+        /// <summary>
+        /// Per-frame update driven by UIManager for the top-most active UI.
+        /// </summary>
+        public virtual void OnUpdate(float deltaTime) { }
 
         /// <summary>
         /// Called by UIManager when input is detected and this is the top UI (polled every frame).

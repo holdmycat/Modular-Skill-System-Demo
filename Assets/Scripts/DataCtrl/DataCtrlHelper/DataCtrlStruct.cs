@@ -534,6 +534,35 @@ namespace Ebonor.DataCtrl
             _canChase = canChase;
         }
     }
+    
+    public struct UnitNumericChange
+    {
+        public ActorNumericComponentBase UnitAttrComp;
+        public eNumericType NumericType;
+        public float NumericResult;
+
+        public UnitNumericChange(ActorNumericComponentBase comp, eNumericType type, float result)
+        {
+            UnitAttrComp = comp;
+            NumericType = type;
+            NumericResult = result;
+        }
+    }
+    
+    public struct BossUnitNumericChange
+    {
+        public ActorNumericComponentBase UnitAttrComp;
+        public eNumericType NumericType;
+        public float NumericResult;
+
+        public BossUnitNumericChange(ActorNumericComponentBase comp, eNumericType type, float result)
+        {
+            UnitAttrComp = comp;
+            NumericType = type;
+            NumericResult = result;
+        }
+    }
+    
     #endregion
     
     #region Pool Manager

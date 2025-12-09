@@ -304,6 +304,7 @@ namespace Ebonor.Manager
             if (_currentSceneManager != null)
             {
                 PoolManager.Inst.DoBeforeLeavingScene();
+                DataEventManager.OnClearAllDicDELEvents();
                 var previous = _currentSceneManager;
                 await previous.Exit();
                 // In edit mode, Destroy throws; use DestroyImmediate to keep tests safe.

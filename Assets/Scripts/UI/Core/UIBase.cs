@@ -31,6 +31,14 @@ namespace Ebonor.UI
         // Is this UI currently visible and interactive?
         public bool IsActive => CurrentState == UIState.Active;
 
+        [Header("Animation")]
+        [SerializeField] private UIAnimStyle openAnim = UIAnimStyle.Scale;
+        [SerializeField] private UIAnimStyle closeAnim = UIAnimStyle.Scale;
+        [SerializeField] private float openDuration = 0.3f;
+        [SerializeField] private float closeDuration = 0.2f;
+        [SerializeField] private float slideDistance = 600f;
+        [SerializeField] private float scaleOvershoot = 1.05f;
+
         #region Lifecycle API (Called by UIManager)
 
         public async UniTask InternalCreateAsync()
@@ -96,10 +104,10 @@ namespace Ebonor.UI
 
         #region Virtual Lifecycle Methods (For Subclasses)
 
-        protected virtual UniTask OnCreateAsync() => UniTask.CompletedTask;
-        protected virtual UniTask OnOpenAsync() => UniTask.CompletedTask;
-        protected virtual UniTask OnCloseAsync() => UniTask.CompletedTask;
-        protected virtual UniTask OnDestroyAsync() => UniTask.CompletedTask;
+        protected abstract UniTask OnCreateAsync();
+        protected abstract UniTask OnOpenAsync();   
+        protected abstract UniTask OnCloseAsync();
+        protected abstract UniTask OnDestroyAsync();
 
         #endregion
 
@@ -107,59 +115,12 @@ namespace Ebonor.UI
 
         protected virtual async UniTask PlayOpenAnimAsync()
         {
-            float duration = 0.3f;
-            float timer = 0f;
-            
-            _rectTransform.localScale = Vector3.zero;
-            _canvasGroup.alpha = 0f;
-
-            while (timer < duration)
-            {
-                timer += Time.deltaTime;
-                float t = Mathf.Clamp01(timer / duration);
-                
-                // Simple EaseOutBack-ish effect
-                float scale = EaseOutBack(t); 
-                
-                _rectTransform.localScale = Vector3.one * scale;
-                _canvasGroup.alpha = t;
-                await UniTask.Yield();
-            }
-            
-            _rectTransform.localScale = Vector3.one;
-            _canvasGroup.alpha = 1f;
+            await UIAnimUtil.PlayAsync(_canvasGroup, _rectTransform, openAnim, true, openDuration, slideDistance, scaleOvershoot);
         }
 
         protected virtual async UniTask PlayCloseAnimAsync()
         {
-            float duration = 0.2f;
-            float timer = 0f;
-            
-            _rectTransform.localScale = Vector3.one;
-            _canvasGroup.alpha = 1f;
-
-            while (timer < duration)
-            {
-                timer += Time.deltaTime;
-                float t = Mathf.Clamp01(timer / duration);
-                
-                // Linear fade out
-                float val = 1f - t;
-                
-                _rectTransform.localScale = Vector3.one * val;
-                _canvasGroup.alpha = val;
-                await UniTask.Yield();
-            }
-            
-            _rectTransform.localScale = Vector3.zero;
-            _canvasGroup.alpha = 0f;
-        }
-        
-        private float EaseOutBack(float x)
-        {
-            const float c1 = 1.70158f;
-            const float c3 = c1 + 1;
-            return 1 + c3 * Mathf.Pow(x - 1, 3) + c1 * Mathf.Pow(x - 1, 2);
+            await UIAnimUtil.PlayAsync(_canvasGroup, _rectTransform, closeAnim, false, closeDuration, slideDistance, scaleOvershoot);
         }
 
         #endregion

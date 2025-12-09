@@ -22,7 +22,7 @@ namespace Ebonor.GamePlay
             {
                 _playerActorInstance = await LoadCharacter<PlayerActorInstance>();
                 
-                var characterData = new CharacterRuntimeData();
+                var characterData = new CharacterRuntimeData(GlobalServices.GlobalGameConfig.defaultPlayerHeroId, true);
                 await _playerActorInstance.LoadAsync<PlayerActorNumericComponent>(characterData);
                 return _playerActorInstance;
             }

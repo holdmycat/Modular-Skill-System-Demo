@@ -33,13 +33,13 @@ namespace Ebonor.DataCtrl
         }
         
         /// <summary>Create and register an item in the pool.</summary>
-        public virtual void InitPoolItem<T>(string name) where T : Component { }
+        public virtual void InitPoolItem<T>(string name) where T : PoolItemBase { }
         
         /// <summary>Spawn an item by key from the pool.</summary>
-        public virtual T SpawnItemFromPool<T>(string name) where T : Component { return null; }
+        public virtual T SpawnItemFromPool<T>(string _name) where T : PoolItemBase { return null; }
 
         /// <summary>Return an item to the pool.</summary>
-        public virtual void DespawnItemFromPool<T>(T t) where T : Component {}
+        public virtual void DespawnItemFromPool<T>(T t) where T : PoolItemBase {}
         
         /// <summary>Clear all pooled items.</summary>
         public abstract void ClearAllPoolItem();

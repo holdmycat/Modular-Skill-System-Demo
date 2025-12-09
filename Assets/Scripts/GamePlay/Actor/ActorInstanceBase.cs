@@ -38,13 +38,27 @@ namespace Ebonor.GamePlay
          }
      }
     
+     
+     //system
     public abstract partial class ActorInstanceBase : MonoBehaviour, IActorInstance
     {
         protected static readonly ILog log = LogManager.GetLogger(typeof(ActorInstanceBase));
         
         protected uint _netId;
         public uint NetId => _netId;
-        
+
+        public long GetModelId()
+        {
+            if (null == _actorNumericComponentBase)
+            {
+                log.Error("Fatal error, _actorNumericComponentBase is null");
+                return -1;
+            }
+
+            return _actorNumericComponentBase.UnitModelNodeId;
+
+        }
+
         /// <summary>
         /// Load/prepare actor data and resources. Override to provide concrete numeric component creation.
         /// </summary>
@@ -52,8 +66,13 @@ namespace Ebonor.GamePlay
         {
             _netId = GlobalServices.NextId();
 
+            //load numeric data
             var result = await LoadActorNumeric<T>(characterdata);
             
+            var actorModel = PoolManager.SpawnItemFromPool<PoolItemBase>(ePoolObjectType.eModel, _actorNumericComponentBase.AttrAvatarName);
+            
+            GlobalHelper.ResetLocalGameObject(gameObject, actorModel.gameObject, true);
+             
             return result;
         }
 

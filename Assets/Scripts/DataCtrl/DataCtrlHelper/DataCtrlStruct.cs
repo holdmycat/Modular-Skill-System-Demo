@@ -172,8 +172,7 @@ namespace Ebonor.DataCtrl
         eSummon = 10,                                     
         [InspectorName("Summon Skill Manager")]
         eSummonSkillActor = 11,
-        [InspectorName("Passive Weapon")]
-        ePasssiveWeapon = 12,
+        eSize = 12,
     }
 
     /// <summary>
@@ -213,6 +212,23 @@ namespace Ebonor.DataCtrl
         OMNI = 1 << 9,
     }
 
+    
+    [Flags]
+    public enum eNpcProfession
+    {
+        EnemyNull = 1 << 0,
+        
+        Mow = 1 << 1,
+        
+        Elite = 1 << 2,
+        
+        Boss = 1 << 3,
+        
+        SummonDragon = 1 << 4,
+        
+        PlayerSummonNpc = 1 << 5,
+    }
+    
     /// <summary>
     /// Input control flag for enabling/disabling input groups.
     /// </summary>

@@ -3,6 +3,7 @@
 // Purpose: Unified resource loading facade supporting Resources and Addressables.
 //------------------------------------------------------------
 using System;
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using UnityEngine;
@@ -60,6 +61,28 @@ namespace Ebonor.DataCtrl
         }
 
         /// <summary>
+        /// Load all assets under the mapped Resources folder for the given type.
+        /// </summary>
+        public async UniTask<IList<T>> LoadAllAssets<T>(ResourceAssetType type) where T : UnityEngine.Object
+        {
+            switch (_mode)
+            {
+                case ResourceLoadMode.Resources:
+                    var folderPath = GetResourceFolder(type);
+                    // Resources.LoadAll is synchronous; wrap in completed task for a consistent async signature.
+                    var assets = Resources.LoadAll<T>(folderPath);
+                    await UniTask.CompletedTask;
+                    return assets;
+                case ResourceLoadMode.Addressables:
+                    Debug.LogWarning($"LoadAllAssets not implemented for Addressables mode (type {type}).");
+                    await UniTask.CompletedTask;
+                    return Array.Empty<T>();
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        /// <summary>
         /// Load generic asset asynchronously.
         /// </summary>
         public async UniTask<T> LoadAsset<T>(string assetName, ResourceAssetType type) where T : UnityEngine.Object
@@ -91,18 +114,24 @@ namespace Ebonor.DataCtrl
         private static string BuildResourcePath(ResourceAssetType type, string assetName)
         {
             // Map asset type to folder; adjust to match Resources layout.
+            var folder = GetResourceFolder(type);
+            return string.IsNullOrEmpty(folder) ? assetName : $"{folder}/{assetName}";
+        }
+
+        private static string GetResourceFolder(ResourceAssetType type)
+        {
             switch (type)
             {
                 case ResourceAssetType.ScriptableObject:
-                    return $"ScriptableObject/{assetName}";
+                    return "ScriptableObject";
                 case ResourceAssetType.UiPrefab:
-                    return $"UI/{assetName}";
+                    return "UI";
                 case ResourceAssetType.HeroModelPrefab:
-                    return $"Models/Hero/{assetName}";
+                    return "Models/Heros";
                 case ResourceAssetType.AllCharacterData:
-                    return $"AllCharacterData/{assetName}";
+                    return "AllCharacterData";
                 default:
-                    return assetName;
+                    return string.Empty;
             }
         }
     }

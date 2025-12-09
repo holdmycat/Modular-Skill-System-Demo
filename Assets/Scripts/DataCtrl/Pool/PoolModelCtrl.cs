@@ -15,7 +15,7 @@ namespace Ebonor.DataCtrl
         private static readonly ILog log = LogManager.GetLogger(typeof(PoolModelCtrl));
         
         /// <summary>Pooled actor instances by model id.</summary>
-        private readonly Dictionary<uint, List<IActorInstance>> _pooledActors = new Dictionary<uint, List<IActorInstance>>();
+        private readonly Dictionary<string, List<PoolItemBase>> _pooledActors = new Dictionary<string, List<PoolItemBase>>();
         
         public override void ClearAllPoolItem()
         {
@@ -31,15 +31,15 @@ namespace Ebonor.DataCtrl
             // No-op for now; implement if pooled actors need pause handling.
         }
 
-        public override T SpawnItemFromPool<T>(string name)
+        public override T SpawnItemFromPool<T>(string _name)
         {
-            uint id = uint.Parse(name);
-            if (!_pooledActors.ContainsKey(id))
+           
+            if (!_pooledActors.ContainsKey(_name))
             {
-                _pooledActors[id] = new List<IActorInstance>();
+                _pooledActors[_name] = new List<PoolItemBase>();
             }
 
-            var list = _pooledActors[id];
+            var list = _pooledActors[_name];
 
             if (list.Count > 0)
             {
@@ -52,7 +52,7 @@ namespace Ebonor.DataCtrl
             MethodInfo methodInfo = typeof(PoolModelCtrl).GetMethod(nameof(GenerateModel), BindingFlags.Instance | BindingFlags.NonPublic)?.MakeGenericMethod(typeof(T));
             if (methodInfo != null)
             {
-                var instance = methodInfo.Invoke(this, new object[]{id});
+                var instance = methodInfo.Invoke(this, new object[]{_name});
                 return instance as T;
             }
 
@@ -63,9 +63,9 @@ namespace Ebonor.DataCtrl
         {
             if (t == null) return;
             
-            if (t is IActorInstance actorInstance)
+            if (t is PoolItemBase actorInstance)
             {
-                var id = actorInstance.GetModelId();
+                var id = t.name;
                 GlobalHelper.ResetLocalGameObject(gameObject, t.gameObject, false, 1f);
 
                 if (_pooledActors.ContainsKey(id))
@@ -79,51 +79,35 @@ namespace Ebonor.DataCtrl
             }
         }
         
-        private T GenerateModel<T>(uint heroId) where T : IActorInstance
+        /// <summary>
+        /// Instantiate a model prefab for the requested unit name and return the component of type T.
+        /// </summary>
+        private T GenerateModel<T>(string modelName) where T : PoolItemBase
         {
             UObject modelObj = null;
 
-            if (typeof(T).Name.Equals("DropAnimatorManager"))
+            
+            var unitAttributeNodeData = DataCtrl.Inst.GetUnitAttributeNodeDataByUnitName(modelName);
+            
+            switch (unitAttributeNodeData.ActorModelType)
             {
-                var dic = DataCtrl.Inst.DicDrop;
-                dic.TryGetValue(heroId, out modelObj);
-            }
-            else if (typeof(T).Name.Equals("SummonAnimatorManager"))
-            {
-                var dic = DataCtrl.Inst.DicSummon;
-                if (!dic.TryGetValue(heroId, out modelObj))
+
+                case eActorModelType.eHero:
                 {
-                    log.ErrorFormat("GenerateModel: summonId {0} not found.", heroId);
-                    return default;
+                    var heroModels = DataCtrl.Inst.GetGameModelDic(eActorModelType.eHero);
+                    if (!heroModels.TryGetValue(unitAttributeNodeData.UnitDataNodeId, out modelObj))
+                    {
+                        var npcModels = DataCtrl.Inst.GetGameModelDic(eActorModelType.eNpc);
+                        npcModels.TryGetValue(unitAttributeNodeData.UnitDataNodeId, out modelObj);
+                    }
+                    break;
                 }
-            }
-            else if (typeof(T).Name.Equals("BulletAnimatorManager"))
-            {
-                var dic = DataCtrl.Inst.DicBullet;
-                if (!dic.TryGetValue(heroId, out modelObj))
-                {
-                    log.ErrorFormat("GenerateModel: bulletId {0} not found.", heroId);
-                    return default;
-                }
-            }
-            else if (typeof(T).Name.Equals("PlayerAnimatorManager"))
-            {
-                var heroModels = DataCtrl.Inst.GetGameModelDic(eActorModelType.eHero);
-                if (!heroModels.TryGetValue(heroId, out modelObj))
-                {
-                    var npcModels = DataCtrl.Inst.GetGameModelDic(eActorModelType.eNpc);
-                    npcModels.TryGetValue(heroId, out modelObj);
-                }
-            }
-            else
-            {
-                var npcModels = DataCtrl.Inst.GetGameModelDic(eActorModelType.eNpc);
-                npcModels.TryGetValue(heroId, out modelObj);
+                
             }
             
             if (modelObj == null)
             {
-                log.ErrorFormat("GenerateModel: model for id {0} not found.", heroId);
+                log.ErrorFormat("GenerateModel: model for id {0} not found.", unitAttributeNodeData.UnitDataNodeId);
                 return default;
             }
 
@@ -131,7 +115,7 @@ namespace Ebonor.DataCtrl
             var instance = actorGo.GetComponent<T>();
             if (instance == null)
             {
-                log.ErrorFormat("GenerateModel: component {0} missing on model id {1}.", typeof(T).Name, heroId);
+                //log.ErrorFormat("GenerateModel: component {0} missing on model id {1}.", typeof(T).Name, heroId);
                 Object.DestroyImmediate(actorGo);
                 return default;
             }

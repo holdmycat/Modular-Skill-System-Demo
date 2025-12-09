@@ -32,12 +32,12 @@ namespace Ebonor.DataCtrl
         /// <param name="type">对象类型</param>
         /// <param name="_name">对象名称</param>
         /// <typeparam name="T">对象管理对象类型</typeparam>
-        public static void InitPoolItem<T>(ePoolObjectType type, string _name) where T : Component
+        public static void InitPoolItem<T>(ePoolObjectType type, string _name) where T : PoolItemBase
         {
             mInst.mDicPoolCtrl[type].InitPoolItem<T>(_name);
         }
         
-        public static T SpawnItemFromPool<T>(ePoolObjectType type, string _name) where T : Component
+        public static T SpawnItemFromPool<T>(ePoolObjectType type, string _name) where T : PoolItemBase
         {
             if (mInst.mDicPoolCtrl.TryGetValue(type, out var inst))
             {
@@ -47,7 +47,7 @@ namespace Ebonor.DataCtrl
             return null;
         }
         
-        public static void DespawnItemToPool<T>(ePoolObjectType type, T t) where T : Component
+        public static void DespawnItemToPool<T>(ePoolObjectType type, T t) where T : PoolItemBase
         {
             if (mInst.mDicPoolCtrl.TryGetValue(type, out var inst))
             {
@@ -89,6 +89,8 @@ namespace Ebonor.DataCtrl
             
             for (var i = ePoolObjectType.eEffect; i < ePoolObjectType.ePoolSize; i++)
             {
+                if(!mDicPoolCtrlType.ContainsKey(i))
+                    continue;
                 Type type = mDicPoolCtrlType[i];
                 MethodInfo methodInfo = typeof(PoolManager).GetMethod(nameof(CreatePoolCtrl)).MakeGenericMethod(type);  
                 var result = methodInfo.Invoke(this, new object[]{i});

@@ -182,6 +182,8 @@ namespace Ebonor.DataCtrl
                 return;
             }
             
+            InitNumericDictionaries<eNumericType>();
+            
             OnInitCommonProperty(characterRuntimeData, netid, unitAttr);
             
             var dataBase = unitAttr as UnitAttributesNodeDataBase;
@@ -224,8 +226,37 @@ namespace Ebonor.DataCtrl
             attrIconName = unitAttr.UnitSprite;
 
             _actorModelType = unitAttr.ActorModelType;
-
         }
+        
+        private void InitNumericDictionaries<TEnum>() where TEnum : Enum
+        {
+            if (mOriNumericDic != null)
+            {
+                return;
+            }
+            
+            // 1) 拿到所有枚举值的数组
+            Array values = Enum.GetValues(typeof(TEnum));
+            int count    = values.Length;
+
+            //mNumericKeys = new List<int>();
+            
+            
+            // 2) 预分配字典容量
+            mOriNumericDic = new Dictionary<int, float>(count);
+            mNumericDic    = new Dictionary<int, float>(count);
+
+            // 3) 逐项转成 int key，赋 0f
+            for (int i = 0; i < count; i++)
+            {
+                // values.GetValue(i) 返回 boxed enum 值
+                int key = (int)values.GetValue(i)!;
+                mOriNumericDic[key] = 0f;
+                mNumericDic   [key] = 0f;
+            }
+        }
+        
+        
         #endregion
         
     }

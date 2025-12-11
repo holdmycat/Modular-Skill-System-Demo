@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 7030687403323455378}
   - component: {fileID: 8417009613008069653}
   - component: {fileID: 2819472874279432245}
+  - component: {fileID: 7932097614070917180}
   m_Layer: 5
   m_Name: Anchor
   m_TagString: Untagged
@@ -76,6 +77,18 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &7932097614070917180
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 878521233730061043}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e9e3056ff5c5b4c1a8a2e88351649c2a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &984961291336510666
 GameObject:
   m_ObjectHideFlags: 0
@@ -204,6 +217,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ce7eaa07bd3143f58acf52da027290f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  blackboard: {fileID: 7932097614070917180}
+  openAnim: 1
+  closeAnim: 1
+  openDuration: 0.3
+  closeDuration: 0.2
+  slideDistance: 600
+  scaleOvershoot: 1.05
+  characterPropertyPanel: {fileID: 1613251962399922944}
 --- !u!1 &5246382587813053550
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,6 +357,7 @@ GameObject:
   - component: {fileID: 7507746192972237142}
   - component: {fileID: 5095853333654851113}
   - component: {fileID: 1613251962399922944}
+  - component: {fileID: 1837994911733926286}
   m_Layer: 5
   m_Name: CharacterProperty
   m_TagString: Untagged
@@ -413,3 +435,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f67343d8afe894f3e8b10bef5962f6ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  showAnim: 1
+  hideAnim: 1
+  showDuration: 0.25
+  hideDuration: 0.2
+  slideDistance: 600
+  scaleOvershoot: 1.05
+  nameText: {fileID: 0}
+  professionText: {fileID: 0}
+  levelText: {fileID: 0}
+  avatarImage: {fileID: 0}
+  defaultAvatar: {fileID: 0}
+  powerText: {fileID: 0}
+  agilityText: {fileID: 0}
+  vitalityText: {fileID: 0}
+  movementSpeedText: {fileID: 0}
+  rotationSpeedText: {fileID: 0}
+  lifeText: {fileID: 0}
+--- !u!225 &1837994911733926286
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7029036809562004200}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0

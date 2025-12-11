@@ -107,6 +107,21 @@ namespace Ebonor.UI
 
         private void RefreshAllNumeric()
         {
+            var displayList = _numericComp != null ? _numericComp.DisplayNumericTypes : null;
+            if (displayList != null && displayList.Count > 0)
+            {
+                foreach (var type in displayList)
+                {
+                    if (NumericWriters.TryGetValue(type, out var writer))
+                    {
+                        float fallback = GetFallbackValue(type);
+                        float value = GetNumericValue(type, fallback);
+                        writer?.Invoke(this, value);
+                    }
+                }
+                return;
+            }
+
             foreach (var kvp in NumericWriters)
             {
                 var type = kvp.Key;

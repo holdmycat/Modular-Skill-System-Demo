@@ -20,6 +20,9 @@ namespace Ebonor.DataCtrl
         protected Dictionary<int, float> mNumericDic;
 
         protected Dictionary<int, float> mOriNumericDic;
+
+        protected readonly List<eNumericType> _displayNumericTypes = new List<eNumericType>();
+        public IReadOnlyList<eNumericType> DisplayNumericTypes => _displayNumericTypes;
         
         public Dictionary<int, float> NumericDic => mNumericDic;
 
@@ -98,6 +101,24 @@ namespace Ebonor.DataCtrl
                 
                 UpdateNumeric(numericType);
                     
+            }
+        }
+
+        protected void SetDisplayNumericTypes(IEnumerable<eNumericType> numericTypes)
+        {
+            _displayNumericTypes.Clear();
+            if (numericTypes == null) return;
+            foreach (var type in numericTypes)
+            {
+                RegisterDisplayNumericType(type);
+            }
+        }
+
+        protected void RegisterDisplayNumericType(eNumericType numericType)
+        {
+            if (!_displayNumericTypes.Contains(numericType))
+            {
+                _displayNumericTypes.Add(numericType);
             }
         }
         
@@ -199,11 +220,24 @@ namespace Ebonor.DataCtrl
             SetValueForOrig(eNumericType.ActorSide, (float)nSide);
             //-----------------------Base Property-End-----------------------//
             
+            // UI display defaults
+            SetDisplayNumericTypes(new []
+            {
+                eNumericType.Power,
+                eNumericType.Agility,
+                eNumericType.Vitality,
+                eNumericType.MovementSpeed,
+                eNumericType.RotationSpeed,
+                eNumericType.Life,
+                eNumericType.MaxLife
+            });
+            
         }
         
         public void OnUnInitActorNumericComponent()
         {
             
+            _displayNumericTypes.Clear();
         }
 
         public void OnResetActorNumericComponent()

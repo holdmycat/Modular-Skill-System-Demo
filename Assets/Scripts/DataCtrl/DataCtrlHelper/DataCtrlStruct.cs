@@ -496,11 +496,6 @@ namespace Ebonor.DataCtrl
         AgilityBase = Agility * 10 + 1,
         AgilityAdd = Agility * 10 + 2,
         
-        // //智力
-        // Intelligence = 1012,
-        // IntelligenceBase = Intelligence * 10 + 1,
-        // IntelligenceAdd = Intelligence * 10 + 2,
-        
         // Vitality
         Vitality = 1023,
         VitalityBase = Vitality * 10 + 1,

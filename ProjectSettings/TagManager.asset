@@ -8,14 +8,14 @@ TagManager:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Camera
   - Water
   - UI
+  - Ground
+  - 
+  - 
   - Npc
   - Hero
-  - 
-  - 
-  - 
   - 
   - 
   - 

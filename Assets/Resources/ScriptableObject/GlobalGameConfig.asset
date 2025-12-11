@@ -16,3 +16,7 @@ MonoBehaviour:
   playerInputPrefabPath: PlayerInput
   allCharacterDataPath: HeroData
   defaultPlayerHeroId: 6070748851497539930
+  ResourcePoolConfig:
+    MaxSimultaneousEffects: 15
+    MaxSimultaneousSounds: 10
+    MaxFloatingTextCount: 15

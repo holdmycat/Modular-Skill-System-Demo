@@ -62,7 +62,7 @@ namespace Ebonor.UI
         /// <summary>
         /// Open a UI panel. Loads it if not already cached.
         /// </summary>
-        public async UniTask<T> OpenUIAsync<T>() where T : UIBase
+        public async UniTask<T> OpenUIAsync<T>(Action<T> beforeOpen = null) where T : UIBase
         {
             Type type = typeof(T);
             T ui = null;
@@ -85,6 +85,7 @@ namespace Ebonor.UI
                 }
 
                 var go = Instantiate(prefab, _uiRoot);
+                go.name = prefab.name;
                 ui = go.GetComponent<T>();
                 if (ui == null)
                 {
@@ -101,6 +102,9 @@ namespace Ebonor.UI
             // Bring to front
             if (ui != null)
             {
+                // Allow caller to inject context before lifecycle callbacks run
+                beforeOpen?.Invoke(ui);
+
                 ui.transform.SetAsLastSibling();
 
                 if (!_activeStack.Contains(ui))
@@ -131,9 +135,17 @@ namespace Ebonor.UI
 
         public async UniTask CloseUIAsync(UIBase ui, bool destroy = false)
         {
-            if (ui == null) return;
+            if (ui == null || ui.Equals(null)) return;
 
-            await ui.InternalCloseAsync();
+            try
+            {
+                await ui.InternalCloseAsync();
+            }
+            catch (MissingReferenceException)
+            {
+                // Object was destroyed externally (e.g., during quit); skip further work.
+                return;
+            }
             
             if (_activeStack.Contains(ui))
             {
@@ -143,7 +155,10 @@ namespace Ebonor.UI
             if (destroy)
             {
                 _uiDict.Remove(ui.GetType());
-                await ui.InternalDestroyAsync();
+                if (ui != null && !ui.Equals(null))
+                {
+                    await ui.InternalDestroyAsync();
+                }
             }
         }
 

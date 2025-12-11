@@ -1,10 +1,35 @@
+using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
 namespace Ebonor.UI
 {
-    public class UIScene_Loading : UIBase
+
+    public partial class UIScene_Loading : UIBase
+    {
+        protected override async UniTask OnCreateAsync()
+        {
+            
+        }
+
+        protected override async UniTask OnOpenAsync()
+        {
+            
+        }
+
+        protected override async UniTask OnCloseAsync()
+        {
+           
+        }
+
+        protected override async UniTask OnDestroyAsync()
+        {
+            
+        }
+    }
+    
+    public partial class UIScene_Loading : UIBase
     {
         [Header("UI References")]
         [SerializeField] private TMP_Text percentText;

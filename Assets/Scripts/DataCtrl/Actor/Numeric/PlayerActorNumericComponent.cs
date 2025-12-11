@@ -11,5 +11,12 @@ namespace Ebonor.DataCtrl
     public class PlayerActorNumericComponent : ActorNumericComponentBase
     {
         // Add player-only numeric fields or initialization overrides here.
+        
+        public  override float GetByKey(int key)
+        {
+            NumericDic.TryGetValue(key, out float value);
+            
+            return value;
+        }
     }
 }

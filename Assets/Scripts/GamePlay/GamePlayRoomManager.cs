@@ -22,7 +22,7 @@ namespace Ebonor.GamePlay
             {
                 _playerActorInstance = await LoadCharacter<PlayerActorInstance>();
                 
-                var characterData = new CharacterRuntimeData();
+                var characterData = new CharacterRuntimeData(GlobalServices.GlobalGameConfig.defaultPlayerHeroId, true);
                 await _playerActorInstance.LoadAsync<PlayerActorNumericComponent>(characterData);
                 return _playerActorInstance;
             }
@@ -35,7 +35,7 @@ namespace Ebonor.GamePlay
         private async UniTask<T> LoadCharacter<T>() where T :ActorInstanceBase
         {
             var go = new GameObject(typeof(T).Name);
-            GlobalHelper.ResetLocalGameObject(gameObject, go, true);
+            GOHelper.ResetLocalGameObject(gameObject, go, true);
             var result = go.AddComponent<T>();
             return result;
         }

@@ -44,6 +44,9 @@ namespace Ebonor.Manager
             if (_uiManager != null) _uiManager.Exit();
         }
 
+        /// <summary>Expose UIManager to scene managers for UI orchestration.</summary>
+        public UIManager GetUiManager() => _uiManager;
+
         /// <summary>
         /// Global UI key handling (e.g., back/menu) forwarded by UIManager.
         /// </summary>
@@ -184,6 +187,7 @@ namespace Ebonor.Manager
             if (null != _currentSceneManager)
             {
                 _currentSceneManager.Tick(dt);
+                PoolManager.Inst.OnUpdate();
             }
         }
         
@@ -279,6 +283,8 @@ namespace Ebonor.Manager
                     // Fallback for edit-mode tests that don't bootstrap UI.
                     progressReporter = new System.Progress<float>(_ => { });
                 }
+
+                PoolManager.CreatePoolManager();
                 
                 // Execute the loading pipeline
                 uiLoading?.SetTitle("Loading DLL");
@@ -296,8 +302,12 @@ namespace Ebonor.Manager
                 // Mark as initialized to prevent future re-loading
                 GlobalServices.MarkAppInitialized();
             }
+            
+            
             if (_currentSceneManager != null)
             {
+                PoolManager.Inst.DoBeforeLeavingScene();
+                DataEventManager.OnClearAllDicDELEvents();
                 var previous = _currentSceneManager;
                 await previous.Exit();
                 // In edit mode, Destroy throws; use DestroyImmediate to keep tests safe.
@@ -309,6 +319,7 @@ namespace Ebonor.Manager
 
             _currentSceneManager = newSceneManagerInstance;
             await _currentSceneManager.Init(this);
+            PoolManager.Inst.DoBeforeEnteringScene(gameObject.scene.name);
             await _currentSceneManager.Enter();
             log.Info($"Switched to scene manager: {_currentSceneManager.GetType().Name}");
             return _currentSceneManager;

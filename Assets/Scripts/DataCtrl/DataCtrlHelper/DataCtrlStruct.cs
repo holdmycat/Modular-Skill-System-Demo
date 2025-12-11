@@ -12,6 +12,17 @@ using UnityEngine;
 namespace Ebonor.DataCtrl
 {
     #region Enums
+    
+    public enum ePoolObjectType
+    {
+        eEffect = 0,
+        eModel = 1,
+        eFloatingText = 2,
+        ePoolSize = 3,
+        
+    }
+    
+    
     /// <summary>
     /// Buff animation stack states and their priorities (higher bit = higher priority).
     /// </summary>
@@ -161,8 +172,7 @@ namespace Ebonor.DataCtrl
         eSummon = 10,                                     
         [InspectorName("Summon Skill Manager")]
         eSummonSkillActor = 11,
-        [InspectorName("Passive Weapon")]
-        ePasssiveWeapon = 12,
+        eSize = 12,
     }
 
     /// <summary>
@@ -202,6 +212,23 @@ namespace Ebonor.DataCtrl
         OMNI = 1 << 9,
     }
 
+    
+    [Flags]
+    public enum eNpcProfession
+    {
+        EnemyNull = 1 << 0,
+        
+        Mow = 1 << 1,
+        
+        Elite = 1 << 2,
+        
+        Boss = 1 << 3,
+        
+        SummonDragon = 1 << 4,
+        
+        PlayerSummonNpc = 1 << 5,
+    }
+    
     /// <summary>
     /// Input control flag for enabling/disabling input groups.
     /// </summary>
@@ -469,11 +496,6 @@ namespace Ebonor.DataCtrl
         AgilityBase = Agility * 10 + 1,
         AgilityAdd = Agility * 10 + 2,
         
-        // //智力
-        // Intelligence = 1012,
-        // IntelligenceBase = Intelligence * 10 + 1,
-        // IntelligenceAdd = Intelligence * 10 + 2,
-        
         // Vitality
         Vitality = 1023,
         VitalityBase = Vitality * 10 + 1,
@@ -507,7 +529,48 @@ namespace Ebonor.DataCtrl
             _canChase = canChase;
         }
     }
+    
+    public struct UnitNumericChange
+    {
+        public ActorNumericComponentBase UnitAttrComp;
+        public eNumericType NumericType;
+        public float NumericResult;
+
+        public UnitNumericChange(ActorNumericComponentBase comp, eNumericType type, float result)
+        {
+            UnitAttrComp = comp;
+            NumericType = type;
+            NumericResult = result;
+        }
+    }
+    
+    public struct BossUnitNumericChange
+    {
+        public ActorNumericComponentBase UnitAttrComp;
+        public eNumericType NumericType;
+        public float NumericResult;
+
+        public BossUnitNumericChange(ActorNumericComponentBase comp, eNumericType type, float result)
+        {
+            UnitAttrComp = comp;
+            NumericType = type;
+            NumericResult = result;
+        }
+    }
+    
     #endregion
     
+    #region Pool Manager
+    [Serializable]
+    public class ResourcePoolConfig
+    {
+        public int MaxSimultaneousEffects;
+
+        public int MaxSimultaneousSounds;
+
+        public int MaxFloatingTextCount;
+    }
+    
+    #endregion
     
 }

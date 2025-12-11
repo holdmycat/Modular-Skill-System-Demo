@@ -23,5 +23,9 @@ namespace Ebonor.DataCtrl
         
         [Header("Default Player Id")]
         public long defaultPlayerHeroId;
+
+        [Header("Default ResourcePoolConfig")]
+        public ResourcePoolConfig ResourcePoolConfig;
+
     }
 }

@@ -8,13 +8,136 @@ using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using UnityEditor;
 using UnityEngine;
-
+using UObject = UnityEngine.Object;
 namespace Ebonor.DataCtrl
 {
+
+    ////all character model
+    public partial class DataCtrl : MonoBehaviour
+    {
+        private Dictionary<eActorModelType, Dictionary<long, UObject>> _dicGameModel;
+
+        private Dictionary<string, UObject> _dicModelName;
+        public Dictionary<long, UObject> GetGameModelDic(eActorModelType type)
+        {
+            if(_dicGameModel.TryGetValue(type, out var dic))
+            {
+                return dic;
+            }
+            return null;
+        }
+        
+        private void OnInitGameModel()
+        {
+            _dicModelName ??= new Dictionary<string, UObject>();
+            _dicGameModel ??= new Dictionary<eActorModelType, Dictionary<long, UObject>>();
+            for (var i = eActorModelType.eHero; i < eActorModelType.eSize; i++)
+            {
+                _dicGameModel.Add(i, new Dictionary<long, UObject>());
+            }
+        }
+
+        private void OnUnintGameModel()
+        {
+            foreach (var variable in _dicGameModel)
+            {
+                variable.Value.Clear();
+            }
+
+            _dicGameModel.Clear();
+            _dicModelName.Clear();
+        }
+
+        private async UniTask OnLoadAllModel()
+        {
+
+            if (_dicModelName.Count > 0)
+            {
+                log.Error("Fatal error, _dicModelName should be zero");
+                return;
+            }
+            
+            var list = await GlobalServices.ResourceLoader.LoadAllAssets<UObject>(ResourceAssetType.HeroModelPrefab);
+
+            foreach (var variable in list)
+            {
+                _dicModelName.Add(variable.name, variable);
+            }
+            
+            foreach (var variable in _dicUnitAttriDatas)
+            {
+                var modelId = variable.Key;
+
+                var unitAttr = variable.Value;
+
+                if (!_dicGameModel.TryGetValue(unitAttr.ActorModelType, out var dictionary))
+                {
+                    log.ErrorFormat("Fatal error, actorModel:{0} not exist", unitAttr.ActorModelType);
+                    return;
+                }
+
+                if (!_dicModelName.TryGetValue(unitAttr.UnitName, out var model))
+                {
+                    log.ErrorFormat("Fatal error, unitName:{0} not exist", unitAttr.UnitName);
+                    return;
+                }
+                
+                dictionary.Add(modelId, model);
+
+                _dicGameModel[unitAttr.ActorModelType] = dictionary;
+                
+                log.DebugFormat("[LoadModel], actorType:{0}, modelId:{1}, ModelName:{2}", unitAttr.ActorModelType, unitAttr.UnitDataNodeId, unitAttr.UnitName);
+                
+            }
+            
+        }
+        
+        public async UniTask<UObject> OnGetModel(eActorModelType modelType, uint modelId, eNpcProfession npcProfession = eNpcProfession.EnemyNull)
+        {
+
+            if (_dicGameModel.TryGetValue(modelType, out var modelDic))
+            {
+                if (modelDic.ContainsKey(modelId))
+                    return null;
+            }
+            
+            var unitAttr = GetUnitAttributeNodeData(modelId);
+
+            if (null == unitAttr)
+            {
+                log.ErrorFormat("Fatal error, modelId:{0} not found", modelId);
+                return null;
+            }
+            
+            if (_dicGameModel[modelType].ContainsKey(modelId))
+            {
+               
+                return _dicGameModel[modelType][modelId];
+            }
+
+            log.ErrorFormat("Fatal error, OnLoadModel, modelType:{0}, modelId:{1}", 
+                modelType,
+                modelId
+            );
+
+            return null;
+        }
+
+        private void OnUnLoadAllModel()
+        {
+            if (null != _dicGameModel)
+            {
+                _dicGameModel.Clear();
+            }
+        }
+    }
+    
+    
     //all character data
     public partial class DataCtrl : MonoBehaviour
     {
         private Dictionary<long, UnitAttributesNodeDataBase> _dicUnitAttriDatas;
+        private Dictionary<string, UnitAttributesNodeDataBase> _dicUnitAttriDatasByName;
         private Dictionary<eActorModelType, List<UnitAttributesNodeDataBase>> _dicListUnitDatas;
         
         private async UniTask LoadAllCharacterDataAsync(GlobalGameConfig config)
@@ -25,6 +148,9 @@ namespace Ebonor.DataCtrl
                 return;
             }
 
+
+            _dicUnitAttriDatasByName ??= new Dictionary<string, UnitAttributesNodeDataBase>();
+            _dicUnitAttriDatasByName.Clear();
             _dicUnitAttriDatas ??= new Dictionary<long, UnitAttributesNodeDataBase>();
             _dicUnitAttriDatas.Clear();
 
@@ -55,6 +181,7 @@ namespace Ebonor.DataCtrl
             {                    
                 _dicUnitAttriDatas.Add(hero.UnitDataNodeId, hero);  
                 _dicListUnitDatas[hero.ActorModelType].Add(hero);  
+                _dicUnitAttriDatasByName.Add(hero.UnitName, hero);
                 log.Debug("heroId:" + hero.UnitDataNodeId);
             }
         }
@@ -68,6 +195,16 @@ namespace Ebonor.DataCtrl
         public UnitAttributesNodeDataBase GetUnitAttributeNodeData(long id)
         {
             if (_dicUnitAttriDatas.TryGetValue(id, out var attr))
+            {
+                return attr;
+            }
+
+            return null;
+        }
+
+        public UnitAttributesNodeDataBase GetUnitAttributeNodeDataByUnitName(string id)
+        {
+            if (_dicUnitAttriDatasByName.TryGetValue(id, out var attr))
             {
                 return attr;
             }
@@ -139,10 +276,9 @@ namespace Ebonor.DataCtrl
             await LoadAllCharacterDataAsync(globalConfig);
             progress?.Report(0.1f);
             
-            //
-            
-            //
-            
+            //load all character model
+            await OnLoadAllModel();
+            progress?.Report(0.5f);
             
             progress?.Report(1.0f);
             
@@ -163,11 +299,14 @@ namespace Ebonor.DataCtrl
         public void InitializeDataCtrl()
         {
             _inst = this;
+            OnInitGameModel();
         }
         
         private void OnDestroy()
         {
             UnLoadAllCharacterDataAsync();
+            OnUnintGameModel();
+            OnUnLoadAllModel();
             _inst = null;
         }
         

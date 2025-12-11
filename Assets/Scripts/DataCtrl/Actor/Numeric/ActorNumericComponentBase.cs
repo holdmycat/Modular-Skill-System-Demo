@@ -106,6 +106,7 @@ namespace Ebonor.DataCtrl
 
         protected void SetDisplayNumericTypes(IEnumerable<eNumericType> numericTypes)
         {
+           
             _displayNumericTypes.Clear();
             if (numericTypes == null) return;
             foreach (var type in numericTypes)
@@ -159,6 +160,13 @@ namespace Ebonor.DataCtrl
             
         }
         
+        public virtual float this[eNumericType numericType]
+        {
+            get => GetByKey((int) numericType);
+            set => UpdateNumeric_SetOperation(numericType, value, false, false);
+        }
+        
+        
     }
     
     //basic property variables
@@ -181,6 +189,16 @@ namespace Ebonor.DataCtrl
         public uint NetId => _netId;
         public eActorModelType ActorModelType => _actorModelType;
         public long UnitModelNodeId => _unitModelNodeId;
+
+        public int GetUILv()
+        {
+            return (int)(this[eNumericType.UnitLv] + 1);
+        }
+        
+        public int GeILv()
+        {
+            return (int)(this[eNumericType.UnitLv]);
+        }
         
         public eNpcProfession NpcProfession => mNpcProfession;
     }
@@ -207,36 +225,47 @@ namespace Ebonor.DataCtrl
             
             OnInitCommonProperty(characterRuntimeData, netid, unitAttr);
             
-            var dataBase = unitAttr as UnitAttributesNodeDataBase;
-            
             //-----------------------Base Property-Begin-----------------------//
-            SetValueForOrig(eNumericType.UnityProfession, (float)dataBase.HeroProfession);
+            SetValueForOrig(eNumericType.UnityProfession, (float)unitAttr.HeroProfession);
             SetValueForOrig(eNumericType.UnitLv, 0);
-            SetValueForOrig(eNumericType.UnitMaxLV, dataBase.UnitMaxLV);
-            SetValueForOrig(eNumericType.ActorSide, (float)dataBase.ActorSide);
-            SetValueForOrig(eNumericType.Height, dataBase.Height);
-            SetValueForOrig(eNumericType.Radius, dataBase.Radius);
-            int nSide = (int)dataBase.ActorSide;
+            SetValueForOrig(eNumericType.UnitMaxLV, unitAttr.UnitMaxLV);
+            SetValueForOrig(eNumericType.ActorSide, (float)unitAttr.ActorSide);
+            SetValueForOrig(eNumericType.Height, unitAttr.Height);
+            SetValueForOrig(eNumericType.Radius, unitAttr.Radius);
+            int nSide = (int)unitAttr.ActorSide;
             SetValueForOrig(eNumericType.ActorSide, (float)nSide);
             //-----------------------Base Property-End-----------------------//
             
+            SetValueForOrig(eNumericType.Power, unitAttr.Power);
+            SetValueForOrig(eNumericType.Agility, unitAttr.Agility);
+            SetValueForOrig(eNumericType.Vitality, unitAttr.Vitality);
+            
+            SetValueForOrig(eNumericType.MovementSpeed, unitAttr.MovementSpeed);
+            SetValueForOrig(eNumericType.RotationSpeed, unitAttr.RotationSpeed);
+            
+            SetValueForOrig(eNumericType.Life, unitAttr.Power);
+            SetValueForOrig(eNumericType.MaxLife, unitAttr.Power);
+            
             // UI display defaults
-            SetDisplayNumericTypes(new []
+            if (_displayNumericTypes.Count == 0)
             {
-                eNumericType.Power,
-                eNumericType.Agility,
-                eNumericType.Vitality,
-                eNumericType.MovementSpeed,
-                eNumericType.RotationSpeed,
-                eNumericType.Life,
-                eNumericType.MaxLife
-            });
+                SetDisplayNumericTypes(new []
+                {
+                    eNumericType.Power,
+                    eNumericType.Agility,
+                    eNumericType.Vitality,
+                    eNumericType.MovementSpeed,
+                    eNumericType.RotationSpeed,
+                    eNumericType.Life,
+                    eNumericType.MaxLife
+                });
+            }
+          
             
         }
         
         public void OnUnInitActorNumericComponent()
         {
-            
             _displayNumericTypes.Clear();
         }
 

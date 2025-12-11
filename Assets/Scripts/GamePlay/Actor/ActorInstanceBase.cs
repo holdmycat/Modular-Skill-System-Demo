@@ -71,7 +71,7 @@ namespace Ebonor.GamePlay
             
             var actorModel = PoolManager.SpawnItemFromPool<PoolItemBase>(ePoolObjectType.eModel, _actorNumericComponentBase.AttrAvatarName);
             
-            GlobalHelper.ResetLocalGameObject(gameObject, actorModel.gameObject, true);
+            GOHelper.ResetLocalGameObject(gameObject, actorModel.gameObject, true);
              
             return result;
         }

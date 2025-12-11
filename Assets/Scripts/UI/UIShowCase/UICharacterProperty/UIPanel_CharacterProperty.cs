@@ -2,10 +2,12 @@
 // File: UIPanel_CharacterProperty.cs
 // Purpose: Display basic character properties and live numeric updates.
 //------------------------------------------------------------
-using System;
-using System.Collections.Generic;
+
+using System.Text;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
+using Ebonor.Framework;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -21,58 +23,98 @@ namespace Ebonor.UI
         [SerializeField] private Image avatarImage;
         [SerializeField] private Sprite defaultAvatar;
 
-        [Header("Numeric")]
-        [SerializeField] private TMP_Text powerText;
-        [SerializeField] private TMP_Text agilityText;
-        [SerializeField] private TMP_Text vitalityText;
-        [SerializeField] private TMP_Text movementSpeedText;
-        [SerializeField] private TMP_Text rotationSpeedText;
-        [SerializeField] private TMP_Text lifeText;
+        
+        [SerializeField] public GameObject goSpawnPropertyItem;
+        [SerializeField] public GameObject goSpawnPropertyPool;
+        [SerializeField] public GridLayoutGroup propertyGridLayout;
+        [SerializeField] public RectTransform propertyRectTransform;
+
+        [SerializeField] public Button btnShowHide;
+        [SerializeField] public RectTransform btnShowHideRect;
+        
+        // [Header("Numeric")]
+        // [SerializeField] private TMP_Text powerText;
+        // [SerializeField] private TMP_Text agilityText;
+        // [SerializeField] private TMP_Text vitalityText;
+        // [SerializeField] private TMP_Text movementSpeedText;
+        // [SerializeField] private TMP_Text rotationSpeedText;
+        // [SerializeField] private TMP_Text lifeText;
 
         private ActorNumericComponentBase _numericComp;
         private UnitAttributesNodeDataBase _unitData;
         private bool _subscribed;
-
-        private static readonly Dictionary<eNumericType, Action<UIPanel_CharacterProperty, float>> NumericWriters =
-            new Dictionary<eNumericType, Action<UIPanel_CharacterProperty, float>>
-            {
-                { eNumericType.Power, (p, v) => p.SetText(p.powerText, v) },
-                { eNumericType.Agility, (p, v) => p.SetText(p.agilityText, v) },
-                { eNumericType.Vitality, (p, v) => p.SetText(p.vitalityText, v) },
-                { eNumericType.MovementSpeed, (p, v) => p.SetText(p.movementSpeedText, v) },
-                { eNumericType.RotationSpeed, (p, v) => p.SetText(p.rotationSpeedText, v) },
-                { eNumericType.Life, (p, v) => p.SetText(p.lifeText, v) },
-                { eNumericType.MaxLife, (p, v) => p.SetText(p.lifeText, v) }
-            };
-
+        private StringBuilder _strBld;
+        private Vector2 _shownPos;
+        private Vector2 _hiddenPos;
+        private bool _isHidden;
+        private bool _positionsReady;
+        private CancellationTokenSource _toggleCts;
+      
         /// <summary>Bind this panel to the provided actor numeric component.</summary>
         public void Bind(ActorNumericComponentBase numericComp)
         {
+
+            _strBld ??= new StringBuilder();
+            _strBld.Clear();
+            
             Unbind();
             _numericComp = numericComp;
             _unitData = ResolveUnitData();
-
-            RefreshStaticInfo();
-            RefreshAllNumeric();
+            btnShowHide.onClick.AddListener(ClickShowHide);
             Subscribe();
         }
 
         /// <summary>Detach from the current actor and stop listening for updates.</summary>
         public void Unbind()
         {
-            if (_subscribed)
-            {
-                DataEventManager.OnDetach<UnitNumericChange>(OnNumericChange);
-                _subscribed = false;
-            }
-
+            btnShowHide.onClick.RemoveListener(ClickShowHide);
+            UnSubscribe();
             _numericComp = null;
             _unitData = null;
+            if (null != _strBld)
+            {
+                _strBld.Clear();
+            }
+            _positionsReady = false;
+            _isHidden = false;
+            _toggleCts?.Cancel();
+            _toggleCts?.Dispose();
+            _toggleCts = null;
+          
         }
+
+        public void ClickShowHide()
+        {
+            if (!_positionsReady)
+            {
+                ComputePositions();
+            }
+            if (!_positionsReady) return;
+
+            _toggleCts?.Cancel();
+            _toggleCts?.Dispose();
+            _toggleCts = new CancellationTokenSource();
+            var target = _isHidden ? _shownPos : _hiddenPos;
+            _ = SlideToAsync(target, 0.2f, _toggleCts.Token);
+            _isHidden = !_isHidden;
+        }
+        
 
         protected override async UniTask OnShowAsync()
         {
-            await UniTask.CompletedTask;
+            RefreshStaticInfo();
+            
+            var displayList = _numericComp != null ? _numericComp.DisplayNumericTypes : null;
+            var count = 0;
+            if (displayList != null && displayList.Count > 0)
+            {
+                count = displayList.Count;
+            }
+            
+            UIHelper.OnDynamicLoadItem(goSpawnPropertyPool, goSpawnPropertyItem, propertyGridLayout, count);
+            RefreshAllNumeric();
+            LayoutRebuilder.ForceRebuildLayoutImmediate(propertyRectTransform);
+            ComputePositions();
         }
 
         protected override async UniTask OnHideAsync()
@@ -86,22 +128,42 @@ namespace Ebonor.UI
             DataEventManager.OnAttach<UnitNumericChange>(OnNumericChange);
             _subscribed = true;
         }
+        
+        private void UnSubscribe()
+        {
+            if (_subscribed)
+            {
+                DataEventManager.OnDetach<UnitNumericChange>(OnNumericChange);
+                _subscribed = false;
+            }
+        }
 
         private void RefreshStaticInfo()
         {
             if (_unitData != null)
             {
-                SetText(nameText, _unitData.UnitName, string.Empty);
-                SetText(professionText, _unitData.HeroProfession.ToString(), string.Empty);
-                SetText(levelText, 1f);
-                UpdateAvatar(_unitData.UnitAvatar);
+                _strBld.Clear();
+                _strBld.Append("Name: ");
+                _strBld.Append(_unitData.UnitName);
+                SetText(nameText, _strBld.ToString(), string.Empty);
+                
+                _strBld.Clear();
+                _strBld.Append("Pro: ");
+                _strBld.Append(_unitData.HeroProfession);
+                SetText(professionText, _strBld.ToString(), string.Empty);
+                
+                _strBld.Clear();
+                _strBld.Append("Lv: ");
+                _strBld.Append(_numericComp.GetUILv());
+                SetText(levelText, _strBld.ToString(), string.Empty);
+                //UpdateAvatar(_unitData.UnitAvatar);
             }
             else
             {
                 SetText(nameText, "Unknown", string.Empty);
                 SetText(professionText, "--", string.Empty);
                 SetText(levelText, 0f);
-                UpdateAvatar(null);
+                //UpdateAvatar(null);
             }
         }
 
@@ -110,34 +172,67 @@ namespace Ebonor.UI
             var displayList = _numericComp != null ? _numericComp.DisplayNumericTypes : null;
             if (displayList != null && displayList.Count > 0)
             {
+                var i = 0;
                 foreach (var type in displayList)
                 {
-                    if (NumericWriters.TryGetValue(type, out var writer))
-                    {
-                        float fallback = GetFallbackValue(type);
-                        float value = GetNumericValue(type, fallback);
-                        writer?.Invoke(this, value);
-                    }
+                    var trans = propertyGridLayout.transform.GetChild(i);
+                    var item = trans.gameObject.GetComponent<UIItem_Font>();
+                    var key = type;
+                    var value = _numericComp[type];
+                    _strBld.Clear();
+                    _strBld.Append(key.ToString());
+                    _strBld.Append(": ");
+                    _strBld.Append(value);
+                    item.UpdatePropertyText(_strBld.ToString());
+                    i++;
                 }
-                return;
+            }
+        }
+
+        private void ComputePositions()
+        {
+            if (rectTransform == null || btnShowHide == null) return;
+
+            var btnRect = btnShowHideRect != null ? btnShowHideRect : btnShowHide.transform as RectTransform;
+            if (btnRect == null) return;
+
+            _shownPos = rectTransform.anchoredPosition;
+
+            var width = rectTransform.rect.width;
+            var btnWidth = btnRect.rect.width;
+            var offset = Mathf.Max(0f, width);
+            _hiddenPos = _shownPos + new Vector2(-offset, 0f);
+            _positionsReady = true;
+        }
+
+        private async UniTaskVoid SlideToAsync(Vector2 target, float duration, CancellationToken token)
+        {
+            if (rectTransform == null) return;
+            var start = rectTransform.anchoredPosition;
+            float timer = 0f;
+            while (timer < duration)
+            {
+                if (token.IsCancellationRequested || rectTransform == null) return;
+                timer += Time.deltaTime;
+                float t = Mathf.Clamp01(timer / duration);
+                float eased = Mathf.SmoothStep(0f, 1f, t);
+                rectTransform.anchoredPosition = Vector2.LerpUnclamped(start, target, eased);
+                await UniTask.Yield();
             }
 
-            foreach (var kvp in NumericWriters)
+            if (rectTransform != null)
             {
-                var type = kvp.Key;
-                float fallback = GetFallbackValue(type);
-                float value = GetNumericValue(type, fallback);
-                kvp.Value?.Invoke(this, value);
+                rectTransform.anchoredPosition = target;
             }
         }
 
         private void OnNumericChange(UnitNumericChange change)
         {
             if (_numericComp == null || change.UnitAttrComp != _numericComp) return;
-            if (NumericWriters.TryGetValue(change.NumericType, out var writer))
-            {
-                writer?.Invoke(this, change.NumericResult);
-            }
+            // if (NumericWriters.TryGetValue(change.NumericType, out var writer))
+            // {
+            //     writer?.Invoke(this, change.NumericResult);
+            // }
         }
 
         private UnitAttributesNodeDataBase ResolveUnitData()

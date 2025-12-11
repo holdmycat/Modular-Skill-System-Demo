@@ -35,7 +35,7 @@ namespace Ebonor.GamePlay
         private async UniTask<T> LoadCharacter<T>() where T :ActorInstanceBase
         {
             var go = new GameObject(typeof(T).Name);
-            GlobalHelper.ResetLocalGameObject(gameObject, go, true);
+            GOHelper.ResetLocalGameObject(gameObject, go, true);
             var result = go.AddComponent<T>();
             return result;
         }

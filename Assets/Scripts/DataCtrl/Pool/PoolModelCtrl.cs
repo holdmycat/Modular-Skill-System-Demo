@@ -66,7 +66,7 @@ namespace Ebonor.DataCtrl
             if (t is PoolItemBase actorInstance)
             {
                 var id = t.name;
-                GlobalHelper.ResetLocalGameObject(gameObject, t.gameObject, false, 1f);
+                GOHelper.ResetLocalGameObject(gameObject, t.gameObject, false, 1f);
 
                 if (_pooledActors.ContainsKey(id))
                 {
@@ -111,7 +111,7 @@ namespace Ebonor.DataCtrl
                 return default;
             }
 
-            var actorGo = (GameObject)GlobalHelper.InstantiatePrefab(modelObj);
+            var actorGo = (GameObject)GOHelper.InstantiatePrefab(modelObj);
             var instance = actorGo.GetComponent<T>();
             if (instance == null)
             {

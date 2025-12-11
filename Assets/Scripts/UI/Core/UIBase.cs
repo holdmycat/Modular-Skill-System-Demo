@@ -5,6 +5,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
+using Ebonor.Framework;
 using UnityEngine;
 
 namespace Ebonor.UI
@@ -25,6 +26,8 @@ namespace Ebonor.UI
     {
         [Header("Blackboard")]
         [SerializeField] protected UiBlackboardBase blackboard;
+        
+        [SerializeField] protected CanvasGroup _bufferCanvasGroup;
         
         protected CanvasGroup _canvasGroup;
         protected RectTransform _rectTransform;
@@ -48,6 +51,8 @@ namespace Ebonor.UI
         {
             _canvasGroup = GetComponent<CanvasGroup>();
             _rectTransform = GetComponent<RectTransform>();
+            
+            UIHelper.OnSetCanvasState(_bufferCanvasGroup, false);
             
             // Default state
             _canvasGroup.alpha = 0;
@@ -85,7 +90,9 @@ namespace Ebonor.UI
         public async UniTask InternalCloseAsync()
         {
             if (CurrentState == UIState.Closing || CurrentState == UIState.Deactive) return;
-
+            
+            UIHelper.OnSetCanvasState(_bufferCanvasGroup, false);
+            
             CurrentState = UIState.Closing;
             _canvasGroup.interactable = false;
             _canvasGroup.blocksRaycasts = false;

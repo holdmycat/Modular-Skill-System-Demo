@@ -23,7 +23,7 @@ namespace Ebonor.DataCtrl
             var go = new GameObject("PoolManager");
             go.AddComponent<PoolManager>();
             DontDestroyOnLoad(go);
-            GlobalHelper.ResetGameObject(go);
+            GOHelper.ResetGameObject(go);
         }
         
         /// <summary>
@@ -83,7 +83,7 @@ namespace Ebonor.DataCtrl
                 return;
             mGOSceneInst = new GameObject("PoolManager_" + _sceneName);
             
-            GlobalHelper.ResetGameObject(mGOSceneInst);
+            GOHelper.ResetGameObject(mGOSceneInst);
 
             //mResourcePoolConfig = DataCtrl.Inst.GetResourcePoolConfig();
             
@@ -102,7 +102,7 @@ namespace Ebonor.DataCtrl
         {
             var go = new GameObject(type.ToString());
             var ctrl = go.AddComponent<T>();
-            GlobalHelper.ResetLocalGameObject(mInst.mGOSceneInst, go, true, 1);
+            GOHelper.ResetLocalGameObject(mInst.mGOSceneInst, go, true, 1);
             ctrl.transform.localPosition = Vector3.up * 100; 
             ctrl.InitPool(type);
             return ctrl;

@@ -30,6 +30,7 @@ namespace Ebonor.Framework
 {
     public static class GlobalHelper
     {
+        
         #region File Path Helpers
         public static string GetParentDirectoryName(string assetPath)
         {
@@ -181,7 +182,6 @@ namespace Ebonor.Framework
         }
         #endregion
         
-        
         #region Skill Names
 
         public static long GetSkillID(string skillName)
@@ -301,139 +301,9 @@ namespace Ebonor.Framework
 
         
         #endregion
-        
-        #region Global Variables
-
-        public static StringBuilder gStrBldInst = new StringBuilder();
-        #endregion
-        
-     
-        #region Asset Instantiate
-        public static T InstantiatePrefab<T>(string path) where T: UnityEngine.Object
-        {
-            var objPrefab = UnityEngine.Resources.Load(path);
-            if (null == objPrefab)
-            {
-                Debug.LogWarningFormat("Fail to find player, path:{0}", path);
-                return null;
-            }
-            var SkillPrefab = UnityEngine.Object.Instantiate(objPrefab) as T;
-            SkillPrefab.name = objPrefab.name;
-            return SkillPrefab;
-        }
-        
-
-        public static T InstantiatePrefab<T>(T obj) where T : UnityEngine.Object
-        {
-            var skillPrefab = UnityEngine.Object.Instantiate(obj) as T;
-            skillPrefab.name = obj.name;
-            return skillPrefab;
-        }
-
-        public static GameObject InstantiateGOPrefab(UnityEngine.Object obj)
-        {
-            if (null == obj)
-            {
-#if UNITY_EDITOR
-                Debug.LogErrorFormat("obj is null");
-                return null;
-#endif
-            }
-            var skillPrefab = UnityEngine.Object.Instantiate(obj) as GameObject;
-            ResetGameObject(skillPrefab);
-            skillPrefab.name = obj.name;
-            return skillPrefab;
-        }
-        
-        public static GameObject InstantiateGOPrefab(GameObject obj)
-        {
-            var skillPrefab = UnityEngine.Object.Instantiate(obj) as GameObject;
-            GlobalHelper.ResetGameObject(skillPrefab);
-            skillPrefab.name = obj.name;
-            return skillPrefab;
-        }
-        
-        public static void ResetGameObject(GameObject go, float scale = 1f)
-        {
-            go.transform.position = Vector3.zero;
-            go.transform.rotation = Quaternion.identity;
-            go.transform.localScale = Vector3.one * scale;
-        }
-        
-        public static void ResetLocalGameObject(GameObject parent, GameObject go, bool active = false, float scale = 1f)
-        {
-            go.transform.SetParent(parent.transform);
-            go.transform.localPosition = Vector3.zero;
-            go.transform.localRotation = Quaternion.identity;
-            go.transform.localScale = Vector3.one * scale;
-            go.SetActive(active);
-        }
-        
-        #endregion
-        
-        
-        #region ip addr
-        private static readonly List<string> IpList = new List<string>();
-        public static string GetLocalIPAddress()
-        {
-            foreach (NetworkInterface ni in NetworkInterface.GetAllNetworkInterfaces())
-            {
-                if (ni.NetworkInterfaceType == NetworkInterfaceType.Wireless80211 || ni.NetworkInterfaceType == NetworkInterfaceType.Ethernet)
-                {
-                    foreach (UnicastIPAddressInformation ip in ni.GetIPProperties().UnicastAddresses)
-                    {
-                        if (ip.Address.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                        {
-                            Console.WriteLine("Local IP Address: {0}", ip.Address.ToString());
-                            return ip.Address.ToString();
-                        }
-                    }
-                }
-            }
-            return "";
-            // var host = Dns.GetHostEntry(Dns.GetHostName());
-            // foreach (var ip in host.AddressList)
-            // {
-            //     if (ip.AddressFamily == AddressFamily.InterNetwork)
-            //     {
-            //         return ip.ToString();
-            //     }
-            // }
-            // throw new Exception("No network adapters with an IPv4 address in the system!");
-        }
-
-        public static string GetCloudIPAddress()
-        {
-            using (WebClient webClient = new WebClient())
-            {
-                // Download the public IP address from the "https://api.ipify.org" URL
-                string publicIpAddress = webClient.DownloadString("https://api.ipify.org");
-
-                // Display the public IP address
-                Console.WriteLine("Your public IP address is: " + publicIpAddress);
-                return publicIpAddress;
-            }
-        }
-        
-        public static string GetPublicIPAddress()
-        {
-            var request = (HttpWebRequest)WebRequest.Create("http://ifconfig.me");
-            request.UserAgent = "curl"; // this will tell the server to return the information as if the request was made by the linux "curl" command
-            string publicIPAddress;
-            request.Method = "GET";
-            using(WebResponse response = request.GetResponse())
-            {
-                using(var reader = new System.IO.StreamReader(response.GetResponseStream()))
-                {
-                    publicIPAddress = reader.ReadToEnd();
-                }
-            }
-            return publicIPAddress.Replace("\n", "");
-        }
-        
-        #endregion
-
+      
         #region String Helpers
+        public static StringBuilder gStrBldInst = new StringBuilder();
         private  static List<string> _splitBuffer = new List<string>();
         public static List<string> SplitToBuffer(string input, char delimiter)
         {
@@ -750,49 +620,6 @@ namespace Ebonor.Framework
         }
         #endregion
         
-        #region encrypt/decrypt byte array
-        
-        public static byte[] Encrypt(byte[] bytesToEncrypt, string password)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                using (AesManaged aes = new AesManaged())
-                {
-                    byte[] key = Encoding.UTF8.GetBytes(password);
-                    aes.Key = key;
-
-                    using (var cs = new CryptoStream(ms, aes.CreateEncryptor(), CryptoStreamMode.Write))
-                    {
-                        cs.Write(bytesToEncrypt, 0, bytesToEncrypt.Length);
-                        cs.FlushFinalBlock();
-                    }
-
-                    return ms.ToArray();
-                }
-            }
-        }
-
-        public static byte[] Decrypt(byte[] bytesToDecrypt, string password)
-        {
-            using (MemoryStream ms = new MemoryStream())
-            {
-                using (AesManaged aes = new AesManaged())
-                {
-                    byte[] key = Encoding.UTF8.GetBytes(password);
-                    aes.Key = key;
-
-                    using (var cs = new CryptoStream(ms, aes.CreateDecryptor(), CryptoStreamMode.Write))
-                    {
-                        cs.Write(bytesToDecrypt, 0, bytesToDecrypt.Length);
-                        cs.FlushFinalBlock();
-                    }
-
-                    return ms.ToArray();
-                }
-            }
-        }
-        #endregion
-        
         #region thread
 
         static int g_mainThreadId;
@@ -806,43 +633,6 @@ namespace Ebonor.Framework
             return g_mainThreadId == System.Threading.Thread.CurrentThread.ManagedThreadId;
         }
 
-        #endregion
-
-        #region editor gizmos
-        
-        public static void DrawCircle(Vector3 center, float radius, int segments, Color color)
-        {
-            
-#if UNITY_EDITOR
-            Gizmos.color = color;
-            float angle = 0f;
-            //Quaternion rot = Quaternion.LookRotation(Vector3.up); // Use Y axis as normal
-
-            Vector3 lastPoint = center +  new Vector3(Mathf.Cos(Mathf.Deg2Rad * angle) * radius, 0, Mathf.Sin(Mathf.Deg2Rad * angle) * radius);
-            Vector3 thisPoint = Vector3.zero;
-
-            for (int i = 1; i <= segments; i++)
-            {
-                angle = (i * 360f) / segments;
-                thisPoint = center +  new Vector3(Mathf.Cos(Mathf.Deg2Rad * angle) * radius, 0, Mathf.Sin(Mathf.Deg2Rad * angle) * radius);
-                Gizmos.DrawLine(lastPoint, thisPoint);
-                lastPoint = thisPoint;
-            }
-#endif
-        }
-        #endregion
-        
-        #region transform
-
-        public static Vector3 GetGroundPosition(Vector3 pos)
-        {
-            return new Vector3(pos.x, 0f, pos.z);
-        }
-
-        public static Vector3 GetVector3(System.Numerics.Vector3 v3)
-        {
-            return new Vector3(v3.X, v3.Y, v3.Z);
-        }
         #endregion
         
         #region Floating Text
@@ -919,7 +709,6 @@ namespace Ebonor.Framework
         }
         #endregion
         
-     
         #region project
         
         #region Dev Build Check
@@ -935,19 +724,7 @@ namespace Ebonor.Framework
         #endregion  
         
         #endregion
-        
-        
-        #region Physics Helpers
-        public static float CalculateKnockUpTotalTime(float height, float gravity = 9.8f)
-        {
-            if (height <= 0f || gravity <= 0f)
-                return 0f;
-            // Time for a single leg (up or down)
-            float singleTime = Mathf.Sqrt(2f * height / gravity);
-            // Total time = up + down
-            return 2f * singleTime;
-        }
-         #endregion
+ 
         
     }
 

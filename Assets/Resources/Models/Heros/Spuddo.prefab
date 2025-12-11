@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4290697613862210641}
   - component: {fileID: 5883892235959408356}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: Spuddo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -57,7 +57,7 @@ GameObject:
   - component: {fileID: 7081025599629371948}
   - component: {fileID: 5618275056192468288}
   - component: {fileID: 5336837189979609090}
-  m_Layer: 7
+  m_Layer: 10
   m_Name: Capsule
   m_TagString: Untagged
   m_Icon: {fileID: 0}

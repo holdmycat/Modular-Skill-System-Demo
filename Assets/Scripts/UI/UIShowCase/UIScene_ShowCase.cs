@@ -3,7 +3,6 @@
 // Purpose: Showcase scene root UI; wires subpanels such as character properties.
 //------------------------------------------------------------
 using Cysharp.Threading.Tasks;
-using Ebonor.GamePlay;
 using UnityEngine;
 
 namespace Ebonor.UI
@@ -14,7 +13,7 @@ namespace Ebonor.UI
         [Header("Panels")]
         [SerializeField] private UIPanel_CharacterProperty characterPropertyPanel;
 
-        private GamePlayRoomManager _roomManager;
+        private ShowCaseUiBlackboard _blackboard;
         
         /// <summary>Find required scene references and cache panel components.</summary>
         protected override async UniTask OnCreateAsync()
@@ -23,8 +22,8 @@ namespace Ebonor.UI
             {
                 characterPropertyPanel = GetComponentInChildren<UIPanel_CharacterProperty>(true);
             }
+            _blackboard = GetBlackboard<ShowCaseUiBlackboard>();
 
-            _roomManager = FindObjectOfType<GamePlayRoomManager>();
             await UniTask.CompletedTask;
         }
         
@@ -37,8 +36,8 @@ namespace Ebonor.UI
         /// <summary>Open UI and bind to the active player instance if available.</summary>
         protected override async UniTask OnOpenAsync()
         {
-            var player = _roomManager != null ? _roomManager.PlayerActorInstance : null;
-            characterPropertyPanel?.Bind(player);
+            var playerNumeric = _blackboard != null ? _blackboard.PlayerNumeric : null;
+            characterPropertyPanel?.Bind(playerNumeric);
             if (characterPropertyPanel != null)
             {
                 await characterPropertyPanel.ShowAsync();

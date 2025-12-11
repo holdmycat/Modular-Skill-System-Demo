@@ -29,7 +29,6 @@ namespace Ebonor.UI
         [SerializeField] private TMP_Text rotationSpeedText;
         [SerializeField] private TMP_Text lifeText;
 
-        private ActorInstanceBase _actorInstance;
         private ActorNumericComponentBase _numericComp;
         private UnitAttributesNodeDataBase _unitData;
         private bool _subscribed;
@@ -46,12 +45,11 @@ namespace Ebonor.UI
                 { eNumericType.MaxLife, (p, v) => p.SetText(p.lifeText, v) }
             };
 
-        /// <summary>Bind this panel to the provided actor instance.</summary>
-        public void Bind(ActorInstanceBase actorInstance)
+        /// <summary>Bind this panel to the provided actor numeric component.</summary>
+        public void Bind(ActorNumericComponentBase numericComp)
         {
             Unbind();
-            _actorInstance = actorInstance;
-            _numericComp = actorInstance != null ? actorInstance.ActorNumericComponentBase : null;
+            _numericComp = numericComp;
             _unitData = ResolveUnitData();
 
             RefreshStaticInfo();
@@ -68,7 +66,6 @@ namespace Ebonor.UI
                 _subscribed = false;
             }
 
-            _actorInstance = null;
             _numericComp = null;
             _unitData = null;
         }
@@ -130,17 +127,11 @@ namespace Ebonor.UI
 
         private UnitAttributesNodeDataBase ResolveUnitData()
         {
-            if (_numericComp != null && DataCtrl.Inst != null)
+            if (_numericComp != null && DataCtrl.DataCtrl.Inst != null)
             {
                 var id = _numericComp.UnitModelNodeId;
-                var fromId = DataCtrl.Inst.GetUnitAttributeNodeData(id);
+                var fromId = DataCtrl.DataCtrl.Inst.GetUnitAttributeNodeData(id);
                 if (fromId != null) return fromId;
-            }
-
-            if (_actorInstance != null && DataCtrl.Inst != null)
-            {
-                var fromName = DataCtrl.Inst.GetUnitAttributeNodeDataByUnitName(_actorInstance.name);
-                if (fromName != null) return fromName;
             }
 
             return null;

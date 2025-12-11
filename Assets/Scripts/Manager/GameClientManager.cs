@@ -44,6 +44,9 @@ namespace Ebonor.Manager
             if (_uiManager != null) _uiManager.Exit();
         }
 
+        /// <summary>Expose UIManager to scene managers for UI orchestration.</summary>
+        public UIManager GetUiManager() => _uiManager;
+
         /// <summary>
         /// Global UI key handling (e.g., back/menu) forwarded by UIManager.
         /// </summary>

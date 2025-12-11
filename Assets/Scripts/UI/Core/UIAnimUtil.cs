@@ -77,6 +77,7 @@ namespace Ebonor.UI
 
             while (timer < duration)
             {
+                if (rectTransform == null) break;
                 timer += Time.deltaTime;
                 float t = Mathf.Clamp01(timer / duration);
                 float eased = EaseOutBack(t, overshoot);
@@ -89,6 +90,7 @@ namespace Ebonor.UI
                 await UniTask.Yield();
             }
 
+            if (rectTransform == null) return;
             rectTransform.localScale = endScale;
             if (canvasGroup != null) canvasGroup.alpha = endAlpha;
         }
@@ -137,6 +139,7 @@ namespace Ebonor.UI
 
             while (timer < duration)
             {
+                if (rectTransform == null) break;
                 timer += Time.deltaTime;
                 float t = Mathf.Clamp01(timer / duration);
                 float eased = EaseOutQuad(t);
@@ -149,6 +152,7 @@ namespace Ebonor.UI
                 await UniTask.Yield();
             }
 
+            if (rectTransform == null) return;
             rectTransform.anchoredPosition = endPos;
             if (canvasGroup != null) canvasGroup.alpha = endAlpha;
         }

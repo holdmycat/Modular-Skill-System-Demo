@@ -6,14 +6,64 @@
 //------------------------------------------------------------
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
+using Ebonor.UI;
 using UnityEngine;
 using Ebonor.GamePlay;
 using ResourceLoader = Ebonor.DataCtrl.ResourceLoader;
 
 namespace Ebonor.Manager
 {
+
+    //uiscene_showcase
+    public partial class ShowCaseSceneManager : SceneManagerBase
+    {
+        private UIScene_ShowCase _uiShowCase;
+        
+        private async UniTask OpenShowcaseUI(ActorInstanceBase playerInstance)
+        {
+            var uiManager = ClientManager != null ? ClientManager.GetUiManager() : null;
+            if (uiManager == null)
+            {
+                log.Error("UIManager is null; cannot open showcase UI.");
+                return;
+            }
+
+            var numeric = playerInstance != null ? playerInstance.ActorNumericComponentBase : null;
+
+            _uiShowCase = await uiManager.OpenUIAsync<UIScene_ShowCase>(ui =>
+            {
+                var bb = ui.GetBlackboard<ShowCaseUiBlackboard>();
+                if (bb != null)
+                {
+                    bb.SetPlayerNumeric(numeric);
+                }
+                else
+                {
+                    log.Error("ShowCaseUiBlackboard missing on UIScene_ShowCase.");
+                }
+            });
+        }
+
+        private async UniTask CloseShowcaseUI()
+        {
+            if (_uiShowCase != null && !_uiShowCase.Equals(null))
+            {
+                var uiManager = ClientManager != null ? ClientManager.GetUiManager() : null;
+                var bb = _uiShowCase.GetBlackboard<ShowCaseUiBlackboard>();
+                bb?.Clear();
+                if (uiManager != null)
+                {
+                    await uiManager.CloseUIAsync(_uiShowCase);
+                }
+            }
+
+            _uiShowCase = null;
+        }
+    }
     
-    public class ShowCaseSceneManager : SceneManagerBase
+    
+    //system
+    public partial class ShowCaseSceneManager : SceneManagerBase
     {
         private SceneLoadConfig _sceneConfig;
 
@@ -47,12 +97,15 @@ namespace Ebonor.Manager
             
             await LoadRoom();
             
-            await _roomInstance.LoadPlayer();
+            var player = await _roomInstance.LoadPlayer();
+            
+            await OpenShowcaseUI(player);
         }
 
         protected override async UniTask OnExit()
         {
             log.Info("Exit showcase scene: cleaning up content.");
+            await CloseShowcaseUI();
             await UnloadRoom();
         }
 
@@ -72,12 +125,15 @@ namespace Ebonor.Manager
             _roomInstance = gameObject.AddComponent<GamePlayRoomManager>();
             await _roomInstance.OnInitRoomManager();
         }
-
+        
         private async UniTask UnloadRoom()
         {
-            await _roomInstance.OnUnInitRoomManager();
-            Destroy(_roomInstance);
-            _roomInstance = null;
+            if (_roomInstance != null)
+            {
+                await _roomInstance.OnUnInitRoomManager();
+                Destroy(_roomInstance);
+                _roomInstance = null;
+            }
             await UniTask.CompletedTask;
         }
         

@@ -21,6 +21,7 @@ namespace Ebonor.UI
 
         protected CanvasGroup canvasGroup;
         protected RectTransform rectTransform;
+        protected UiBlackboardBase Blackboard { get; private set; }
 
         public bool IsVisible { get; private set; }
 
@@ -28,6 +29,7 @@ namespace Ebonor.UI
         {
             canvasGroup = GetComponent<CanvasGroup>();
             rectTransform = GetComponent<RectTransform>();
+            Blackboard = GetComponentInParent<UiBlackboardBase>();
             InstantHide();
         }
 

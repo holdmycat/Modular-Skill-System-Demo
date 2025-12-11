@@ -23,6 +23,9 @@ namespace Ebonor.UI
     [RequireComponent(typeof(RectTransform))]
     public abstract class UIBase : MonoBehaviour
     {
+        [Header("Blackboard")]
+        [SerializeField] protected UiBlackboardBase blackboard;
+        
         protected CanvasGroup _canvasGroup;
         protected RectTransform _rectTransform;
         
@@ -57,6 +60,9 @@ namespace Ebonor.UI
             CurrentState = UIState.Deactive;
         }
 
+        /// <summary>Typed access to attached blackboard.</summary>
+        public T GetBlackboard<T>() where T : UiBlackboardBase => blackboard as T;
+
         public async UniTask InternalOpenAsync()
         {
             if (CurrentState == UIState.Opening || CurrentState == UIState.Active) return;
@@ -85,7 +91,17 @@ namespace Ebonor.UI
             _canvasGroup.blocksRaycasts = false;
 
             // Play Animation
-            await PlayCloseAnimAsync();
+            if (_rectTransform != null)
+            {
+                try
+                {
+                    await PlayCloseAnimAsync();
+                }
+                catch (MissingReferenceException)
+                {
+                    // UI was destroyed during shutdown; skip animation.
+                }
+            }
             
             // Cleanup
             await OnCloseAsync();

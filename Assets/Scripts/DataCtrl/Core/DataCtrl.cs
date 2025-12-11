@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
 using Cysharp.Threading.Tasks;
 using Ebonor.Framework;
 using MongoDB.Bson.IO;
@@ -9,6 +8,10 @@ using MongoDB.Bson.Serialization;
 using UnityEditor;
 using UnityEngine;
 using UObject = UnityEngine.Object;
+#if UNITY_EDITOR
+
+#endif
+
 namespace Ebonor.DataCtrl
 {
 
@@ -230,34 +233,12 @@ namespace Ebonor.DataCtrl
 
             progress?.Report(0.1f);
                     
-            // Find assemblies
-            Assembly _dataCtrl = null;
-            Assembly _multiPlayer = null;
-            Assembly _manager = null;
-
-            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (var assembly in assemblies)
-            {
-                if (assembly.FullName.Contains(ConstData.AD_DATACTRL))
-                {
-                    _dataCtrl = assembly;
-                }
-                else if (assembly.FullName.Contains(ConstData.AD_MULTIPLAYER))
-                {
-                    _multiPlayer = assembly;
-                }
-                else if (assembly.FullName.Contains(ConstData.AD_MANAGER))
-                {
-                    _manager = assembly;
-                }
-            }
-                    
             progress?.Report(0.3f);
 
             // Perform BSON registration
             // Note: BsonClassMap and other MongoDB types are generally thread-safe for registration 
             // as long as we don't access Unity APIs here.
-            OnLoadMPBattleGraphData(_dataCtrl, _multiPlayer, _manager);
+            OnLoadMPBattleGraphData();
                     
             progress?.Report(0.8f);
 
@@ -315,34 +296,12 @@ namespace Ebonor.DataCtrl
             [InitializeOnLoadMethod]
             static void OnLoadMPBattleGraphDataV2()
             {
-                Assembly _dataCtrl = null;
-                Assembly _multiPlayer = null;
-                Assembly _manager = null;
-
-
-                Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
-                foreach (var assembly in assemblies)
-                {
-                    if (assembly.FullName.Contains(ConstData.AD_DATACTRL))
-                    {
-                        _dataCtrl = assembly;
-                    }
-                    else if (assembly.FullName.Contains(ConstData.AD_MULTIPLAYER))
-                    {
-                        _multiPlayer = assembly;
-                    }
-                    else if (assembly.FullName.Contains(ConstData.AD_MANAGER))
-                    {
-                        _manager = assembly;
-                    }
-                }
-
-                OnLoadMPBattleGraphData(_dataCtrl, _multiPlayer, _manager);
+                OnLoadMPBattleGraphData();
             }
     #endif
 
             private static bool IsInitedBsonClassMap = false;
-            static void OnLoadMPBattleGraphData(Assembly _dataCtrl, Assembly _multiPlayer, Assembly manager)
+            static void OnLoadMPBattleGraphData()
             {
                 // ConventionPack conventionPack = new ConventionPack {new IgnoreExtraElementsConvention(true)};
                 // ConventionRegistry.Register("IgnoreExtraElements", conventionPack, type => true);
@@ -400,28 +359,7 @@ namespace Ebonor.DataCtrl
                 
 
                 AttributesNodeDataSerializerRegister.RegisterClassMaps();
-                var types = new List<Type>();
-                //types.AddRange(_multiPlayer.GetTypes());
-                types.AddRange(_dataCtrl.GetTypes());
-                //types.AddRange(manager.GetTypes());
-
-                foreach (Type type in types)
-                {
-                    if (!type.IsSubclassOf(typeof(UnityEngine.Object)))
-                    {
-                        continue;
-                    }
-
-                    if (type.IsGenericType)
-                    {
-                        continue;
-                    }
-
-                    if (!BsonClassMap.IsClassMapRegistered(type))
-                        BsonClassMap.LookupClassMap(type);
-                }
-
-                RegisterAllSubClassForDeserialize(types);
+                GeneratedTypeRegistry.RegisterAllBsonClassMaps();
 
                 
 
@@ -444,45 +382,5 @@ namespace Ebonor.DataCtrl
                 //log.Debug("Finish Register Bson data types");
             }
 
-            static void RegisterAllSubClassForDeserialize(List<Type> allTypes)
-            {
-                List<Type> parenTypes = new List<Type>();
-                List<Type> childrenTypes = new List<Type>();
-                // registe by BsonDeserializerRegisterAttribute Automatically  
-                foreach (Type type in allTypes)
-                {
-                    BsonDeserializerRegisterAttribute[] bsonDeserializerRegisterAttributes =
-                        type.GetCustomAttributes(typeof(BsonDeserializerRegisterAttribute), false) as
-                            BsonDeserializerRegisterAttribute[];
-                    if (bsonDeserializerRegisterAttributes.Length > 0)
-                    {
-                        parenTypes.Add(type);
-                    }
-
-                    BsonDeserializerRegisterAttribute[] bsonDeserializerRegisterAttributes1 =
-                        type.GetCustomAttributes(typeof(BsonDeserializerRegisterAttribute), true) as
-                            BsonDeserializerRegisterAttribute[];
-                    if (bsonDeserializerRegisterAttributes1.Length > 0)
-                    {
-                        childrenTypes.Add(type);
-                    }
-                }
-
-                foreach (Type type in childrenTypes)
-                {
-                    foreach (var parentType in parenTypes)
-                    {
-                        if (parentType.IsAssignableFrom(type) && parentType != type)
-                        {
-                            if (!BsonClassMap.IsClassMapRegistered(type))
-                            {
-                                BsonClassMap.LookupClassMap(type);
-                            }
-                        }
-                    }
-                }
-            }
-
-            
     }
 }

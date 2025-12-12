@@ -8,21 +8,22 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Ebonor.Framework;
 using UnityEditor;
 using UnityEditor.Build;
 using UnityEditor.Build.Reporting;
 using UnityEngine;
 
-namespace Ebonor.EditorTools
+namespace Ebonor.DataCtrl
 {
     /// <summary>Generates a static type registry used at runtime to avoid Assembly scanning.</summary>
     public class TypeRegistryGenerator : IPreprocessBuildWithReport
     {
         public int callbackOrder => 0;
 
-        private const string OutputPath = "Assets/Scripts/Generated/GeneratedTypeRegistry.cs";
+        private const string OutputPath = "Assets/Scripts/DataCtrl/Generated/GeneratedTypeRegistry.cs";
 
-        [MenuItem("Tools/Generate/Type Registry")]
+        [MenuItem("Custom Windows/Generate/Type Registry")]
         public static void GenerateFromMenu() => Generate();
 
         public void OnPreprocessBuild(BuildReport report) => Generate();
@@ -81,9 +82,9 @@ namespace Ebonor.EditorTools
         private static bool IsTargetAssembly(System.Reflection.Assembly asm)
         {
             var name = asm.FullName;
-            return name.Contains(Ebonor.DataCtrl.ConstData.AD_DATACTRL)
-                   || name.Contains(Ebonor.DataCtrl.ConstData.AD_MULTIPLAYER)
-                   || name.Contains(Ebonor.DataCtrl.ConstData.AD_MANAGER);
+            return name.Contains(ConstData.AD_DATACTRL)
+                   || name.Contains(ConstData.AD_MULTIPLAYER);
+                    //|| name.Contains(ConstData.AD_MANAGER);
         }
 
         private static string BuildCode(
@@ -98,7 +99,7 @@ namespace Ebonor.EditorTools
             sb.AppendLine("using System;");
             sb.AppendLine("using MongoDB.Bson.Serialization;");
             sb.AppendLine("using UnityEngine;");
-            sb.AppendLine("namespace Ebonor.DataCtrl.Generated");
+            sb.AppendLine("namespace Ebonor.DataCtrl");
             sb.AppendLine("{");
             sb.AppendLine("    public static class GeneratedTypeRegistry");
             sb.AppendLine("    {");

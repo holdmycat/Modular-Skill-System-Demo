@@ -95,7 +95,7 @@ namespace Ebonor.DataCtrl
             
         }
         
-        public async UniTask<UObject> OnGetModel(eActorModelType modelType, uint modelId, eNpcProfession npcProfession = eNpcProfession.EnemyNull)
+        public UObject OnGetModel(eActorModelType modelType, uint modelId, eNpcProfession npcProfession = eNpcProfession.EnemyNull)
         {
 
             if (_dicGameModel.TryGetValue(modelType, out var modelDic))
@@ -357,29 +357,9 @@ namespace Ebonor.DataCtrl
 
                 BsonSerializer.RegisterSerializer(typeof(LayerMask), new LayerMaskSerializer());
                 
-
                 AttributesNodeDataSerializerRegister.RegisterClassMaps();
-                GeneratedTypeRegistry.RegisterAllBsonClassMaps();
-
                 
-
-                // var filePath = Path.Combine(Application.dataPath, ("AssetPackages/BattleGraphData/SkillGraphData/"));
-                //
-                // DirectoryInfo directory = new DirectoryInfo(filePath);
-                // FileInfo[] fileInfos = directory.GetFiles();
-                // byte[] mfile = File.ReadAllBytes(fileInfos[0].FullName);
-                // NP_DataSupportor MnNpDataSupportor = null;
-                // try
-                // {
-                //     MnNpDataSupportor = BsonSerializer.Deserialize<NP_DataSupportor>(mfile);
-                // }
-                // catch (Exception e)
-                // {
-                //     log.Error(e);
-                //     return;
-                // }
-                // Debug.Log("Success Deserialize NP_DataSupportor");
-                //log.Debug("Finish Register Bson data types");
+                GeneratedTypeRegistry.RegisterAllBsonClassMaps();
             }
 
     }

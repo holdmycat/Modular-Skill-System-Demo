@@ -59,8 +59,26 @@ namespace Ebonor.DataCtrl
                 log.Error("Fatal error, _dicModelName should be zero");
                 return;
             }
+
+            if (GlobalServices.ResourceLoader == null)
+            {
+                log.Warn("ResourceLoader is null; skipping model load.");
+                return;
+            }
+            
+            if (_dicUnitAttriDatas == null || _dicUnitAttriDatas.Count == 0)
+            {
+                log.Warn("No unit attribute data loaded; skipping model load.");
+                return;
+            }
             
             var list = await GlobalServices.ResourceLoader.LoadAllAssets<UObject>(ResourceAssetType.HeroModelPrefab);
+
+            if (list == null)
+            {
+                log.Warn("Hero model prefabs not found; skipping model load.");
+                return;
+            }
 
             foreach (var variable in list)
             {

@@ -187,7 +187,11 @@ namespace Ebonor.Manager
             if (null != _currentSceneManager)
             {
                 _currentSceneManager.Tick(dt);
-                PoolManager.Inst.OnUpdate();
+                var poolManager = PoolManager.Inst;
+                if (poolManager != null && !poolManager.Equals(null))
+                {
+                    poolManager.OnUpdate();
+                }
             }
         }
         
@@ -245,6 +249,16 @@ namespace Ebonor.Manager
             
             log.Info("DataCtrl initialized.");
         }
+
+        private static PoolManager GetOrCreatePoolManager()
+        {
+            if (PoolManager.Inst == null || PoolManager.Inst.Equals(null))
+            {
+                PoolManager.CreatePoolManager();
+            }
+
+            return PoolManager.Inst;
+        }
         
         /// <summary>
         /// Switch to a new scene manager instance. Destroys the previous manager.
@@ -284,7 +298,7 @@ namespace Ebonor.Manager
                     progressReporter = new System.Progress<float>(_ => { });
                 }
 
-                PoolManager.CreatePoolManager();
+                GetOrCreatePoolManager();
                 
                 // Execute the loading pipeline
                 uiLoading?.SetTitle("Loading DLL");
@@ -306,7 +320,8 @@ namespace Ebonor.Manager
             
             if (_currentSceneManager != null)
             {
-                PoolManager.Inst.DoBeforeLeavingScene();
+                var poolManager = GetOrCreatePoolManager();
+                poolManager?.DoBeforeLeavingScene();
                 DataEventManager.OnClearAllDicDELEvents();
                 var previous = _currentSceneManager;
                 await previous.Exit();
@@ -319,7 +334,8 @@ namespace Ebonor.Manager
 
             _currentSceneManager = newSceneManagerInstance;
             await _currentSceneManager.Init(this);
-            PoolManager.Inst.DoBeforeEnteringScene(gameObject.scene.name);
+            var activePoolManager = GetOrCreatePoolManager();
+            activePoolManager?.DoBeforeEnteringScene(gameObject.scene.name);
             await _currentSceneManager.Enter();
             log.Info($"Switched to scene manager: {_currentSceneManager.GetType().Name}");
             return _currentSceneManager;

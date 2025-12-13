@@ -36,7 +36,7 @@ namespace Ebonor.DataCtrl.Editor
             foreach (var val in enumValues)
             {
                 int intVal = (int)val;
-                if (intVal < 10000) continue; // Skip Min and below if any
+                if (intVal >= 10000) continue; // Skip Min and below if any
 
                 // Skip if it looks like a Base or Add variant (ends in 1 or 2 and is > 100000? No, logic is * 10 + 1)
                 // Example: Power = 1021. PowerBase = 10211.

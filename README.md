@@ -27,6 +27,9 @@ This project is a **production-ready, modular skill system** extracted from an i
 2.  **Zero Duplication**: Logic is written once in generic processors; data defines the specific behavior.
 3.  **Performance**: Visual graphs are compiled into compact binary data (`.bytes`) for zero-parsing runtime loading.
 
+## Documentation
+> **[📘 Read the Engineering Runbook & Technical Deep Dives](docs/README.md)**
+
 ## Folder Structure
 
 *   `Assets/Scripts/DataCtrl`: Contains the data definitions and serialization logic.

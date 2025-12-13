@@ -11,37 +11,43 @@ namespace Ebonor.DataCtrl
         Min = 10000,
 
         /// <summary>
-        /// profession
+        /// UnityProfession
         /// </summary>
         [InspectorName("UnityProfession")]
         UnityProfession = 1001,
 
         /// <summary>
-        /// faction/side
+        /// ActorSide
         /// </summary>
         [InspectorName("ActorSide")]
         ActorSide = 1002,
 
         /// <summary>
-        /// level (in-session)
+        /// UnitLv
         /// </summary>
         [InspectorName("UnitLv")]
         UnitLv = 1003,
 
         /// <summary>
-        /// max level
+        /// UnitMaxLV
         /// </summary>
         [InspectorName("UnitMaxLV")]
         UnitMaxLV = 1004,
 
+        /// <summary>
+        /// Height
+        /// </summary>
         [InspectorName("Height")]
         Height = 1005,
 
+        /// <summary>
+        /// Radius
+        /// </summary>
         [InspectorName("Radius")]
         Radius = 1006,
 
         /// <summary>
-        /// Strength
+        /// Power
         /// </summary>
         [InspectorName("Power")]
         Power = 1021,
@@ -93,13 +99,13 @@ namespace Ebonor.DataCtrl
         RotationSpeedAdd = RotationSpeed * 10 + 2,
 
         /// <summary>
-        /// animation speed
+        /// RunningAnimSpeed
         /// </summary>
         [InspectorName("RunningAnimSpeed")]
         RunningAnimSpeed = 1043,
 
         /// <summary>
-        /// drop flight duration
+        /// DropFlyingDuration
         /// </summary>
         [InspectorName("DropFlyingDuration")]
         DropFlyingDuration = 1044,

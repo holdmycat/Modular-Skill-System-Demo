@@ -15,3 +15,7 @@ Welcome to the `Modular-Skill-System-Demo` documentation.
 ### Magic Number Fragility & Schema Design
 *   [English](en/magic_number_fragility.md)
 *   [中文 (Chinese)](zh/magic_number_fragility.md)
+
+### God Class Analysis (GameClientManager)
+*   [English](en/god_class_analysis.md)
+*   [中文 (Chinese)](zh/god_class_analysis.md)

@@ -41,6 +41,9 @@
 ExportedObj/
 .consulo/
 *.csproj
+!/RoslynAnalyzers/*.csproj
+/RoslynAnalyzers/bin/
+/RoslynAnalyzers/obj/
 *.unityproj
 *.sln
 *.suo

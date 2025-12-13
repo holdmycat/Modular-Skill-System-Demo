@@ -81,6 +81,5 @@ public class GradientSerializer : SerializerBase<Gradient>
 
         BsonSerializer.Serialize(context.Writer, document);
     }
-
-    public Type ValueType => typeof(Gradient);
+    
 }

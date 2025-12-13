@@ -22,7 +22,10 @@ namespace Ebonor.DataCtrl
             }
             var go = new GameObject("PoolManager");
             go.AddComponent<PoolManager>();
-            DontDestroyOnLoad(go);
+            if (Application.isPlaying)
+            {
+                DontDestroyOnLoad(go);
+            }
             GOHelper.ResetGameObject(go);
         }
         
@@ -39,6 +42,12 @@ namespace Ebonor.DataCtrl
         
         public static T SpawnItemFromPool<T>(ePoolObjectType type, string _name) where T : PoolItemBase
         {
+            if (mInst == null || mInst.Equals(null))
+            {
+                log.Warn("SpawnItemFromPool called before PoolManager is created; returning null.");
+                return null;
+            }
+
             if (mInst.mDicPoolCtrl.TryGetValue(type, out var inst))
             {
                 return inst.SpawnItemFromPool<T>(_name);
@@ -49,6 +58,12 @@ namespace Ebonor.DataCtrl
         
         public static void DespawnItemToPool<T>(ePoolObjectType type, T t) where T : PoolItemBase
         {
+            if (mInst == null || mInst.Equals(null))
+            {
+                log.Warn("DespawnItemToPool called before PoolManager is created; ignoring.");
+                return;
+            }
+
             if (mInst.mDicPoolCtrl.TryGetValue(type, out var inst))
             {
                 inst.DespawnItemFromPool<T>(t);

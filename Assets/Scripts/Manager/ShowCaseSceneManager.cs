@@ -24,7 +24,7 @@ namespace Ebonor.Manager
             var uiManager = ClientManager != null ? ClientManager.GetUiManager() : null;
             if (uiManager == null)
             {
-                log.Error("UIManager is null; cannot open showcase UI.");
+                log.Warn("UIManager is null; skipping showcase UI (edit-mode).");
                 return;
             }
 
@@ -78,18 +78,24 @@ namespace Ebonor.Manager
         {
 
             log.Info("Enter showcase scene: loading content (data-driven).");
-            
-            _sceneConfig = await GlobalServices.ResourceLoader.LoadAsset<SceneLoadConfig>(this.name, ResourceAssetType.ScriptableObject);
-            
+
+            // Allow tests to inject _sceneConfig directly; otherwise load from resources.
+            if (_sceneConfig == null && null != GlobalServices.ResourceLoader)
+            {
+                var loader = GlobalServices.ResourceLoader;
+                _sceneConfig = await loader.LoadAsset<SceneLoadConfig>(this.name,
+                    ResourceAssetType.ScriptableObject);
+            }
+
             _resLoader = GlobalServices.ResourceLoader;
-            
-            if (null == _sceneConfig)
+
+            if (_sceneConfig == null)
             {
                 log.Error("Scene config is missing; skipping content load");
                 return;
             }
 
-            if (null == _resLoader)
+            if (_resLoader == null)
             {
                 log.Error("_resLoader is null");
                 return;

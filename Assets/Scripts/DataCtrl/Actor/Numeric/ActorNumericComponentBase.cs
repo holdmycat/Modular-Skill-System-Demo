@@ -212,7 +212,16 @@ namespace Ebonor.DataCtrl
         #region public
         public void OnInitActorNumericComponent(CharacterRuntimeData characterRuntimeData, uint netid)
         {
-            var unitAttr = DataCtrl.Inst.GetUnitAttributeNodeData(characterRuntimeData._numericId);
+            var dataCtrl = DataCtrl.Inst;
+            var unitAttr = dataCtrl != null ? dataCtrl.GetUnitAttributeNodeData(characterRuntimeData._numericId) : null;
+
+            if (unitAttr == null)
+            {
+                log.Warn($"Unit attributes not found for id {characterRuntimeData._numericId}; using defaults.");
+                InitNumericDictionaries<eNumericType>();
+                OnInitCommonProperty(characterRuntimeData, netid, null);
+                return;
+            }
             
             var t = unitAttr.GetType();
             if (t != typeof(UnitAttributesNodeDataBase) 
@@ -282,6 +291,16 @@ namespace Ebonor.DataCtrl
 
             _unitModelNodeId = characterRuntimeData._numericId;
             
+            if (unitAttr == null)
+            {
+                // Default placeholders for missing data in edit-mode tests.
+                attrAvatarName = string.Empty;
+                attrName = $"Unit_{characterRuntimeData._numericId}";
+                attrIconName = string.Empty;
+                _actorModelType = eActorModelType.eHero;
+                return;
+            }
+
             attrAvatarName = unitAttr.UnitAvatar;
 
             attrName = unitAttr.UnitName;

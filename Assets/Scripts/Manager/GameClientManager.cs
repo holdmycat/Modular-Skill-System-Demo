@@ -21,20 +21,20 @@ namespace Ebonor.Manager
         
         private void InitUIManagerService()
         {
-            if (null == _uiManager)
-            {
-                // 2. UI Manager
-                var uiGo = new GameObject("UIManager");
-                uiGo.transform.SetParent(transform);
-                _uiManager = uiGo.AddComponent<UIManager>();
-                _uiManager.Init(transform);
-                _uiManager.SetGlobalUiHandler(HandleGlobalUiCommand);
-                log.Info("UIManager initialized.");
-            }
-            else
-            {
-                log.Error("Fatal error, _uiManager should be null");
-            }
+            // if (null == _uiManager)
+            // {
+            //     // 2. UI Manager
+            //     var uiGo = new GameObject("UIManager");
+            //     uiGo.transform.SetParent(transform);
+            //     _uiManager = uiGo.AddComponent<UIManager>();
+            //     _uiManager.Init(transform);
+            //     //_uiManager.SetGlobalUiHandler(HandleGlobalUiCommand);
+            //     log.Info("UIManager initialized.");
+            // }
+            // else
+            // {
+            //     log.Error("Fatal error, _uiManager should be null");
+            // }
            
         }
 
@@ -181,7 +181,7 @@ namespace Ebonor.Manager
             float dt = Time.deltaTime;
             
             // Update Services
-            if (_inputRouter != null) _inputRouter.OnUpdate(dt);
+            
             if (_uiManager != null) _uiManager.OnUpdate(dt, _inputRouter);
 
             if (null != _currentSceneManager)

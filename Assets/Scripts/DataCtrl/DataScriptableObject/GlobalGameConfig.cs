@@ -27,5 +27,8 @@ namespace Ebonor.DataCtrl
         [Header("Default ResourcePoolConfig")]
         public ResourcePoolConfig ResourcePoolConfig;
 
+        [Header("First Scene Name")]
+        public string FirstSceneName;
+        
     }
 }

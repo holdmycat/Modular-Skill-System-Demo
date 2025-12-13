@@ -16,6 +16,11 @@ Welcome to the `Modular-Skill-System-Demo` documentation.
 *   [English](en/magic_number_fragility.md)
 *   [中文 (Chinese)](zh/magic_number_fragility.md)
 
-### God Class Analysis (GameClientManager)
-*   [English](en/god_class_analysis.md)
-*   [中文 (Chinese)](zh/god_class_analysis.md)
+### Zenject Interview Cheat Sheet
+*   [中文 (Chinese)](zh/zenject_interview_cheat_sheet.md)
+
+### Zenject Flow Clarification (Startup vs Bootstrapper)
+*   [中文 (Chinese)](zh/zenject_flow_clarification.md) | [English](en/zenject_flow_clarification.md)
+
+### DataCtrl Refactoring Plan (God Class Split)
+*   [中文 (Chinese)](zh/datactrl_refactoring_plan.md) | [English](en/datactrl_refactoring_plan.md)

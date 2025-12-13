@@ -8,10 +8,11 @@ using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
 using UnityEngine;
+using Zenject;
 
 namespace Ebonor.UI
 {
-    public class UIManager : MonoBehaviour
+    public class UIManager : MonoBehaviour, IUIService, ITickable
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(UIManager));
         
@@ -29,16 +30,28 @@ namespace Ebonor.UI
         // Stack to track active UIs (for input handling order)
         private List<UIBase> _activeStack = new List<UIBase>();
 
-        private Action<UiGlobalCommand> _globalUiHandler;
+        
+        private IInputService _inputService;
+
+        [Inject]
+        public void Construct(IInputService inputService)
+        {
+            _inputService = inputService;
+        }
 
         public void Init(Transform root)
         {
             _uiRoot = root;
         }
+        
 
-        public void SetGlobalUiHandler(Action<UiGlobalCommand> handler)
+        public void Tick()
         {
-            _globalUiHandler = handler;
+            // Zenject Tick
+            if (_inputService != null)
+            {
+                OnUpdate(Time.deltaTime, _inputService as PlayerInputRouter);
+            }
         }
 
         public void OnUpdate(float deltaTime, PlayerInputRouter router)
@@ -49,10 +62,10 @@ namespace Ebonor.UI
         public void Exit()
         {
             // Cleanup all UIs
-            foreach (var ui in _uiDict.Values)
-            {
-                if (ui != null) Destroy(ui.gameObject);
-            }
+            // foreach (var ui in _uiDict.Values)
+            // {
+            //     if (ui != null) Destroy(ui.gameObject);
+            // }
             _uiDict.Clear();
             _activeStack.Clear();
         }
@@ -64,62 +77,63 @@ namespace Ebonor.UI
         /// </summary>
         public async UniTask<T> OpenUIAsync<T>(Action<T> beforeOpen = null) where T : UIBase
         {
-            Type type = typeof(T);
-            T ui = null;
-
-            var prefabPath = type.Name;
-            
-            // 1. Check Cache
-            if (_uiDict.TryGetValue(type, out var baseUI))
-            {
-                ui = baseUI as T;
-            }
-            else
-            {
-                var prefab = await GlobalServices.ResourceLoader.LoadAsset<GameObject>(prefabPath, ResourceAssetType.UiPrefab);
-                
-                if (prefab == null)
-                {
-                    log.Error($"Failed to load UI prefab at path: {prefabPath}");
-                    return null;
-                }
-
-                var go = Instantiate(prefab, _uiRoot);
-                go.name = prefab.name;
-                ui = go.GetComponent<T>();
-                if (ui == null)
-                {
-                    log.Error($"Prefab at {prefabPath} does not have component {type.Name}");
-                    Destroy(go);
-                    return null;
-                }
-
-                await ui.InternalCreateAsync();
-                _uiDict.Add(type, ui);
-            }
-
-            // 3. Open
-            // Bring to front
-            if (ui != null)
-            {
-                // Allow caller to inject context before lifecycle callbacks run
-                beforeOpen?.Invoke(ui);
-
-                ui.transform.SetAsLastSibling();
-
-                if (!_activeStack.Contains(ui))
-                {
-                    _activeStack.Add(ui);
-                }
-
-                await ui.InternalOpenAsync();
-                return ui;
-            }
-
-            
-            log.Error("Fatal error, fail to load:" + prefabPath);
-            
             return null;
+            // Type type = typeof(T);
+            // T ui = null;
+            //
+            // var prefabPath = type.Name;
+            //
+            // // 1. Check Cache
+            // if (_uiDict.TryGetValue(type, out var baseUI))
+            // {
+            //     ui = baseUI as T;
+            // }
+            // else
+            // {
+            //     var prefab = await GlobalServices.ResourceLoader.LoadAsset<GameObject>(prefabPath, ResourceAssetType.UiPrefab);
+            //     
+            //     if (prefab == null)
+            //     {
+            //         log.Error($"Failed to load UI prefab at path: {prefabPath}");
+            //         return null;
+            //     }
+            //
+            //     var go = Instantiate(prefab, _uiRoot);
+            //     go.name = prefab.name;
+            //     ui = go.GetComponent<T>();
+            //     if (ui == null)
+            //     {
+            //         log.Error($"Prefab at {prefabPath} does not have component {type.Name}");
+            //         Destroy(go);
+            //         return null;
+            //     }
+            //
+            //     await ui.InternalCreateAsync();
+            //     _uiDict.Add(type, ui);
+            // }
+            //
+            // // 3. Open
+            // // Bring to front
+            // if (ui != null)
+            // {
+            //     // Allow caller to inject context before lifecycle callbacks run
+            //     beforeOpen?.Invoke(ui);
+            //
+            //     ui.transform.SetAsLastSibling();
+            //
+            //     if (!_activeStack.Contains(ui))
+            //     {
+            //         _activeStack.Add(ui);
+            //     }
+            //
+            //     await ui.InternalOpenAsync();
+            //     return ui;
+        // }
+        //
+        //     
+        //     log.Error("Fatal error, fail to load:" + prefabPath);
+        //     
+        //     return null;
         }
 
         /// <summary>
@@ -189,11 +203,11 @@ namespace Ebonor.UI
             if (openMenu || cancel)
             {
                 // Forward global commands to outer controller (e.g., GameClientManager)
-                if (_globalUiHandler != null)
-                {
-                    if (cancel) _globalUiHandler.Invoke(UiGlobalCommand.Cancel);
-                    if (openMenu) _globalUiHandler.Invoke(UiGlobalCommand.OpenMenu);
-                }
+                // if (_globalUiHandler != null)
+                // {
+                //     if (cancel) _globalUiHandler.Invoke(UiGlobalCommand.Cancel);
+                //     if (openMenu) _globalUiHandler.Invoke(UiGlobalCommand.OpenMenu);
+                // }
                 return;
             }
 

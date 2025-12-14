@@ -1,4 +1,5 @@
 using System;
+using System.Reflection;
 using Cysharp.Threading.Tasks;
 using Zenject;
 using Ebonor.DataCtrl;
@@ -36,6 +37,13 @@ namespace Ebonor.Manager
 
         public void Initialize()
         {
+#if UNITY_EDITOR
+            if (IsRunningPlaymodeTests())
+            {
+                log.Info("[GameStartup] Detected playmode test runner; skipping startup sequence.");
+                return;
+            }
+#endif
             // 使用 UniTask.Void 启动异步流程
             StartupSequence().Forget();
         }
@@ -64,5 +72,20 @@ namespace Ebonor.Manager
             progressReporter.Report(1f);
             await _uiService.CloseUIAsync<UIScene_Loading>();
         }
+
+#if UNITY_EDITOR
+        private static bool IsRunningPlaymodeTests()
+        {
+            // Unity test framework attaches a PlaymodeTestsController named "Code-based tests runner"
+            var type = Type.GetType("UnityEngine.TestTools.TestRunner.PlaymodeTestsController, UnityEngine.TestRunner");
+            var method = type?.GetMethod("IsControllerOnScene", BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+            if (method == null)
+            {
+                return false;
+            }
+
+            return method.Invoke(null, null) is bool running && running;
+        }
+#endif
     }
 }

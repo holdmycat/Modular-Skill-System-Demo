@@ -34,7 +34,19 @@ namespace ModestTree
 #if UNITY_WSA && ENABLE_DOTNET && !UNITY_EDITOR
             return b == a || b.GetTypeInfo().IsAssignableFrom(a.GetTypeInfo());
 #else
-            return b == a || b.IsAssignableFrom(a);
+            try
+            {
+                return b == a || b.IsAssignableFrom(a);
+            }
+            catch (TypeLoadException)
+            {
+                // Swallow type load issues caused by missing dependencies during reflection scans
+                return false;
+            }
+            catch (ReflectionTypeLoadException)
+            {
+                return false;
+            }
 #endif
         }
 

@@ -5,6 +5,7 @@
 // Author: Xuefei Zhao (clashancients@gmail.com)
 //------------------------------------------------------------
 using System;
+using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
 using Ebonor.UI;
@@ -13,38 +14,40 @@ using Zenject;
 namespace Ebonor.Manager
 {
     
-    public class ShowcaseSceneManager : IInitializable, IDisposable
+    public class ShowcaseSceneManager : ISceneManager, IDisposable
     {
         
         private static readonly ILog log = LogManager.GetLogger(typeof(ShowcaseSceneManager));
         
-        readonly IUIService _uiService;
-        readonly ICharacterDataRepository _dataRepo;
-    
-        // 构造函数注入
-        public ShowcaseSceneManager(IUIService uiService, ICharacterDataRepository dataRepo)
+        private readonly IUIService _uiService;
+        private readonly ICharacterDataRepository _dataRepo;
+        private readonly IRoomManagerService _roomManagerService;
+        public ShowcaseSceneManager(IRoomManagerService roomManagerService, IUIService uiService, ICharacterDataRepository dataRepo)
         {
             log.Debug("[ShowcaseSceneManager] Starting Construction");
             _uiService = uiService;
             _dataRepo = dataRepo;
-
+            _roomManagerService = roomManagerService;
         }
-
-        public void Initialize() 
-        {
-            
-            log.Debug("[ShowcaseSceneManager] Starting Initialize");
-            // 这里写原来的 OnEnter 逻辑
-            // LoadRoom();
-            // LoadPlayer();
-            // OpenUI();
-        }
-
+        
         public void Dispose()
         {
-            // 这里写原来的 OnExit 逻辑
             log.Debug("[ShowcaseSceneManager] Starting Dispose");
         }
+
+        public async UniTask StartupSequence()
+        {
+            await LoadRoom();
+        }
+        
+        private async UniTask LoadRoom()
+        {
+            log.Debug("[ShowcaseSceneManager] Starting LoadRoom");
+
+            await _roomManagerService.CreateRoomAndAddPlayer();
+            
+        }
+        
     }
     
 

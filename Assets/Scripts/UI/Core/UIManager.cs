@@ -46,11 +46,8 @@ namespace Ebonor.UI
 
         private void OnDestroy()
         {
-            // 在这里清理资源，例如：
-            // 1. 销毁所有 UI 实例
+            // Clean up resources here if owner destroys the manager
             Exit(); 
-            // 2. 取消事件订阅
-            // 3. 释放非托管资源
         }
 
         private void Exit()

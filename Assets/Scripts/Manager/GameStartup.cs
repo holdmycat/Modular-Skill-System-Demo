@@ -46,7 +46,7 @@ namespace Ebonor.Manager
                 return;
             }
 #endif
-            // 使用 UniTask.Void 启动异步流程
+            // Kick off async flow without awaiting
             StartupSequence().Forget();
         }
 
@@ -56,23 +56,23 @@ namespace Ebonor.Manager
             
             _uiSceneLoading = await _uiService.OpenUIAsync<UIScene_Loading>();
             
-            // 1. 初始化系统数据 (BSON 注册等)
+            // 1. Initialize system data (BSON registration, etc.)
             progressReporter.Report(0.1f);
             await _systemDataService.InitializeAsync();
             
-            // 2. 从ResourceLoader中加载资源
+            // 2. Load data from ResourceLoader
             progressReporter.Report(0.3f);
             log.Info("[GameStartup] 2. System Initialized. Loading Data From ResourceLoader...");
             await _dataLoaderService.InitializeAsync(); 
             
-            // 3. 数据准备好了，才去加载场景
-            // 这里的 LoadSceneAsync 会负责卸载 Bootstrap，加载 Showcase
+            // 3. After data is ready, switch scene (LoadSceneAsync handles unloading bootstrap and loading Showcase)
             log.Info("[GameStartup] 3. Data Loaded. Switching to Game Scene...");
             progressReporter.Report(0.5f);
             await _sceneLoader.LoadSceneAsync(_config.FirstSceneName);
             
             progressReporter.Report(1f);
             await UniTask.WaitUntil(() => _progressValue >= 0.999f);
+            await UniTask.Delay(250);
             await _uiService.CloseUIAsync<UIScene_Loading>();
         }
 

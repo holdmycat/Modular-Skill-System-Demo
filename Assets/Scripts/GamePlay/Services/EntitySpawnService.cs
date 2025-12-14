@@ -75,5 +75,41 @@ namespace Ebonor.GamePlay
             // In the future, integrate with Zenject MemoryPool if needed.
             Object.Destroy(entity.gameObject);
         }
+
+        /// <summary>
+        /// Spawns a new GameEntity using the separated Logic-View architecture.
+        /// </summary>
+        public async UniTask<T> SpawnGameEntity<T>(string prefabName, Vector3 position, Quaternion rotation, Transform parent = null) where T : GameEntity
+        {
+            // 1. Create the Logic Shell (GameEntity)
+            // This is a new GameObject with the GameEntity component, injected by Zenject.
+            // It is NOT pooled.
+            var entity = _container.InstantiateComponentOnNewGameObject<T>($"{typeof(T).Name}_{prefabName}");
+            
+            if (entity == null)
+            {
+                log.Error($"Failed to create GameEntity shell for: {prefabName}");
+                return null;
+            }
+
+            // 2. Set Transform
+            entity.transform.position = position;
+            entity.transform.rotation = rotation;
+            if (parent != null)
+            {
+                entity.transform.SetParent(parent);
+            }
+            
+            // Ensure it's in the active scene
+            UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(entity.gameObject, UnityEngine.SceneManagement.SceneManager.GetActiveScene());
+
+            // 3. Load the Visual Model (Pooled)
+            await entity.LoadModelAsync(prefabName);
+
+            // 4. Initialize Entity Logic
+            await entity.InitializeAsync();
+
+            return entity;
+        }
     }
 }

@@ -19,6 +19,7 @@ namespace Ebonor.Manager
         readonly ISystemDataService _systemDataService;
         readonly IDataLoaderService _dataLoaderService;
         private IProgress<float> progressReporter;
+        private float _progressValue;
         private UIScene_Loading _uiSceneLoading;
         private readonly IUIService _uiService;
         public GameStartup(IUIService uiService, ISceneLoaderService sceneLoader, IDataLoaderService dataLoaderService, GlobalGameConfig config, ISystemDataService systemDataService)
@@ -32,6 +33,7 @@ namespace Ebonor.Manager
             {
                 log.Info($"[GameStartup]Global Loading Progress: {progress * 100:F0}%");
                 _uiSceneLoading?.SetPercent(progress);
+                _progressValue = progress;
             });     
         }
 
@@ -70,6 +72,7 @@ namespace Ebonor.Manager
             await _sceneLoader.LoadSceneAsync(_config.FirstSceneName);
             
             progressReporter.Report(1f);
+            await UniTask.WaitUntil(() => _progressValue >= 0.999f);
             await _uiService.CloseUIAsync<UIScene_Loading>();
         }
 

@@ -8,47 +8,54 @@ using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
 using UnityEngine;
+using Zenject;
 
 namespace Ebonor.UI
 {
-    public class UIManager : MonoBehaviour
+    public class UIManager : MonoBehaviour, IUIService, ITickable
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(UIManager));
         
-        public enum UiGlobalCommand
-        {
-            Cancel,
-            OpenMenu
-        }
-
-        private Transform _uiRoot;
-
         // Cache loaded UIs: Type -> Instance
-        private Dictionary<Type, UIBase> _uiDict = new Dictionary<Type, UIBase>();
+        private Dictionary<Type, UIBase> _uiDict;
         
         // Stack to track active UIs (for input handling order)
-        private List<UIBase> _activeStack = new List<UIBase>();
+        private List<UIBase> _activeStack;
+        
+        private IInputService _inputService;
 
-        private Action<UiGlobalCommand> _globalUiHandler;
+        private ResourceLoader _resourceLoader;
 
-        public void Init(Transform root)
+        [Inject]
+        public void Construct(IInputService inputService, ResourceLoader loader)
         {
-            _uiRoot = root;
+            _inputService = inputService;
+            _resourceLoader = loader;
+            _uiDict = new Dictionary<Type, UIBase>();
+            _activeStack = new List<UIBase>();
+        }
+        
+        public void Tick()
+        {
+            // Zenject Tick
+            if (_inputService != null)
+            {
+                HandleInput(Time.deltaTime, _inputService as PlayerInputRouter);
+            }
         }
 
-        public void SetGlobalUiHandler(Action<UiGlobalCommand> handler)
+        private void OnDestroy()
         {
-            _globalUiHandler = handler;
+            // 在这里清理资源，例如：
+            // 1. 销毁所有 UI 实例
+            Exit(); 
+            // 2. 取消事件订阅
+            // 3. 释放非托管资源
         }
 
-        public void OnUpdate(float deltaTime, PlayerInputRouter router)
+        private void Exit()
         {
-            HandleInput(deltaTime, router);
-        }
-
-        public void Exit()
-        {
-            // Cleanup all UIs
+            //Cleanup all UIs
             foreach (var ui in _uiDict.Values)
             {
                 if (ui != null) Destroy(ui.gameObject);
@@ -64,9 +71,10 @@ namespace Ebonor.UI
         /// </summary>
         public async UniTask<T> OpenUIAsync<T>(Action<T> beforeOpen = null) where T : UIBase
         {
+            
             Type type = typeof(T);
             T ui = null;
-
+            
             var prefabPath = type.Name;
             
             // 1. Check Cache
@@ -76,15 +84,15 @@ namespace Ebonor.UI
             }
             else
             {
-                var prefab = await GlobalServices.ResourceLoader.LoadAsset<GameObject>(prefabPath, ResourceAssetType.UiPrefab);
+                var prefab = await _resourceLoader.LoadAsset<GameObject>(prefabPath, ResourceAssetType.UiPrefab);
                 
                 if (prefab == null)
                 {
                     log.Error($"Failed to load UI prefab at path: {prefabPath}");
                     return null;
                 }
-
-                var go = Instantiate(prefab, _uiRoot);
+            
+                var go = Instantiate(prefab, gameObject.transform);
                 go.name = prefab.name;
                 ui = go.GetComponent<T>();
                 if (ui == null)
@@ -93,29 +101,29 @@ namespace Ebonor.UI
                     Destroy(go);
                     return null;
                 }
-
+            
                 await ui.InternalCreateAsync();
                 _uiDict.Add(type, ui);
             }
-
+            
             // 3. Open
             // Bring to front
             if (ui != null)
             {
                 // Allow caller to inject context before lifecycle callbacks run
                 beforeOpen?.Invoke(ui);
-
+            
                 ui.transform.SetAsLastSibling();
-
+            
                 if (!_activeStack.Contains(ui))
                 {
                     _activeStack.Add(ui);
                 }
-
+            
                 await ui.InternalOpenAsync();
                 return ui;
             }
-
+        
             
             log.Error("Fatal error, fail to load:" + prefabPath);
             
@@ -189,11 +197,11 @@ namespace Ebonor.UI
             if (openMenu || cancel)
             {
                 // Forward global commands to outer controller (e.g., GameClientManager)
-                if (_globalUiHandler != null)
-                {
-                    if (cancel) _globalUiHandler.Invoke(UiGlobalCommand.Cancel);
-                    if (openMenu) _globalUiHandler.Invoke(UiGlobalCommand.OpenMenu);
-                }
+                // if (_globalUiHandler != null)
+                // {
+                //     if (cancel) _globalUiHandler.Invoke(UiGlobalCommand.Cancel);
+                //     if (openMenu) _globalUiHandler.Invoke(UiGlobalCommand.OpenMenu);
+                // }
                 return;
             }
 

@@ -16,31 +16,31 @@ MonoBehaviour:
   - Name: UnityProfession
     Id: 1001
     Type: 0
-    Description: profession
+    Description: UnityProfession
   - Name: ActorSide
     Id: 1002
     Type: 0
-    Description: faction/side
+    Description: ActorSide
   - Name: UnitLv
     Id: 1003
     Type: 0
-    Description: level (in-session)
+    Description: UnitLv
   - Name: UnitMaxLV
     Id: 1004
     Type: 0
-    Description: max level
+    Description: UnitMaxLV
   - Name: Height
     Id: 1005
     Type: 0
-    Description: 
+    Description: Height
   - Name: Radius
     Id: 1006
     Type: 0
-    Description: 
+    Description: Radius
   - Name: Power
     Id: 1021
     Type: 1
-    Description: Strength
+    Description: Power
   - Name: Agility
     Id: 1022
     Type: 1
@@ -68,8 +68,8 @@ MonoBehaviour:
   - Name: RunningAnimSpeed
     Id: 1043
     Type: 0
-    Description: animation speed
+    Description: RunningAnimSpeed
   - Name: DropFlyingDuration
     Id: 1044
     Type: 0
-    Description: drop flight duration
+    Description: DropFlyingDuration

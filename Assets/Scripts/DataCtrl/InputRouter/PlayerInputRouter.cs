@@ -2,22 +2,26 @@
 // File: PlayerInputRouter.cs
 // Purpose: Central point to swap between different input sources (keyboard, gamepad, etc.).
 //------------------------------------------------------------
+
+using System;
 using UnityEngine;
-using Ebonor.DataCtrl;
+using Zenject;
 
 namespace Ebonor.DataCtrl
 {
     /// <summary>
     /// Stores the active input source so gameplay systems can read from one surface.
     /// </summary>
-    public class PlayerInputRouter : MonoBehaviour, IPlayerInputSource
+    public class PlayerInputRouter : MonoBehaviour, IInputService, ITickable
     {
-        // Managed by GameClientManager, no self-singleton.
+        // Managed by GameClientManager (Legacy) or Zenject (New)
         
-        public void OnUpdate(float deltaTime)
+        public void Tick()
         {
-            // Update logic if needed (currently input is event/poll based, but good to have the hook)
+            // Zenject Tick
+            
         }
+
 
         public void Exit()
         {
@@ -71,11 +75,7 @@ namespace Ebonor.DataCtrl
         public void SetSkillsEnabled(bool enabled) => controlFlags = enabled ? controlFlags | eInputControlFlag.Skills : controlFlags & ~eInputControlFlag.Skills;
         public void SetMovementEnabled(bool enabled) => controlFlags = enabled ? controlFlags | eInputControlFlag.Movement : controlFlags & ~eInputControlFlag.Movement;
         public void SetUiEnabled(bool enabled) => controlFlags = enabled ? controlFlags | eInputControlFlag.Ui : controlFlags & ~eInputControlFlag.Ui;
-
-        public void SetInputSource(IPlayerInputSource source)
-        {
-            _current = source;
-        }
+        
 
         private static bool IsBlocked(eInputControlFlag flag)
         {

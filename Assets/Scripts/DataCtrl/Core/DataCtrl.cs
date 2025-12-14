@@ -178,10 +178,10 @@ namespace Ebonor.DataCtrl
             _dicListUnitDatas ??= new Dictionary<eActorModelType, List<UnitAttributesNodeDataBase>>();
             _dicListUnitDatas.Clear();
 
-            for (var i = eActorModelType.eHero; i <= eActorModelType.eEventSkillActor; i++)
-            {
-                _dicListUnitDatas.Add(i, new List<UnitAttributesNodeDataBase>());
-            }
+            // for (var i = eActorModelType.eHero; i <= eActorModelType.eEventSkillActor; i++)
+            // {
+            //     _dicListUnitDatas.Add(i, new List<UnitAttributesNodeDataBase>());
+            // }
             
             var globalConfig = config.allCharacterDataPath;
             if (GlobalServices.ResourceLoader == null)

@@ -38,11 +38,11 @@ namespace Ebonor.Manager
            
         }
 
-        private void UnInitUIManagerService()
-        {
-            // Cleanup services
-            if (_uiManager != null) _uiManager.Exit();
-        }
+        // private void UnInitUIManagerService()
+        // {
+        //     // Cleanup services
+        //     if (_uiManager != null) _uiManager.Exit();
+        // }
 
         /// <summary>Expose UIManager to scene managers for UI orchestration.</summary>
         public UIManager GetUiManager() => _uiManager;
@@ -50,20 +50,20 @@ namespace Ebonor.Manager
         /// <summary>
         /// Global UI key handling (e.g., back/menu) forwarded by UIManager.
         /// </summary>
-        private void HandleGlobalUiCommand(UIManager.UiGlobalCommand command)
-        {
-            switch (command)
-            {
-                case UIManager.UiGlobalCommand.Cancel:
-                    // TODO: handle global back (e.g., close top UI or exit scene)
-                    log.Info("Global UI Cancel triggered.");
-                    break;
-                case UIManager.UiGlobalCommand.OpenMenu:
-                    // TODO: open/pause main menu or forward to scene manager
-                    log.Info("Global UI OpenMenu triggered.");
-                    break;
-            }
-        }
+        // private void HandleGlobalUiCommand(UIManager.UiGlobalCommand command)
+        // {
+        //     switch (command)
+        //     {
+        //         case UIManager.UiGlobalCommand.Cancel:
+        //             // TODO: handle global back (e.g., close top UI or exit scene)
+        //             log.Info("Global UI Cancel triggered.");
+        //             break;
+        //         case UIManager.UiGlobalCommand.OpenMenu:
+        //             // TODO: open/pause main menu or forward to scene manager
+        //             log.Info("Global UI OpenMenu triggered.");
+        //             break;
+        //     }
+        // }
     }
     
     //player input router
@@ -172,27 +172,27 @@ namespace Ebonor.Manager
         private void OnDestroy()
         {
             UnInitPlayerRouterService();
-            UnInitUIManagerService();
+            //UnInitUIManagerService();
             instance = null;
         }
         
         private void Update()
         {
-            float dt = Time.deltaTime;
-            
-            // Update Services
-            
-            if (_uiManager != null) _uiManager.OnUpdate(dt, _inputRouter);
-
-            if (null != _currentSceneManager)
-            {
-                _currentSceneManager.Tick(dt);
-                var poolManager = PoolManager.Inst;
-                if (poolManager != null && !poolManager.Equals(null))
-                {
-                    poolManager.OnUpdate();
-                }
-            }
+            // float dt = Time.deltaTime;
+            //
+            // // Update Services
+            //
+            // if (_uiManager != null) _uiManager.OnUpdate(dt, _inputRouter);
+            //
+            // if (null != _currentSceneManager)
+            // {
+            //     _currentSceneManager.Tick(dt);
+            //     var poolManager = PoolManager.Inst;
+            //     if (poolManager != null && !poolManager.Equals(null))
+            //     {
+            //         poolManager.OnUpdate();
+            //     }
+            // }
         }
         
         public async UniTask InitGameClientManager()

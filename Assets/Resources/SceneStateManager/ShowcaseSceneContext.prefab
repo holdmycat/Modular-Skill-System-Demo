@@ -9,10 +9,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1515935007969798244}
-  - component: {fileID: 501914811131148681}
-  - component: {fileID: 5790961970775014940}
+  - component: {fileID: 4748716049830498306}
   m_Layer: 0
-  m_Name: GameBootstrapper
+  m_Name: ShowcaseInstaller
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -33,7 +32,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2305968181343246734}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &501914811131148681
+--- !u!114 &4748716049830498306
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,21 +41,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4013480450421148169}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 824628cd7e5a74b3183c5114788880de, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _inputRouterPrefab: {fileID: 0}
-  _uiManagerPrefab: {fileID: 0}
---- !u!114 &5790961970775014940
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4013480450421148169}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ba36e5961486f44e5a04e2ce142794e3, type: 3}
+  m_Script: {fileID: 11500000, guid: d44797d3b6ac341a1b6c29a636b34eea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &6056631543384735579
@@ -70,7 +55,7 @@ GameObject:
   - component: {fileID: 2305968181343246734}
   - component: {fileID: 22696057166434924}
   m_Layer: 0
-  m_Name: ShowcaseGoContext
+  m_Name: ShowcaseSceneContext
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -106,7 +91,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _scriptableObjectInstallers: []
   _monoInstallers:
-  - {fileID: 501914811131148681}
+  - {fileID: 4748716049830498306}
   _installerPrefabs: []
   _autoRun: 1
   _kernel: {fileID: 0}

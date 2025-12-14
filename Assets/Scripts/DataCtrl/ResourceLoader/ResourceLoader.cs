@@ -130,6 +130,8 @@ namespace Ebonor.DataCtrl
                     return "Models/Heros";
                 case ResourceAssetType.AllCharacterData:
                     return "AllCharacterData";
+                case ResourceAssetType.SceneStateManager:
+                    return "SceneStateManager";
                 default:
                     return string.Empty;
             }

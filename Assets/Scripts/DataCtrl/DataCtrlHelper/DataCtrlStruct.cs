@@ -154,25 +154,9 @@ namespace Ebonor.DataCtrl
         eHero = 1,
         [InspectorName("NPC")]
         eNpc = 2,
-        [InspectorName("Weapon Spirit")]
-        eSoulModel = 3, // Summon from weapon
-        [InspectorName("Architecture")]
-        eArchitecture = 4,
-        [InspectorName("Drop Item")]
-        eDrop = 5,
         [InspectorName("Skill Manager")]
-        eSkillActor = 6,
-        [InspectorName("Bullet")]
-        eBullet = 7, 
-        [InspectorName("Event Skill Manager")]
-        eEventSkillActor = 8, 
-        [InspectorName("Bullet Skill Manager")]
-        eBulletSkillActor = 9, 
-        [InspectorName("Summon Target")]
-        eSummon = 10,                                     
-        [InspectorName("Summon Skill Manager")]
-        eSummonSkillActor = 11,
-        eSize = 12,
+        eSkillActor = 3,
+        eSize = 4,
     }
 
     /// <summary>
@@ -254,7 +238,8 @@ namespace Ebonor.DataCtrl
         /// <summary>Hero model prefabs under Resources/Models/Hero/</summary>
         HeroModelPrefab,
         /// <summary>All character data under Resources/AllCharacterData/</summary>
-        AllCharacterData
+        AllCharacterData,
+        SceneStateManager,
     }
     
     /// <summary>

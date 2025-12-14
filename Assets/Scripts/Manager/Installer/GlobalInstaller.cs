@@ -34,9 +34,12 @@ namespace Ebonor.Manager
             // 4. Bind SystemDataService (BSON Registration)
             Container.Bind<ISystemDataService>().To<SystemDataService>().AsSingle();
 
-            Container.Bind<IModelRepository>().To<ModelRepository>().AsSingle();
+            Container.BindInterfacesAndSelfTo<ModelRepository>().AsSingle();
             
             Container.Bind<IDataLoaderService>().To<DataLoaderService>().AsSingle();
+            
+            //Container.Bind<ICharacterDataRepository>().To<CharacterDataRepository>().AsSingle();
+            Container.BindInterfacesAndSelfTo<CharacterDataRepository>().AsSingle();
             
             // 5. Bind GameStartup
             // "BindInterfacesTo" means it will be bound to IInitializable, so Initialize() will be called.

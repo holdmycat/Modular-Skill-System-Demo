@@ -5,6 +5,6 @@ namespace Ebonor.DataCtrl
 {
     public interface ISceneLoaderService
     {
-        UniTask LoadSceneAsync(string sceneName, Action<float> onProgress = null);
+        UniTask LoadSceneAsync(string sceneName);
     }
 }

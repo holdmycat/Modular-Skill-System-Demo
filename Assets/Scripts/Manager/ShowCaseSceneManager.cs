@@ -4,151 +4,48 @@
 // Purpose: Data-driven scene manager for the ShowcaseScene sandbox.
 // Author: Xuefei Zhao (clashancients@gmail.com)
 //------------------------------------------------------------
-using Cysharp.Threading.Tasks;
+using System;
 using Ebonor.DataCtrl;
+using Ebonor.Framework;
 using Ebonor.UI;
-using UnityEngine;
-using Ebonor.GamePlay;
-using ResourceLoader = Ebonor.DataCtrl.ResourceLoader;
+using Zenject;
 
 namespace Ebonor.Manager
 {
-
-    //uiscene_showcase
-    public partial class ShowCaseSceneManager : SceneManagerBase
+    
+    public class ShowcaseSceneManager : IInitializable, IDisposable
     {
-        private UIScene_ShowCase _uiShowCase;
         
-        private async UniTask OpenShowcaseUI(ActorInstanceBase playerInstance)
+        private static readonly ILog log = LogManager.GetLogger(typeof(ShowcaseSceneManager));
+        
+        readonly IUIService _uiService;
+        readonly ICharacterDataRepository _dataRepo;
+    
+        // 构造函数注入
+        public ShowcaseSceneManager(IUIService uiService, ICharacterDataRepository dataRepo)
         {
-            var uiManager = ClientManager != null ? ClientManager.GetUiManager() : null;
-            if (uiManager == null)
-            {
-                log.Warn("UIManager is null; skipping showcase UI (edit-mode).");
-                return;
-            }
+            log.Debug("[ShowcaseSceneManager] Starting Construction");
+            _uiService = uiService;
+            _dataRepo = dataRepo;
 
-            var numeric = playerInstance != null ? playerInstance.ActorNumericComponentBase : null;
-
-            _uiShowCase = await uiManager.OpenUIAsync<UIScene_ShowCase>(ui =>
-            {
-                var bb = ui.GetBlackboard<ShowCaseUiBlackboard>();
-                if (bb != null)
-                {
-                    bb.SetPlayerNumeric(numeric);
-                }
-                else
-                {
-                    log.Error("ShowCaseUiBlackboard missing on UIScene_ShowCase.");
-                }
-            });
         }
 
-        private async UniTask CloseShowcaseUI()
+        public void Initialize() 
         {
-            if (_uiShowCase != null && !_uiShowCase.Equals(null))
-            {
-                var uiManager = ClientManager != null ? ClientManager.GetUiManager() : null;
-                var bb = _uiShowCase.GetBlackboard<ShowCaseUiBlackboard>();
-                bb?.Clear();
-                if (uiManager != null)
-                {
-                    await uiManager.CloseUIAsync(_uiShowCase);
-                }
-            }
+            
+            log.Debug("[ShowcaseSceneManager] Starting Initialize");
+            // 这里写原来的 OnEnter 逻辑
+            // LoadRoom();
+            // LoadPlayer();
+            // OpenUI();
+        }
 
-            _uiShowCase = null;
+        public void Dispose()
+        {
+            // 这里写原来的 OnExit 逻辑
+            log.Debug("[ShowcaseSceneManager] Starting Dispose");
         }
     }
     
-    
-    //system
-    public partial class ShowCaseSceneManager : SceneManagerBase
-    {
-        private SceneLoadConfig _sceneConfig;
-
-        private ResourceLoader _resLoader;
-        
-        private Transform _characterRoot;
-        private Transform _uiRoot;
-        private Transform _audioRoot;
-        private Transform _logicRoot;
-        
-        protected override async UniTask OnEnter()
-        {
-
-            log.Info("Enter showcase scene: loading content (data-driven).");
-
-            // Allow tests to inject _sceneConfig directly; otherwise load from resources.
-            if (_sceneConfig == null && null != GlobalServices.ResourceLoader)
-            {
-                var loader = GlobalServices.ResourceLoader;
-                _sceneConfig = await loader.LoadAsset<SceneLoadConfig>(this.name,
-                    ResourceAssetType.ScriptableObject);
-            }
-
-            _resLoader = GlobalServices.ResourceLoader;
-
-            if (_sceneConfig == null)
-            {
-                log.Error("Scene config is missing; skipping content load");
-                return;
-            }
-
-            if (_resLoader == null)
-            {
-                log.Error("_resLoader is null");
-                return;
-            }
-            
-            await LoadRoom();
-            
-            var player = await _roomInstance.LoadPlayer();
-            
-            await OpenShowcaseUI(player);
-        }
-
-        protected override async UniTask OnExit()
-        {
-            log.Info("Exit showcase scene: cleaning up content.");
-            await CloseShowcaseUI();
-            await UnloadRoom();
-        }
-
-        protected override UniTask OnResetScene()
-        {
-            log.Debug("Reset showcase scene to defaults.");
-            return UniTask.CompletedTask;
-        }
-        
-        private async UniTask LoadRoom()
-        {
-            if (null != _roomInstance)
-            {
-                log.Error("Fatal error, _roomInstance not null");
-                return;
-            }
-            _roomInstance = gameObject.AddComponent<GamePlayRoomManager>();
-            await _roomInstance.OnInitRoomManager();
-        }
-        
-        private async UniTask UnloadRoom()
-        {
-            if (_roomInstance != null)
-            {
-                await _roomInstance.OnUnInitRoomManager();
-                Destroy(_roomInstance);
-                _roomInstance = null;
-            }
-            await UniTask.CompletedTask;
-        }
-        
-        private void DestroySafe(GameObject go)
-        {
-            if (go == null) return;
-            if (Application.isPlaying) Destroy(go);
-            else DestroyImmediate(go);
-        }
-    }
 
 }

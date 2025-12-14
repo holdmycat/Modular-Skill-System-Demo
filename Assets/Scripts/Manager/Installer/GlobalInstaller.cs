@@ -1,6 +1,7 @@
 using UnityEngine;
 using Zenject;
 using Ebonor.DataCtrl;
+using Ebonor.GamePlay;
 using Ebonor.UI;
 
 namespace Ebonor.Manager
@@ -47,6 +48,8 @@ namespace Ebonor.Manager
             
             //Container.Bind<ICharacterDataRepository>().To<CharacterDataRepository>().AsSingle();
             Container.BindInterfacesAndSelfTo<CharacterDataRepository>().AsSingle();
+            
+            Container.Bind<IEntityFactory>().To<EntitySpawnService>().AsSingle();
             
             // 5. Bind GameStartup
             // "BindInterfacesTo" means it will be bound to IInitializable, so Initialize() will be called.

@@ -46,6 +46,10 @@ namespace Ebonor.Manager
             
             log.Debug($"[SceneLoaderService] Instantiated: {instance.name}, Active: {instance.activeInHierarchy}");
             
+            // Ensure root before moving to current scene (required by MoveGameObjectToScene)
+            instance.transform.SetParent(null, worldPositionStays: false);
+            SceneManager.MoveGameObjectToScene(instance, SceneManager.GetActiveScene());
+            
             // Optional: If the prefab was inactive, force it active.
             if (!instance.activeSelf)
             {

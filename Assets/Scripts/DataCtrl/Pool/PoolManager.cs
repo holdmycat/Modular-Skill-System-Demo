@@ -1,170 +1,111 @@
 using System;
 using System.Collections.Generic;
-using System.Reflection;
 using Ebonor.Framework;
 using UnityEngine;
+using Zenject;
 using UObject = UnityEngine.Object;
+
 namespace Ebonor.DataCtrl
 {
-    //对外接口
-    public partial class PoolManager : MonoBehaviour
+    public class PoolManager : MonoBehaviour, IPoolManager, IInitializable, IDisposable
     {
-        
-        /// <summary>
-        /// 创建对象池
-        /// </summary>
-        public static void CreatePoolManager()
-        {
-            if (null != mInst)
-            {
-                log.WarnFormat("CreatePoolManager called multiple times, and that is wrong");
-                return;
-            }
-            var go = new GameObject("PoolManager");
-            go.AddComponent<PoolManager>();
-            if (Application.isPlaying)
-            {
-                DontDestroyOnLoad(go);
-            }
-            GOHelper.ResetGameObject(go);
-        }
-        
-        /// <summary>
-        /// 预加载对象
-        /// </summary>
-        /// <param name="type">对象类型</param>
-        /// <param name="_name">对象名称</param>
-        /// <typeparam name="T">对象管理对象类型</typeparam>
-        public static void InitPoolItem<T>(ePoolObjectType type, string _name) where T : PoolItemBase
-        {
-            mInst.mDicPoolCtrl[type].InitPoolItem<T>(_name);
-        }
-        
-        public static T SpawnItemFromPool<T>(ePoolObjectType type, string _name) where T : PoolItemBase
-        {
-            if (mInst == null || mInst.Equals(null))
-            {
-                log.Warn("SpawnItemFromPool called before PoolManager is created; returning null.");
-                return null;
-            }
+        private static readonly ILog log = LogManager.GetLogger(typeof(PoolManager));
 
-            if (mInst.mDicPoolCtrl.TryGetValue(type, out var inst))
-            {
-                return inst.SpawnItemFromPool<T>(_name);
-            }
+        [Inject]
+        private DiContainer _container;
 
-            return null;
-        }
-        
-        public static void DespawnItemToPool<T>(ePoolObjectType type, T t) where T : PoolItemBase
-        {
-            if (mInst == null || mInst.Equals(null))
-            {
-                log.Warn("DespawnItemToPool called before PoolManager is created; ignoring.");
-                return;
-            }
+        private Dictionary<ePoolObjectType, PoolCtrlBase> mDicPoolCtrl = new Dictionary<ePoolObjectType, PoolCtrlBase>();
+      
 
-            if (mInst.mDicPoolCtrl.TryGetValue(type, out var inst))
-            {
-                inst.DespawnItemFromPool<T>(t);
-            }
-        }
-        
-        /// <summary>
-        /// 自回收逻辑，每帧判断是否使用完毕(客户端特效自回收)
-        /// </summary>
-        public void OnUpdate()
-        {
-            foreach (var variable in mDicPoolCtrl)
-            {
-                variable.Value.OnUpdate(this);
-            }
-        }
-
-        public void DoBeforeLeavingScene()
-        {
-            foreach (var variable in mInst.mDicPoolCtrl)
-            {
-                variable.Value.ClearAllPoolItem();
-            }
-            mDicPoolCtrl.Clear();
-            mGOSceneInst = null;
-        }
-
-        public void DoBeforeEnteringScene(string _sceneName)
-        {
-
-            if(mDicPoolCtrl.Count > 0)
-                return;
-            mGOSceneInst = new GameObject("PoolManager_" + _sceneName);
-            
-            GOHelper.ResetGameObject(mGOSceneInst);
-
-            //mResourcePoolConfig = DataCtrl.Inst.GetResourcePoolConfig();
-            
-            for (var i = ePoolObjectType.eEffect; i < ePoolObjectType.ePoolSize; i++)
-            {
-                if(!mDicPoolCtrlType.ContainsKey(i))
-                    continue;
-                Type type = mDicPoolCtrlType[i];
-                MethodInfo methodInfo = typeof(PoolManager).GetMethod(nameof(CreatePoolCtrl)).MakeGenericMethod(type);  
-                var result = methodInfo.Invoke(this, new object[]{i});
-                mDicPoolCtrl.Add(i, result as PoolCtrlBase);
-            }
-        }
-        
-        public static PoolCtrlBase CreatePoolCtrl<T>(ePoolObjectType type) where T : PoolCtrlBase
-        {
-            var go = new GameObject(type.ToString());
-            var ctrl = go.AddComponent<T>();
-            GOHelper.ResetLocalGameObject(mInst.mGOSceneInst, go, true, 1);
-            ctrl.transform.localPosition = Vector3.up * 100; 
-            ctrl.InitPool(type);
-            return ctrl;
-        }
-
-        public static void OnPauseAndResumePoolManager(bool isPause)
-        {
-            foreach (var variable in mInst.mDicPoolCtrl)
-            {
-                variable.Value.OnPauseResumeGame(mInst, isPause);
-            }
-        }
-        
-        
-    }
-    
-    //系统接口和非静态私有数据
-    public partial class PoolManager : MonoBehaviour
-    {
-        Dictionary<ePoolObjectType, PoolCtrlBase> mDicPoolCtrl = new Dictionary<ePoolObjectType, PoolCtrlBase>();
-
-        GameObject mGOSceneInst;
-
-        private ResourcePoolConfig mResourcePoolConfig;
-        public ResourcePoolConfig ResourcePoolConfig => mResourcePoolConfig;
-        
-        void Awake()
-        {
-            mInst = this;
-        }
-    }
-
-    //系统静态数据和接口
-    public partial class PoolManager : MonoBehaviour
-    {
-        static Dictionary<ePoolObjectType, Type> mDicPoolCtrlType = new Dictionary<ePoolObjectType, Type>
+        // Static mapping of pool types to controller types
+        private static readonly Dictionary<ePoolObjectType, Type> mDicPoolCtrlType = new Dictionary<ePoolObjectType, Type>
         {
             //{ePoolObjectType.eEffect, typeof(PoolEffectCtrl)},
             {ePoolObjectType.eModel, typeof(PoolModelCtrl)},
             //{ePoolObjectType.eFloatingText, typeof(PoolFloatingTextCtrl)},
         };
-        
-        static readonly ILog log = LogManager.GetLogger(typeof(PoolManager));
 
-        static PoolManager mInst;
-        public static PoolManager Inst => mInst;
+        public void Initialize()
+        {
+            log.Info("[PoolManager] Initializing...");
+            // Create a root GameObject for pools if it doesn't exist
+          
+            // Initialize all registered pools
+            foreach (var kvp in mDicPoolCtrlType)
+            {
+                CreatePoolCtrl(kvp.Key, kvp.Value);
+            }
+        }
+
+        public void Dispose()
+        {
+            log.Info("[PoolManager] Disposing...");
+            foreach (var ctrl in mDicPoolCtrl.Values)
+            {
+                ctrl.ClearAllPoolItem();
+            }
+            mDicPoolCtrl.Clear();
+            
+        }
+
+        private void CreatePoolCtrl(ePoolObjectType type, Type ctrlType)
+        {
+            if (mDicPoolCtrl.ContainsKey(type)) return;
+
+            // Create a new GameObject for this pool controller
+            var go = new GameObject(type.ToString());
+            go.transform.SetParent(gameObject.transform);
+            
+            // Use Zenject to instantiate the component so it gets injected if needed
+            // But since we are adding it to a specific GO, we use InstantiateComponent
+            var ctrl = _container.InstantiateComponent(ctrlType, go) as PoolCtrlBase;
+            
+            if (ctrl != null)
+            {
+                ctrl.transform.localPosition = Vector3.up * 100; // Legacy positioning
+                ctrl.InitPool(type, _container); // Pass container to the controller
+                mDicPoolCtrl.Add(type, ctrl);
+                log.Debug($"[PoolManager] Created pool controller for {type}");
+            }
+            else
+            {
+                log.Error($"[PoolManager] Failed to create pool controller for {type}");
+            }
+        }
         
-        
+        public T SpawnItemFromPool<T>(ePoolObjectType type, string name) where T : PoolItemBase
+        {
+            if (mDicPoolCtrl.TryGetValue(type, out var ctrl))
+            {
+                return ctrl.SpawnItemFromPool<T>(name);
+            }
+            
+            log.Warn($"[PoolManager] No pool controller found for type {type}");
+            return null;
+        }
+
+        public void DespawnItemToPool<T>(ePoolObjectType type, T item) where T : PoolItemBase
+        {
+            if (item == null) return;
+
+            if (mDicPoolCtrl.TryGetValue(type, out var ctrl))
+            {
+                ctrl.DespawnItemFromPool(item);
+            }
+            else
+            {
+                log.Warn($"[PoolManager] No pool controller found for type {type} to despawn {item.name}");
+                // Fallback destroy if pool not found
+                Destroy(item.gameObject);
+            }
+        }
+
+        public void InitPoolItem<T>(ePoolObjectType type, string name) where T : PoolItemBase
+        {
+            if (mDicPoolCtrl.TryGetValue(type, out var ctrl))
+            {
+                ctrl.InitPoolItem<T>(name);
+            }
+        }
     }
 }

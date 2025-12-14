@@ -26,10 +26,14 @@ namespace Ebonor.DataCtrl
         /// <summary>Handle pause/resume for pooled items if needed.</summary>
         public abstract void OnPauseResumeGame(PoolManager poolMgr, bool isPause);
         
-        /// <summary>Initialize pool with its type.</summary>
-        public virtual void InitPool(ePoolObjectType type)
+        /// <summary>Zenject Container for instantiating pooled objects.</summary>
+        protected Zenject.DiContainer _container;
+
+        /// <summary>Initialize pool with its type and container.</summary>
+        public virtual void InitPool(ePoolObjectType type, Zenject.DiContainer container)
         {
             poolType = type;
+            _container = container;
         }
         
         /// <summary>Create and register an item in the pool.</summary>

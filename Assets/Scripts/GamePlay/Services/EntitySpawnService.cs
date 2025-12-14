@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Zenject;
 using Object = UnityEngine.Object;
 
@@ -23,7 +24,7 @@ namespace Ebonor.GamePlay
             _characterDataRepository = characterDataRepository;
         }
 
-        public async UniTask<T> SpawnEntityAsync<T>(long unitId, Vector3 position, Quaternion rotation, Transform parent = null) where T : ActorInstanceBase
+        public async UniTask<T> SpawnEntityAsync<T>(long unitId, Vector3 position, Quaternion rotation, Transform parent = null) where T : PoolItemBase
         {
 
             var unitAttribteData = _characterDataRepository.GetUnitAttribteData(unitId);
@@ -58,12 +59,15 @@ namespace Ebonor.GamePlay
 
             instance.name = $"{prefab.name}_{instance.GetInstanceID()}";
             
+            // Ensure it's not in DontDestroyOnLoad (ProjectContext might parent it there)
+            SceneManager.MoveGameObjectToScene(instance.gameObject, SceneManager.GetActiveScene());
+            
             // Optional: Call manual Init if needed, but Zenject [Inject] is preferred.
             
             return instance;
         }
 
-        public void DespawnEntity(ActorInstanceBase entity)
+        public void DespawnEntity(PoolItemBase entity)
         {
             if (entity == null) return;
             

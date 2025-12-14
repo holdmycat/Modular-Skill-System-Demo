@@ -56,6 +56,27 @@ namespace Ebonor.Manager
                 instance.SetActive(true);
             }
             
+            // Get the GameObjectContext component to access its container
+            var context = instance.GetComponentNoAlloc<GameObjectContext>();
+            if (context != null)
+            {
+                // Resolve ISceneManager from the child container
+                var sceneManager = context.Container.Resolve<ISceneManager>();
+                if (sceneManager != null)
+                {
+                    log.Debug("[SceneLoaderService] Calling ISceneManager.StartupSequence...");
+                    await sceneManager.StartupSequence();
+                }
+                else
+                {
+                    log.Warn("[SceneLoaderService] ISceneManager not found in scene context.");
+                }
+            }
+            else
+            {
+                log.Warn("[SceneLoaderService] GameObjectContext component not found on instantiated object.");
+            }
+            
             log.Debug($"[SceneLoaderService] Load complete: {sceneName}");
         }
     }

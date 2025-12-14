@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Ebonor.DataCtrl;
 using UnityEngine;
 
 namespace Ebonor.GamePlay
@@ -14,12 +15,12 @@ namespace Ebonor.GamePlay
         /// <param name="rotation">Spawn rotation</param>
         /// <param name="parent">Optional parent transform</param>
         /// <returns>The spawned entity instance</returns>
-        UniTask<T> SpawnEntityAsync<T>(long assetId, Vector3 position, Quaternion rotation, Transform parent = null) where T : ActorInstanceBase;
+        UniTask<T> SpawnEntityAsync<T>(long assetId, Vector3 position, Quaternion rotation, Transform parent = null) where T : PoolItemBase;
 
         /// <summary>
         /// Despawns an entity (returns to pool or destroys).
         /// </summary>
         /// <param name="entity">The entity to despawn</param>
-        void DespawnEntity(ActorInstanceBase entity);
+        void DespawnEntity(PoolItemBase entity);
     }
 }

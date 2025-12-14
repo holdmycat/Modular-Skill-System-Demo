@@ -252,12 +252,13 @@ namespace Ebonor.Manager
 
         private static PoolManager GetOrCreatePoolManager()
         {
-            if (PoolManager.Inst == null || PoolManager.Inst.Equals(null))
-            {
-                PoolManager.CreatePoolManager();
-            }
-
-            return PoolManager.Inst;
+            // if (PoolManager.Inst == null || PoolManager.Inst.Equals(null))
+            // {
+            //     PoolManager.CreatePoolManager();
+            // }
+            //
+            // return PoolManager.Inst;
+            return null;
         }
         
         /// <summary>
@@ -321,7 +322,7 @@ namespace Ebonor.Manager
             if (_currentSceneManager != null)
             {
                 var poolManager = GetOrCreatePoolManager();
-                poolManager?.DoBeforeLeavingScene();
+                //poolManager?.DoBeforeLeavingScene();
                 DataEventManager.OnClearAllDicDELEvents();
                 var previous = _currentSceneManager;
                 await previous.Exit();
@@ -335,7 +336,7 @@ namespace Ebonor.Manager
             _currentSceneManager = newSceneManagerInstance;
             await _currentSceneManager.Init(this);
             var activePoolManager = GetOrCreatePoolManager();
-            activePoolManager?.DoBeforeEnteringScene(gameObject.scene.name);
+            //activePoolManager?.DoBeforeEnteringScene(gameObject.scene.name);
             await _currentSceneManager.Enter();
             log.Info($"Switched to scene manager: {_currentSceneManager.GetType().Name}");
             return _currentSceneManager;

@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using Ebonor.Framework;
-using UnityEngine;
+using Ebonor.GamePlay;
 using Zenject;
 
 namespace Ebonor.Manager
@@ -13,6 +11,9 @@ namespace Ebonor.Manager
         
         public override void InstallBindings()
         {
+            //room manager
+            Container.BindInterfacesAndSelfTo<RoomManagerService>().FromNewComponentOnNewGameObject().AsSingle();
+            
             log.Debug("[ShowcaseInstaller] InstallBindings called.");
             Container.BindInterfacesAndSelfTo<ShowcaseSceneManager>().AsSingle().NonLazy();
         }

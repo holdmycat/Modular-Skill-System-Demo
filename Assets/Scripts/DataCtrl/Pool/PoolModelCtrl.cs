@@ -111,7 +111,14 @@ namespace Ebonor.DataCtrl
                 return default;
             }
 
-            var actorGo = (GameObject)GOHelper.InstantiatePrefab(modelObj);
+            // Use Zenject to instantiate so that [Inject] works on the new object.
+            // InstantiatePrefab returns a GameObject.
+            var actorGo = _container.InstantiatePrefab(modelObj);
+            
+            // Ensure it's active and reset transform if needed (InstantiatePrefab usually keeps prefab settings)
+            // But we might want to ensure it's clean.
+            GOHelper.ResetGameObject(actorGo);
+
             var instance = actorGo.GetComponent<T>();
             if (instance == null)
             {

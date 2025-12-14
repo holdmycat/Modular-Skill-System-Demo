@@ -64,23 +64,25 @@ namespace Ebonor.GamePlay
         /// </summary>
         public virtual async UniTask<bool> LoadAsync<T>(CharacterRuntimeData characterdata) where T : ActorNumericComponentBase
         {
-            _netId = GlobalServices.NextId();
+            // _netId = GlobalServices.NextId();
+            //
+            // //load numeric data
+            // var result = await LoadActorNumeric<T>(characterdata);
+            //
+            // // In edit-mode tests the pool may be empty; guard against null.
+            // var actorModel = PoolManager.SpawnItemFromPool<PoolModelItem>(ePoolObjectType.eModel, _actorNumericComponentBase.AttrAvatarName);
+            // if (actorModel != null)
+            // {
+            //     GOHelper.ResetLocalGameObject(gameObject, actorModel.gameObject, true);
+            // }
+            // else
+            // {
+            //     log.Warn($"Actor model '{_actorNumericComponentBase.AttrAvatarName}' not found in pool; skipping placement (likely edit-mode).");
+            // }
+            //
+            // return result;
 
-            //load numeric data
-            var result = await LoadActorNumeric<T>(characterdata);
-            
-            // In edit-mode tests the pool may be empty; guard against null.
-            var actorModel = PoolManager.SpawnItemFromPool<PoolItemBase>(ePoolObjectType.eModel, _actorNumericComponentBase.AttrAvatarName);
-            if (actorModel != null)
-            {
-                GOHelper.ResetLocalGameObject(gameObject, actorModel.gameObject, true);
-            }
-            else
-            {
-                log.Warn($"Actor model '{_actorNumericComponentBase.AttrAvatarName}' not found in pool; skipping placement (likely edit-mode).");
-            }
-            
-            return result;
+            return true;
         }
 
         /// <summary>Cleanup resources.</summary>

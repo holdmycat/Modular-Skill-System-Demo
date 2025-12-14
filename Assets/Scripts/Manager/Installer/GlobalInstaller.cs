@@ -49,7 +49,11 @@ namespace Ebonor.Manager
             //Container.Bind<ICharacterDataRepository>().To<CharacterDataRepository>().AsSingle();
             Container.BindInterfacesAndSelfTo<CharacterDataRepository>().AsSingle();
             
+            Container.BindInterfacesAndSelfTo<PoolManager>().FromNewComponentOnNewGameObject().AsSingle().NonLazy();
+            
             Container.Bind<IEntityFactory>().To<EntitySpawnService>().AsSingle();
+            
+            Container.Bind<ISceneManager>().To<ShowcaseSceneManager>().AsSingle();
             
             // 5. Bind GameStartup
             // "BindInterfacesTo" means it will be bound to IInitializable, so Initialize() will be called.

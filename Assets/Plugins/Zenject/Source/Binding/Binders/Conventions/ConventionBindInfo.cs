@@ -56,7 +56,15 @@ namespace Zenject
                 // This is much faster than calling assembly.GetTypes() every time
                 if (!_assemblyTypeCache.TryGetValue(assembly, out types))
                 {
-                    types = assembly.GetTypes();
+                    try
+                    {
+                        types = assembly.GetTypes();
+                    }
+                    catch (ReflectionTypeLoadException ex)
+                    {
+                        // Skip types that failed to load due to missing dependencies
+                        types = ex.Types.Where(t => t != null).ToArray();
+                    }
                     _assemblyTypeCache[assembly] = types;
                 }
             }

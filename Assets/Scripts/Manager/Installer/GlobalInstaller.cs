@@ -11,6 +11,13 @@ namespace Ebonor.Manager
 
         public override void InstallBindings()
         {
+#if UNITY_EDITOR
+            if (IsRunningPlaymodeTests())
+            {
+                Debug.Log("[GlobalInstaller] Detected playmode test runner; skipping bindings.");
+                return;
+            }
+#endif
             // 1. Bind Global Config
             if (_globalConfig != null)
             {
@@ -47,5 +54,19 @@ namespace Ebonor.Manager
             // "NonLazy" is CRITICAL: it forces the object to be created immediately on startup.
             Container.BindInterfacesTo<GameStartup>().AsSingle().NonLazy();
         }
+
+#if UNITY_EDITOR
+        private static bool IsRunningPlaymodeTests()
+        {
+            var type = System.Type.GetType("UnityEngine.TestTools.TestRunner.PlaymodeTestsController, UnityEngine.TestRunner");
+            var method = type?.GetMethod("IsControllerOnScene", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            if (method == null)
+            {
+                return false;
+            }
+
+            return method.Invoke(null, null) is bool running && running;
+        }
+#endif
     }
 }

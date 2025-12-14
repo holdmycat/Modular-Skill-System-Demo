@@ -51,6 +51,12 @@ namespace Zenject
         {
             get
             {
+#if UNITY_EDITOR
+                if (IsRunningPlaymodeTests())
+                {
+                    throw Assert.CreateException("ProjectContext accessed while playmode tests are running; a ProjectContext prefab in Resources interferes with Zenject integration tests.");
+                }
+#endif
                 if (_instance == null)
                 {
                     InstantiateAndInitialize();
@@ -183,6 +189,14 @@ namespace Zenject
 
         public void Awake()
         {
+#if UNITY_EDITOR
+            if (IsRunningPlaymodeTests())
+            {
+                Debug.Log("[ProjectContext] Playmode test runner detected; skipping Awake/creation.");
+                Destroy(gameObject);
+                return;
+            }
+#endif
             if (Application.isPlaying)
                 // DontDestroyOnLoad can only be called when in play mode and otherwise produces errors
                 // ProjectContext is created during design time (in an empty scene) when running validation
@@ -292,6 +306,20 @@ namespace Zenject
             InstallInstallers();
 
         }
+
+#if UNITY_EDITOR
+        static bool IsRunningPlaymodeTests()
+        {
+            var type = System.Type.GetType("UnityEngine.TestTools.TestRunner.PlaymodeTestsController, UnityEngine.TestRunner");
+            var method = type?.GetMethod("IsControllerOnScene", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+            if (method == null)
+            {
+                return false;
+            }
+
+            return method.Invoke(null, null) is bool running && running;
+        }
+#endif
     }
 }
 

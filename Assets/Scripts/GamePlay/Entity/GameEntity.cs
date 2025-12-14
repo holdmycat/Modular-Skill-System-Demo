@@ -22,6 +22,8 @@ namespace Ebonor.GamePlay
         [Inject]
         protected DiContainer _container;
 
+       
+        
         [SerializeField] private uint _netId;
         public uint NetId => _netId;
 

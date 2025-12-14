@@ -14,7 +14,7 @@ namespace Ebonor.GamePlay
             await base.InitializeAsync();
             // Additional character initialization if needed
         }
-
+        
         public async UniTask LoadDataAsync<T>(CharacterRuntimeData runtimeData) where T : ActorNumericComponentBase
         {
             if (_numericComponent == null)

@@ -12,16 +12,16 @@ namespace Ebonor.GamePlay
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(EntitySpawnService));
         
-        private readonly DiContainer _container;
+        private readonly IInstantiator _instantiator;
         private readonly ResourceLoader _resourceLoader;
 
         private readonly ICharacterDataRepository _characterDataRepository;
 
 
         
-        public EntitySpawnService(DiContainer container, ResourceLoader resourceLoader, ICharacterDataRepository characterDataRepository)
+        public EntitySpawnService(IInstantiator container, ResourceLoader resourceLoader, ICharacterDataRepository characterDataRepository)
         {
-            _container = container;
+            _instantiator = container;
             _resourceLoader = resourceLoader;
             _characterDataRepository = characterDataRepository;
           
@@ -52,7 +52,7 @@ namespace Ebonor.GamePlay
             // - The component T is returned
             // - Dependencies are injected (if T is a MonoBehaviour with [Inject])
             // - If the prefab has a GameObjectContext, it is initialized and parented correctly
-            var instance = _container.InstantiatePrefabForComponent<T>(prefab, position, rotation, parent);
+            var instance = _instantiator.InstantiatePrefabForComponent<T>(prefab, position, rotation, parent);
 
             if (instance == null)
             {
@@ -99,7 +99,7 @@ namespace Ebonor.GamePlay
             // 1. Create the Logic Shell (GameEntity)
             // This is a new GameObject with the GameEntity component, injected by Zenject.
             // It is NOT pooled.
-            var entity = _container.InstantiateComponentOnNewGameObject<T>($"{typeof(T).Name}_{prefabName}");
+            var entity = _instantiator.InstantiateComponentOnNewGameObject<T>($"{typeof(T).Name}_{prefabName}");
             
             if (entity == null)
             {

@@ -39,7 +39,7 @@ namespace Ebonor.DataCtrl
         //protected Zenject.DiContainer _container;
 
         /// <summary>Initialize pool with its type and container.</summary>
-        public virtual void InitPool(ePoolObjectType type, Zenject.DiContainer container)
+        public virtual void InitPool(ePoolObjectType type)
         {
             log.DebugFormat("[PoolCtrlBase] InitPool type={0}", type);
             poolType = type;

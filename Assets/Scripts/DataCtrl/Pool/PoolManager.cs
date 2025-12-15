@@ -12,7 +12,7 @@ namespace Ebonor.DataCtrl
         private static readonly ILog log = LogManager.GetLogger(typeof(PoolManager));
 
         [Inject]
-        private DiContainer _container;
+        private IInstantiator _instantiator;
 
         private Dictionary<ePoolObjectType, PoolCtrlBase> mDicPoolCtrl = new Dictionary<ePoolObjectType, PoolCtrlBase>();
       
@@ -58,12 +58,12 @@ namespace Ebonor.DataCtrl
             
             // Use Zenject to instantiate the component so it gets injected if needed
             // But since we are adding it to a specific GO, we use InstantiateComponent
-            var ctrl = _container.InstantiateComponent(ctrlType, go) as PoolCtrlBase;
+            var ctrl = _instantiator.InstantiateComponent(ctrlType, go) as PoolCtrlBase;
             
             if (ctrl != null)
             {
                 ctrl.transform.localPosition = Vector3.up * 100; // Legacy positioning
-                ctrl.InitPool(type, _container); // Pass container to the controller
+                ctrl.InitPool(type); // Pass container to the controller
                 mDicPoolCtrl.Add(type, ctrl);
                 log.Debug($"[PoolManager] Created pool controller for {type}");
             }

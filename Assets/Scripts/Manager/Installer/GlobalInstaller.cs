@@ -42,6 +42,9 @@ namespace Ebonor.Manager
             // 4. Bind SystemDataService (BSON Registration)
             Container.Bind<ISystemDataService>().To<SystemDataService>().AsSingle();
 
+            // 4.5 Optional services (graceful degradation)
+            Container.Bind<IVoiceChatService>().To<NullVoiceChatService>().AsSingle();
+
             Container.BindInterfacesAndSelfTo<ModelRepository>().AsSingle();
             
             Container.Bind<IDataLoaderService>().To<DataLoaderService>().AsSingle();

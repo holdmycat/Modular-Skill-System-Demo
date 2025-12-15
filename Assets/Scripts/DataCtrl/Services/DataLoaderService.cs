@@ -34,12 +34,6 @@ namespace Ebonor.DataCtrl
 
             log.Info("[DataLoaderService] Starting Data Loading...");
             
-            //Load Unit Models
-            log.Info("[DataLoaderService] Starting Loading Models...");
-            var list = await _resourceLoader.LoadAllAssets<UObject>(ResourceAssetType.HeroModelPrefab);
-            _modelRepository.SaveModelAsync(list);
-            log.Info("[DataLoaderService] Loading Models complete...");
-            
             //Load Unit Attribute Data Supportor
             log.Info("[DataLoaderService] Starting Loading character data...");
             var heroData = await _resourceLoader.LoadAsset<TextAsset>(_globalGameConfig.allCharacterDataPath, ResourceAssetType.AllCharacterData);
@@ -47,6 +41,14 @@ namespace Ebonor.DataCtrl
             var heroItems = BsonSerializer.Deserialize<UnitAttributesDataSupportor>(bsonReader);
             await _characterDataRepository.SaveUnitDataSupporterAsync(heroItems);
             log.Info("[DataLoaderService] Loading character data complete...");
+            
+            //Load Unit Models
+            log.Info("[DataLoaderService] Starting Loading Models...");
+            var list = await _resourceLoader.LoadAllAssets<UObject>(ResourceAssetType.HeroModelPrefab);
+            _modelRepository.SaveModelAsync(list);
+            log.Info("[DataLoaderService] Loading Models complete...");
+            
+           
             
             _isInitialized = true;
             log.Info("[DataLoaderService] Data Loading complete.");

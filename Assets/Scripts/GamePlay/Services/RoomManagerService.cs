@@ -13,11 +13,13 @@ namespace Ebonor.GamePlay
         
         private CharacterEntity _characterEntity;
         
+        private CharacterRuntimeData _characterRuntimeData;
+        
         [Inject] 
         protected GlobalGameConfig _globalGameConfig;
 
         [Inject]
-        protected EntitySpawnService _entitySpawnService;
+        protected IEntityFactory _entitySpawnService;
 
         [Inject]
         protected ICharacterDataRepository _characterDataRepository;
@@ -26,31 +28,18 @@ namespace Ebonor.GamePlay
         {
             if (null == _characterEntity)
             {
-                var characterData = new CharacterRuntimeData(_globalGameConfig.defaultPlayerHeroId, true);
+                _characterRuntimeData = new CharacterRuntimeData(GlobalServices.NextId(), _globalGameConfig.defaultPlayerHeroId, true);
                 
-                // 1. Get Character Attributes to find the Prefab Name
-                var unitAttr = _characterDataRepository.GetUnitAttribteData(characterData._numericId);
-                if (unitAttr == null)
-                {
-                    log.ErrorFormat($"[RoomManagerService] Failed to find unit attributes for ID: {characterData._numericId}");
-                    return;
-                }
-                
-                // 2. Spawn Player Entity (Logic Shell + Model)
-                // Using a default spawn position for now, can be configured later.
                 var spawnPos = Vector3.zero; 
                 var spawnRot = Quaternion.identity;
                 
-                var player = await _entitySpawnService.SpawnGameEntity<PlayerEntity>(unitAttr.UnitAvatar, spawnPos, spawnRot);
+                var player = await _entitySpawnService.SpawnGameEntity<PlayerEntity>(_characterRuntimeData, spawnPos, spawnRot, transform);
                 
                 if (player != null)
                 {
                     _characterEntity = player;
                     
-                    // 3. Load Data (Numeric Component)
-                    await player.LoadDataAsync<PlayerActorNumericComponent>(characterData);
-                    
-                    log.Error($"[RoomManagerService] Player spawned and initialized: {player.name}");
+                    log.Debug($"[RoomManagerService] Player spawned and initialized: {player.name}");
                 }
             }
         }

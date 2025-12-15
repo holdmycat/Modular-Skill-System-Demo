@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Ebonor.Framework;
 using UnityEngine;
+using Zenject;
 using UObject = UnityEngine.Object;
 
 namespace Ebonor.DataCtrl
@@ -16,9 +17,17 @@ namespace Ebonor.DataCtrl
         
         /// <summary>Pooled actor instances by model id.</summary>
         private readonly Dictionary<string, List<PoolItemBase>> _pooledActors = new Dictionary<string, List<PoolItemBase>>();
+
+        [Inject]
+        private ICharacterDataRepository _characterDataRepository;
+        
+        [Inject]
+        private IModelRepository _modelRepository;
         
         public override void ClearAllPoolItem()
         {
+            log.Debug("[PoolModelCtrl] ClearAllPoolItem");
+
             foreach (var list in _pooledActors.Values)
             {
                 list.Clear();
@@ -28,11 +37,13 @@ namespace Ebonor.DataCtrl
 
         public override void OnPauseResumeGame(PoolManager poolMgr, bool isPause)
         {
+            log.DebugFormat("[PoolModelCtrl] OnPauseResumeGame isPause={0}", isPause);
             // No-op for now; implement if pooled actors need pause handling.
         }
 
         public override T SpawnItemFromPool<T>(string _name)
         {
+            log.DebugFormat("[PoolModelCtrl] SpawnItemFromPool name={0}", _name);
            
             if (!_pooledActors.ContainsKey(_name))
             {
@@ -47,20 +58,16 @@ namespace Ebonor.DataCtrl
                 list.RemoveAt(0);
                 return result as T;
             }
-            
-            // Fallback: generate a new instance.
-            MethodInfo methodInfo = typeof(PoolModelCtrl).GetMethod(nameof(GenerateModel), BindingFlags.Instance | BindingFlags.NonPublic)?.MakeGenericMethod(typeof(T));
-            if (methodInfo != null)
-            {
-                var instance = methodInfo.Invoke(this, new object[]{_name});
-                return instance as T;
-            }
 
-            return null;
+            var instance = GenerateModel<T>(_name);
+            
+            return instance;
         }
 
         public override void DespawnItemFromPool<T>(T t)
         {
+            log.DebugFormat("[PoolModelCtrl] DespawnItemFromPool name={0}", t != null ? t.name : "null");
+
             if (t == null) return;
             
             if (t is PoolItemBase actorInstance)
@@ -87,17 +94,17 @@ namespace Ebonor.DataCtrl
             UObject modelObj = null;
 
             
-            var unitAttributeNodeData = DataCtrl.Inst.GetUnitAttributeNodeDataByUnitName(modelName);
+            var unitAttributeNodeData = _characterDataRepository.GetUnitAttributeNodeDataByUnitName(modelName);
             
             switch (unitAttributeNodeData.ActorModelType)
             {
 
                 case eActorModelType.eHero:
                 {
-                    var heroModels = DataCtrl.Inst.GetGameModelDic(eActorModelType.eHero);
+                    var heroModels = _modelRepository.GetGameModelDic(eActorModelType.eHero);
                     if (!heroModels.TryGetValue(unitAttributeNodeData.UnitDataNodeId, out modelObj))
                     {
-                        var npcModels = DataCtrl.Inst.GetGameModelDic(eActorModelType.eNpc);
+                        var npcModels = _modelRepository.GetGameModelDic(eActorModelType.eNpc);
                         npcModels.TryGetValue(unitAttributeNodeData.UnitDataNodeId, out modelObj);
                     }
                     break;
@@ -113,8 +120,8 @@ namespace Ebonor.DataCtrl
 
             // Use Zenject to instantiate so that [Inject] works on the new object.
             // InstantiatePrefab returns a GameObject.
-            var actorGo = _container.InstantiatePrefab(modelObj);
-            
+            var actorGo = _instantiator.InstantiatePrefab(modelObj);
+            actorGo.name = modelObj.name;
             // Ensure it's active and reset transform if needed (InstantiatePrefab usually keeps prefab settings)
             // But we might want to ensure it's clean.
             GOHelper.ResetGameObject(actorGo);

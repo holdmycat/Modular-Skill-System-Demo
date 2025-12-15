@@ -16,12 +16,15 @@ namespace Ebonor.GamePlay
         private readonly ResourceLoader _resourceLoader;
 
         private readonly ICharacterDataRepository _characterDataRepository;
+
+
         
         public EntitySpawnService(DiContainer container, ResourceLoader resourceLoader, ICharacterDataRepository characterDataRepository)
         {
             _container = container;
             _resourceLoader = resourceLoader;
             _characterDataRepository = characterDataRepository;
+          
         }
 
         public async UniTask<T> SpawnEntityAsync<T>(long unitId, Vector3 position, Quaternion rotation, Transform parent = null) where T : PoolItemBase
@@ -79,8 +82,20 @@ namespace Ebonor.GamePlay
         /// <summary>
         /// Spawns a new GameEntity using the separated Logic-View architecture.
         /// </summary>
-        public async UniTask<T> SpawnGameEntity<T>(string prefabName, Vector3 position, Quaternion rotation, Transform parent = null) where T : GameEntity
+        public async UniTask<T> SpawnGameEntity<T>(CharacterRuntimeData characterRuntimeData, Vector3 position, Quaternion rotation, Transform parent = null) where T : GameEntity
         {
+
+            var unitId = characterRuntimeData._numericId;
+            
+            var unitAttr = _characterDataRepository.GetUnitAttribteData(unitId);
+            if (unitAttr == null)
+            {
+                log.ErrorFormat($"[RoomManagerService] Failed to find unit attributes for ID: {unitId}");
+                return null;
+            }
+
+            var prefabName = unitAttr.UnitAvatar;
+            
             // 1. Create the Logic Shell (GameEntity)
             // This is a new GameObject with the GameEntity component, injected by Zenject.
             // It is NOT pooled.
@@ -92,23 +107,19 @@ namespace Ebonor.GamePlay
                 return null;
             }
 
+
             // 2. Set Transform
-            entity.transform.position = position;
-            entity.transform.rotation = rotation;
+            var transform = entity.transform;
+            transform.position = position;
+            transform.rotation = rotation;
+            
             if (parent != null)
             {
                 entity.transform.SetParent(parent);
             }
             
-            // Ensure it's in the active scene
-            UnityEngine.SceneManagement.SceneManager.MoveGameObjectToScene(entity.gameObject, UnityEngine.SceneManagement.SceneManager.GetActiveScene());
-
-            // 3. Load the Visual Model (Pooled)
-            await entity.LoadModelAsync(prefabName);
-
-            // 4. Initialize Entity Logic
-            await entity.InitializeAsync();
-
+            await entity.FullInitialize(characterRuntimeData, prefabName);
+            
             return entity;
         }
     }

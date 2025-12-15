@@ -85,6 +85,8 @@ namespace Ebonor.DataCtrl
 
             public T Acquire<T>() where T : class, IReference, new()
             {
+                log.DebugFormat("[ReferenceCollection] Acquire generic type={0}", typeof(T).FullName);
+
                 if (typeof(T) != m_ReferenceType)
                 {
                     log.Error("Type is invalid.");
@@ -106,6 +108,8 @@ namespace Ebonor.DataCtrl
 
             public IReference Acquire()
             {
+                log.DebugFormat("[ReferenceCollection] Acquire type={0}", m_ReferenceType.FullName);
+
                 m_UsingReferenceCount++;
                 m_AcquireReferenceCount++;
                 lock (m_References)
@@ -125,6 +129,8 @@ namespace Ebonor.DataCtrl
 
             public void ReleaseV1(IReference reference)
             {
+                log.DebugFormat("[ReferenceCollection] Release type={0}", reference != null ? reference.GetType().FullName : "null");
+
                 reference.Clear();
                 lock (m_References)
                 {
@@ -187,6 +193,8 @@ namespace Ebonor.DataCtrl
 
             public void RemoveAll()
             {
+                log.DebugFormat("[ReferenceCollection] RemoveAll type={0}", m_ReferenceType.FullName);
+
                 lock (m_References)
                 {
                     m_RemoveReferenceCount += m_References.Count;

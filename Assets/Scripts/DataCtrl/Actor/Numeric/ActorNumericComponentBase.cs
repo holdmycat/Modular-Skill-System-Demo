@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Text;
 using Ebonor.Framework;
 using UnityEngine;
+using Zenject;
 
 namespace Ebonor.DataCtrl
 {
@@ -15,20 +16,29 @@ namespace Ebonor.DataCtrl
     //property operations
     public abstract partial class ActorNumericComponentBase : MonoBehaviour, IActorNumericComponent
     {
-        protected StringBuilder mStrBld = new StringBuilder();
+
+        [Inject]
+        private IDataEventBus _dataEventBus;
+
+        protected StringBuilder mStrBld;
         
         protected Dictionary<int, float> mNumericDic;
 
         protected Dictionary<int, float> mOriNumericDic;
 
-        protected readonly List<eNumericType> _displayNumericTypes = new List<eNumericType>();
+        protected List<eNumericType> _displayNumericTypes;
         public IReadOnlyList<eNumericType> DisplayNumericTypes => _displayNumericTypes;
         
-        public Dictionary<int, float> NumericDic => mNumericDic;
+        protected Dictionary<int, float> NumericDic => mNumericDic;
 
-        public Dictionary<int, float> OriNumericDic => mOriNumericDic;
+        protected Dictionary<int, float> OriNumericDic => mOriNumericDic;
         
-        public abstract float GetByKey(int key);
+        private float GetByKey(int key)
+        {
+            NumericDic.TryGetValue(key, out float value);
+            
+            return value;
+        }
         
         protected void SetValueForOrig(eNumericType type, float value)
         {
@@ -50,18 +60,18 @@ namespace Ebonor.DataCtrl
         }
         
         /// <summary>
-        /// UpdateNumeric_SetOperation: 处理更新数值操作
+        /// UpdateNumeric_SetOperation: handle numeric value updates.
         /// </summary>
         /// <param name="numericType"></param>
         /// <param name="value"></param>
-        /// <param name="isForceRefresh">是否可以强制刷新</param>
-        /// <param name="isAllowAdjustBase">是否可以修改Base数值</param>
+        /// <param name="isForceRefresh">Allow forcing a refresh even when the value is unchanged.</param>
+        /// <param name="isAllowAdjustBase">Allow adjusting the Base numeric value directly.</param>
         private void UpdateNumeric_SetOperation(eNumericType numericType,float value, bool isForceRefresh = false, bool isAllowAdjustBase = false)
         {
             float cur = this.GetByKey((int)numericType);
             if (numericType < eNumericType.Min)
             {
-                //是否强制刷新
+                // Skip if the value is unchanged unless a forced refresh is requested.
                 if (Math.Abs(cur - value) <= 0.00001f && !isForceRefresh)
                 {
                     return;
@@ -81,7 +91,7 @@ namespace Ebonor.DataCtrl
                 int bas = final * 10 + 1;
                 int add = final * 10 + 2;
                     
-                //对外接口不能修改Base数据
+                // External callers should not modify Base values directly unless explicitly allowed.
                 if ((int)numericType == bas && !isAllowAdjustBase)
                 {
                     log.ErrorFormat("You should only modify cur and  add values directly. this time you want to change {0}", numericType);
@@ -129,7 +139,7 @@ namespace Ebonor.DataCtrl
             int final = (int) numericType;
             float result = this.NumericDic[final];
             var finalType = numericType;
-            //如果不是直接操作最终值，需要发送两次事件，一次是修改的值，一次是最终值
+            // When modifying base/add values, emit change events for both the derived and final values.
             if (numericType > eNumericType.Min)
             {
                 final = (int) numericType / 10;
@@ -138,23 +148,23 @@ namespace Ebonor.DataCtrl
                 
                 finalType = (eNumericType)final;
                 
-                //取得最终值，由基础xxx+额外xxx值组成
+                // The final value is built from base + additional values.
                 float finalResult = this.GetByKey(bas) + this.GetByKey(add);
-                //更新最终值
+                // Update the cached final value before broadcasting.
                 NumericDic[(int)finalType] = finalResult;
-                DataEventManager.OnValueChange(new UnitNumericChange(this, finalType, finalResult));
+                _dataEventBus.OnValueChange(new UnitNumericChange(this, finalType, finalResult));
 
                 if (ActorModelType == eActorModelType.eNpc && NpcProfession == eNpcProfession.Boss)
                 {
-                    DataEventManager.OnValueChange(new BossUnitNumericChange(this, finalType, finalResult));
+                    _dataEventBus.OnValueChange(new BossUnitNumericChange(this, finalType, finalResult));
                 }
             }
             else
             {
-                DataEventManager.OnValueChange(new UnitNumericChange(this, numericType, result));
+                _dataEventBus.OnValueChange(new UnitNumericChange(this, numericType, result));
                 if (ActorModelType == eActorModelType.eNpc && NpcProfession == eNpcProfession.Boss)
                 {
-                    DataEventManager.OnValueChange(new BossUnitNumericChange(this, numericType, result));
+                    _dataEventBus.OnValueChange(new BossUnitNumericChange(this, numericType, result));
                 }
             }
             
@@ -178,8 +188,7 @@ namespace Ebonor.DataCtrl
         protected string attrAvatarName;
         protected uint _netId;
         protected long _unitModelNodeId;
-        protected eActorModelType _actorModelType; 
-        
+        protected eActorModelType _actorModelType;
         protected eNpcProfession mNpcProfession;
         
         public string AttrName => attrName;
@@ -189,17 +198,14 @@ namespace Ebonor.DataCtrl
         public uint NetId => _netId;
         public eActorModelType ActorModelType => _actorModelType;
         public long UnitModelNodeId => _unitModelNodeId;
-
-        public int GetUILv()
+        public int GetUILevel()
         {
-            return (int)(this[eNumericType.UnitLv] + 1);
+            return GetLevel() + 1;
         }
-        
-        public int GeILv()
+        public int GetLevel()
         {
             return (int)(this[eNumericType.UnitLv]);
         }
-        
         public eNpcProfession NpcProfession => mNpcProfession;
     }
     
@@ -208,20 +214,23 @@ namespace Ebonor.DataCtrl
     {
         
         static readonly ILog log = LogManager.GetLogger(typeof(ActorNumericComponentBase));
+
+        [Inject]
+        private ICharacterDataRepository _characterDataRepository;
+        
+        [Inject] // Zenject automatically calls this after injection.
+        public void PostInject() {
+            mStrBld = new StringBuilder();
+            _displayNumericTypes = new List<eNumericType>();
+        }
         
         #region public
-        public void OnInitActorNumericComponent(CharacterRuntimeData characterRuntimeData, uint netid)
+        public void OnInitActorNumericComponent(CharacterRuntimeData characterRuntimeData)
         {
-            var dataCtrl = DataCtrl.Inst;
-            var unitAttr = dataCtrl != null ? dataCtrl.GetUnitAttributeNodeData(characterRuntimeData._numericId) : null;
 
-            if (unitAttr == null)
-            {
-                log.Warn($"Unit attributes not found for id {characterRuntimeData._numericId}; using defaults.");
-                InitNumericDictionaries<eNumericType>();
-                OnInitCommonProperty(characterRuntimeData, netid, null);
-                return;
-            }
+            var unitAttr = _characterDataRepository.GetUnitAttribteData(characterRuntimeData._numericId);
+
+            var netid = characterRuntimeData._netId;
             
             var t = unitAttr.GetType();
             if (t != typeof(UnitAttributesNodeDataBase) 
@@ -298,6 +307,7 @@ namespace Ebonor.DataCtrl
                 attrName = $"Unit_{characterRuntimeData._numericId}";
                 attrIconName = string.Empty;
                 _actorModelType = eActorModelType.eHero;
+                log.WarnFormat("[ActorNumericComponentBase] UnitAttributesNodeDataBase is null for numericId {0}; using defaults.", characterRuntimeData._numericId);
                 return;
             }
 
@@ -317,21 +327,21 @@ namespace Ebonor.DataCtrl
                 return;
             }
             
-            // 1) 拿到所有枚举值的数组
+            // 1) Retrieve all enum values.
             Array values = Enum.GetValues(typeof(TEnum));
             int count    = values.Length;
 
             //mNumericKeys = new List<int>();
             
             
-            // 2) 预分配字典容量
+            // 2) Pre-allocate dictionary capacity.
             mOriNumericDic = new Dictionary<int, float>(count);
             mNumericDic    = new Dictionary<int, float>(count);
 
-            // 3) 逐项转成 int key，赋 0f
+            // 3) Convert to int keys and seed with zero.
             for (int i = 0; i < count; i++)
             {
-                // values.GetValue(i) 返回 boxed enum 值
+                // values.GetValue(i) returns a boxed enum value.
                 int key = (int)values.GetValue(i)!;
                 mOriNumericDic[key] = 0f;
                 mNumericDic   [key] = 0f;

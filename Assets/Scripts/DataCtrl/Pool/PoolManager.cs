@@ -75,6 +75,8 @@ namespace Ebonor.DataCtrl
         
         public T SpawnItemFromPool<T>(ePoolObjectType type, string name) where T : PoolItemBase
         {
+            log.DebugFormat("[PoolManager] SpawnItemFromPool type={0} name={1}", type, name);
+
             if (mDicPoolCtrl.TryGetValue(type, out var ctrl))
             {
                 return ctrl.SpawnItemFromPool<T>(name);
@@ -86,6 +88,8 @@ namespace Ebonor.DataCtrl
 
         public void DespawnItemToPool<T>(ePoolObjectType type, T item) where T : PoolItemBase
         {
+            log.DebugFormat("[PoolManager] DespawnItemToPool type={0} name={1}", type, item != null ? item.name : "null");
+
             if (item == null) return;
 
             if (mDicPoolCtrl.TryGetValue(type, out var ctrl))
@@ -102,6 +106,8 @@ namespace Ebonor.DataCtrl
 
         public void InitPoolItem<T>(ePoolObjectType type, string name) where T : PoolItemBase
         {
+            log.DebugFormat("[PoolManager] InitPoolItem type={0} name={1}", type, name);
+
             if (mDicPoolCtrl.TryGetValue(type, out var ctrl))
             {
                 ctrl.InitPoolItem<T>(name);

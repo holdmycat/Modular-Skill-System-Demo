@@ -21,7 +21,7 @@ namespace Ebonor.DataCtrl
         uint NetId { get; }
         
         //first time initialization
-        void OnInitActorNumericComponent(CharacterRuntimeData characterRuntimeData, uint netid);
+        void OnInitActorNumericComponent(CharacterRuntimeData characterRuntimeData);
 
         void OnUnInitActorNumericComponent();
         

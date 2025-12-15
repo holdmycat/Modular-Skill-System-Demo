@@ -110,7 +110,11 @@ namespace Ebonor.Framework
 
         public virtual void Debug(object message)
         {
-            
+            if (!IsEnabled(Level.DEBUG))
+            {
+                return;
+            }
+
             if (this._factory.InUnity)
                 UnityEngine.Debug.Log(Format(message, "DEBUG"));
 #if !NETFX_CORE
@@ -121,11 +125,21 @@ namespace Ebonor.Framework
 
         public virtual void Debug(object message, Exception exception)
         {
+            if (!IsEnabled(Level.DEBUG))
+            {
+                return;
+            }
+
             Debug($"{message} Exception:{exception}");
         }
 
         public virtual void DebugAssertionFormat(object message)
         {
+            if (!IsEnabled(Level.DEBUG))
+            {
+                return;
+            }
+
             if (this._factory.InUnity)
                 UnityEngine.Debug.LogAssertionFormat(Format(message, "ERROR"));
 #if !NETFX_CORE
@@ -136,11 +150,21 @@ namespace Ebonor.Framework
 
         public virtual void DebugFormat(string format, params object[] args)
         {
+            if (!IsEnabled(Level.DEBUG))
+            {
+                return;
+            }
+
             Debug(string.Format(format, args));
         }
             
         public virtual void Info(object message)
         {
+            if (!IsEnabled(Level.INFO))
+            {
+                return;
+            }
+
             if (this._factory.InUnity)
                 UnityEngine.Debug.Log(Format(message, "INFO"));
 #if !NETFX_CORE
@@ -151,16 +175,31 @@ namespace Ebonor.Framework
 
         public virtual void Info(object message, Exception exception)
         {
+            if (!IsEnabled(Level.INFO))
+            {
+                return;
+            }
+
             Info(string.Format("{0} Exception:{1}", message, exception));
         }
 
         public virtual void InfoFormat(string format, params object[] args)
         {
+            if (!IsEnabled(Level.INFO))
+            {
+                return;
+            }
+
             Info(string.Format(format, args));
         }
 
         public virtual void Warn(object message)
         {
+            if (!IsEnabled(Level.WARN))
+            {
+                return;
+            }
+
             if (this._factory.InUnity)
                 UnityEngine.Debug.LogWarning(Format(message, "WARN"));
 #if !NETFX_CORE
@@ -171,16 +210,31 @@ namespace Ebonor.Framework
 
         public virtual void Warn(object message, Exception exception)
         {
+            if (!IsEnabled(Level.WARN))
+            {
+                return;
+            }
+
             //Warn(string.Format("{0} Exception:{1}", message, exception));
         }
 
         public virtual void WarnFormat(string format, params object[] args)
         {
+            if (!IsEnabled(Level.WARN))
+            {
+                return;
+            }
+
             Warn(string.Format(format, args));
         }
 
         public virtual void Error(object message)
         {
+            if (!IsEnabled(Level.ERROR))
+            {
+                return;
+            }
+
             if (this._factory.InUnity)
                 UnityEngine.Debug.LogError(Format(message, "ERROR"));
 #if !NETFX_CORE
@@ -191,16 +245,31 @@ namespace Ebonor.Framework
 
         public virtual void Error(object message, Exception exception)
         {
+            if (!IsEnabled(Level.ERROR))
+            {
+                return;
+            }
+
             Error(string.Format("{0} Exception:{1}", message, exception));
         }
 
         public virtual void ErrorFormat(string format, params object[] args)
         {
+            if (!IsEnabled(Level.ERROR))
+            {
+                return;
+            }
+
             Error(string.Format(format, args));
         }
 
         public virtual void Fatal(object message)
         {
+            if (!IsEnabled(Level.FATAL))
+            {
+                return;
+            }
+
             if (this._factory.InUnity)
                 UnityEngine.Debug.LogError(Format(message, "FATAL"));
 #if !NETFX_CORE
@@ -211,11 +280,21 @@ namespace Ebonor.Framework
 
         public virtual void Fatal(object message, Exception exception)
         {
+            if (!IsEnabled(Level.FATAL))
+            {
+                return;
+            }
+
             Fatal(string.Format("{0} Exception:{1}", message, exception));
         }
 
         public virtual void FatalFormat(string format, params object[] args)
         {
+            if (!IsEnabled(Level.FATAL))
+            {
+                return;
+            }
+
             Fatal(string.Format(format, args));
         }
 

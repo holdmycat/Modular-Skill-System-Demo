@@ -48,6 +48,8 @@ namespace Ebonor.DataCtrl
         /// <returns>所有引用池的信息。</returns>
         public static ReferencePoolInfo[] GetAllReferencePoolInfos()
         {
+            log.Debug("[ReferencePool] GetAllReferencePoolInfos");
+
             int index = 0;
             ReferencePoolInfo[] results = null;
 
@@ -68,6 +70,8 @@ namespace Ebonor.DataCtrl
         /// </summary>
         public static void ClearAll()
         {
+            log.Debug("[ReferencePool] ClearAll");
+
             lock (s_ReferenceCollections)
             {
                 foreach (KeyValuePair<Type, ReferenceCollection> referenceCollection in s_ReferenceCollections)
@@ -86,6 +90,8 @@ namespace Ebonor.DataCtrl
         /// <returns>引用。</returns>
         public static T Acquire<T>() where T : class, IReference, new()
         {
+            log.DebugFormat("[ReferencePool] Acquire generic type={0}", typeof(T).FullName);
+
             return GetReferenceCollection(typeof(T)).Acquire<T>();
         }
 
@@ -96,6 +102,8 @@ namespace Ebonor.DataCtrl
         /// <returns>引用。</returns>
         public static IReference Acquire(Type referenceType)
         {
+            log.DebugFormat("[ReferencePool] Acquire type={0}", referenceType != null ? referenceType.FullName : "null");
+
             InternalCheckReferenceType(referenceType);
             return GetReferenceCollection(referenceType).Acquire();
         }
@@ -106,6 +114,8 @@ namespace Ebonor.DataCtrl
         /// <param name="reference">引用。</param>
         public static void Release(IReference reference)
         {
+            log.DebugFormat("[ReferencePool] Release type={0}", reference != null ? reference.GetType().FullName : "null");
+
             if (reference == null)
             {
                 log.Error("Reference is invalid.");
@@ -124,6 +134,7 @@ namespace Ebonor.DataCtrl
         /// <param name="count">追加数量。</param>
         public static void Add<T>(int count) where T : class, IReference, new()
         {
+            log.DebugFormat("[ReferencePool] Add generic type={0} count={1}", typeof(T).FullName, count);
             // GetReferenceCollection(typeof(T)).Add<T>(count);
         }
 
@@ -134,6 +145,7 @@ namespace Ebonor.DataCtrl
         /// <param name="count">追加数量。</param>
         public static void Add(Type referenceType, int count)
         {
+            log.DebugFormat("[ReferencePool] Add type={0} count={1}", referenceType != null ? referenceType.FullName : "null", count);
             //InternalCheckReferenceType(referenceType);
             //GetReferenceCollection(referenceType).Add(count);
         }
@@ -145,6 +157,7 @@ namespace Ebonor.DataCtrl
         /// <param name="count">移除数量。</param>
         public static void Remove<T>(int count) where T : class, IReference
         {
+            log.DebugFormat("[ReferencePool] Remove generic type={0} count={1}", typeof(T).FullName, count);
             //GetReferenceCollection(typeof(T)).Remove(count);
         }
 
@@ -155,6 +168,7 @@ namespace Ebonor.DataCtrl
         /// <param name="count">移除数量。</param>
         public static void Remove(Type referenceType, int count)
         {
+            log.DebugFormat("[ReferencePool] Remove type={0} count={1}", referenceType != null ? referenceType.FullName : "null", count);
             // InternalCheckReferenceType(referenceType);
             // GetReferenceCollection(referenceType).Remove(count);
         }
@@ -165,6 +179,7 @@ namespace Ebonor.DataCtrl
         /// <typeparam name="T">引用类型。</typeparam>
         public static void RemoveAll<T>() where T : class, IReference
         {
+            log.DebugFormat("[ReferencePool] RemoveAll generic type={0}", typeof(T).FullName);
             GetReferenceCollection(typeof(T)).RemoveAll();
         }
 
@@ -174,6 +189,7 @@ namespace Ebonor.DataCtrl
         /// <param name="referenceType">引用类型。</param>
         public static void RemoveAll(Type referenceType)
         {
+            log.DebugFormat("[ReferencePool] RemoveAll type={0}", referenceType != null ? referenceType.FullName : "null");
             InternalCheckReferenceType(referenceType);
             GetReferenceCollection(referenceType).RemoveAll();
         }

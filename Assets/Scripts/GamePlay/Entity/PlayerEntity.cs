@@ -1,15 +1,21 @@
+using Cysharp.Threading.Tasks;
+using Ebonor.DataCtrl;
+using Ebonor.Framework;
 using UnityEngine;
 
 namespace Ebonor.GamePlay
 {
     public class PlayerEntity : CharacterEntity
     {
+        private static readonly ILog log = LogManager.GetLogger(typeof(PlayerEntity));
         // Player specific logic (Input, Camera, etc.)
         
-        public override async Cysharp.Threading.Tasks.UniTask InitializeAsync()
+        
+        protected override async UniTask InitializeDataAsync(CharacterRuntimeData data)
         {
-            await base.InitializeAsync();
-            log.Info($"[PlayerEntity] Initialized: {name}");
+            log.DebugFormat("[PlayerEntity] InitializeDataAsync netId={0}", data._netId);
+            LoadDataAsync<PlayerActorNumericComponent>(data);
+            await UniTask.CompletedTask;
         }
     }
 }

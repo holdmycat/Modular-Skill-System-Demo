@@ -21,7 +21,7 @@ namespace Ebonor.GamePlay
              if (null == ActorNumericComponentBase)
              {
                  _actorNumericComponentBase = gameObject.AddComponent<T>();
-                 _actorNumericComponentBase.OnInitActorNumericComponent(characterdata, _netId);
+                 _actorNumericComponentBase.OnInitActorNumericComponent(characterdata);
                  return true;
              }
              
@@ -58,33 +58,7 @@ namespace Ebonor.GamePlay
             return _actorNumericComponentBase.UnitModelNodeId;
 
         }
-
-        /// <summary>
-        /// Load/prepare actor data and resources. Override to provide concrete numeric component creation.
-        /// </summary>
-        public virtual async UniTask<bool> LoadAsync<T>(CharacterRuntimeData characterdata) where T : ActorNumericComponentBase
-        {
-            // _netId = GlobalServices.NextId();
-            //
-            // //load numeric data
-            // var result = await LoadActorNumeric<T>(characterdata);
-            //
-            // // In edit-mode tests the pool may be empty; guard against null.
-            // var actorModel = PoolManager.SpawnItemFromPool<PoolModelItem>(ePoolObjectType.eModel, _actorNumericComponentBase.AttrAvatarName);
-            // if (actorModel != null)
-            // {
-            //     GOHelper.ResetLocalGameObject(gameObject, actorModel.gameObject, true);
-            // }
-            // else
-            // {
-            //     log.Warn($"Actor model '{_actorNumericComponentBase.AttrAvatarName}' not found in pool; skipping placement (likely edit-mode).");
-            // }
-            //
-            // return result;
-
-            return true;
-        }
-
+        
         /// <summary>Cleanup resources.</summary>
         public virtual async UniTask<bool> UnloadAsync()
         {

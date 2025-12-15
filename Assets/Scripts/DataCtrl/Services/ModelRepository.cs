@@ -12,6 +12,17 @@ namespace Ebonor.DataCtrl
         private Dictionary<eActorModelType, Dictionary<long, UObject>> _dicGameModel;
         private Dictionary<string, UObject> _dicModelName;
         private ICharacterDataRepository _characterDataRepository;
+        
+        public Dictionary<long, UObject> GetGameModelDic(eActorModelType type)
+        {
+            if(_dicGameModel.TryGetValue(type, out var dic))
+            {
+                return dic;
+            }
+            return null;
+        }
+        
+        
         public void SaveModelAsync(IList<UObject> list)
         {
             log.Debug("[ModelRepository], Starting save model");

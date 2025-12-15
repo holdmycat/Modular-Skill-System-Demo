@@ -18,21 +18,7 @@ namespace Ebonor.GamePlay
         
         public async UniTask<ActorInstanceBase> LoadPlayer()
         {
-            if (null == _playerActorInstance)
-            {
-                _playerActorInstance = await LoadCharacter<PlayerActorInstance>();
-
-                // Fall back to hero id 0 when config is not provided (edit-mode tests).
-                var defaultHeroId = GlobalServices.GlobalGameConfig != null
-                    ? GlobalServices.GlobalGameConfig.defaultPlayerHeroId
-                    : 0;
-
-                var characterData = new CharacterRuntimeData(defaultHeroId, true);
-                await _playerActorInstance.LoadAsync<PlayerActorNumericComponent>(characterData);
-                return _playerActorInstance;
-            }
-            
-            log.Error("Fatal error, _playerActorInstance not null");
+          
             
             return null;
         }

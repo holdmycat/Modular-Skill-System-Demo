@@ -154,7 +154,7 @@ namespace Ebonor.UI
                 
                 _strBld.Clear();
                 _strBld.Append("Lv: ");
-                _strBld.Append(_numericComp.GetUILv());
+                _strBld.Append(_numericComp.GetUILevel());
                 SetText(levelText, _strBld.ToString(), string.Empty);
                 //UpdateAvatar(_unitData.UnitAvatar);
             }
@@ -246,32 +246,13 @@ namespace Ebonor.UI
 
             return null;
         }
-
-        private float GetNumericValue(eNumericType type, float fallback = 0f)
-        {
-            if (_numericComp?.NumericDic != null && _numericComp.NumericDic.TryGetValue((int)type, out var value))
-            {
-                return value;
-            }
-
-            return fallback;
-        }
-
+        
         private float GetFallbackValue(eNumericType type)
         {
             if (_unitData == null) return 0f;
 
-            return type switch
-            {
-                eNumericType.Power => _unitData.Power,
-                eNumericType.Agility => _unitData.Agility,
-                eNumericType.Vitality => _unitData.Vitality,
-                eNumericType.MovementSpeed => _unitData.MovementSpeed,
-                eNumericType.RotationSpeed => _unitData.RotationSpeed,
-                eNumericType.Life => 0f,
-                eNumericType.MaxLife => 0f,
-                _ => 0f
-            };
+            return _numericComp[type];
+            
         }
 
         private void SetText(TMP_Text text, float value, string format = "0")

@@ -6,9 +6,7 @@
 //------------------------------------------------------------
 using System;
 using Cysharp.Threading.Tasks;
-using Ebonor.DataCtrl;
 using Ebonor.Framework;
-using Ebonor.UI;
 using Zenject;
 
 namespace Ebonor.Manager
@@ -19,33 +17,46 @@ namespace Ebonor.Manager
         
         private static readonly ILog log = LogManager.GetLogger(typeof(ShowcaseSceneManager));
         
-        private readonly IUIService _uiService;
-        private readonly ICharacterDataRepository _dataRepo;
-        private readonly IRoomManagerService _roomManagerService;
-        public ShowcaseSceneManager(IRoomManagerService roomManagerService, IUIService uiService, ICharacterDataRepository dataRepo)
+        private ServerManager _serverManager;
+        private  ClientManager _clientManager;
+
+        [Inject]
+        public void Construct(ServerManager serverManager, ClientManager clientManager)
         {
-            log.Debug("[ShowcaseSceneManager] Starting Construction");
-            _uiService = uiService;
-            _dataRepo = dataRepo;
-            _roomManagerService = roomManagerService;
+            _serverManager = serverManager;
+            _clientManager = clientManager;
+            log.Debug("[ShowcaseSceneManager] Constructed with Dual World Managers.");
+        }
+
+        public ShowcaseSceneManager()
+        {
+            log.Debug("[ShowcaseSceneManager] Starting Construction (Wait for Inject)");
         }
         
         public void Dispose()
         {
             log.Debug("[ShowcaseSceneManager] Starting Dispose");
+            _serverManager.ShutdownAsync().Forget();
+            _clientManager.ShutdownAsync().Forget();
         }
 
         public async UniTask StartupSequence()
         {
-            await LoadRoom();
+            log.Info("[ShowcaseSceneManager] StartupSequence: Initializing Dual World...");
+
+            // 1. Init Client First (To Listen for Events)
+            await _clientManager.InitAsync();
+
+            // 2. Init Server (To Generate Events)
+            await _serverManager.InitAsync();
+            
+            log.Info("[ShowcaseSceneManager] Dual World Initialized.");
         }
         
         private async UniTask LoadRoom()
         {
-            log.Debug("[ShowcaseSceneManager] Starting LoadRoom");
-
-            await _roomManagerService.CreateRoomAndAddPlayer();
-            
+             // Deprecated legacy method, keeping empty to satisfy potential interface requirements temporarily or just removing.
+             await UniTask.CompletedTask;
         }
         
     }

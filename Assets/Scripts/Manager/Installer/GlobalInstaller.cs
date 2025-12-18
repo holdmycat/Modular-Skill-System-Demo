@@ -61,7 +61,7 @@ namespace Ebonor.Manager
             // Bind NumericComponent Factory
             Container.Bind<IActorNumericComponentFactory>().To<ActorNumericComponentFactory>().AsSingle();
             
-            Container.Bind<ISceneManager>().To<ShowcaseSceneManager>().AsSingle();
+            //Container.Bind<ISceneManager>().To<ShowcaseSceneManager>().AsSingle();
             
             // 5. Bind GameStartup
             // "BindInterfacesTo" means it will be bound to IInitializable, so Initialize() will be called.

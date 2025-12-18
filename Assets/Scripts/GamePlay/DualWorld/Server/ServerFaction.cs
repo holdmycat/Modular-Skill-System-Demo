@@ -10,7 +10,7 @@ namespace Ebonor.GamePlay
         private readonly INetworkBus _networkBus;
         //public List<ServerTeam> Teams { get; private set; } = new List<ServerTeam>();
 
-        public ServerFaction(int factionId, INetworkBus networkBus) : base(factionId)
+        public ServerFaction(FactionType factionId, INetworkBus networkBus) : base(factionId)
         {
             _networkBus = networkBus;
         }

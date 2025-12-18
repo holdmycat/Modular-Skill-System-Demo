@@ -1,5 +1,14 @@
 namespace Ebonor.DataCtrl
 {
+    public enum FactionType
+    {
+        Player = 1,
+        Ally = 2,
+        Enemy = 3,
+        Neutral = 4,
+        Terrorist = 5,
+    }
+
     // Marker Interfaces
     public interface ICommand { }
     public interface IRpc { }
@@ -27,18 +36,18 @@ namespace Ebonor.DataCtrl
 
     public struct RpcCreateFaction : IRpc
     {
-        public int FactionId;
+        public FactionType FactionId;
     }
 
     public struct RpcCreateTeam : IRpc
     {
-        public int FactionId;
+        public FactionType FactionId;
         public int TeamId;
     }
 
     public struct RpcCreateSoldier : IRpc
     {
-        public int FactionId;
+        public FactionType FactionId;
         public int TeamId;
         public int SoldierId; // NetId
     }

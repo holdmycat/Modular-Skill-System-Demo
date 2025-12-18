@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
+using Ebonor.GamePlay;
 
 namespace Ebonor.Manager
 {
@@ -10,7 +11,7 @@ namespace Ebonor.Manager
         private static readonly ILog log = LogManager.GetLogger(typeof(ServerRoomManager));
         
         private readonly INetworkBus _networkBus;
-        private readonly Dictionary<int, Ebonor.GamePlay.ServerFaction> _factions = new Dictionary<int, Ebonor.GamePlay.ServerFaction>();
+        private readonly Dictionary<FactionType, ServerFaction> _factions = new Dictionary<FactionType, ServerFaction>();
 
         public ServerRoomManager(INetworkBus networkBus)
         {
@@ -23,21 +24,21 @@ namespace Ebonor.Manager
             log.Info("[ServerRoomManager] InitAsync");
             
             // 1. Create Logical Factions
-            CreateFactionInternal(1);
-            CreateFactionInternal(2);
+            CreateFactionInternal(FactionType.Player);
+            CreateFactionInternal(FactionType.Enemy);
             
             // 2. Notify Clients (Drive the View)
             // In a real server, we might wait for clients to connect, but here they are local.
-            _networkBus.SendRpc(new RpcCreateFaction { FactionId = 1 });
-            _networkBus.SendRpc(new RpcCreateFaction { FactionId = 2 });
+            _networkBus.SendRpc(new RpcCreateFaction { FactionId = FactionType.Player });
+            _networkBus.SendRpc(new RpcCreateFaction { FactionId = FactionType.Enemy });
         }
 
-        private void CreateFactionInternal(int factionId)
+        private void CreateFactionInternal(FactionType factionId)
         {
              _factions.Add(factionId, new Ebonor.GamePlay.ServerFaction(factionId, _networkBus));
              
              // Setup initial state (e.g. create a team immediately for testing?)
-             if(factionId == 1)
+             if(factionId == FactionType.Player)
              {
                  _factions[factionId].CreateTeam(101);
              }

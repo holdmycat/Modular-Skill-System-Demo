@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Ebonor.DataCtrl;
 using Ebonor.Framework;
 
 namespace Ebonor.GamePlay
@@ -9,12 +10,12 @@ namespace Ebonor.GamePlay
     /// </summary>
     public abstract class FactionBase
     {
-        public int FactionId { get; protected set; }
+        public FactionType FactionId { get; protected set; }
         
         // In a real generic implementation, this might be a generic list or dictionary, 
         // but for now we keep it simple. Subclasses might manage specific Team types.
         
-        public FactionBase(int factionId)
+        public FactionBase(FactionType factionId)
         {
             FactionId = factionId;
         }

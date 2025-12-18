@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using Ebonor.DataCtrl;
 using Ebonor.Framework;
 
 namespace Ebonor.GamePlay
@@ -14,7 +15,7 @@ namespace Ebonor.GamePlay
         private readonly GameObject _viewRoot;
         public List<ClientTeam> Teams { get; private set; } = new List<ClientTeam>();
 
-        public ClientFaction(int factionId, Transform parentRoot) : base(factionId)
+        public ClientFaction(FactionType factionId, Transform parentRoot) : base(factionId)
         {
             _viewRoot = new GameObject($"Faction_{factionId}");
             Ebonor.Framework.GOHelper.ResetLocalGameObject(parentRoot.gameObject, _viewRoot, true);

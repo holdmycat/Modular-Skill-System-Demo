@@ -12,7 +12,7 @@ namespace Ebonor.Manager
         private static readonly ILog log = LogManager.GetLogger(typeof(ClientRoomManager));
         
         private INetworkBus _networkBus;
-        private readonly Dictionary<int, Ebonor.GamePlay.ClientFaction> _factions = new Dictionary<int, Ebonor.GamePlay.ClientFaction>();
+        private readonly Dictionary<FactionType, Ebonor.GamePlay.ClientFaction> _factions = new Dictionary<FactionType, Ebonor.GamePlay.ClientFaction>();
 
         [Inject]
         public void Construct(INetworkBus networkBus)
@@ -44,7 +44,7 @@ namespace Ebonor.Manager
             }
         }
 
-        private void CreateFaction(int factionId)
+        private void CreateFaction(FactionType factionId)
         {
             // Now ClientFaction is a pure C# class that creates its own GameObject
             var faction = new Ebonor.GamePlay.ClientFaction(factionId, transform);

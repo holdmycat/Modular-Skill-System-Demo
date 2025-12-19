@@ -47,13 +47,13 @@ namespace Ebonor.DataCtrl
             return $"{Prefix}:{components.Usage.ToString().ToLower()}:{Normalize(components.ScenarioId)}:{components.Faction}:{components.Slot}:{Normalize(components.Variant)}";
         }
 
-        public int GenerateTeamId(TeamIdComponents components)
+        public long GenerateTeamId(TeamIdComponents components)
         {
             string key = BuildTeamKey(components);
             long hash = GlobalHelper.GetRoleID(key);
             if (hash < 0) hash = -hash;
-            // Fit into int while keeping deterministic nature.
-            return unchecked((int)(hash & 0x7FFFFFFF));
+            // Return full positive long to minimize collision risk.
+            return hash;
         }
 
         private static string Normalize(string value)

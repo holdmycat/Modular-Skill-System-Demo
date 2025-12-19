@@ -11,7 +11,7 @@ namespace Ebonor.DataCtrl
         /// </summary>
         /// <param name="components">Key parts describing team usage and context.</param>
         /// <returns>Non-negative team id.</returns>
-        int GenerateTeamId(TeamIdComponents components);
+        long GenerateTeamId(TeamIdComponents components);
 
         /// <summary>
         /// Builds the string key used for hashing (useful for debugging/interop).

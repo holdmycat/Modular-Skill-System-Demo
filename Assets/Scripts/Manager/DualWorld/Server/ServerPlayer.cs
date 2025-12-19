@@ -17,24 +17,26 @@ namespace Ebonor.Manager
         {
             BootstrapInfo = bootstrapInfo;
             _teamIdGenerator = teamIdGenerator;
-            Faction = new ServerFaction(bootstrapInfo.FactionId, networkBus);
+            var seed = BootstrapInfo.TeamConfig.Seed;
+            var _teamIdComp = new TeamIdComponents(
+                seed.Usage,
+                seed.ScenarioId,
+                seed.Faction,
+                seed.Slot,
+                seed.Variant
+            );
+            Faction = new ServerFaction(bootstrapInfo.FactionId, networkBus, _teamIdGenerator, _teamIdComp);
         }
 
         public void InitializeTeams()
         {
             if (BootstrapInfo.TeamConfig == null)
                 return;
-
-            var seed = BootstrapInfo.TeamConfig.Seed;
-            var teamId = _teamIdGenerator.GenerateTeamId(new TeamIdComponents(
-                seed.Usage,
-                seed.ScenarioId,
-                seed.Faction,
-                seed.Slot,
-                seed.Variant
-            ));
-
-            Faction.CreateTeam(teamId);
+            
+           
+            Faction.CreateTeam();
+            
+          
             // TODO: squad creation RPC when protocol supports it.
         }
 

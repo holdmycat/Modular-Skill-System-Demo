@@ -26,7 +26,7 @@ namespace Ebonor.Manager
             // PASSIVE: Do NOT create factions yourself. Wait for Server.
             
             _networkBus.OnRpcReceived += OnRpcReceived;
-            _networkBus.OnTickSync += OnTickSync;
+            _networkBus.OnTickSync += Tick;
         }
 
         private void OnRpcReceived(IRpc rpc)
@@ -59,9 +59,12 @@ namespace Ebonor.Manager
             }
         }
 
-        public void OnTickSync(int tick)
+        public void Tick(int tick)
         {
-            
+            foreach (var faction in _factions.Values)
+            {
+                faction.Tick(tick);
+            }
         }
         
 

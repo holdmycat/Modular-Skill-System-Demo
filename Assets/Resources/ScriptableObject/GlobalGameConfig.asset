@@ -21,3 +21,4 @@ MonoBehaviour:
     MaxSimultaneousSounds: 10
     MaxFloatingTextCount: 15
   FirstSceneName: ShowcaseSceneContext
+  TeamIds: 65000000c9000000

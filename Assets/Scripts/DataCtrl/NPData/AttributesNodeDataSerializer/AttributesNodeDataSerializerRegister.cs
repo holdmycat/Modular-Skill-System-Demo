@@ -22,15 +22,11 @@ namespace Ebonor.DataCtrl
         static AttributesNodeDataSerializerRegister()
         {
             // Auto-register all subclasses via reflection
-            _typeMap = Assembly.GetAssembly(typeof(UnitAttributesNodeDataBase))
+            _typeMap = Assembly.GetAssembly(typeof(SlgUnitAttributesNodeData))
                 .GetTypes()
-                .Where(t => 
-                        t.IsSubclassOf(typeof(UnitAttributesNodeDataBase)) //|| 
-                        // t.IsSubclassOf(typeof(SkillAttributesNodeDataBase)) ||
-                        // t.IsSubclassOf(typeof(DropAttributesNodeDataBase)) ||
-                        // t.IsSubclassOf(typeof(SummonAttributesNodeDataBase)) ||
-                        // t.IsSubclassOf(typeof(BulletAttributesNodeDataBase))
-                        )
+                .Where(t => typeof(ICommonAttributeBase).IsAssignableFrom(t)
+                            && !t.IsInterface
+                            && !t.IsAbstract)
                 .ToDictionary(t => t.Name, t => t);
             
 #if UNITY_EDITOR
@@ -57,6 +53,29 @@ namespace Ebonor.DataCtrl
                     cm.SetIsRootClass(true); // supports inheritance
                 });
             }
+            
+            if (null == BsonSerializer.SerializerRegistry.GetSerializer(typeof(SlgUnitAttributesNodeData)))
+            { 
+                // BsonSerializer.RegisterSerializer(typeof(UnitAttributesNodeDataBase), new AttributesDataSerializer<UnitAttributesNodeDataBase>());
+                BsonClassMap.RegisterClassMap<SlgUnitAttributesNodeData>(cm =>
+                {
+                    cm.AutoMap();
+                    cm.SetIsRootClass(true); // supports inheritance
+                });
+            }
+            
+            
+            if (null == BsonSerializer.SerializerRegistry.GetSerializer(typeof(SlgUnitSquadAttributesNodeData)))
+            { 
+                // BsonSerializer.RegisterSerializer(typeof(UnitAttributesNodeDataBase), new AttributesDataSerializer<UnitAttributesNodeDataBase>());
+                BsonClassMap.RegisterClassMap<SlgUnitAttributesNodeData>(cm =>
+                {
+                    cm.AutoMap();
+                    cm.SetIsRootClass(true); // supports inheritance
+                });
+            }
+            
+            
             
             // if (null == BsonSerializer.SerializerRegistry.GetSerializer(typeof(SkillAttributesNodeDataBase)))
             // {

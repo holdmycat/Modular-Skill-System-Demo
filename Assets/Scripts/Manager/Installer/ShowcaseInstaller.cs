@@ -1,3 +1,4 @@
+using Ebonor.DataCtrl;
 using Ebonor.Framework;
 using Ebonor.GamePlay;
 using Zenject;
@@ -14,6 +15,9 @@ namespace Ebonor.Manager
             // --- Network Layer ---
             // Bind NetworkBus
             Container.BindInterfacesAndSelfTo<SimulatedNetworkBus>().AsSingle();
+
+            // Data Providers
+            Container.Bind<IPlayerDataProvider>().To<LocalPlayerDataProvider>().AsSingle();
             
             // Bind ServerTickManager
             Container.BindInterfacesAndSelfTo<ServerTickManager>().AsSingle();

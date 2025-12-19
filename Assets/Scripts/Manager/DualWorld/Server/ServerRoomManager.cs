@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
-using Ebonor.GamePlay;
 
 namespace Ebonor.Manager
 {
@@ -11,51 +10,56 @@ namespace Ebonor.Manager
         private static readonly ILog log = LogManager.GetLogger(typeof(ServerRoomManager));
         
         private readonly INetworkBus _networkBus;
-        private readonly Dictionary<FactionType, ServerFaction> _factions = new Dictionary<FactionType, ServerFaction>();
+        private readonly IPlayerDataProvider _playerDataProvider;
+        private readonly Dictionary<FactionType, ServerPlayer> _players = new Dictionary<FactionType, ServerPlayer>();
 
-        public ServerRoomManager(INetworkBus networkBus)
+        public ServerRoomManager(INetworkBus networkBus, IPlayerDataProvider playerDataProvider)
         {
             _networkBus = networkBus;
+            _playerDataProvider = playerDataProvider;
             log.Debug("[ServerRoomManager] Constructed.");
         }
         
         public async UniTask InitAsync()
         {
             log.Info("[ServerRoomManager] InitAsync");
-            
-            // 1. Create Logical Factions
-            CreateFactionInternal(FactionType.Player);
-            CreateFactionInternal(FactionType.Enemy);
-            
-            // 2. Notify Clients (Drive the View)
-            // In a real server, we might wait for clients to connect, but here they are local.
-            _networkBus.SendRpc(new RpcCreateFaction { FactionId = FactionType.Player });
-            _networkBus.SendRpc(new RpcCreateFaction { FactionId = FactionType.Enemy });
-        }
 
-        private void CreateFactionInternal(FactionType factionId)
-        {
-             _factions.Add(factionId, new Ebonor.GamePlay.ServerFaction(factionId, _networkBus));
-             
-             // Setup initial state (e.g. create a team immediately for testing?)
-             if(factionId == FactionType.Player)
-             {
-                 _factions[factionId].CreateTeam(101);
-             }
+            foreach (var playerInfo in _playerDataProvider.GetPlayers())
+            {
+                if (_players.ContainsKey(playerInfo.FactionId))
+                {
+                    log.Warn($"[ServerRoomManager] Duplicate player faction {playerInfo.FactionId} ignored.");
+                    continue;
+                }
+
+                var player = new ServerPlayer(playerInfo, _networkBus);
+                _players.Add(playerInfo.FactionId, player);
+
+                // Notify clients about the faction
+                _networkBus.SendRpc(new RpcCreateFaction { FactionId = playerInfo.FactionId });
+
+                // Bootstrap teams for this player
+                player.InitializeTeams();
+            }
         }
 
         public void Tick(int tick)
         {
-            foreach (var faction in _factions.Values)
+            foreach (var player in _players.Values)
             {
-                faction.Tick(tick);
+                player.Tick(tick);
             }
         }
 
         public async UniTask ShutdownAsync()
         {
             log.Info("[ServerRoomManager] ShutdownAsync");
-            _factions.Clear();
+            
+            foreach (var player in _players.Values)
+            {
+                await player.ShutdownAsync();
+            }
+            _players.Clear();
         }
     }
 }

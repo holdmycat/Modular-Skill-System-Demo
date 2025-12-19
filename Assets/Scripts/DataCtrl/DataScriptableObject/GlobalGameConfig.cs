@@ -2,7 +2,8 @@
 // File: GlobalGameConfig.cs
 // Purpose: Global game configuration (loading mode, rules).
 //------------------------------------------------------------
-using Ebonor.Framework;
+
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Ebonor.DataCtrl
@@ -29,6 +30,10 @@ namespace Ebonor.DataCtrl
 
         [Header("First Scene Name")]
         public string FirstSceneName;
-        
+
+        [Header("Default Player team Ids")] 
+        [SerializeField]
+        public List<int> TeamIds;
+
     }
 }

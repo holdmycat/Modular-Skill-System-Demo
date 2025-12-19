@@ -6,5 +6,7 @@ namespace Ebonor.Manager
     {
         UniTask InitAsync();
         UniTask ShutdownAsync();
+
+        void Tick(int tick);
     }
 }

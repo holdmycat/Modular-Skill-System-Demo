@@ -114,6 +114,21 @@ namespace Plugins.NodeEditor
             var graph = ScriptableObject.CreateInstance<UnitAttributesDataGraph>();
             ProjectWindowUtil.CreateAsset(graph, "AllHeroAttriDataGraph.asset");
         }
+
+        [MenuItem("Assets/Create/AllSlgUnitAttributesData", false, 11)]
+        public static void CreateGraphPorcessor_AllSlgUnitAttributesData()
+        {
+            var graph = ScriptableObject.CreateInstance<SlgUnitAttributesDataGraph>();
+            ProjectWindowUtil.CreateAsset(graph, "AllSlgUnitAttrDataGraph.asset");
+        }
+
+        [MenuItem("Assets/Create/AllSlgSquadAttributesData", false, 12)]
+        public static void CreateGraphProcessor_AllSlgSquadAttributesData()
+        {
+            var graph = ScriptableObject.CreateInstance<SlgUnitSquadAttributesDataGraph>();
+            ProjectWindowUtil.CreateAsset(graph, "AllSlgSquadAttrDataGraph.asset");
+        }
+      
         
         // [MenuItem("Assets/Create/AllWeaponAttributesData", false, 10)]
         // public static void CreateGraphPorcessor_AllWeaponAttributesData()
@@ -166,6 +181,14 @@ namespace Plugins.NodeEditor
                 case UnitAttributesDataGraph unitAttributesGraph:
                     NodeGraphWindowHelper.GetAndShowNodeGraphWindow<UnitAttributesDataGraphWindow>(unitAttributesGraph)
                         .InitializeGraph(unitAttributesGraph);
+                    return true;
+                case SlgUnitAttributesDataGraph slgGraph:
+                    NodeGraphWindowHelper.GetAndShowNodeGraphWindow<SlgUnitAttributesDataGraphWindow>(slgGraph)
+                        .InitializeGraph(slgGraph);
+                    return true;
+                case SlgUnitSquadAttributesDataGraph slgSquadGraph:
+                    NodeGraphWindowHelper.GetAndShowNodeGraphWindow<SlgUnitSquadAttributesDataGraphWindow>(slgSquadGraph)
+                        .InitializeGraph(slgSquadGraph);
                     return true;
                 default:
                     NodeGraphWindowHelper.GetAndShowNodeGraphWindow<FallbackGraphWindow>(baseGraph)

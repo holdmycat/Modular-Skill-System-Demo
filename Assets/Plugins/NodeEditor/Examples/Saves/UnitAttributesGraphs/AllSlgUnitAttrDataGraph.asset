@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6caf200f33cf4b76809177853e76552, type: 3}
+  m_Name: AllSlgUnitAttrDataGraph
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  serializedGraph:
+    nodes:
+    - type: Plugins.NodeEditor.ArcherAttributesNode, NodeGraphProcessor.Examples,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      jsonDatas: '{"nodeCustomName":"Archer-Clinkz","GUID":"956d3a51-84bf-4298-88e8-25328aaff544","computeOrder":0,"position":{"serializedVersion":"2","x":487.0,"y":200.0,"width":144.0,"height":42.0},"expanded":false,"debug":false,"nodeLock":false,"data":{"rid":1000},"references":{"version":2,"RefIds":[{"rid":1000,"type":{"class":"ArcherAttributesNodeData","ns":"Ebonor.DataCtrl","asm":"Ebonor.DataCtrl"},"data":{"typeStr":"Plugins.NodeEditor.ArcherAttributesNode","UnitDataNodeId":1752794821622386297,"UnitName":"Clinkz","UnitSprite":"ui_icon_clinkz","UnitAvatar":"Clinkz","CombatPositionType":2,"UnitClassType":2,"ArmorType":1,"DamageType":1,"BaseHp":5.0,"Attack":3.0,"AttackRange":3.0,"MoveSpeed":1.0,"PopulationCost":0}}]}}'
+    - type: Plugins.NodeEditor.ShieldInfantryAttributesNode, NodeGraphProcessor.Examples,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      jsonDatas: '{"nodeCustomName":"Shield-DragonKnight","GUID":"2d0ac9f3-f56c-4881-bf78-421e23463e9a","computeOrder":1,"position":{"serializedVersion":"2","x":213.0,"y":200.0,"width":234.0,"height":42.0},"expanded":false,"debug":false,"nodeLock":false,"data":{"rid":1000},"references":{"version":2,"RefIds":[{"rid":1000,"type":{"class":"ShieldInfantryAttributesNodeData","ns":"Ebonor.DataCtrl","asm":"Ebonor.DataCtrl"},"data":{"typeStr":"Plugins.NodeEditor.ShieldInfantryAttributesNode","UnitDataNodeId":9115565238967645920,"UnitName":"DragonKnight","UnitSprite":"ui_icon_dragonknight","UnitAvatar":"DragonKnight","CombatPositionType":0,"UnitClassType":0,"ArmorType":3,"DamageType":0,"BaseHp":10.0,"Attack":2.0,"AttackRange":1.0,"MoveSpeed":1.0,"PopulationCost":0}}]}}'
+    edges: []
+    stackNodes: []
+    pinnedElements: []
+    exposedParameters: []
+    stickyNotes: []
+    position: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  edges: []
+  stackNodes: []
+  pinnedElements: []
+  exposedParameters: []
+  serializedParameterList: []
+  stickyNotes: []
+  position: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  Name: SlgUnitData
+  SavePath: Assets/Resources/AllCharacterData
+  references:
+    version: 2
+    RefIds: []

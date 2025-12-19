@@ -1,4 +1,5 @@
 using System.IO;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using Ebonor.Framework;
 using MongoDB.Bson.IO;
@@ -16,6 +17,7 @@ namespace Ebonor.DataCtrl
         private IModelRepository _modelRepository;
         private ICharacterDataRepository _characterDataRepository;
         private GlobalGameConfig _globalGameConfig;
+        private  int _counter = -1;
         public DataLoaderService(GlobalGameConfig config, ResourceLoader resourceLoader, IModelRepository modelRepository, ICharacterDataRepository characterDataRepository)
         {
             _modelRepository = modelRepository;
@@ -52,6 +54,12 @@ namespace Ebonor.DataCtrl
             
             _isInitialized = true;
             log.Info("[DataLoaderService] Data Loading complete.");
+        }
+        
+        /// <summary>Get the next unique actor ID (uint, starts at 0).</summary>
+        public uint NextId()
+        {
+            return unchecked((uint)Interlocked.Increment(ref _counter));
         }
 
         

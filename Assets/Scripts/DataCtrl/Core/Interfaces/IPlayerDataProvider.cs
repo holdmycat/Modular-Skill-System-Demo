@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 namespace Ebonor.DataCtrl
 {
     public sealed class PlayerBootstrapInfo
@@ -18,6 +16,6 @@ namespace Ebonor.DataCtrl
     
     public interface IPlayerDataProvider
     {
-        IEnumerable<PlayerBootstrapInfo> GetPlayers();
+        PlayerBootstrapInfo GetPlayers();
     }
 }

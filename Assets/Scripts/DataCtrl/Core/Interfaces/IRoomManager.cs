@@ -1,12 +1,12 @@
 using Cysharp.Threading.Tasks;
 
-namespace Ebonor.Manager
+namespace Ebonor.DataCtrl
 {
-    public interface IRoomManager
+    public interface IRoomManager : INetworkBehaviour
     {
         UniTask InitAsync();
         UniTask ShutdownAsync();
-
+        
         void Tick(int tick);
     }
 }

@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Ebonor.DataCtrl
 {
     public enum FactionType
@@ -39,16 +41,23 @@ namespace Ebonor.DataCtrl
         public FactionType FactionId;
     }
 
+    public struct RpcCreateCharacter : IRpc
+    {
+        public uint NetId;
+    }
+    
+    
     public struct RpcCreateTeam : IRpc
     {
         public FactionType FactionId;
-        public int TeamId;
+        public long TeamId;
+        public List<long> SquadList;
     }
 
     public struct RpcCreateSoldier : IRpc
     {
         public FactionType FactionId;
-        public int TeamId;
+        public long TeamId;
         public int SoldierId; // NetId
     }
     
@@ -59,10 +68,14 @@ namespace Ebonor.DataCtrl
     public interface INetworkBus
     {
         // Client -> Server
-        void SendCommand<T>(T cmd) where T : ICommand;
+        void SendCommand<T>(uint netId, T cmd) where T : ICommand;
+        void RegisterCommandListener(uint netId, System.Action<ICommand> handler);
+        void UnregisterCommandListener(uint netId, System.Action<ICommand> handler);
         
         // Server -> Client
-        void SendRpc<T>(T rpc) where T : IRpc;
+        void SendRpc<T>(uint netId, T rpc) where T : IRpc;
+        void RegisterRpcListener(uint netId, System.Action<IRpc> handler);
+        void UnregisterRpcListener(uint netId, System.Action<IRpc> handler);
         
         // Server -> Client (Sync)
         void SyncTick(int tick);

@@ -7,6 +7,8 @@ namespace Ebonor.DataCtrl
     {
         
         UniTask InitializeAsync();
+
+        uint NextId();  
     }
 
 }

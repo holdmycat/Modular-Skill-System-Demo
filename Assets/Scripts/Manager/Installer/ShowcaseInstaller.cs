@@ -7,7 +7,6 @@ namespace Ebonor.Manager
 {
     public class ShowcaseInstaller : MonoInstaller
     {
-        
         private static readonly ILog log = LogManager.GetLogger(typeof(ShowcaseInstaller));
         
         public override void InstallBindings()
@@ -15,7 +14,7 @@ namespace Ebonor.Manager
             // --- Network Layer ---
             // Bind NetworkBus
             Container.BindInterfacesAndSelfTo<SimulatedNetworkBus>().AsSingle();
-
+            
             // Data Providers
             Container.Bind<IPlayerDataProvider>().To<LocalPlayerDataProvider>().AsSingle();
             Container.Bind<ITeamIdGenerator>().To<TeamIdGenerator>().AsSingle();

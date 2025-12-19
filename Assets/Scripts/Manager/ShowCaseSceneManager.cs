@@ -7,6 +7,7 @@
 using System;
 using Cysharp.Threading.Tasks;
 using Ebonor.Framework;
+using Ebonor.GamePlay;
 using Zenject;
 
 namespace Ebonor.Manager
@@ -27,7 +28,7 @@ namespace Ebonor.Manager
             _clientManager = clientManager;
             log.Debug("[ShowcaseSceneManager] Constructed with Dual World Managers.");
         }
-
+        
         public ShowcaseSceneManager()
         {
             log.Debug("[ShowcaseSceneManager] Starting Construction (Wait for Inject)");

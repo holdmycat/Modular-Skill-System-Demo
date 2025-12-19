@@ -49,7 +49,7 @@ namespace Ebonor.DataCtrl
         #region Gen NetId
 
         private static int _counter = -1;
-
+        
         /// <summary>Get the next unique actor ID (uint, starts at 0).</summary>
         public static uint NextId()
         {

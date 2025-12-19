@@ -1,3 +1,4 @@
+using Ebonor.GamePlay;
 using Zenject;
 
 namespace Ebonor.Manager

@@ -3,18 +3,19 @@ using Ebonor.Framework;
 using UnityEngine;
 using Zenject;
 
-namespace Ebonor.Manager
+namespace Ebonor.GamePlay
 {
     public class ClientManager : MonoBehaviour
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ClientManager));
 
         private ClientRoomManager _clientRoomManager;
-
+        
         [Inject]
         public void Construct(ClientRoomManager roomManager)
         {
             _clientRoomManager = roomManager;
+            GOHelper.ResetLocalGameObject(gameObject,_clientRoomManager.gameObject,true, 1f);
             log.Debug("[ClientManager] Constructed (Injected).");
         }
 

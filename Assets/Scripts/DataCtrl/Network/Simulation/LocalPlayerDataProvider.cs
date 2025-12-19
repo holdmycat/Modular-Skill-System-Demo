@@ -1,11 +1,10 @@
-using System.Collections.Generic;
 
 namespace Ebonor.DataCtrl
 {
     public class LocalPlayerDataProvider : IPlayerDataProvider
     {
-        private readonly List<PlayerBootstrapInfo> _players;
-
+        private PlayerBootstrapInfo _player;
+        
         public LocalPlayerDataProvider(GlobalGameConfig config)
         {
             var playerTeam = config.PlayerBirthTeamConfigInst?.PlayerTeam ?? new TeamConfigDefinition
@@ -19,16 +18,13 @@ namespace Ebonor.DataCtrl
                     Variant = "default"
                 }
             };
-
-            _players = new List<PlayerBootstrapInfo>
-            {
-                new PlayerBootstrapInfo("local-player", FactionType.Player, playerTeam)
-            };
+            
+            _player = new PlayerBootstrapInfo("local-player", FactionType.Player, playerTeam);
         }
         
-        public IEnumerable<PlayerBootstrapInfo> GetPlayers()
+        public PlayerBootstrapInfo GetPlayers()
         {
-            return _players;
+            return _player;
         }
     }
 }

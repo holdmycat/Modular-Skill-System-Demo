@@ -1,8 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Ebonor.Framework;
-using Zenject;
 
-namespace Ebonor.Manager
+namespace Ebonor.GamePlay
 {
     public class ServerManager
     {
@@ -10,9 +9,6 @@ namespace Ebonor.Manager
 
         private readonly ServerRoomManager _serverRoomManager;
         
-        // In the future, we might inject ServerTickManager here
-        // private readonly ServerTickManager _tickManager;
-
         public ServerManager(ServerRoomManager roomManager)
         {
             _serverRoomManager = roomManager;

@@ -3,7 +3,7 @@ using Ebonor.DataCtrl;
 using UnityEngine;
 using Zenject;
 
-namespace Ebonor.Manager
+namespace Ebonor.GamePlay
 {
     public class ServerTickManager : IInitializable, ITickable, IDisposable
     {
@@ -16,10 +16,10 @@ namespace Ebonor.Manager
         private float _timer;
         private bool _isRunning = false;
 
-        private readonly Ebonor.Manager.ServerManager _serverManager;
+        private readonly ServerManager _serverManager;
 
         [Inject]
-        public ServerTickManager(INetworkBus networkBus, Ebonor.Manager.ServerManager serverManager)
+        public ServerTickManager(INetworkBus networkBus, ServerManager serverManager)
         {
             _networkBus = networkBus;
             _serverManager = serverManager;

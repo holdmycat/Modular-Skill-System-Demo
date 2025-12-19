@@ -18,6 +18,7 @@ namespace Ebonor.Manager
 
             // Data Providers
             Container.Bind<IPlayerDataProvider>().To<LocalPlayerDataProvider>().AsSingle();
+            Container.Bind<ITeamIdGenerator>().To<TeamIdGenerator>().AsSingle();
             
             // Bind ServerTickManager
             Container.BindInterfacesAndSelfTo<ServerTickManager>().AsSingle();

@@ -30,10 +30,11 @@ namespace Ebonor.DataCtrl
 
         [Header("First Scene Name")]
         public string FirstSceneName;
+        
 
-        [Header("Default Player team Ids")] 
+        [Header("Default Player Team Config")] 
         [SerializeField]
-        public List<int> TeamIds;
+        public PlayerBirthTeamConfig PlayerBirthTeamConfigInst;
 
     }
 }

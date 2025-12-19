@@ -11,19 +11,31 @@ namespace Ebonor.Manager
     {
         public PlayerBootstrapInfo BootstrapInfo { get; }
         public ServerFaction Faction { get; }
+        private readonly ITeamIdGenerator _teamIdGenerator;
 
-        public ServerPlayer(PlayerBootstrapInfo bootstrapInfo, INetworkBus networkBus)
+        public ServerPlayer(PlayerBootstrapInfo bootstrapInfo, INetworkBus networkBus, ITeamIdGenerator teamIdGenerator)
         {
             BootstrapInfo = bootstrapInfo;
+            _teamIdGenerator = teamIdGenerator;
             Faction = new ServerFaction(bootstrapInfo.FactionId, networkBus);
         }
 
         public void InitializeTeams()
         {
-            foreach (var teamId in BootstrapInfo.TeamIds)
-            {
-                Faction.CreateTeam(teamId);
-            }
+            if (BootstrapInfo.TeamConfig == null)
+                return;
+
+            var seed = BootstrapInfo.TeamConfig.Seed;
+            var teamId = _teamIdGenerator.GenerateTeamId(new TeamIdComponents(
+                seed.Usage,
+                seed.ScenarioId,
+                seed.Faction,
+                seed.Slot,
+                seed.Variant
+            ));
+
+            Faction.CreateTeam(teamId);
+            // TODO: squad creation RPC when protocol supports it.
         }
 
         public void Tick(int tick)

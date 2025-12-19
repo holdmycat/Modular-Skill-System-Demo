@@ -6,13 +6,13 @@ namespace Ebonor.DataCtrl
     {
         public string PlayerId { get; }
         public FactionType FactionId { get; }
-        public IReadOnlyList<int> TeamIds { get; }
+        public TeamConfigDefinition TeamConfig { get; }
         
-        public PlayerBootstrapInfo(string playerId, FactionType factionId, IReadOnlyList<int> teamIds)
+        public PlayerBootstrapInfo(string playerId, FactionType factionId, TeamConfigDefinition teamConfig)
         {
             PlayerId = playerId;
             FactionId = factionId;
-            TeamIds = teamIds;
+            TeamConfig = teamConfig;
         }
     }
     

@@ -11,12 +11,14 @@ namespace Ebonor.Manager
         
         private readonly INetworkBus _networkBus;
         private readonly IPlayerDataProvider _playerDataProvider;
+        private readonly ITeamIdGenerator _teamIdGenerator;
         private readonly Dictionary<FactionType, ServerPlayer> _players = new Dictionary<FactionType, ServerPlayer>();
 
-        public ServerRoomManager(INetworkBus networkBus, IPlayerDataProvider playerDataProvider)
+        public ServerRoomManager(INetworkBus networkBus, IPlayerDataProvider playerDataProvider, ITeamIdGenerator teamIdGenerator)
         {
             _networkBus = networkBus;
             _playerDataProvider = playerDataProvider;
+            _teamIdGenerator = teamIdGenerator;
             log.Debug("[ServerRoomManager] Constructed.");
         }
         
@@ -32,7 +34,7 @@ namespace Ebonor.Manager
                     continue;
                 }
 
-                var player = new ServerPlayer(playerInfo, _networkBus);
+                var player = new ServerPlayer(playerInfo, _networkBus, _teamIdGenerator);
                 _players.Add(playerInfo.FactionId, player);
 
                 // Notify clients about the faction

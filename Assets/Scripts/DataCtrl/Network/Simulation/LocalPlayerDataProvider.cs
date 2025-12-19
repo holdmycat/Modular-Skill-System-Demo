@@ -6,26 +6,23 @@ namespace Ebonor.DataCtrl
     {
         private readonly List<PlayerBootstrapInfo> _players;
 
-        private GlobalGameConfig _globalGameConfig;
-        
         public LocalPlayerDataProvider(GlobalGameConfig config)
         {
-
-            _globalGameConfig = config;
-            
-            var list = new int[_globalGameConfig.TeamIds.Count];
-
-            int index = 0;
-            foreach (var variable in _globalGameConfig.TeamIds)
+            var playerTeam = config.PlayerBirthTeamConfigInst?.PlayerTeam ?? new TeamConfigDefinition
             {
-                list[index] = variable;
+                Seed = new TeamIdSeed
+                {
+                    Usage = TeamUsageType.Player,
+                    ScenarioId = "local",
+                    Faction = FactionType.Player,
+                    Slot = 0,
+                    Variant = "default"
+                }
+            };
 
-                index++;
-            }
-            
             _players = new List<PlayerBootstrapInfo>
             {
-                new PlayerBootstrapInfo("local-player", FactionType.Player, list)
+                new PlayerBootstrapInfo("local-player", FactionType.Player, playerTeam)
             };
         }
         

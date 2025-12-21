@@ -15,6 +15,8 @@ MonoBehaviour:
   loadMode: 0
   playerInputPrefabPath: PlayerInput
   allCharacterDataPath: HeroData
+  allSlgSquadDataPath: SlgSquadData
+  allSlgUnitDataPath: SlgUnitData
   defaultPlayerHeroId: 6070748851497539930
   ResourcePoolConfig:
     MaxSimultaneousEffects: 15

@@ -18,18 +18,18 @@ namespace Ebonor.DataCtrl
     /// </summary>
     [System.Serializable]
     [BsonSerializer(typeof(AttributesDataSerializer<SlgUnitSquadAttributesNodeData>))]
-    public abstract class SlgUnitSquadAttributesNodeData : ICommonAttributeBase
+    public abstract class SlgUnitSquadAttributesNodeData : UnitAttributesNodeDataBase
     {
         [BsonElement("typeStr")]
         public string typeStr = "";
-
-        [BsonElement("SquadDataNodeId")]
-        public long SquadDataNodeId;
 
         [Tooltip("关联的兵种 UnitId，对应 SlgUnitAttributesNodeData.UnitDataNodeId")]
         [BsonElement("UnitId")]
         public long UnitId;
 
+        [BsonElement("UnitSprite")]
+        public string UnitSprite;
+        
         [Tooltip("初始人数")]
         [BsonElement("InitialCount")]
         public int InitialCount = 10;
@@ -59,8 +59,9 @@ namespace Ebonor.DataCtrl
         {
             string key = BuildRoleKey();
             long id = GlobalHelper.GetRoleID(key);
-            if (id < 0) id = 0;
-            SquadDataNodeId = id;
+            if (id < 0) 
+                id = 0;
+            UnitDataNodeId= id;
             return id;
         }
 
@@ -79,7 +80,8 @@ namespace Ebonor.DataCtrl
     {
         private static readonly string[] BaseProperties =
         {
-            "SquadDataNodeId",
+            "UnitDataNodeId",
+            "UnitName",
             "UnitId",
             "Formation"
         };
@@ -171,7 +173,7 @@ namespace Ebonor.DataCtrl
                 if (child == null) continue;
                 float h = EditorGUI.GetPropertyHeight(child, true);
                 Rect r = new Rect(fullPosition.x, y, fullPosition.width, h);
-                bool readonlyId = name == "SquadDataNodeId";
+                bool readonlyId = name == "UnitDataNodeId";
                 if (readonlyId) EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.PropertyField(r, child, true);
                 if (readonlyId) EditorGUI.EndDisabledGroup();
@@ -225,7 +227,7 @@ namespace Ebonor.DataCtrl
 
             if (GUI.Button(copyRect, "Copy Squad ID"))
             {
-                var idProp = property.FindPropertyRelative("SquadDataNodeId");
+                var idProp = property.FindPropertyRelative("UnitDataNodeId");
                 if (idProp != null)
                 {
                     EditorGUIUtility.systemCopyBuffer = idProp.longValue.ToString();
@@ -238,7 +240,7 @@ namespace Ebonor.DataCtrl
         {
             string key = BuildRoleKey(property);
             long id = GlobalHelper.GetRoleID(key);
-            var idProp = property.FindPropertyRelative("SquadDataNodeId");
+            var idProp = property.FindPropertyRelative("UnitDataNodeId");
             if (idProp != null)
             {
                 idProp.longValue = id < 0 ? 0 : id;

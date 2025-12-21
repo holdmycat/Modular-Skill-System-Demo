@@ -8,6 +8,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
+using System.Text;
 using UnityEngine;
 
 namespace Ebonor.Framework
@@ -19,7 +21,11 @@ namespace Ebonor.Framework
         private Level _level = Level.ALL;
         
         bool _isDev = false;
-        
+
+        // File Logging Support
+        public bool EnableFileLog { get; set; }
+        private string _logFilePath;
+
         public DefaultLogFactory()
         {
         }
@@ -45,6 +51,50 @@ namespace Ebonor.Framework
                 _isDev = isMainThread?Debug.isDebugBuild : false;
 #endif
                 return _isDev && _level != Level.OFF;
+            }
+        }
+
+        public void WriteToFile(string logName, string level, object message, Exception exception = null)
+        {
+            if (!EnableFileLog) return;
+
+            try
+            {
+                if (string.IsNullOrEmpty(_logFilePath))
+                {
+                    // Use project root directory (outside Assets)
+                    string projectRoot = Directory.GetParent(Application.dataPath).FullName;
+                    string dir = Path.Combine(projectRoot, "Logs");
+                    
+                    if (!Directory.Exists(dir))
+                    {
+                        Directory.CreateDirectory(dir);
+                    }
+                    // Format: Log_yyyy-MM-dd_HH-mm.txt
+                    string filename = $"Log_{DateTime.Now:yyyy-MM-dd_HH-mm}.txt";
+                    _logFilePath = Path.Combine(dir, filename);
+                }
+
+                StringBuilder sb = new StringBuilder();
+                sb.Append(DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss.fff"));
+                sb.Append(" [");
+                sb.Append(level);
+                sb.Append("] ");
+                sb.Append(logName);
+                sb.Append("-");
+                sb.Append(message);
+                if (exception != null)
+                {
+                    sb.Append(" Exception:");
+                    sb.Append(exception);
+                }
+                sb.AppendLine();
+
+                File.AppendAllText(_logFilePath, sb.ToString());
+            }
+            catch (Exception)
+            {
+                // Put fail-safe here to prevent infinite error loops if logging fails
             }
         }
 
@@ -121,6 +171,7 @@ namespace Ebonor.Framework
             else
                 Console.WriteLine(Format(message, "DEBUG"));
 #endif
+            _factory.WriteToFile(name, "DEBUG", message);
         }
 
         public virtual void Debug(object message, Exception exception)
@@ -131,6 +182,9 @@ namespace Ebonor.Framework
             }
 
             Debug($"{message} Exception:{exception}");
+            // WriteToFile is called inside Debug(string) or we handle exception explicit logic?
+            // The original code calls Debug(string), which calls the overload above.
+            // But let's be safe. The original Debug calls Debug(string). 
         }
 
         public virtual void DebugAssertionFormat(object message)
@@ -146,6 +200,7 @@ namespace Ebonor.Framework
             else
                 Console.WriteLine(Format(message, "ERROR"));
 #endif
+            _factory.WriteToFile(name, "ERROR", message);
         }
 
         public virtual void DebugFormat(string format, params object[] args)
@@ -171,6 +226,7 @@ namespace Ebonor.Framework
             else
                 Console.WriteLine(Format(message, "INFO"));
 #endif
+            _factory.WriteToFile(name, "INFO", message);
         }
 
         public virtual void Info(object message, Exception exception)
@@ -206,6 +262,7 @@ namespace Ebonor.Framework
             else
                 Console.WriteLine(Format(message, "WARN"));
 #endif
+            _factory.WriteToFile(name, "WARN", message);
         }
 
         public virtual void Warn(object message, Exception exception)
@@ -216,6 +273,9 @@ namespace Ebonor.Framework
             }
 
             //Warn(string.Format("{0} Exception:{1}", message, exception));
+            // Original code was commented out? Let's respect original but ensure file log if uncommented logic exists.
+            // Wait, original: //Warn(...) 
+            // So it does nothing? Then no file log.
         }
 
         public virtual void WarnFormat(string format, params object[] args)
@@ -241,6 +301,7 @@ namespace Ebonor.Framework
             else
                 Console.WriteLine(Format(message, "ERROR"));
 #endif
+            _factory.WriteToFile(name, "ERROR", message);
         }
 
         public virtual void Error(object message, Exception exception)
@@ -276,6 +337,7 @@ namespace Ebonor.Framework
             else
                 Console.WriteLine(Format(message, "FATAL"));
 #endif
+            _factory.WriteToFile(name, "FATAL", message);
         }
 
         public virtual void Fatal(object message, Exception exception)

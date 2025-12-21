@@ -46,7 +46,7 @@ namespace Plugins.NodeEditor
                     var value = slgNode.SlgSquadAttributesData_GetNodeData();
                     if (value == null) continue;
                     value.typeStr = node.GetType().ToString();
-                    DataSupportor.SquadAttributesDic[value.SquadDataNodeId] = value;
+                    DataSupportor.SquadAttributesDic[value.UnitDataNodeId] = value;
                 }
             }
         }

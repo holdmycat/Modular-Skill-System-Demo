@@ -44,6 +44,39 @@ namespace Ebonor.DataCtrl
             await _characterDataRepository.SaveUnitDataSupporterAsync(heroItems);
             log.Info("[DataLoaderService] Loading character data complete...");
             
+            //Load slg unit Attribute Data Supporter - SlgUnitAttributesDataSupportor
+            log.Info("[DataLoaderService] Starting Loading SLG Unit data...");
+            var slgUnitData = await _resourceLoader.LoadAsset<TextAsset>(_globalGameConfig.allSlgUnitDataPath, ResourceAssetType.AllCharacterData);
+            if (slgUnitData != null)
+            {
+                using var slgUnitReader = new BsonBinaryReader(new MemoryStream(slgUnitData.bytes));
+                var slgUnitItems = BsonSerializer.Deserialize<SlgUnitAttributesDataSupportor>(slgUnitReader);
+                await _characterDataRepository.SaveSlgUnitDataSupporterAsync(slgUnitItems);
+                log.Info("[DataLoaderService] Loading SLG Unit data complete...");
+            }
+            else
+            {
+                log.Warn($"[DataLoaderService] Failed to load SLG Unit Data at path: {_globalGameConfig.allSlgUnitDataPath}");
+            }
+            
+            
+            //Load slg squad Attribute Data Supporter - SlgUnitSquadAttributesDataSupportor
+            log.Info("[DataLoaderService] Starting Loading SLG Squad data...");
+            var slgSquadData = await _resourceLoader.LoadAsset<TextAsset>(_globalGameConfig.allSlgSquadDataPath, ResourceAssetType.AllCharacterData);
+            if (slgSquadData != null)
+            {
+                using var slgSquadReader = new BsonBinaryReader(new MemoryStream(slgSquadData.bytes));
+                var slgSquadItems = BsonSerializer.Deserialize<SlgUnitSquadAttributesDataSupportor>(slgSquadReader);
+                await _characterDataRepository.SaveSlgSquadDataSupporterAsync(slgSquadItems);
+                log.Info("[DataLoaderService] Loading SLG Squad data complete...");
+            }
+            else
+            {
+                log.Warn($"[DataLoaderService] Failed to load SLG Squad Data at path: {_globalGameConfig.allSlgSquadDataPath}");
+            }
+            
+            
+            
             //Load Unit Models
             log.Info("[DataLoaderService] Starting Loading Models...");
             var list = await _resourceLoader.LoadAllAssets<UObject>(ResourceAssetType.HeroModelPrefab);

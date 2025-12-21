@@ -22,6 +22,14 @@ namespace Ebonor.DataCtrl
         [Tooltip("Path for loading all character data assets.")]
         public string allCharacterDataPath = "AllCharacterData/HeroData";
         
+        [Header("Character Data")]
+        [Tooltip("Path for loading all slg squad data assets.")]
+        public string allSlgSquadDataPath = "AllCharacterData/SlgSquadData";
+        
+        [Header("Character Data")]
+        [Tooltip("Path for loading all slg unit data assets.")]
+        public string allSlgUnitDataPath = "AllCharacterData/SlgUnitData";
+        
         [Header("Default Player Id")]
         public long defaultPlayerHeroId;
 
@@ -31,10 +39,8 @@ namespace Ebonor.DataCtrl
         [Header("First Scene Name")]
         public string FirstSceneName;
         
-
         [Header("Default Player Team Config")] 
         [SerializeField]
         public PlayerBirthTeamConfig PlayerBirthTeamConfigInst;
-
     }
 }

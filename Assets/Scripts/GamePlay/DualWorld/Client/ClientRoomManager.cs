@@ -48,7 +48,7 @@ namespace Ebonor.GamePlay
                 case NetworkPrefabType.Team:
                 {
                     // Deserialize payload for Team
-                    var teamPayload = NetworkSerializer.Deserialize<TeamSpawnPayload>(msg.Payload);
+                    var teamPayload = TeamSpawnPayload.Deserialize(msg.Payload);
                     if (teamPayload.SquadList == null) teamPayload.SquadList = new List<long>();
                     
                     var clientTeam = new ClientTeamRuntime(msg.NetId);
@@ -66,11 +66,46 @@ namespace Ebonor.GamePlay
                     {
                         log.Warn($"[ClientRoomManager] Failed to link Team {msg.NetId} to Owner {teamPayload.OwnerNetId} (Owner not found)");
                     }
+
+                    if (_pendingSquads.TryGetValue(msg.NetId, out var pendingSquads))
+                    {
+                        foreach (var entry in pendingSquads)
+                        {
+                            clientTeam.RegisterSquadRuntime(entry.squad, entry.payload);
+                            log.Info($"[ClientRoomManager] Linked pending Squad {entry.squad.NetId} to Team {msg.NetId}");
+                        }
+
+                        _pendingSquads.Remove(msg.NetId);
+                    }
                     break;
                 }
 
-                // Add Squad case later if needed
-                // case NetworkPrefabType.Squad: ...
+                case NetworkPrefabType.Squad:
+                {
+                    var squadPayload = SquadSpawnPayload.Deserialize(msg.Payload);
+                    var clientSquad = new ClientSquadRuntime(msg.NetId);
+                    clientSquad.InitSquadRuntime(squadPayload);
+                    newActor = clientSquad;
+
+                    uint teamNetId = (uint)squadPayload.TeamNetId;
+                    var teamActor = _networkBus.GetSpawnedOrNull(teamNetId) as ClientTeamRuntime;
+                    if (teamActor != null)
+                    {
+                        teamActor.RegisterSquadRuntime(clientSquad, squadPayload);
+                        log.Info($"[ClientRoomManager] Linked Squad {msg.NetId} to Team {teamNetId}");
+                    }
+                    else
+                    {
+                        if (!_pendingSquads.TryGetValue(teamNetId, out var list))
+                        {
+                            list = new List<(ClientSquadRuntime squad, SquadSpawnPayload payload)>();
+                            _pendingSquads[teamNetId] = list;
+                        }
+                        list.Add((clientSquad, squadPayload));
+                        log.Warn($"[ClientRoomManager] Team {teamNetId} not found for Squad {msg.NetId}; queued for later link.");
+                    }
+                    break;
+                }
                     
                 default:
                     log.Error($"[ClientRoomManager] Unknown Spawn Type: {msg.Type}");
@@ -122,6 +157,7 @@ namespace Ebonor.GamePlay
         
         private INetworkBus _networkBus;
         private BaseActor _localPlayer;
+        private readonly Dictionary<uint, List<(ClientSquadRuntime squad, SquadSpawnPayload payload)>> _pendingSquads = new Dictionary<uint, List<(ClientSquadRuntime squad, SquadSpawnPayload payload)>>();
 
         // Composition: Network Handle
         private NetworkIdHandle _netHandle;

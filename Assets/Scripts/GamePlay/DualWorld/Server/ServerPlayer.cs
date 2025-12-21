@@ -69,7 +69,7 @@ namespace Ebonor.GamePlay
                 {
                     Type = NetworkPrefabType.Team,
                     NetId = _baseTeamRuntime.NetId,
-                    Payload = NetworkSerializer.Serialize(teamPayload)
+                    Payload = teamPayload.Serialize()
                 });
         }
 

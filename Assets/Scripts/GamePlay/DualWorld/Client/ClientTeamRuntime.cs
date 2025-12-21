@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
 
@@ -7,6 +8,8 @@ namespace Ebonor.GamePlay
     {
         
         private static readonly ILog log = LogManager.GetLogger(typeof(ClientTeamRuntime));
+        private readonly Dictionary<uint, ClientSquadRuntime> _squadRuntimesByNetId = new Dictionary<uint, ClientSquadRuntime>();
+        private readonly Dictionary<long, ClientSquadRuntime> _squadRuntimesBySquadId = new Dictionary<long, ClientSquadRuntime>();
 
         public ClientTeamRuntime(uint netId)
         {
@@ -29,6 +32,19 @@ namespace Ebonor.GamePlay
         protected override void ConstructSquads()
         {
             log.Debug("[ClientTeamRuntime] ConstructSquads.");
+        }
+
+        public void RegisterSquadRuntime(ClientSquadRuntime squadRuntime, SquadSpawnPayload payload)
+        {
+            if (squadRuntime == null)
+            {
+                return;
+            }
+            
+            _squadRuntimesByNetId[squadRuntime.NetId] = squadRuntime;
+            _squadRuntimesBySquadId[payload.SquadId] = squadRuntime;
+            
+            log.Debug($"[ClientTeamRuntime] Registered Squad NetId:{squadRuntime.NetId} SquadId:{payload.SquadId}");
         }
         
     }

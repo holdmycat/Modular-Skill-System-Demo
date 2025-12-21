@@ -105,11 +105,11 @@ namespace Ebonor.DataCtrl
         void RegisterRpcListener(uint netId, System.Action<IRpc> handler);
         void UnregisterRpcListener(uint netId, System.Action<IRpc> handler);
 
-        void RegisterSpawns(uint netId, INetworkBehaviour behaviour);
+        void RegisterSpawns(uint netId, INetworkBehaviour behaviour, bool isServer = false);
         
         void UnRegisterSpawns(uint netId, INetworkBehaviour behaviour);
 
-        INetworkBehaviour GetSpawnedOrNull(uint netId);
+        INetworkBehaviour GetSpawnedOrNull(uint netId, bool preferServer = false);
         
         
         // Server -> Client (Sync)
@@ -119,5 +119,87 @@ namespace Ebonor.DataCtrl
         event System.Action<ICommand> OnCommandReceived;
         event System.Action<IRpc> OnRpcReceived;
         event System.Action<int> OnTickSync;
+    }
+    public struct TeamSpawnPayload
+    {
+        public long TeamId;
+        public List<long> SquadList;
+        public FactionType Faction;
+        public uint OwnerNetId;
+        
+        public byte[] Serialize()
+        {
+            var ms = new System.IO.MemoryStream();
+            using (var writer = new System.IO.BinaryWriter(ms))
+            {
+                writer.Write(TeamId);
+                writer.Write(SquadList.Count);
+                foreach (var id in SquadList)
+                {
+                    writer.Write(id);
+                }
+                writer.Write((int)Faction);
+                writer.Write(OwnerNetId);
+            }
+            return ms.ToArray();
+        }
+
+        public static TeamSpawnPayload Deserialize(byte[] data)
+        {
+            if (data == null || data.Length == 0) return default;
+            var ms = new System.IO.MemoryStream(data);
+            using (var reader = new System.IO.BinaryReader(ms))
+            {
+                var payload = new TeamSpawnPayload();
+                payload.TeamId = reader.ReadInt64();
+                int count = reader.ReadInt32();
+                payload.SquadList = new List<long>();
+                for (int i = 0; i < count; i++)
+                {
+                    payload.SquadList.Add(reader.ReadInt64());
+                }
+                payload.Faction = (FactionType)reader.ReadInt32();
+                payload.OwnerNetId = (uint)reader.ReadInt32();
+                return payload;
+            }
+        }
+    }
+
+    [System.Serializable]
+    public struct SquadSpawnPayload
+    {
+        public long SquadId;
+        public long OwnerNetId;
+        public long TeamNetId;
+        public FactionType Faction;
+        
+        public byte[] Serialize()
+        {
+            var ms = new System.IO.MemoryStream();
+            using (var writer = new System.IO.BinaryWriter(ms))
+            {
+                writer.Write(SquadId);
+                writer.Write(OwnerNetId);
+                writer.Write(TeamNetId);
+                writer.Write((int)Faction);
+            }
+            return ms.ToArray();
+        }
+
+        public static SquadSpawnPayload Deserialize(byte[] data)
+        {
+            if (data == null || data.Length == 0) return default;
+            var ms = new System.IO.MemoryStream(data);
+            using (var reader = new System.IO.BinaryReader(ms))
+            {
+                return new SquadSpawnPayload
+                {
+                    SquadId = reader.ReadInt64(),
+                    OwnerNetId = reader.ReadInt64(),
+                    TeamNetId = reader.ReadInt64(),
+                    Faction = (FactionType)reader.ReadInt32()
+                };
+            }
+        }
     }
 }

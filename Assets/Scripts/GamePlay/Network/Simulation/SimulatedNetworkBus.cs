@@ -22,8 +22,8 @@ namespace Ebonor.GamePlay
         private readonly Dictionary<uint, List<Action<ICommand>>> _cmdListeners = new Dictionary<uint, List<Action<ICommand>>>();
         private readonly Dictionary<uint, List<Action<IRpc>>> _rpcListeners = new Dictionary<uint, List<Action<IRpc>>>();
 
-        private readonly Dictionary<uint, INetworkBehaviour> _dicSpawnActors =
-            new Dictionary<uint, INetworkBehaviour>();
+        private readonly Dictionary<uint, List<(INetworkBehaviour behaviour, bool isServer)>> _dicSpawnActors =
+            new Dictionary<uint, List<(INetworkBehaviour behaviour, bool isServer)>>();
 
         
         public SimulatedNetworkBus()
@@ -125,33 +125,49 @@ namespace Ebonor.GamePlay
             }
         }
 
-        public void RegisterSpawns(uint netId, INetworkBehaviour behaviour)
+        public void RegisterSpawns(uint netId, INetworkBehaviour behaviour, bool isServer = false)
         {
-            if (_dicSpawnActors.ContainsKey(netId))
+            if (!_dicSpawnActors.TryGetValue(netId, out var list))
             {
-                log.ErrorFormat("[RegisterSpawns] netId:{0}, behaviour already exists", netId);
-                return;
+                list = new List<(INetworkBehaviour behaviour, bool isServer)>();
+                _dicSpawnActors[netId] = list;
             }
 
-            _dicSpawnActors.Add(netId, behaviour);
+            if (!list.Exists(x => ReferenceEquals(x.behaviour, behaviour)))
+            {
+                list.Add((behaviour, isServer));
+                log.DebugFormat("[RegisterSpawns] netId:{0}, count:{1}", netId, list.Count);
+            }
         }
 
         public void UnRegisterSpawns(uint netId, INetworkBehaviour behaviour)
         {
-            if (_dicSpawnActors.ContainsKey(netId))
+            if (_dicSpawnActors.TryGetValue(netId, out var list))
             {
-                _dicSpawnActors.Remove(netId);
+                list.RemoveAll(x => ReferenceEquals(x.behaviour, behaviour));
+                if (list.Count == 0)
+                {
+                    _dicSpawnActors.Remove(netId);
+                }
                 return;
             }
-            
+
             log.WarnFormat("[UnRegisterSpawns] netId:{0} or behaviour not found", netId);
         }
 
-        public INetworkBehaviour GetSpawnedOrNull(uint netId)
+        public INetworkBehaviour GetSpawnedOrNull(uint netId, bool preferServer = false)
         {
-            if (_dicSpawnActors.TryGetValue(netId, out var actor))
+            if (_dicSpawnActors.TryGetValue(netId, out var list) && list.Count > 0)
             {
-                return actor;
+                if (preferServer)
+                {
+                    var serverEntry = list.Find(x => x.isServer);
+                    if (serverEntry.behaviour != null)
+                        return serverEntry.behaviour;
+                }
+                
+                // Default: most recently registered (client usually registers after server).
+                return list[list.Count - 1].behaviour;
             }
             return null;
         }

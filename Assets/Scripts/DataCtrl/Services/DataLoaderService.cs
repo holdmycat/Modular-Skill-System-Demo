@@ -17,7 +17,7 @@ namespace Ebonor.DataCtrl
         private IModelRepository _modelRepository;
         private ICharacterDataRepository _characterDataRepository;
         private GlobalGameConfig _globalGameConfig;
-        private  int _counter = -1;
+        private  int _counter = 1;
         public DataLoaderService(GlobalGameConfig config, ResourceLoader resourceLoader, IModelRepository modelRepository, ICharacterDataRepository characterDataRepository)
         {
             _modelRepository = modelRepository;
@@ -56,7 +56,8 @@ namespace Ebonor.DataCtrl
             log.Info("[DataLoaderService] Data Loading complete.");
         }
         
-        /// <summary>Get the next unique actor ID (uint, starts at 0).</summary>
+        /// <summary>Get the next unique actor ID (uint, starts at 2).</summary>
+        /// 1 is reserved for room manager
         public uint NextId()
         {
             return unchecked((uint)Interlocked.Increment(ref _counter));

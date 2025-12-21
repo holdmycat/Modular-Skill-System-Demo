@@ -22,9 +22,13 @@ namespace Ebonor.GamePlay
         private readonly Dictionary<uint, List<Action<ICommand>>> _cmdListeners = new Dictionary<uint, List<Action<ICommand>>>();
         private readonly Dictionary<uint, List<Action<IRpc>>> _rpcListeners = new Dictionary<uint, List<Action<IRpc>>>();
 
+        private readonly Dictionary<uint, INetworkBehaviour> _dicSpawnActors =
+            new Dictionary<uint, INetworkBehaviour>();
+
+        
         public SimulatedNetworkBus()
         {
-            Debug.Log("[SimNet] Network Bus Initialized.");
+            log.Debug("[SimulatedNetworkBus] Network Bus Initialized.");
         }
 
         public void SendCommand<T>(uint netId, T cmd) where T : ICommand
@@ -47,9 +51,10 @@ namespace Ebonor.GamePlay
             }
         }
         
-        public void SendRpc<T>(uint netId, T rpc) where T : IRpc
+        public void SendRpc<T>(T rpc) where T : IRpc
         {
             log.Info($"<color=magenta>[Net:Rpc] {rpc.GetType().Name}</color>");
+            uint netId = NetworkConstants.ROOM_MANAGER_NET_ID;
             if (_rpcListeners.TryGetValue(netId, out var listeners))
             {
                 foreach (var listener in listeners.ToArray())
@@ -119,5 +124,39 @@ namespace Ebonor.GamePlay
                 }
             }
         }
+
+        public void RegisterSpawns(uint netId, INetworkBehaviour behaviour)
+        {
+            if (_dicSpawnActors.ContainsKey(netId))
+            {
+                log.ErrorFormat("[RegisterSpawns] netId:{0}, behaviour already exists", netId);
+                return;
+            }
+
+            _dicSpawnActors.Add(netId, behaviour);
+        }
+
+        public void UnRegisterSpawns(uint netId, INetworkBehaviour behaviour)
+        {
+            if (_dicSpawnActors.ContainsKey(netId))
+            {
+                _dicSpawnActors.Remove(netId);
+                return;
+            }
+            
+            log.WarnFormat("[UnRegisterSpawns] netId:{0} or behaviour not found", netId);
+        }
+
+        public INetworkBehaviour GetSpawnedOrNull(uint netId)
+        {
+            if (_dicSpawnActors.TryGetValue(netId, out var actor))
+            {
+                return actor;
+            }
+            return null;
+        }
+        
+        
+        
     }
 }

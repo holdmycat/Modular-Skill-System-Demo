@@ -15,24 +15,20 @@ namespace Ebonor.GamePlay
         public ClientPlayer( INetworkBus networkBus, uint netId)
         {
             _networkBus = networkBus;
-            _netId = netId;
-            _networkBus.RegisterRpcListener(_netId, OnRpcReceived);
+            BindId(netId);//client player
+            // _networkBus.RegisterRpcListener(_netId, OnRpcReceived); // Removed: Handled by Local Object logic if needed, but Spawning is done by Manager now.
+             
             log.Debug("[ClientPlayer] Constructed.");
         }
 
         private void OnRpcReceived(IRpc rpc)
         {
-            log.Info($"<color=magenta>[ClientPlayer] OnRpcCreateTeam [Net:Rpc] {this.GetType().Name}</color>");
-
-            if (rpc is RpcCreateTeam rpcCreateTeam)
-            {
-                
-            }
-            
+            // Legacy Logic Removed
+            log.Info($"<color=magenta>[ClientPlayer] OnRpcReceived [Net:Rpc] {this.GetType().Name}</color>");
         }
         
         
-        public override void InitializeTeam()
+        public override async UniTask InitAsync()
         {
             log.Info("[ClientPlayer] InitializeTeam");
         }

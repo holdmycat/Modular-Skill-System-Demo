@@ -18,7 +18,7 @@ namespace Ebonor.GamePlay
             GOHelper.ResetLocalGameObject(gameObject,_clientRoomManager.gameObject,true, 1f);
             log.Debug("[ClientManager] Constructed (Injected).");
         }
-
+        
         public async UniTask InitAsync()
         {
             log.Info("[ClientManager] Initializing...");
@@ -31,7 +31,10 @@ namespace Ebonor.GamePlay
         private void Update()
         {
             // Frame-based updates for visuals
-            _clientRoomManager?.OnUpdate();
+            if (null != _clientRoomManager)
+            {
+                _clientRoomManager.OnUpdate();
+            }
         }
 
         public async UniTask ShutdownAsync()

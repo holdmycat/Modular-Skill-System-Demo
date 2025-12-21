@@ -20,7 +20,7 @@ namespace Ebonor.GamePlay
 
             _teamIdGenerator = teamIdGenerator;
             
-            _netId = _dataLoaderService.NextId() ;
+            BindId(_dataLoaderService.NextId());//server player
             
             _fractionType = type;
 
@@ -37,27 +37,40 @@ namespace Ebonor.GamePlay
             ));
             
             log.Debug("[ServerPlayer] Constructed.");
+            
+         
+            
         }
 
-        public override void InitializeTeam()
+        public override async UniTask InitAsync()
         {
             log.Debug("[ServerPlayer] InitializeTeam.");
             
+            if (null != _baseTeamRuntime)
+            {
+                log.Error("[ServerPlayer] Fatal error _baseTeamRuntime is not null.");
+                return;
+            }
             
-            _networkBus.SendRpc(_netId, 
-                new RpcCreateTeam
+            _baseTeamRuntime = new ServerTeamRuntime(_dataLoaderService, _networkBus);
+
+            var teamPayload = new TeamSpawnPayload
+            {
+                Faction = _fractionType, 
+                TeamId = _teamId, 
+                OwnerNetId = this.NetId,
+                SquadList = _teamConfigDefinition.SquadIds
+            };
+            
+            _baseTeamRuntime.InitTeamRuntime(teamPayload);
+            
+            _networkBus.SendRpc( 
+                new RpcSpawnObject
                 {
-                    FactionId = _fractionType, 
-                    TeamId = _teamId, 
-                    SquadList = _teamConfigDefinition.SquadIds
+                    Type = NetworkPrefabType.Team,
+                    NetId = _baseTeamRuntime.NetId,
+                    Payload = NetworkSerializer.Serialize(teamPayload)
                 });
-            
-            
-            //construct squad
-            
-            
-            
-            
         }
 
         public override void Tick(int tick)

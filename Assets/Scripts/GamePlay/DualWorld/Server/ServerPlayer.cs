@@ -1,3 +1,7 @@
+// ---------------------------------------------
+// Script: ServerPlayer.cs
+// Purpose: Server-side player wrapper that generates team payloads and broadcasts team spawns.
+// ---------------------------------------------
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;

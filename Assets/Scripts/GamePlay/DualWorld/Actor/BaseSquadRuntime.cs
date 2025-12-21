@@ -1,3 +1,7 @@
+// ---------------------------------------------
+// Script: BaseSquadRuntime.cs
+// Purpose: Base network behaviour for squad runtimes, storing ownership and faction data from spawn payloads.
+// ---------------------------------------------
 using Ebonor.DataCtrl;
 using UnityEngine;
 

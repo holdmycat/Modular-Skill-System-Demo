@@ -1,3 +1,7 @@
+// ---------------------------------------------
+// Script: ClientRoomManager.cs
+// Purpose: Client-side room coordinator that listens for RPC spawn/destroy messages and wires up local actors.
+// ---------------------------------------------
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;

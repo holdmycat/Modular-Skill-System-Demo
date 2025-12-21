@@ -1,3 +1,7 @@
+// ---------------------------------------------
+// Script: ClientTeamRuntime.cs
+// Purpose: Client representation of a team, tracking squad runtimes by NetId and squad identifiers.
+// ---------------------------------------------
 using System.Collections.Generic;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;

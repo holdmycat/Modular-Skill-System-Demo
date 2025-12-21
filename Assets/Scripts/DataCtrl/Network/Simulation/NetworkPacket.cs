@@ -1,3 +1,7 @@
+// ---------------------------------------------
+// Script: NetworkPacket.cs
+// Purpose: Defines network-facing enums, packet contracts, and spawn payload serialization helpers.
+// ---------------------------------------------
 using System.Collections.Generic;
 
 namespace Ebonor.DataCtrl

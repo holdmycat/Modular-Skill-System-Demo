@@ -1,3 +1,7 @@
+// ---------------------------------------------
+// Script: SimulatedNetworkBus.cs
+// Purpose: In-memory network bus to simulate RPCs/commands between server and client logic during local runs.
+// ---------------------------------------------
 using System;
 using System.Collections.Generic;
 using Ebonor.DataCtrl;

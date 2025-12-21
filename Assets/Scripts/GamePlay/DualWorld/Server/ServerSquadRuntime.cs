@@ -1,3 +1,7 @@
+// ---------------------------------------------
+// Script: ServerSquadRuntime.cs
+// Purpose: Server-side squad runtime that owns squad NetIds and initializes squad metadata for clients.
+// ---------------------------------------------
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
 

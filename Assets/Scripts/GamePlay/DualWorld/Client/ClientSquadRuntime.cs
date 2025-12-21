@@ -1,3 +1,7 @@
+// ---------------------------------------------
+// Script: ClientSquadRuntime.cs
+// Purpose: Client-side squad runtime that mirrors server squad state for local presentation.
+// ---------------------------------------------
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
 

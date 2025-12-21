@@ -1,3 +1,7 @@
+// ---------------------------------------------
+// Script: BaseTeamRuntime.cs
+// Purpose: Base network behaviour for teams, handling shared team metadata and squad list lifecycle.
+// ---------------------------------------------
 using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;

@@ -1,3 +1,7 @@
+// ---------------------------------------------
+// Script: ServerTeamRuntime.cs
+// Purpose: Server-side team runtime that spawns squads, registers them on the bus, and tracks server references.
+// ---------------------------------------------
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
 using System.Collections.Generic;

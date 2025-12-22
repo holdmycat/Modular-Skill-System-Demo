@@ -19,10 +19,10 @@ namespace Ebonor.GamePlay
             log.Debug("[ClientManager] Constructed (Injected).");
         }
         
-        public async UniTask InitAsync()
+        public void InitAsync()
         {
             log.Info("[ClientManager] Initializing...");
-            await _clientRoomManager.InitAsync();
+            _clientRoomManager.InitAsync();
             
             // Assuming ClientManager is a MonoBehaviour, it will naturally have Update() called by Unity
             // But if we want controlled updates, we could do it here.
@@ -39,8 +39,10 @@ namespace Ebonor.GamePlay
 
         public async UniTask ShutdownAsync()
         {
-            log.Info("[ClientManager] Shutting down...");
             await _clientRoomManager.ShutdownAsync();
+            
+            log.Info("[ClientManager] Shutting down...");
+            
         }
     }
 }

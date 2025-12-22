@@ -14,8 +14,12 @@ namespace Ebonor.DataCtrl
 
         UnitAttributesNodeDataBase GetUnitAttributeNodeDataByUnitName(string id);
         
+        SlgUnitAttributesNodeData GetSlgUnitAttributeNodeDataByUnitName(string id);
+        
         Dictionary<long, UnitAttributesNodeDataBase> GetAllUnitAttribteData();
 
+        Dictionary<long, SlgUnitAttributesNodeData> GetAllSlgUnitAttribteData();
+        
         SlgUnitAttributesNodeData GetSlgUnitData(long unitId);
         
         SlgUnitSquadAttributesNodeData GetSlgSquadData(long unitId);

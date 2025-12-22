@@ -14,7 +14,7 @@ namespace Ebonor.GamePlay
         {
             _instantiator = instantiator;
         }
-
+        
         public T Create<T>(GameObject target) where T : ActorNumericComponentBase
         {
             if (target == null)

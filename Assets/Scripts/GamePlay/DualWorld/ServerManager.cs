@@ -15,10 +15,10 @@ namespace Ebonor.GamePlay
             log.Debug("[ServerManager] Constructed.");
         }
 
-        public async UniTask InitAsync()
+        public void InitAsync()
         {
             log.Info("[ServerManager] Initializing...");
-            await _serverRoomManager.InitAsync();
+            _serverRoomManager.InitAsync();
         }
 
         public void Tick(int tick)

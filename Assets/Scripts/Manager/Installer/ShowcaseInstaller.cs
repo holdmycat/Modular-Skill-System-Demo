@@ -30,9 +30,11 @@ namespace Ebonor.Manager
             Container.Bind<ClientRoomManager>().FromNewComponentOnNewGameObject().AsSingle();
             Container.Bind<ClientManager>().FromNewComponentOnNewGameObject().AsSingle();
             
-            // --- Factories ---
-            // Deleted - Re-implement based on Faction hierarchy later
-
+            Container.Bind<ServerCommander>().AsSingle();
+            
+            Container.BindFactory<ServerCommander, ServerCommander.Factory>().AsSingle();
+            Container.BindFactory<ClientCommander, ClientCommander.Factory>().AsSingle();
+            
             // --- Scene Root ---
             log.Debug("[ShowcaseInstaller] InstallBindings called.");
             Container.BindInterfacesAndSelfTo<ShowcaseSceneManager>().AsSingle().NonLazy();

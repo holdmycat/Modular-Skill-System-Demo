@@ -38,7 +38,7 @@ namespace Ebonor.Manager
         {
             log.Debug("[ShowcaseSceneManager] Starting Dispose");
             _serverManager.ShutdownAsync().Forget();
-            _clientManager.ShutdownAsync().Forget();
+            //_clientManager.ShutdownAsync().Forget();
         }
 
         public async UniTask StartupSequence()
@@ -46,10 +46,10 @@ namespace Ebonor.Manager
             log.Info("[ShowcaseSceneManager] StartupSequence: Initializing Dual World...");
 
             // 1. Init Client First (To Listen for Events)
-            await _clientManager.InitAsync();
-
+            _clientManager.InitAsync();
+            
             // 2. Init Server (To Generate Events)
-            await _serverManager.InitAsync();
+            _serverManager.InitAsync();
             
             log.Info("[ShowcaseSceneManager] Dual World Initialized.");
         }

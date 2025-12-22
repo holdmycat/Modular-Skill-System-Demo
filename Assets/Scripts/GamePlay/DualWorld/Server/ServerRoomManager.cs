@@ -1,6 +1,8 @@
+using System;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
+using Zenject;
 
 namespace Ebonor.GamePlay
 {
@@ -11,58 +13,69 @@ namespace Ebonor.GamePlay
         private readonly INetworkBus _networkBus;
         private readonly IPlayerDataProvider _playerDataProvider;
         private readonly ITeamIdGenerator _teamIdGenerator;
-        private BaseActor _localPlayer;
+        private readonly ICharacterDataRepository _characterDataRepository;
         
         private IDataLoaderService _dataLoaderService;
-       
-        public ServerRoomManager(IDataLoaderService dataLoaderService, INetworkBus networkBus, IPlayerDataProvider playerDataProvider, ITeamIdGenerator teamIdGenerator)
+        private BaseCommander _baseCommander;
+        
+        private readonly ServerCommander.Factory _factory; 
+        
+        [Inject]
+        public ServerRoomManager(
+            ServerCommander.Factory factory, 
+            IDataLoaderService dataLoaderService, 
+            INetworkBus networkBus, 
+            IPlayerDataProvider playerDataProvider, 
+            ITeamIdGenerator teamIdGenerator, 
+            ICharacterDataRepository characterDataRepository)
         {
+            _factory = factory;
             _networkBus = networkBus;
             _dataLoaderService = dataLoaderService;
             _playerDataProvider = playerDataProvider;
             _teamIdGenerator = teamIdGenerator;
+            _characterDataRepository = characterDataRepository;
             BindId(NetworkConstants.ROOM_MANAGER_NET_ID);//server room manager
             log.Debug("[ServerRoomManager] Constructed (Static NetId: 1).");
         }
         
-        public override async UniTask InitAsync()
+        public override void InitAsync()
         {
             log.Info("[ServerRoomManager] InitAsync");
-
-            _localPlayer = new ServerPlayer(_playerDataProvider.GetPlayers().TeamConfig, FactionType.Player, _dataLoaderService, _networkBus, _teamIdGenerator);
             
-            // Spawn the Player on Client
-            // Player doesn't need complex payload yet, or maybe just Faction? 
-            // For now sending empty payload or basic info if needed.
-            // Using a simple 4-byte payload for NetId verification or similar if needed, but empty is fine for now.
-            var spawnPayload = new byte[0]; 
+            _networkBus.RegisterSpawns(NetId, this, true);
             
-            _networkBus.SendRpc(new RpcSpawnObject 
-            { 
-                Type = NetworkPrefabType.Player,
-                NetId = _localPlayer.NetId,
-                Payload = spawnPayload
-            });
+            _baseCommander = _factory.Create(); 
             
+            var spawnPayload = Array.Empty<byte>(); 
             
-            await _localPlayer.InitAsync();
+            _baseCommander.InitAsync();
             
+             _networkBus.SendRpc(new RpcSpawnObject 
+             { 
+                 Type = NetworkPrefabType.Player,
+                 NetId = _baseCommander.NetId,
+                 Payload = spawnPayload
+             });
+             
         }
 
         public override void Tick(int tick)
         {
-            if (null == _localPlayer)
-                return;
-            
-            _localPlayer.Tick(tick);
+        
         }
 
         public override async UniTask ShutdownAsync()
         {
             log.Info("[ServerRoomManager] ShutdownAsync");
+
+            await _baseCommander.ShutdownAsync();
             
+            _networkBus.SendRpc(new RpcDestroyObject 
+            {
+                NetId = NetId
+            });
             
         }
     }
 }
-

@@ -6,6 +6,6 @@ namespace Ebonor.DataCtrl
     {
         void SaveModelAsync(IList<UnityEngine.Object> list);
 
-        Dictionary<long, UObject> GetGameModelDic(eActorModelType type);
+        UObject GetGameModel(long id);
     }
 }

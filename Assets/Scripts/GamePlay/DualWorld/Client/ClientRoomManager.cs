@@ -2,20 +2,18 @@
 // Script: ClientRoomManager.cs
 // Purpose: Client-side room coordinator that listens for RPC spawn/destroy messages and wires up local actors.
 // ---------------------------------------------
-using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
-using UnityEngine;
 using Zenject;
 
 namespace Ebonor.GamePlay
 {
 
     //network rpc
-    public partial class ClientRoomManager : MonoBehaviour, IRoomManager
+    public partial class ClientRoomManager : BaseRoomManager
     {
-         private void OnRpcReceived(IRpc rpc)
+        private void OnRpcReceived(IRpc rpc)
         {
             // Only handle Spawn Objects on this channel
             if (rpc is RpcSpawnObject spawnMsg)
@@ -42,93 +40,22 @@ namespace Ebonor.GamePlay
             {
                 case NetworkPrefabType.Player:
                 {
-                    // Player might not need payload, or minimal payload
-                    var clientPlayer = new ClientPlayer(_networkBus, msg.NetId);
-                    clientPlayer.InitAsync().Forget();
-                    newActor = clientPlayer;
+                    _baseCommander = _factory.Create();
+                    newActor = _baseCommander;
+                    newActor.BindId(msg.NetId);
+                    newActor.InitFromSpawnPayload(msg.Payload);
                     break;
                 }
-                    
-                case NetworkPrefabType.Team:
-                {
-                    // Deserialize payload for Team
-                    var teamPayload = TeamSpawnPayload.Deserialize(msg.Payload);
-                    if (teamPayload.SquadList == null) teamPayload.SquadList = new List<long>();
-                    
-                    var clientTeam = new ClientTeamRuntime(msg.NetId);
-                    clientTeam.InitTeamRuntime(teamPayload);
-                    newActor = clientTeam;
-                    
-                    // Link to Owner Actor (Player/AI)
-                    var ownerActor = _networkBus.GetSpawnedOrNull(teamPayload.OwnerNetId) as BaseActor;
-                    if (ownerActor != null)
-                    {
-                        ownerActor.SetTeam(clientTeam);
-                        log.Info($"[ClientRoomManager] Linked Team {msg.NetId} to Owner {teamPayload.OwnerNetId}");
-                    }
-                    else
-                    {
-                        log.Warn($"[ClientRoomManager] Failed to link Team {msg.NetId} to Owner {teamPayload.OwnerNetId} (Owner not found)");
-                    }
-
-                    if (_pendingSquads.TryGetValue(msg.NetId, out var pendingSquads))
-                    {
-                        foreach (var entry in pendingSquads)
-                        {
-                            clientTeam.RegisterSquadRuntime(entry.squad, entry.payload);
-                            log.Info($"[ClientRoomManager] Linked pending Squad {entry.squad.NetId} to Team {msg.NetId}");
-                        }
-
-                        _pendingSquads.Remove(msg.NetId);
-                    }
-                    break;
-                }
-
-                case NetworkPrefabType.Squad:
-                {
-                    var squadPayload = SquadSpawnPayload.Deserialize(msg.Payload);
-                    var clientSquad = new ClientSquadRuntime(msg.NetId);
-                    clientSquad.InitSquadRuntime(squadPayload);
-                    newActor = clientSquad;
-
-                    uint teamNetId = (uint)squadPayload.TeamNetId;
-                    var teamActor = _networkBus.GetSpawnedOrNull(teamNetId) as ClientTeamRuntime;
-                    if (teamActor != null)
-                    {
-                        teamActor.RegisterSquadRuntime(clientSquad, squadPayload);
-                        log.Info($"[ClientRoomManager] Linked Squad {msg.NetId} to Team {teamNetId}");
-                    }
-                    else
-                    {
-                        if (!_pendingSquads.TryGetValue(teamNetId, out var list))
-                        {
-                            list = new List<(ClientSquadRuntime squad, SquadSpawnPayload payload)>();
-                            _pendingSquads[teamNetId] = list;
-                        }
-                        list.Add((clientSquad, squadPayload));
-                        log.Warn($"[ClientRoomManager] Team {teamNetId} not found for Squad {msg.NetId}; queued for later link.");
-                    }
-                    break;
-                }
-                    
                 default:
                     log.Error($"[ClientRoomManager] Unknown Spawn Type: {msg.Type}");
                     return;
             }
 
-                
+            newActor.InitAsync();
+            
+            _networkBus.RegisterSpawns(newActor.NetId, newActor);
+            
             log.Info($"[ClientRoomManager] Successfully Spawned {newActor.GetType().Name} [NetId:{msg.NetId}]");
-                
-            if (newActor != null)
-            {
-                // Register to the Bus (Single Source of Truth)
-                _networkBus.RegisterSpawns(msg.NetId, newActor);
-                
-                if (msg.Type == NetworkPrefabType.Player)
-                {
-                    _localPlayer = newActor as BaseActor;
-                }
-            }
         }
 
         private void OnDestroyObject(RpcDestroyObject msg)
@@ -155,51 +82,67 @@ namespace Ebonor.GamePlay
     }
     
     //system
-    public partial class ClientRoomManager : MonoBehaviour, IRoomManager
+    public partial class ClientRoomManager : BaseRoomManager
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ClientRoomManager));
         
         private INetworkBus _networkBus;
-        private BaseActor _localPlayer;
-        private readonly Dictionary<uint, List<(ClientSquadRuntime squad, SquadSpawnPayload payload)>> _pendingSquads = new Dictionary<uint, List<(ClientSquadRuntime squad, SquadSpawnPayload payload)>>();
-
+        private ICharacterDataRepository _characterDataRepository;
+        private BaseCommander _baseCommander;
+        
         // Composition: Network Handle
-        private NetworkIdHandle _netHandle;
-        public uint NetId => _netHandle.NetId;
-        public void BindId(uint netid) => _netHandle.BindId(netid);
+     
 
+        private ClientCommander.Factory _factory; 
+        
         [Inject]
-        public void Construct(INetworkBus networkBus)
+        public void Construct(ClientCommander.Factory factory,  INetworkBus networkBus, ICharacterDataRepository characterDataRepository)
         {
+            log.Info($"[ClientRoomManager] Construct");
+            _factory = factory;
             _networkBus = networkBus;
+            _characterDataRepository = characterDataRepository;
             BindId(NetworkConstants.ROOM_MANAGER_NET_ID);//client room manager
+           
         }
         
-        public async UniTask InitAsync()
+        public override void InitAsync()
         {
             log.Info($"[ClientRoomManager] InitAsync - Listening on Static NetId: {NetId}");
-            
             // Register listener for the Bootstrap Channel (NetId 1)
             _networkBus.RegisterRpcListener(NetId, OnRpcReceived);
             _networkBus.OnTickSync += Tick;
+            _networkBus.RegisterSpawns(NetId, this);
         }
         
-        public void OnUpdate()
+        public override void OnUpdate()
         {
             // Update loop if needed
+            if (null != _baseCommander)
+            {
+                _baseCommander.OnUpdate();
+            }
         }
 
-        public void Tick(int tick)
+        public override void Tick(int tick)
         {
             // Tick sync if needed
+            if (null != _baseCommander)
+            {
+                _baseCommander.Tick(tick);
+            }
         }
         
-        public async UniTask ShutdownAsync()
+        public override async UniTask ShutdownAsync()
         {
-            log.Info("[ClientRoomManager] ShutdownAsync");
+            
+
+            await _baseCommander.ShutdownAsync();
             
             if (_networkBus != null)
                 _networkBus.UnregisterRpcListener(NetId, OnRpcReceived);
+            
+            log.Info("[ClientRoomManager] ShutdownAsync");
         }
     }
 }

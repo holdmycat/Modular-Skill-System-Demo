@@ -155,6 +155,23 @@ namespace Ebonor.DataCtrl
             return _dicUnitAttriDatas;
         }
         
+        
+        public Dictionary<long, SlgUnitAttributesNodeData> GetAllSlgUnitAttribteData()
+        {
+            return _dicSlgUnitAttriDatas;
+        }
+
+        public SlgUnitAttributesNodeData GetSlgUnitAttributeNodeDataByUnitName(string id)
+        {
+            if (_dicSlgUnitAttriDatasByName.TryGetValue(id, out var attr))
+            {
+                return attr;
+            }
+
+            return null;
+        }
+        
+        
         public void Dispose()
         {
             log.Debug("[CharacterDataRepository], Starting Dispose");

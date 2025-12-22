@@ -93,6 +93,13 @@ namespace Ebonor.DataCtrl
     {
         public uint NetId;
     }
+
+    public struct RpcSquadDamage : IRpc
+    {
+        public uint SquadNetId;
+        public List<int> DeadSoldierIndices;
+        public float RemainingTotalHp;
+    }
     /// <summary>
     /// Network Interface for sending Commands and RPCs.
     /// This abstracts the underlying network layer (Socket/Photon/Mirror).

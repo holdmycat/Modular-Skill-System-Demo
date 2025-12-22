@@ -91,26 +91,10 @@ namespace Ebonor.DataCtrl
         /// </summary>
         private T GenerateModel<T>(string modelName) where T : PoolItemBase
         {
-            UObject modelObj = null;
-
             
-            var unitAttributeNodeData = _characterDataRepository.GetUnitAttributeNodeDataByUnitName(modelName);
-            
-            switch (unitAttributeNodeData.ActorModelType)
-            {
+            var unitAttributeNodeData = _characterDataRepository.GetSlgUnitAttributeNodeDataByUnitName(modelName);
 
-                case eActorModelType.eHero:
-                {
-                    var heroModels = _modelRepository.GetGameModelDic(eActorModelType.eHero);
-                    if (!heroModels.TryGetValue(unitAttributeNodeData.UnitDataNodeId, out modelObj))
-                    {
-                        var npcModels = _modelRepository.GetGameModelDic(eActorModelType.eNpc);
-                        npcModels.TryGetValue(unitAttributeNodeData.UnitDataNodeId, out modelObj);
-                    }
-                    break;
-                }
-                
-            }
+            UObject modelObj = _modelRepository.GetGameModel(unitAttributeNodeData.UnitDataNodeId);
             
             if (modelObj == null)
             {

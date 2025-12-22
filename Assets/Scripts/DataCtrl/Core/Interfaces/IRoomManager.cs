@@ -4,6 +4,6 @@ namespace Ebonor.DataCtrl
 {
     public interface IRoomManager : INetworkBehaviour
     {
-       
+        
     }
 }

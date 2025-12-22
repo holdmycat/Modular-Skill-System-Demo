@@ -161,19 +161,29 @@ namespace Ebonor.GamePlay
 
         public INetworkBehaviour GetSpawnedOrNull(uint netId, bool preferServer = false)
         {
-            if (_dicSpawnActors.TryGetValue(netId, out var list) && list.Count > 0)
+            if (!_dicSpawnActors.TryGetValue(netId, out var list) || list.Count == 0)
             {
-                if (preferServer)
-                {
-                    var serverEntry = list.Find(x => x.isServer);
-                    if (serverEntry.behaviour != null)
-                        return serverEntry.behaviour;
-                }
-                
-                // Default: most recently registered (client usually registers after server).
-                return list[list.Count - 1].behaviour;
+                throw new InvalidOperationException($"[SimulatedNetworkBus] No spawned behaviours found for NetId:{netId}");
             }
-            return null;
+
+            if (preferServer)
+            {
+                var serverEntry = list.Find(x => x.isServer);
+                if (serverEntry.behaviour != null)
+                {
+                    return serverEntry.behaviour;
+                }
+
+                throw new InvalidOperationException($"[SimulatedNetworkBus] Requested server behaviour for NetId:{netId} but none registered.");
+            }
+
+            var clientEntry = list.FindLast(x => !x.isServer);
+            if (clientEntry.behaviour != null)
+            {
+                return clientEntry.behaviour;
+            }
+
+            throw new InvalidOperationException($"[SimulatedNetworkBus] Requested client behaviour for NetId:{netId} but none registered.");
         }
         
         

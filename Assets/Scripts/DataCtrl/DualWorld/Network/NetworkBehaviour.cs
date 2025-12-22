@@ -26,14 +26,31 @@ namespace Ebonor.DataCtrl
         {
         }
 
-        public virtual async UniTask InitAsync()
+        public virtual void InitAsync()
         {
-            
+            log.Info($"[NetworkBehaviour] InitAsync");
         }
 
+        public virtual void InitFromSpawnPayload(byte[] payload)
+        {
+            log.Info($"[NetworkBehaviour] InitFromSpawnPayload");
+        }
+
+        public virtual async UniTask InitAsync(RpcSpawnObject msg)
+        {
+            log.Info($"[NetworkBehaviour] InitAsync");
+        }
+        
+        
         public virtual async UniTask ShutdownAsync()
+        {
+            log.Info($"[NetworkBehaviour] ShutdownAsync");
+        }
+        
+        public virtual void OnUpdate()
         {
             
         }
+        
     }
 }

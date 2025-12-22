@@ -24,12 +24,14 @@ namespace Ebonor.GamePlay
             _dataLoaderService = dataLoaderService;
 
             BindId(_dataLoaderService.NextId());
+            
+            _networkBus.RegisterSpawns(NetId, this, true);
         }
         
         public override void InitAsync()
         {
             log.Info($"[ServerCommander] InitAsync");
-            _networkBus.RegisterSpawns(NetId, this, true);
+            
         }
         
         public override async UniTask ShutdownAsync()

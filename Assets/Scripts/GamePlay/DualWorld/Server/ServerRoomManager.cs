@@ -36,14 +36,13 @@ namespace Ebonor.GamePlay
             _teamIdGenerator = teamIdGenerator;
             _characterDataRepository = characterDataRepository;
             BindId(NetworkConstants.ROOM_MANAGER_NET_ID);//server room manager
+            _networkBus.RegisterSpawns(NetId, this, true);
             log.Debug("[ServerRoomManager] Constructed (Static NetId: 1).");
         }
         
         public override void InitAsync()
         {
             log.Info("[ServerRoomManager] InitAsync");
-            
-            _networkBus.RegisterSpawns(NetId, this, true);
             
             _baseCommander = _factory.Create(); 
             

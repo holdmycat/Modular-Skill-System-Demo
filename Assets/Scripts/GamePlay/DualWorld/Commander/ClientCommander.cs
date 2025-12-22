@@ -23,8 +23,6 @@ namespace Ebonor.GamePlay
         public override void InitAsync()
         {
             log.Info($"[ClientCommander] InitAsync");
-            
-            //_networkBus.RegisterSpawns(NetId, this);
         }
         
         public override async UniTask ShutdownAsync()

@@ -50,10 +50,10 @@ namespace Ebonor.GamePlay
                     log.Error($"[ClientRoomManager] Unknown Spawn Type: {msg.Type}");
                     return;
             }
-
-            newActor.InitAsync();
             
             _networkBus.RegisterSpawns(newActor.NetId, newActor);
+            
+            newActor.InitAsync();
             
             log.Info($"[ClientRoomManager] Successfully Spawned {newActor.GetType().Name} [NetId:{msg.NetId}]");
         }
@@ -89,10 +89,6 @@ namespace Ebonor.GamePlay
         private INetworkBus _networkBus;
         private ICharacterDataRepository _characterDataRepository;
         private BaseCommander _baseCommander;
-        
-        // Composition: Network Handle
-     
-
         private ClientCommander.Factory _factory; 
         
         [Inject]
@@ -103,7 +99,7 @@ namespace Ebonor.GamePlay
             _networkBus = networkBus;
             _characterDataRepository = characterDataRepository;
             BindId(NetworkConstants.ROOM_MANAGER_NET_ID);//client room manager
-           
+            _networkBus.RegisterSpawns(NetId, this);
         }
         
         public override void InitAsync()
@@ -112,7 +108,6 @@ namespace Ebonor.GamePlay
             // Register listener for the Bootstrap Channel (NetId 1)
             _networkBus.RegisterRpcListener(NetId, OnRpcReceived);
             _networkBus.OnTickSync += Tick;
-            _networkBus.RegisterSpawns(NetId, this);
         }
         
         public override void OnUpdate()
@@ -135,8 +130,6 @@ namespace Ebonor.GamePlay
         
         public override async UniTask ShutdownAsync()
         {
-            
-
             await _baseCommander.ShutdownAsync();
             
             if (_networkBus != null)

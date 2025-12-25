@@ -1,6 +1,7 @@
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
 using Ebonor.GamePlay;
+using UnityEngine;
 using Zenject;
 
 namespace Ebonor.Manager
@@ -8,6 +9,9 @@ namespace Ebonor.Manager
     public class ShowcaseInstaller : MonoInstaller
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ShowcaseInstaller));
+
+        [Header("Scene Id")]
+        public string SceneId;
         
         public override void InstallBindings()
         {
@@ -15,13 +19,18 @@ namespace Ebonor.Manager
             // Bind NetworkBus
             Container.BindInterfacesAndSelfTo<SimulatedNetworkBus>().AsSingle();
             
-            // Data Providers
-            Container.Bind<IPlayerDataProvider>().To<LocalPlayerDataProvider>().AsSingle();
-            Container.Bind<ITeamIdGenerator>().To<TeamIdGenerator>().AsSingle();
-            
             // Bind ServerTickManager
             Container.BindInterfacesAndSelfTo<ServerTickManager>().AsSingle();
-
+            
+            //Bind SceneResourceManager
+            Container.Bind<ISceneResourceManager>()
+                .To<SceneResourceManager>()
+                .AsSingle()
+                .WithArguments(SceneId);
+            
+            // Data Providers
+            //Container.Bind<ICommanderDataProvider>().To<CommanderDataProvider>().AsSingle();
+            
             // --- Server Logic World ---
             Container.Bind<ServerRoomManager>().AsSingle();
             Container.Bind<ServerManager>().AsSingle();
@@ -35,9 +44,16 @@ namespace Ebonor.Manager
             Container.BindFactory<ServerCommander, ServerCommander.Factory>().AsSingle();
             Container.BindFactory<ClientCommander, ClientCommander.Factory>().AsSingle();
             
+            Container.BindFactory<ServerLegion, ServerLegion.Factory>().AsSingle();
+            Container.BindFactory<ClientLegion, ClientLegion.Factory>().AsSingle();
+
+            
             // --- Scene Root ---
             log.Debug("[ShowcaseInstaller] InstallBindings called.");
             Container.BindInterfacesAndSelfTo<ShowcaseSceneManager>().AsSingle().NonLazy();
+            
+          
+            
         }
     }
 }

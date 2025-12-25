@@ -39,8 +39,12 @@ namespace Ebonor.DataCtrl
         [Header("First Scene Name")]
         public string FirstSceneName;
         
-        [Header("Default Player Team Config")] 
+        [Header("Scene Registry")]
+        [Tooltip("Registered scenario ids and defaults.")]
+        public GameSceneConfig GameSceneConfig;
+        
+        [Header("Default Player Commander Config")] 
         [SerializeField]
-        public PlayerBirthTeamConfig PlayerBirthTeamConfigInst;
+        public CommanderBirthConfig CommanderBirthConfigInst;
     }
 }

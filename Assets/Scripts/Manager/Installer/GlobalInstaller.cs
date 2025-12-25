@@ -42,9 +42,10 @@ namespace Ebonor.Manager
             // 4. Bind SystemDataService (BSON Registration)
             Container.Bind<ISystemDataService>().To<SystemDataService>().AsSingle();
 
-            // Team id generator (deterministic team ids for player/level squads)
-            Container.Bind<ITeamIdGenerator>().To<TeamIdGenerator>().AsSingle();
 
+            Container.Bind<IScenarioIdRegistry>().To<ScenarioIdRegistry>().AsSingle();
+            Container.Bind<ILegionIdGenerator>().To<LegionIdGenerator>().AsSingle();
+            
             // 4.5 Optional services (graceful degradation)
             Container.Bind<IVoiceChatService>().To<NullVoiceChatService>().AsSingle();
 

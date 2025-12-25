@@ -23,11 +23,12 @@ MonoBehaviour:
     MaxSimultaneousSounds: 10
     MaxFloatingTextCount: 15
   FirstSceneName: ShowcaseSceneContext
-  PlayerBirthTeamConfigInst:
-    PlayerTeam:
+  GameSceneConfig: {fileID: 11400000, guid: 851bb4e35f2794110b603d7b89241dda, type: 2}
+  CommanderBirthConfigInst:
+    LegionConfig:
       Seed:
         Usage: 0
-        ScenarioId: ShowcaseScene
+        ScenarioId: showcasescene
         Faction: 1
         Slot: 0
         Variant: 

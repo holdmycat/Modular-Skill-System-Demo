@@ -6,35 +6,67 @@ using Zenject;
 
 namespace Ebonor.GamePlay
 {
-    public class ServerRoomManager : NetworkBehaviour, IRoomManager
+
+    //commander - scene config enemy
+    public partial class ServerRoomManager : NetworkBehaviour, IRoomManager
+    {
+        
+    }
+    
+    
+    //commander - player
+    public partial class ServerRoomManager : NetworkBehaviour, IRoomManager
+    {
+        private void InitPlayerCommander()
+        {
+            _baseCommander = _factory.Create(); 
+            
+            var bootstrap = _sceneResourceManager?.GetPlayerCommanderBootstrapInfo() ?? _sceneResourceManager?.GetCommanderBootstrapInfo();
+            if (bootstrap == null)
+            {
+                throw new System.InvalidOperationException("[ServerRoomManager] InitPlayerCommander failed: bootstrap is null.");
+            }
+
+            _baseCommander.Configure(bootstrap);
+
+            _baseCommander.InitAsync();
+
+            var payload = new CommanderSpawnPayload
+            {
+                CommanderNetId = _baseCommander.NetId,
+                LegionId = _baseCommander.LegionId,
+                Bootstrap = bootstrap
+            };
+            var spawnPayload = payload.Serialize();
+
+            _networkBus.SendRpc(new RpcSpawnObject 
+            { 
+                Type = NetworkPrefabType.Player,
+                NetId = _baseCommander.NetId,
+                Payload = spawnPayload
+            });
+            
+        }
+    }
+    
+    //system
+    public partial class ServerRoomManager : NetworkBehaviour, IRoomManager
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ServerRoomManager));
         
         private readonly INetworkBus _networkBus;
-        private readonly IPlayerDataProvider _playerDataProvider;
-        private readonly ITeamIdGenerator _teamIdGenerator;
-        private readonly ICharacterDataRepository _characterDataRepository;
-        
-        private IDataLoaderService _dataLoaderService;
         private BaseCommander _baseCommander;
-        
         private readonly ServerCommander.Factory _factory; 
         
         [Inject]
         public ServerRoomManager(
             ServerCommander.Factory factory, 
-            IDataLoaderService dataLoaderService, 
-            INetworkBus networkBus, 
-            IPlayerDataProvider playerDataProvider, 
-            ITeamIdGenerator teamIdGenerator, 
-            ICharacterDataRepository characterDataRepository)
+            INetworkBus networkBus, ISceneResourceManager sceneResourceManager)
         {
             _factory = factory;
             _networkBus = networkBus;
-            _dataLoaderService = dataLoaderService;
-            _playerDataProvider = playerDataProvider;
-            _teamIdGenerator = teamIdGenerator;
-            _characterDataRepository = characterDataRepository;
+            _sceneResourceManager = sceneResourceManager;
+            _gameSceneResource = _sceneResourceManager.GetSceneResource();
             BindId(NetworkConstants.ROOM_MANAGER_NET_ID);//server room manager
             _networkBus.RegisterSpawns(NetId, this, true);
             log.Debug("[ServerRoomManager] Constructed (Static NetId: 1).");
@@ -43,20 +75,8 @@ namespace Ebonor.GamePlay
         public override void InitAsync()
         {
             log.Info("[ServerRoomManager] InitAsync");
-            
-            _baseCommander = _factory.Create(); 
-            
-            var spawnPayload = Array.Empty<byte>(); 
-            
-            _baseCommander.InitAsync();
-            
-             _networkBus.SendRpc(new RpcSpawnObject 
-             { 
-                 Type = NetworkPrefabType.Player,
-                 NetId = _baseCommander.NetId,
-                 Payload = spawnPayload
-             });
-             
+
+            InitPlayerCommander();
         }
 
         public override void Tick(int tick)
@@ -68,13 +88,14 @@ namespace Ebonor.GamePlay
         {
             log.Info("[ServerRoomManager] ShutdownAsync");
 
-            await _baseCommander.ShutdownAsync();
+            _networkBus.UnRegisterSpawns(_netId, this);
             
+            await _baseCommander.ShutdownAsync();
+
             _networkBus.SendRpc(new RpcDestroyObject 
             {
                 NetId = NetId
             });
-            
         }
     }
 }

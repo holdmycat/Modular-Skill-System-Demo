@@ -12,6 +12,10 @@ namespace Ebonor.DataCtrl
         protected uint _netId => _netid;
         public uint NetId => _netid;
 
+        protected ISceneResourceManager _sceneResourceManager;
+
+        protected GameSceneResource _gameSceneResource;
+        
         public void BindId(uint netid)
         {
             if (_netid != 0)

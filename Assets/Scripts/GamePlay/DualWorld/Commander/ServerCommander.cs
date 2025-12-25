@@ -64,6 +64,21 @@ namespace Ebonor.GamePlay
 
             _baseLegion.InitAsync();
             
+            var legionPayloadBytes = new LegionSpawnPayload
+            {
+                LegionId = (long)_legionId,
+                SquadList = _bootstrapInfo?.LegionConfig?.SquadIds ?? new System.Collections.Generic.List<long>(),
+                Faction = _seed.Faction,
+                OwnerNetId = NetId
+            }.Serialize();
+
+            _networkBus.SendRpc(new RpcSpawnObject
+            {
+                Type = NetworkPrefabType.Legion,
+                NetId = _baseLegion.NetId,
+                Payload = legionPayloadBytes
+            });
+            
             
             
         }

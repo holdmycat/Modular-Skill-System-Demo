@@ -46,6 +46,16 @@ namespace Ebonor.GamePlay
                     newActor.InitFromSpawnPayload(msg.Payload);
                     break;
                 }
+                case NetworkPrefabType.Legion:
+                {
+                    var teamPayload = LegionSpawnPayload.Deserialize(msg.Payload);
+                    var legion = _legionFactory.Create();
+                    newActor = legion;
+                    newActor.BindId(msg.NetId);
+                    legion.Configure(msg.NetId, (ulong)teamPayload.LegionId, false);
+                    legion.InitFromSpawnPayload(msg.Payload);
+                    break;
+                }
                 default:
                     log.Error($"[ClientRoomManager] Unknown Spawn Type: {msg.Type}");
                     return;
@@ -90,12 +100,14 @@ namespace Ebonor.GamePlay
         private ICharacterDataRepository _characterDataRepository;
         private BaseCommander _baseCommander;
         private ClientCommander.Factory _factory; 
+        private ClientLegion.Factory _legionFactory;
         
         [Inject]
-        public void Construct(ClientCommander.Factory factory,  INetworkBus networkBus, ICharacterDataRepository characterDataRepository)
+        public void Construct(ClientCommander.Factory factory, ClientLegion.Factory legionFactory, INetworkBus networkBus, ICharacterDataRepository characterDataRepository)
         {
             log.Info($"[ClientRoomManager] Construct");
             _factory = factory;
+            _legionFactory = legionFactory;
             _networkBus = networkBus;
             _characterDataRepository = characterDataRepository;
             BindId(NetworkConstants.ROOM_MANAGER_NET_ID);//client room manager

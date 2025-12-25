@@ -14,12 +14,32 @@ namespace Ebonor.GamePlay
         {
             log.Info($"[ClientLegion] Construction");
             
+            _networkBus = networkBus;
             _dataLoaderService = dataLoaderService;
         }
         
         public override void InitAsync()
         {
             log.Info($"[ClientLegion] InitAsync");
+        }
+
+        public override void InitFromSpawnPayload(byte[] payload)
+        {
+            var team = LegionSpawnPayload.Deserialize(payload);
+            if (team.LegionId == 0)
+            {
+                throw new System.InvalidOperationException("[ClientLegion] InitFromSpawnPayload missing legion id.");
+            }
+            if (team.OwnerNetId == 0)
+            {
+                throw new System.InvalidOperationException("[ClientLegion] InitFromSpawnPayload missing owner net id.");
+            }
+            if (team.SquadList == null)
+            {
+                team.SquadList = new System.Collections.Generic.List<long>();
+            }
+            log.Info($"[ClientLegion] InitFromSpawnPayload legionId:{team.LegionId}, owner:{team.OwnerNetId}, squads:{team.SquadList?.Count ?? 0}");
+            base.InitFromSpawnPayload(payload);
         }
         
         public override async UniTask ShutdownAsync()

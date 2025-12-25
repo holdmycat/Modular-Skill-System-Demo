@@ -23,7 +23,11 @@ namespace Ebonor.GamePlay
             }
             BindId(netId);
             _legionId = legionId;
-            _networkBus?.RegisterSpawns(NetId, this, isServer);
+            if (_networkBus == null)
+            {
+                throw new System.InvalidOperationException("[BaseLegion] Configure failed: network bus is null.");
+            }
+            _networkBus.RegisterSpawns(NetId, this, isServer);
         }
     }
 }

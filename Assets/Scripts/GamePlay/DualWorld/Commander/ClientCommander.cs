@@ -9,6 +9,14 @@ namespace Ebonor.GamePlay
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ClientCommander));
         
+        private ClientLegion.Factory _legionFactory;
+        
+        [Inject]
+        public void Construct(ClientLegion.Factory legionFactory)
+        {
+            _legionFactory = legionFactory;
+        }
+
         [Inject]
         public ClientCommander(INetworkBus networkBus, IDataLoaderService dataLoaderService)
         {
@@ -46,13 +54,42 @@ namespace Ebonor.GamePlay
             log.Info($"[ClientCommander] InitFromSpawnPayload commanderNetId:{data.CommanderNetId}, legionId:{_legionId}");
 
             Configure(data.Bootstrap);
+        }
+        
+        public override void OnRpc(IRpc rpc)
+        {
+            if (rpc is RpcSpawnObject spawnMsg && spawnMsg.Type == NetworkPrefabType.Legion)
+            {
+                log.Info($"[ClientCommander] Received Legion Spawn RPC: NetId:{spawnMsg.NetId}");
+                
+                var teamPayload = LegionSpawnPayload.Deserialize(spawnMsg.Payload);
+                var legion = _legionFactory.Create();
+                _baseLegion = legion;
+                
+                legion.Configure(spawnMsg.NetId, (ulong)teamPayload.LegionId, false);
+                legion.InitFromSpawnPayload(spawnMsg.Payload);
 
-            base.InitFromSpawnPayload(payload);
+                _networkBus.RegisterSpawns(legion.NetId, legion);
+                
+                legion.InitAsync();
+                
+                log.Info($"[ClientCommander] Spawned Legion {legion.NetId}");
+                return;
+            }
+
+            base.OnRpc(rpc);
         }
         
         public override async UniTask  ShutdownAsync()
         {
             log.Info($"[ClientCommander] ShutdownAsync");
+            
+            if (_baseLegion != null)
+            {
+                _networkBus.UnRegisterSpawns(_baseLegion.NetId, _baseLegion);
+                await _baseLegion.ShutdownAsync();
+            }
+
             await base.ShutdownAsync();
         }
         

@@ -127,13 +127,13 @@ namespace Ebonor.DataCtrl
         void UnregisterCommandListener(uint netId, System.Action<ICommand> handler);
         
         // Server -> Client
-        void SendRpc<T>(T rpc) where T : IRpc;
+        void SendRpc<T>(uint netId, T rpc) where T : IRpc;
         void RegisterRpcListener(uint netId, System.Action<IRpc> handler);
         void UnregisterRpcListener(uint netId, System.Action<IRpc> handler);
 
-        void RegisterSpawns(uint netId, INetworkBehaviour behaviour, bool isServer = false);
+        void RegisterSpawns(uint netId, INetworkBehaviour behaviour, bool isServer = false, bool isAutoRegisterRpc = true);
         
-        void UnRegisterSpawns(uint netId, INetworkBehaviour behaviour);
+        void UnRegisterSpawns(uint netId, INetworkBehaviour behaviour, bool isServer = false, bool isAutoUnRegisterRpc = true);
 
         INetworkBehaviour GetSpawnedOrNull(uint netId, bool preferServer = false);
         

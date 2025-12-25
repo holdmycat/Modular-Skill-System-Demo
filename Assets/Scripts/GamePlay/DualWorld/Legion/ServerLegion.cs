@@ -22,13 +22,16 @@ namespace Ebonor.GamePlay
         public override void InitAsync()
         {
             log.Info($"[ServerLegion] InitAsync");
+            
+            
+            
         }
         
         public override async UniTask ShutdownAsync()
         {
             log.Info("[ServerLegion] ShutdownAsync");
             await base.ShutdownAsync();
-            _networkBus.UnRegisterSpawns(_netId, this);
+            _networkBus.UnRegisterSpawns(_netId, this, true);
         }
         
         public class Factory : PlaceholderFactory<ServerLegion> 

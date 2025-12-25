@@ -29,7 +29,7 @@ namespace Ebonor.GamePlay
 
             _baseCommander.Configure(bootstrap);
 
-            _baseCommander.InitAsync();
+
 
             var payload = new CommanderSpawnPayload
             {
@@ -39,12 +39,14 @@ namespace Ebonor.GamePlay
             };
             var spawnPayload = payload.Serialize();
 
-            _networkBus.SendRpc(new RpcSpawnObject 
+            _networkBus.SendRpc(NetworkConstants.ROOM_MANAGER_NET_ID, new RpcSpawnObject 
             { 
                 Type = NetworkPrefabType.Player,
                 NetId = _baseCommander.NetId,
                 Payload = spawnPayload
             });
+            
+            _baseCommander.InitAsync();
             
         }
     }
@@ -88,11 +90,11 @@ namespace Ebonor.GamePlay
         {
             log.Info("[ServerRoomManager] ShutdownAsync");
 
-            _networkBus.UnRegisterSpawns(_netId, this);
+            _networkBus.UnRegisterSpawns(_netId, this, true,false);
             
             await _baseCommander.ShutdownAsync();
 
-            _networkBus.SendRpc(new RpcDestroyObject 
+            _networkBus.SendRpc(NetworkConstants.ROOM_MANAGER_NET_ID, new RpcDestroyObject 
             {
                 NetId = NetId
             });

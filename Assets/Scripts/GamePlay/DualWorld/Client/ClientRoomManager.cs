@@ -13,7 +13,7 @@ namespace Ebonor.GamePlay
     //network rpc
     public partial class ClientRoomManager : BaseRoomManager
     {
-        private void OnRpcReceived(IRpc rpc)
+        public override void OnRpc(IRpc rpc)
         {
             // Only handle Spawn Objects on this channel
             if (rpc is RpcSpawnObject spawnMsg)
@@ -46,18 +46,8 @@ namespace Ebonor.GamePlay
                     newActor.InitFromSpawnPayload(msg.Payload);
                     break;
                 }
-                case NetworkPrefabType.Legion:
-                {
-                    var teamPayload = LegionSpawnPayload.Deserialize(msg.Payload);
-                    var legion = _legionFactory.Create();
-                    newActor = legion;
-                    newActor.BindId(msg.NetId);
-                    legion.Configure(msg.NetId, (ulong)teamPayload.LegionId, false);
-                    legion.InitFromSpawnPayload(msg.Payload);
-                    break;
-                }
                 default:
-                    log.Error($"[ClientRoomManager] Unknown Spawn Type: {msg.Type}");
+                    log.Error($"[ClientRoomManager] Unknown or Handled-by-Commander Spawn Type: {msg.Type}");
                     return;
             }
             
@@ -111,14 +101,14 @@ namespace Ebonor.GamePlay
             _networkBus = networkBus;
             _characterDataRepository = characterDataRepository;
             BindId(NetworkConstants.ROOM_MANAGER_NET_ID);//client room manager
-            _networkBus.RegisterSpawns(NetId, this);
+            _networkBus.RegisterSpawns(NetId, this, false);
         }
         
         public override void InitAsync()
         {
             log.Info($"[ClientRoomManager] InitAsync - Listening on Static NetId: {NetId}");
             // Register listener for the Bootstrap Channel (NetId 1)
-            _networkBus.RegisterRpcListener(NetId, OnRpcReceived);
+            //_networkBus.RegisterRpcListener(NetId, OnRpcReceived);
             _networkBus.OnTickSync += Tick;
         }
         
@@ -144,8 +134,8 @@ namespace Ebonor.GamePlay
         {
             await _baseCommander.ShutdownAsync();
             
-            if (_networkBus != null)
-                _networkBus.UnregisterRpcListener(NetId, OnRpcReceived);
+            // if (_networkBus != null)
+            //     _networkBus.UnregisterRpcListener(NetId, OnRpcReceived, false);
             
             log.Info("[ClientRoomManager] ShutdownAsync");
         }

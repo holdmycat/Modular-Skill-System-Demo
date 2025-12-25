@@ -60,5 +60,9 @@ namespace Ebonor.DataCtrl
             
         }
         
+        public virtual void OnRpc(IRpc rpc)
+        {
+            log.Warn($"[NetworkBehaviour] Unhandled RPC: {rpc?.GetType().Name} on NetId:{NetId}");
+        }
     }
 }

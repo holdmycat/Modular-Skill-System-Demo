@@ -55,10 +55,10 @@ namespace Ebonor.GamePlay
             }
         }
         
-        public void SendRpc<T>(T rpc) where T : IRpc
+        public void SendRpc<T>(uint netId, T rpc) where T : IRpc
         {
             log.Info($"<color=magenta>[Net:Rpc] {rpc.GetType().Name}</color>");
-            uint netId = NetworkConstants.ROOM_MANAGER_NET_ID;
+            //uint netId = NetworkConstants.ROOM_MANAGER_NET_ID;
             if (_rpcListeners.TryGetValue(netId, out var listeners))
             {
                 foreach (var listener in listeners.ToArray())
@@ -129,7 +129,7 @@ namespace Ebonor.GamePlay
             }
         }
 
-        public void RegisterSpawns(uint netId, INetworkBehaviour behaviour, bool isServer = false)
+        public void RegisterSpawns(uint netId, INetworkBehaviour behaviour, bool isServer = false, bool isAutoRegisterRpc = true)
         {
             if (!_dicSpawnActors.TryGetValue(netId, out var list))
             {
@@ -140,15 +140,29 @@ namespace Ebonor.GamePlay
             if (!list.Exists(x => ReferenceEquals(x.behaviour, behaviour)))
             {
                 list.Add((behaviour, isServer));
+                if (isAutoRegisterRpc && !isServer)
+                {
+                    // Auto-wire RPC listener
+                    RegisterRpcListener(netId, behaviour.OnRpc);
+                }
+              
                 log.DebugFormat("[RegisterSpawns] netId:{0}, count:{1}", netId, list.Count);
             }
         }
 
-        public void UnRegisterSpawns(uint netId, INetworkBehaviour behaviour)
+        public void UnRegisterSpawns(uint netId, INetworkBehaviour behaviour, bool isServer = false, bool isAutoUnRegisterRpc = true)
         {
             if (_dicSpawnActors.TryGetValue(netId, out var list))
             {
                 list.RemoveAll(x => ReferenceEquals(x.behaviour, behaviour));
+
+                if (isAutoUnRegisterRpc)
+                {
+                    // Auto-unwire RPC listener
+                    UnregisterRpcListener(netId, behaviour.OnRpc);
+                }
+               
+
                 if (list.Count == 0)
                 {
                     _dicSpawnActors.Remove(netId);

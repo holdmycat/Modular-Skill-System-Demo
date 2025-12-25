@@ -15,7 +15,11 @@ namespace Ebonor.GamePlay
         protected NetworkIdHandle _netHandle;
         public uint NetId => _netHandle.NetId;
         public void BindId(uint netid) => _netHandle.BindId(netid);
-        
+        public virtual void OnRpc(IRpc rpc)
+        {
+           
+        }
+
         public virtual void InitAsync()
         {
            

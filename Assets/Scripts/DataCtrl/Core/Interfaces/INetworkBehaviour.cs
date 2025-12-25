@@ -16,5 +16,7 @@ namespace Ebonor.DataCtrl
 
         void BindId(uint netid);
 
+        void OnRpc(IRpc rpc);
+
     }
 }

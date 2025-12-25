@@ -43,6 +43,8 @@ namespace Ebonor.GamePlay
 
             BindId(commanderNetId);
             _networkBus.RegisterSpawns(NetId, this, true);
+
+            _legionId = _legionIdGenerator.Next(NetId); // gameplay id (64-bit)
         }
         
         public override void InitAsync()
@@ -57,10 +59,8 @@ namespace Ebonor.GamePlay
 
             _baseLegion = _factory.Create();
 
-            var legionId = _legionIdGenerator.Next(NetId); // gameplay id (64-bit)
             var legionNetId = _dataLoaderService.NextId(); // network id (uint)
-            _legionId = legionId;
-            _baseLegion.Configure(legionNetId, legionId, true);
+            _baseLegion.Configure(legionNetId, _legionId, true);
 
             _baseLegion.InitAsync();
             
@@ -72,7 +72,7 @@ namespace Ebonor.GamePlay
                 OwnerNetId = NetId
             }.Serialize();
 
-            _networkBus.SendRpc(new RpcSpawnObject
+            _networkBus.SendRpc(_netId, new RpcSpawnObject
             {
                 Type = NetworkPrefabType.Legion,
                 NetId = _baseLegion.NetId,
@@ -85,7 +85,9 @@ namespace Ebonor.GamePlay
         {
             log.Info("[ServerCommander] ShutdownAsync");
             await base.ShutdownAsync();
-            _networkBus.UnRegisterSpawns(_netId, this);
+            _networkBus.UnRegisterSpawns(_netId, this,true);
+
+            await _baseLegion.ShutdownAsync();
         }
         
         

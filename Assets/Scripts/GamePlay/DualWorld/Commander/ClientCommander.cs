@@ -12,17 +12,13 @@ namespace Ebonor.GamePlay
         private ClientLegion.Factory _legionFactory;
         
         [Inject]
-        public void Construct(ClientLegion.Factory legionFactory)
-        {
-            _legionFactory = legionFactory;
-        }
-
-        [Inject]
-        public ClientCommander(INetworkBus networkBus, IDataLoaderService dataLoaderService)
+        public ClientCommander(INetworkBus networkBus, IDataLoaderService dataLoaderService, ClientLegion.Factory legionFactory)
         {
             log.Info($"[ClientCommander] Construction");
 
             _networkBus = networkBus;
+            
+            _legionFactory = legionFactory;
             
             _dataLoaderService = dataLoaderService;
         }
@@ -62,11 +58,13 @@ namespace Ebonor.GamePlay
             {
                 log.Info($"[ClientCommander] Received Legion Spawn RPC: NetId:{spawnMsg.NetId}");
                 
-                var teamPayload = LegionSpawnPayload.Deserialize(spawnMsg.Payload);
+                var legionPayload = LegionSpawnPayload.Deserialize(spawnMsg.Payload);
                 var legion = _legionFactory.Create();
                 _baseLegion = legion;
                 
-                legion.Configure(spawnMsg.NetId, (ulong)teamPayload.LegionId, false);
+                var squadList = _bootstrapInfo.LegionConfig.SquadIds;
+                
+                legion.Configure(spawnMsg.NetId, (ulong)legionPayload.LegionId, squadList, false);
                 legion.InitFromSpawnPayload(spawnMsg.Payload);
 
                 _networkBus.RegisterSpawns(legion.NetId, legion);

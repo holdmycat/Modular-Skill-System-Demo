@@ -10,20 +10,29 @@ namespace Ebonor.GamePlay
         private static readonly ILog log = LogManager.GetLogger(typeof(ServerLegion));
         
         [Inject]
-        public ServerLegion(INetworkBus networkBus, IDataLoaderService dataLoaderService)
+        public ServerLegion(INetworkBus networkBus, IDataLoaderService dataLoaderService, ICharacterDataRepository characterDataRepository)
         {
             log.Info($"[ServerLegion] Construction");
 
+            _characterDataRepository = characterDataRepository;
             _networkBus = networkBus;
-            
             _dataLoaderService = dataLoaderService;
         }
         
         public override void InitAsync()
         {
             log.Info($"[ServerLegion] InitAsync");
-            
-            
+
+            foreach (var variable in _squadList)
+            {
+                log.Info($"[ServerLegion] InitAsync, squadId:" + variable);
+
+                var slgSquadData = _characterDataRepository.GetSlgSquadData(variable);
+                
+                
+                
+
+            }
             
         }
         
@@ -41,6 +50,5 @@ namespace Ebonor.GamePlay
                 log.Info($"[ServerLegion.Factory] Construction");
             }
         }
-        
     }
 }

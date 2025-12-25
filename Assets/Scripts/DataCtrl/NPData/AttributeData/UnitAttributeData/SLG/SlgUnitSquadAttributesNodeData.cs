@@ -18,15 +18,21 @@ namespace Ebonor.DataCtrl
     /// </summary>
     [System.Serializable]
     [BsonSerializer(typeof(AttributesDataSerializer<SlgUnitSquadAttributesNodeData>))]
-    public abstract class SlgUnitSquadAttributesNodeData : UnitAttributesNodeDataBase
+    public abstract class SlgUnitSquadAttributesNodeData : ICommonAttributeBase
     {
         [BsonElement("typeStr")]
         public string typeStr = "";
 
+        [BsonElement("UnitDataNodeId")]
+        public long UnitDataNodeId;
+        
         [Tooltip("关联的兵种 UnitId，对应 SlgUnitAttributesNodeData.UnitDataNodeId")]
         [BsonElement("UnitId")]
         public long UnitId;
 
+        [BsonElement("UnitName")]
+        public string UnitName;
+        
         [BsonElement("UnitSprite")]
         public string UnitSprite;
         

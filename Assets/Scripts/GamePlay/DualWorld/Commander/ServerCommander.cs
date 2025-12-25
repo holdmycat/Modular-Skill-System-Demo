@@ -59,8 +59,10 @@ namespace Ebonor.GamePlay
 
             _baseLegion = _factory.Create();
 
+            var squadList = _bootstrapInfo.LegionConfig.SquadIds;
+            
             var legionNetId = _dataLoaderService.NextId(); // network id (uint)
-            _baseLegion.Configure(legionNetId, _legionId, true);
+            _baseLegion.Configure(legionNetId, _legionId, squadList, true);
 
             _baseLegion.InitAsync();
             
@@ -89,7 +91,6 @@ namespace Ebonor.GamePlay
 
             await _baseLegion.ShutdownAsync();
         }
-        
         
         public class Factory : PlaceholderFactory<ServerCommander> 
         {

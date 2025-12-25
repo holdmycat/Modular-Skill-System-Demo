@@ -58,12 +58,12 @@ namespace Ebonor.Manager
             
             Container.BindInterfacesAndSelfTo<PoolManager>().FromNewComponentOnNewGameObject().AsSingle().NonLazy();
             
-            Container.Bind<IEntityFactory>().To<EntitySpawnService>().AsSingle();
+            //Container.Bind<IEntityFactory>().To<EntitySpawnService>().AsSingle();
             
             Container.BindInterfacesAndSelfTo<DataEventBusManager>().AsSingle();
 
             // Bind NumericComponent Factory
-            Container.Bind<IActorNumericComponentFactory>().To<ActorNumericComponentFactory>().AsSingle();
+            //Container.Bind<IActorNumericComponentFactory>().To<ActorNumericComponentFactory>().AsSingle();
             
             //Container.Bind<ISceneManager>().To<ShowcaseSceneManager>().AsSingle();
             

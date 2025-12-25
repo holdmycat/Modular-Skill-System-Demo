@@ -10,10 +10,11 @@ namespace Ebonor.GamePlay
         private static readonly ILog log = LogManager.GetLogger(typeof(ClientLegion));
 
         [Inject]
-        public ClientLegion(INetworkBus networkBus, IDataLoaderService dataLoaderService)
+        public ClientLegion(INetworkBus networkBus, IDataLoaderService dataLoaderService, ICharacterDataRepository characterDataRepository)
         {
             log.Info($"[ClientLegion] Construction");
             
+            _characterDataRepository = characterDataRepository;
             _networkBus = networkBus;
             _dataLoaderService = dataLoaderService;
         }

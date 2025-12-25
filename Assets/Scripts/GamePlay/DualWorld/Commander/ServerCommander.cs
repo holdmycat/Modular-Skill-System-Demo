@@ -79,13 +79,12 @@ namespace Ebonor.GamePlay
                 Payload = legionPayloadBytes
             });
             
-            
-            
         }
         
         public override async UniTask ShutdownAsync()
         {
             log.Info("[ServerCommander] ShutdownAsync");
+            await base.ShutdownAsync();
             _networkBus.UnRegisterSpawns(_netId, this);
         }
         

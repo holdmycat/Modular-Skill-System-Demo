@@ -45,6 +45,8 @@ namespace Ebonor.GamePlay
         public override async UniTask ShutdownAsync()
         {
             log.Info($"[ClientLegion] ShutdownAsync");
+
+            await base.ShutdownAsync();
         }
         
         public override void Tick(int tick)

@@ -50,9 +50,10 @@ namespace Ebonor.GamePlay
             base.InitFromSpawnPayload(payload);
         }
         
-        public override async UniTask ShutdownAsync()
+        public override async UniTask  ShutdownAsync()
         {
             log.Info($"[ClientCommander] ShutdownAsync");
+            await base.ShutdownAsync();
         }
         
         public override void Tick(int tick)

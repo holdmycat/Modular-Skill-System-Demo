@@ -49,6 +49,10 @@ namespace Ebonor.DataCtrl
         public virtual async UniTask ShutdownAsync()
         {
             log.Info($"[NetworkBehaviour] ShutdownAsync");
+            if (_netid == 0)
+            {
+                throw new System.InvalidOperationException($"{GetType().Name} ShutdownAsync called with NetId==0 (not registered).");
+            }
         }
         
         public virtual void OnUpdate()

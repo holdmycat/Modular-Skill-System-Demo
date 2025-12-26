@@ -11,104 +11,178 @@ namespace Ebonor.DataCtrl
         Min = 10000,
 
         /// <summary>
-        /// UnityProfession
+        /// Unity Layer/Tag identifier
         /// </summary>
         [InspectorName("UnityProfession")]
         UnityProfession = 1001,
 
         /// <summary>
-        /// ActorSide
+        /// Faction Side (0: Neutral, 1: Player, 2: Enemy)
         /// </summary>
         [InspectorName("ActorSide")]
         ActorSide = 1002,
 
         /// <summary>
-        /// UnitLv
+        /// Current Level
         /// </summary>
         [InspectorName("UnitLv")]
         UnitLv = 1003,
 
         /// <summary>
-        /// UnitMaxLV
+        /// Max Level Cap
         /// </summary>
-        [InspectorName("UnitMaxLV")]
-        UnitMaxLV = 1004,
+        [InspectorName("UnitMaxLv")]
+        UnitMaxLv = 1004,
 
         /// <summary>
-        /// Height
+        /// Current HP / Max HP (Base + Add)
         /// </summary>
-        [InspectorName("Height")]
-        Height = 1005,
+        [InspectorName("Hp")]
+        Hp = 1010,
+        HpBase = Hp * 10 + 1,
+        HpAdd = Hp * 10 + 2,
 
         /// <summary>
-        /// Radius
+        /// Physical Attack
         /// </summary>
-        [InspectorName("Radius")]
-        Radius = 1006,
+        [InspectorName("Attack")]
+        Attack = 1011,
+        AttackBase = Attack * 10 + 1,
+        AttackAdd = Attack * 10 + 2,
 
         /// <summary>
-        /// Power
+        /// Physical Defense
         /// </summary>
-        [InspectorName("Power")]
-        Power = 1021,
-        PowerBase = Power * 10 + 1,
-        PowerAdd = Power * 10 + 2,
+        [InspectorName("Defense")]
+        Defense = 1012,
+        DefenseBase = Defense * 10 + 1,
+        DefenseAdd = Defense * 10 + 2,
 
         /// <summary>
-        /// Agility
+        /// Attack Speed (Attacks per sec)
         /// </summary>
-        [InspectorName("Agility")]
-        Agility = 1022,
-        AgilityBase = Agility * 10 + 1,
-        AgilityAdd = Agility * 10 + 2,
+        [InspectorName("AttackSpeed")]
+        AttackSpeed = 1013,
+        AttackSpeedBase = AttackSpeed * 10 + 1,
+        AttackSpeedAdd = AttackSpeed * 10 + 2,
 
         /// <summary>
-        /// Vitality
+        /// World Map March Speed
         /// </summary>
-        [InspectorName("Vitality")]
-        Vitality = 1023,
-        VitalityBase = Vitality * 10 + 1,
-        VitalityAdd = Vitality * 10 + 2,
+        [InspectorName("MarchSpeed")]
+        MarchSpeed = 2001,
+        MarchSpeedBase = MarchSpeed * 10 + 1,
+        MarchSpeedAdd = MarchSpeed * 10 + 2,
 
         /// <summary>
-        /// Life
+        /// Resource Load Capacity
         /// </summary>
-        [InspectorName("Life")]
-        Life = 1024,
+        [InspectorName("LoadCapacity")]
+        LoadCapacity = 2002,
+        LoadCapacityBase = LoadCapacity * 10 + 1,
+        LoadCapacityAdd = LoadCapacity * 10 + 2,
 
         /// <summary>
-        /// MaxLife
+        /// Stamina cost per action
         /// </summary>
-        [InspectorName("MaxLife")]
-        MaxLife = 1025,
+        [InspectorName("StaminaCost")]
+        StaminaCost = 2003,
 
         /// <summary>
-        /// MovementSpeed
+        /// Infantry Atk % Bonus (100=1%)
         /// </summary>
-        [InspectorName("MovementSpeed")]
-        MovementSpeed = 1041,
-        MovementSpeedBase = MovementSpeed * 10 + 1,
-        MovementSpeedAdd = MovementSpeed * 10 + 2,
+        [InspectorName("InfantryAttackMod")]
+        InfantryAttackMod = 2011,
+        InfantryAttackModBase = InfantryAttackMod * 10 + 1,
+        InfantryAttackModAdd = InfantryAttackMod * 10 + 2,
 
         /// <summary>
-        /// RotationSpeed
+        /// Infantry Def % Bonus
         /// </summary>
-        [InspectorName("RotationSpeed")]
-        RotationSpeed = 1042,
-        RotationSpeedBase = RotationSpeed * 10 + 1,
-        RotationSpeedAdd = RotationSpeed * 10 + 2,
+        [InspectorName("InfantryDefenseMod")]
+        InfantryDefenseMod = 2012,
+        InfantryDefenseModBase = InfantryDefenseMod * 10 + 1,
+        InfantryDefenseModAdd = InfantryDefenseMod * 10 + 2,
 
         /// <summary>
-        /// RunningAnimSpeed
+        /// Infantry HP % Bonus
         /// </summary>
-        [InspectorName("RunningAnimSpeed")]
-        RunningAnimSpeed = 1043,
+        [InspectorName("InfantryHpMod")]
+        InfantryHpMod = 2013,
+        InfantryHpModBase = InfantryHpMod * 10 + 1,
+        InfantryHpModAdd = InfantryHpMod * 10 + 2,
 
         /// <summary>
-        /// DropFlyingDuration
+        /// Lancer Atk % Bonus
         /// </summary>
-        [InspectorName("DropFlyingDuration")]
-        DropFlyingDuration = 1044,
+        [InspectorName("LancerAttackMod")]
+        LancerAttackMod = 2021,
+        LancerAttackModBase = LancerAttackMod * 10 + 1,
+        LancerAttackModAdd = LancerAttackMod * 10 + 2,
+
+        /// <summary>
+        /// Lancer Def % Bonus
+        /// </summary>
+        [InspectorName("LancerDefenseMod")]
+        LancerDefenseMod = 2022,
+        LancerDefenseModBase = LancerDefenseMod * 10 + 1,
+        LancerDefenseModAdd = LancerDefenseMod * 10 + 2,
+
+        /// <summary>
+        /// Lancer HP % Bonus
+        /// </summary>
+        [InspectorName("LancerHpMod")]
+        LancerHpMod = 2023,
+        LancerHpModBase = LancerHpMod * 10 + 1,
+        LancerHpModAdd = LancerHpMod * 10 + 2,
+
+        /// <summary>
+        /// Marksman Atk % Bonus
+        /// </summary>
+        [InspectorName("MarksmanAttackMod")]
+        MarksmanAttackMod = 2031,
+        MarksmanAttackModBase = MarksmanAttackMod * 10 + 1,
+        MarksmanAttackModAdd = MarksmanAttackMod * 10 + 2,
+
+        /// <summary>
+        /// Marksman Def % Bonus
+        /// </summary>
+        [InspectorName("MarksmanDefenseMod")]
+        MarksmanDefenseMod = 2032,
+        MarksmanDefenseModBase = MarksmanDefenseMod * 10 + 1,
+        MarksmanDefenseModAdd = MarksmanDefenseMod * 10 + 2,
+
+        /// <summary>
+        /// Marksman HP % Bonus
+        /// </summary>
+        [InspectorName("MarksmanHpMod")]
+        MarksmanHpMod = 2033,
+        MarksmanHpModBase = MarksmanHpMod * 10 + 1,
+        MarksmanHpModAdd = MarksmanHpMod * 10 + 2,
+
+        /// <summary>
+        /// Construction Speed %
+        /// </summary>
+        [InspectorName("ConstructionSpeed")]
+        ConstructionSpeed = 3001,
+        ConstructionSpeedBase = ConstructionSpeed * 10 + 1,
+        ConstructionSpeedAdd = ConstructionSpeed * 10 + 2,
+
+        /// <summary>
+        /// Research Speed %
+        /// </summary>
+        [InspectorName("ResearchSpeed")]
+        ResearchSpeed = 3002,
+        ResearchSpeedBase = ResearchSpeed * 10 + 1,
+        ResearchSpeedAdd = ResearchSpeed * 10 + 2,
+
+        /// <summary>
+        /// Troop Training Speed %
+        /// </summary>
+        [InspectorName("TrainingSpeed")]
+        TrainingSpeed = 3003,
+        TrainingSpeedBase = TrainingSpeed * 10 + 1,
+        TrainingSpeedAdd = TrainingSpeed * 10 + 2,
 
     }
 }

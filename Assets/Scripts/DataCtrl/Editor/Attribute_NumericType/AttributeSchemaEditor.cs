@@ -52,7 +52,7 @@ namespace Ebonor.DataCtrl.Editor
                 sb.AppendLine($"        [InspectorName(\"{attr.Name}\")]");
                 sb.AppendLine($"        {attr.Name} = {attr.Id},");
 
-                if (attr.Type == AttributeType.BaseAdd)
+                if (attr.Type == AttributeType.Base)
                 {
                     sb.AppendLine($"        {attr.Name}Base = {attr.Name} * 10 + 1,");
                     sb.AppendLine($"        {attr.Name}Add = {attr.Name} * 10 + 2,");

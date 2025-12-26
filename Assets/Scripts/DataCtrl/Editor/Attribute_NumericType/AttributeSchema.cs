@@ -6,8 +6,8 @@ namespace Ebonor.DataCtrl.Editor
 {
     public enum AttributeType
     {
-        FinalOnly,
-        BaseAdd
+        Final,
+        Base
     }
 
     [Serializable]

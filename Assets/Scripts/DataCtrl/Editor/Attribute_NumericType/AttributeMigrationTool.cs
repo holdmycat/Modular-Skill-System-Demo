@@ -9,8 +9,8 @@ namespace Ebonor.DataCtrl.Editor
 {
     public class AttributeMigrationTool
     {
-        [MenuItem("Custom Windows/Migrate Attributes to Schema")]
-        public static void Migrate()
+        [MenuItem("Custom Windows/Setup SLG Attribute Schema")]
+        public static void SetupSLGSchema()
         {
             string assetPath = "Assets/Resources/ScriptableObject/AttributeSchema.asset";
             string dir = Path.GetDirectoryName(assetPath);
@@ -27,72 +27,63 @@ namespace Ebonor.DataCtrl.Editor
             }
 
             schema.Attributes.Clear();
+            
+            // --- 1. Basic / RPG Attributes (1000 - 1999) ---
+            // Used by Squads for Combat interactions
+            AddAttr(schema, "UnityProfession", 1001, AttributeType.Final, "Unity Layer/Tag identifier");
+            AddAttr(schema, "ActorSide", 1002, AttributeType.Final, "Faction Side (0: Neutral, 1: Player, 2: Enemy)");
+            AddAttr(schema, "UnitLv", 1003, AttributeType.Final, "Current Level");
+            AddAttr(schema, "UnitMaxLv", 1004, AttributeType.Final, "Max Level Cap");
+            
+            AddAttr(schema, "Hp", 1010, AttributeType.Base, "Current HP / Max HP (Base + Add)");
+            AddAttr(schema, "Attack", 1011, AttributeType.Base, "Physical Attack");
+            AddAttr(schema, "Defense", 1012, AttributeType.Base, "Physical Defense");
+            AddAttr(schema, "AttackSpeed", 1013, AttributeType.Base, "Attack Speed (Attacks per sec)");
+            
+            // --- 2. SLG Military Attributes (2000 - 2999) ---
+            // Used by Commander (Modifiers) and Legion (March Stats)
+            
+            // March Physics
+            AddAttr(schema, "MarchSpeed", 2001, AttributeType.Base, "World Map March Speed");
+            AddAttr(schema, "LoadCapacity", 2002, AttributeType.Base, "Resource Load Capacity");
+            AddAttr(schema, "StaminaCost", 2003, AttributeType.Final, "Stamina cost per action");
 
-            var enumValues = Enum.GetValues(typeof(eNumericType)).Cast<eNumericType>().Distinct().OrderBy(e => (int)e).ToList();
-            var enumNames = Enum.GetNames(typeof(eNumericType)).ToList();
+            // Unit Type Modifiers (Percent, usually FinalOnly, e.g. 1000 = 10%)
+            // These gather inputs from Tech, Gear, VIP.
+            // Changed to BaseAdd to support separation of "Permanent Base" (Tech) vs "Temporary" (Buffs) if needed.
+            AddAttr(schema, "InfantryAttackMod", 2011, AttributeType.Base, "Infantry Atk % Bonus (100=1%)");
+            AddAttr(schema, "InfantryDefenseMod", 2012, AttributeType.Base, "Infantry Def % Bonus");
+            AddAttr(schema, "InfantryHpMod", 2013, AttributeType.Base, "Infantry HP % Bonus");
+            
+            AddAttr(schema, "LancerAttackMod", 2021, AttributeType.Base, "Lancer Atk % Bonus");
+            AddAttr(schema, "LancerDefenseMod", 2022, AttributeType.Base, "Lancer Def % Bonus");
+            AddAttr(schema, "LancerHpMod", 2023, AttributeType.Base, "Lancer HP % Bonus");
+            
+            AddAttr(schema, "MarksmanAttackMod", 2031, AttributeType.Base, "Marksman Atk % Bonus");
+            AddAttr(schema, "MarksmanDefenseMod", 2032, AttributeType.Base, "Marksman Def % Bonus");
+            AddAttr(schema, "MarksmanHpMod", 2033, AttributeType.Base, "Marksman HP % Bonus");
 
-            HashSet<int> processedIds = new HashSet<int>();
+            // --- 3. SLG Economy Attributes (3000 - 3999) ---
+            // Commander Level
+            AddAttr(schema, "ConstructionSpeed", 3001, AttributeType.Base, "Construction Speed %");
+            AddAttr(schema, "ResearchSpeed", 3002, AttributeType.Base, "Research Speed %");
+            AddAttr(schema, "TrainingSpeed", 3003, AttributeType.Base, "Troop Training Speed %");
 
-            foreach (var val in enumValues)
-            {
-                int intVal = (int)val;
-                if (intVal >= 10000) continue; // Skip Min and below if any
-
-                // Skip if it looks like a Base or Add variant (ends in 1 or 2 and is > 100000? No, logic is * 10 + 1)
-                // Example: Power = 1021. PowerBase = 10211.
-                // So if intVal is 10211, parent is 1021.
-                // Check if this value is a child
-                if (IsChildValue(intVal))
-                {
-                    continue;
-                }
-
-                if (processedIds.Contains(intVal)) continue;
-
-                string name = val.ToString();
-                
-                // Check if Base/Add variants exist
-                int baseId = intVal * 10 + 1;
-                int addId = intVal * 10 + 2;
-
-                bool hasBase = Enum.IsDefined(typeof(eNumericType), baseId);
-                bool hasAdd = Enum.IsDefined(typeof(eNumericType), addId);
-
-                AttributeDefinition def = new AttributeDefinition();
-                def.Name = name;
-                def.Id = intVal;
-                def.Type = (hasBase && hasAdd) ? AttributeType.BaseAdd : AttributeType.FinalOnly;
-                def.Description = name; // Default description
-
-                schema.Attributes.Add(def);
-                processedIds.Add(intVal);
-            }
 
             EditorUtility.SetDirty(schema);
             AssetDatabase.SaveAssets();
-            Debug.Log($"Migrated {schema.Attributes.Count} attributes to {assetPath}");
+            Debug.Log($"[AttributeMigrationTool] Set up {schema.Attributes.Count} SLG attributes in {assetPath}");
         }
 
-        private static bool IsChildValue(int val)
+        private static void AddAttr(AttributeSchema schema, string name, int id, AttributeType type, string desc)
         {
-            // A child value comes from Parent * 10 + 1 or + 2.
-            // So (val - 1) / 10 should be a valid parent ID?
-            // Or simpler: check if the last digit is 1 or 2, AND the parent exists in the enum.
-            
-            int lastDigit = val % 10;
-            if (lastDigit == 1 || lastDigit == 2)
+            schema.Attributes.Add(new AttributeDefinition
             {
-                int parentId = val / 10;
-                // Check if parentId exists in eNumericType
-                if (Enum.IsDefined(typeof(eNumericType), parentId))
-                {
-                    // It is a child only if the parent actually exists.
-                    // Example: 10211 -> parent 1021 (Power). Power exists. So 10211 is child.
-                    // Example: 1001 (UnityProfession). 1001 % 10 = 1. Parent 100. Does 100 exist? Likely not.
-                    return true;
-                }
-            }
-            return false;
+                Name = name,
+                Id = id,
+                Type = type,
+                Description = desc
+            });
         }
     }
 }

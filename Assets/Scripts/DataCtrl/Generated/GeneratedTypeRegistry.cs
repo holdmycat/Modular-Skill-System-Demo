@@ -19,7 +19,6 @@ namespace Ebonor.DataCtrl
             typeof(Ebonor.DataCtrl.KeyboardPlayerInputSource),
             typeof(Ebonor.DataCtrl.NP_RuntimeTree),
             typeof(Ebonor.DataCtrl.NP_SupportTree),
-            typeof(Ebonor.DataCtrl.PlayerActorNumericComponent),
             typeof(Ebonor.DataCtrl.PlayerInputRouter),
             typeof(Ebonor.DataCtrl.PoolFloatingTextItem),
             typeof(Ebonor.DataCtrl.PoolManager),

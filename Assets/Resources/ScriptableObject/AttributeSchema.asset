@@ -16,60 +16,92 @@ MonoBehaviour:
   - Name: UnityProfession
     Id: 1001
     Type: 0
-    Description: UnityProfession
+    Description: Unity Layer/Tag identifier
   - Name: ActorSide
     Id: 1002
     Type: 0
-    Description: ActorSide
+    Description: 'Faction Side (0: Neutral, 1: Player, 2: Enemy)'
   - Name: UnitLv
     Id: 1003
     Type: 0
-    Description: UnitLv
-  - Name: UnitMaxLV
+    Description: Current Level
+  - Name: UnitMaxLv
     Id: 1004
     Type: 0
-    Description: UnitMaxLV
-  - Name: Height
-    Id: 1005
-    Type: 0
-    Description: Height
-  - Name: Radius
-    Id: 1006
-    Type: 0
-    Description: Radius
-  - Name: Power
-    Id: 1021
+    Description: Max Level Cap
+  - Name: Hp
+    Id: 1010
     Type: 1
-    Description: Power
-  - Name: Agility
-    Id: 1022
+    Description: Current HP / Max HP (Base + Add)
+  - Name: Attack
+    Id: 1011
     Type: 1
-    Description: Agility
-  - Name: Vitality
-    Id: 1023
+    Description: Physical Attack
+  - Name: Defense
+    Id: 1012
     Type: 1
-    Description: Vitality
-  - Name: Life
-    Id: 1024
-    Type: 0
-    Description: Life
-  - Name: MaxLife
-    Id: 1025
-    Type: 0
-    Description: MaxLife
-  - Name: MovementSpeed
-    Id: 1041
+    Description: Physical Defense
+  - Name: AttackSpeed
+    Id: 1013
     Type: 1
-    Description: MovementSpeed
-  - Name: RotationSpeed
-    Id: 1042
+    Description: Attack Speed (Attacks per sec)
+  - Name: MarchSpeed
+    Id: 2001
     Type: 1
-    Description: RotationSpeed
-  - Name: RunningAnimSpeed
-    Id: 1043
+    Description: World Map March Speed
+  - Name: LoadCapacity
+    Id: 2002
+    Type: 1
+    Description: Resource Load Capacity
+  - Name: StaminaCost
+    Id: 2003
     Type: 0
-    Description: RunningAnimSpeed
-  - Name: DropFlyingDuration
-    Id: 1044
-    Type: 0
-    Description: DropFlyingDuration
+    Description: Stamina cost per action
+  - Name: InfantryAttackMod
+    Id: 2011
+    Type: 1
+    Description: Infantry Atk % Bonus (100=1%)
+  - Name: InfantryDefenseMod
+    Id: 2012
+    Type: 1
+    Description: Infantry Def % Bonus
+  - Name: InfantryHpMod
+    Id: 2013
+    Type: 1
+    Description: Infantry HP % Bonus
+  - Name: LancerAttackMod
+    Id: 2021
+    Type: 1
+    Description: Lancer Atk % Bonus
+  - Name: LancerDefenseMod
+    Id: 2022
+    Type: 1
+    Description: Lancer Def % Bonus
+  - Name: LancerHpMod
+    Id: 2023
+    Type: 1
+    Description: Lancer HP % Bonus
+  - Name: MarksmanAttackMod
+    Id: 2031
+    Type: 1
+    Description: Marksman Atk % Bonus
+  - Name: MarksmanDefenseMod
+    Id: 2032
+    Type: 1
+    Description: Marksman Def % Bonus
+  - Name: MarksmanHpMod
+    Id: 2033
+    Type: 1
+    Description: Marksman HP % Bonus
+  - Name: ConstructionSpeed
+    Id: 3001
+    Type: 1
+    Description: Construction Speed %
+  - Name: ResearchSpeed
+    Id: 3002
+    Type: 1
+    Description: Research Speed %
+  - Name: TrainingSpeed
+    Id: 3003
+    Type: 1
+    Description: Troop Training Speed %

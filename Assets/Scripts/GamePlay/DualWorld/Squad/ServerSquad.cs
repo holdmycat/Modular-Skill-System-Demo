@@ -30,6 +30,21 @@ namespace Ebonor.GamePlay
             log.Info($"[ServerSquad] InitAsync");
             
           
+            //create soldiers
+            var formation = _squadUnitAttr.Formation;
+
+            var count = _squadUnitAttr.MaxCount;
+            
+            //我需要知道加载的模型id
+            var unitId = _squadUnitAttr.UnitId;
+
+            //我需要知道加载的位置
+
+            //我需要知道阵型
+
+
+
+
         }
         
         public override async UniTask ShutdownAsync()

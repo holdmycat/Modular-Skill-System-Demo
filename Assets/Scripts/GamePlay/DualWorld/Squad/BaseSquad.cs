@@ -1,35 +1,31 @@
-using System.Collections;
-using System.Collections.Generic;
 using Ebonor.DataCtrl;
-using UnityEngine;
 
 namespace Ebonor.GamePlay
 {
-    public class BaseLegion : NetworkBehaviour
+    public class BaseSquad : NetworkBehaviour
     {
         protected INetworkBus _networkBus;
         
         protected  IDataLoaderService _dataLoaderService;
-        protected ulong _legionId;
-
+        
         protected ICharacterDataRepository _characterDataRepository;
-        
-        protected List<long> _squadList;
-        
-        protected List<BaseSquad> _listBaseSquads;
+
+        protected SlgUnitSquadAttributesNodeData _squadUnitAttr;
         
         /// <summary>
         /// Bind net id and register to network bus. Call right after construction.
         /// </summary>
-        public void Configure(uint netId, ulong legionId, List<long> list, bool isServer = false)
+        public void Configure(uint netId, SlgUnitSquadAttributesNodeData squadUnitAttr, bool isServer = false)
         {
             if (NetId != 0)
             {
                 return;
             }
+
+            _squadUnitAttr = squadUnitAttr;
+            
             BindId(netId);
-            _legionId = legionId;
-            _squadList = list;
+           
             if (_networkBus == null)
             {
                 throw new System.InvalidOperationException("[BaseLegion] Configure failed: network bus is null.");

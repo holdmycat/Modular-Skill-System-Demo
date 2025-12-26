@@ -14,7 +14,6 @@ namespace Ebonor.DataCtrl
 
         protected ISceneResourceManager _sceneResourceManager;
 
-        protected GameSceneResource _gameSceneResource;
         
         public void BindId(uint netid)
         {

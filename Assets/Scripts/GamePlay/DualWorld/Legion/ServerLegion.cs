@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
@@ -9,11 +10,17 @@ namespace Ebonor.GamePlay
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ServerLegion));
         
+        private readonly ServerSquad.Factory _factory;
+        
         [Inject]
-        public ServerLegion(INetworkBus networkBus, IDataLoaderService dataLoaderService, ICharacterDataRepository characterDataRepository)
+        public ServerLegion(
+            ServerSquad.Factory factory, 
+            INetworkBus networkBus, 
+            IDataLoaderService dataLoaderService, 
+            ICharacterDataRepository characterDataRepository)
         {
             log.Info($"[ServerLegion] Construction");
-
+            _listBaseSquads = new List<BaseSquad>();
             _characterDataRepository = characterDataRepository;
             _networkBus = networkBus;
             _dataLoaderService = dataLoaderService;
@@ -29,6 +36,14 @@ namespace Ebonor.GamePlay
 
                 var slgSquadData = _characterDataRepository.GetSlgSquadData(variable);
                 
+                var baseSquad = _factory.Create();
+
+                var squadNetId = _dataLoaderService.NextId();
+                
+                baseSquad.Configure(squadNetId, slgSquadData, true);
+
+                baseSquad.InitAsync();
+                
                 
                 
 
@@ -39,6 +54,11 @@ namespace Ebonor.GamePlay
         public override async UniTask ShutdownAsync()
         {
             log.Info("[ServerLegion] ShutdownAsync");
+            foreach (var variable in _listBaseSquads)
+            {
+                await variable.ShutdownAsync();
+            }
+            _listBaseSquads.Clear();
             await base.ShutdownAsync();
             _networkBus.UnRegisterSpawns(_netId, this, true);
         }

@@ -68,7 +68,6 @@ namespace Ebonor.GamePlay
             _factory = factory;
             _networkBus = networkBus;
             _sceneResourceManager = sceneResourceManager;
-            _gameSceneResource = _sceneResourceManager.GetSceneResource();
             BindId(NetworkConstants.ROOM_MANAGER_NET_ID);//server room manager
             _networkBus.RegisterSpawns(NetId, this, true);
             log.Debug("[ServerRoomManager] Constructed (Static NetId: 1).");

@@ -28,9 +28,6 @@ namespace Ebonor.Manager
                 .AsSingle()
                 .WithArguments(SceneId);
             
-            // Data Providers
-            //Container.Bind<ICommanderDataProvider>().To<CommanderDataProvider>().AsSingle();
-            
             // --- Server Logic World ---
             Container.Bind<ServerRoomManager>().AsSingle();
             Container.Bind<ServerManager>().AsSingle();
@@ -39,14 +36,15 @@ namespace Ebonor.Manager
             Container.Bind<ClientRoomManager>().FromNewComponentOnNewGameObject().AsSingle();
             Container.Bind<ClientManager>().FromNewComponentOnNewGameObject().AsSingle();
             
-            Container.Bind<ServerCommander>().AsSingle();
-            
             Container.BindFactory<ServerCommander, ServerCommander.Factory>().AsSingle();
             Container.BindFactory<ClientCommander, ClientCommander.Factory>().AsSingle();
             
             Container.BindFactory<ServerLegion, ServerLegion.Factory>().AsSingle();
             Container.BindFactory<ClientLegion, ClientLegion.Factory>().AsSingle();
 
+            Container.BindFactory<ServerSquad, ServerSquad.Factory>().AsSingle();
+            Container.BindFactory<ClientSquad, ClientSquad.Factory>().AsSingle();
+            
             
             // --- Scene Root ---
             log.Debug("[ShowcaseInstaller] InstallBindings called.");

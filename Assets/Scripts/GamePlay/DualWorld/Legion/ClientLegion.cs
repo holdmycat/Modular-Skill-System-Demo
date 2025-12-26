@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
@@ -9,11 +10,17 @@ namespace Ebonor.GamePlay
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ClientLegion));
 
+        private readonly ClientSquad.Factory _factory;
+
+        
         [Inject]
-        public ClientLegion(INetworkBus networkBus, IDataLoaderService dataLoaderService, ICharacterDataRepository characterDataRepository)
+        public ClientLegion(
+            ClientSquad.Factory factory, 
+            INetworkBus networkBus, IDataLoaderService dataLoaderService, ICharacterDataRepository characterDataRepository)
         {
             log.Info($"[ClientLegion] Construction");
-            
+            _factory = factory;
+            _listBaseSquads = new List<BaseSquad>();
             _characterDataRepository = characterDataRepository;
             _networkBus = networkBus;
             _dataLoaderService = dataLoaderService;
@@ -47,6 +54,12 @@ namespace Ebonor.GamePlay
         {
             log.Info($"[ClientLegion] ShutdownAsync");
 
+            foreach (var variable in _listBaseSquads)
+            {
+                await variable.ShutdownAsync();
+            }
+            _listBaseSquads.Clear();
+            
             await base.ShutdownAsync();
         }
         

@@ -14,7 +14,7 @@ namespace Ebonor.GamePlay
         public SceneResourceManager(string sceneId /* 其他依赖 */, GlobalGameConfig config, IScenarioIdRegistry idRegistry) {
             _sceneId = sceneId;
             _globalGameConfig = config;
-
+            
             var list = _globalGameConfig?.GameSceneConfig?.ListSceneRes;
             if (list == null)
             {

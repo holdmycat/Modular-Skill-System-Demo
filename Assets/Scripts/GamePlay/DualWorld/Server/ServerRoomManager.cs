@@ -68,7 +68,7 @@ namespace Ebonor.GamePlay
             _sceneResourceManager = sceneResourceManager;
             BindId(NetworkConstants.ROOM_MANAGER_NET_ID);//server room manager
             _networkBus.RegisterSpawns(NetId, this, true);
-            log.Debug("[ServerRoomManager] Constructed (Static NetId: 1).");
+            log.Info("[ServerRoomManager] Constructed (Static NetId: 1).");
         }
         
         public override void InitAsync()

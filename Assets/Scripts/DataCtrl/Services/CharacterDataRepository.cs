@@ -25,7 +25,7 @@ namespace Ebonor.DataCtrl
         public CharacterDataRepository()
         {
             
-            log.Debug("[CharacterDataRepository], Starting Construction");
+            log.Info("[CharacterDataRepository], Starting Construction");
             _dicSlgUnitAttriDatasByName = new Dictionary<string, SlgUnitAttributesNodeData>();
             _dicSlgUnitAttriDatas = new Dictionary<long, SlgUnitAttributesNodeData>();
             
@@ -44,14 +44,14 @@ namespace Ebonor.DataCtrl
         
         public async UniTask SaveUnitDataSupporterAsync(UnitAttributesDataSupportor dataSupportor)
         {
-            log.Debug("[CharacterDataRepository], Starting save unit data");
+            log.Info("[CharacterDataRepository], Starting save unit data");
             
             foreach (var hero in dataSupportor.UnitAttributesDataSupportorDic.Values)  
             {                    
                 _dicUnitAttriDatas.Add(hero.UnitDataNodeId, hero);  
                 _dicListUnitDatas[hero.ActorModelType].Add(hero);  
                 _dicUnitAttriDatasByName.Add(hero.UnitName, hero);
-                log.Debug("[CharacterDataRepository] Saving unit data heroId:" + hero.UnitDataNodeId);
+                log.Info("[CharacterDataRepository] Saving unit data heroId:" + hero.UnitDataNodeId);
             }
             
             await UniTask.CompletedTask;
@@ -59,7 +59,7 @@ namespace Ebonor.DataCtrl
 
         public async UniTask SaveSlgUnitDataSupporterAsync(SlgUnitAttributesDataSupportor dataSupportor)
         {
-            log.Debug("[CharacterDataRepository] Starting save SLG unit data");
+            log.Info("[CharacterDataRepository] Starting save SLG unit data");
             
             foreach (var unit in dataSupportor.SlgUnitAttributesDic.Values)
             {
@@ -74,7 +74,7 @@ namespace Ebonor.DataCtrl
                         _dicSlgUnitAttriDatasByName.Add(unit.UnitName, unit);
                     }
                     
-                    log.Debug("[CharacterDataRepository] Saving SLG unit data id:" + unit.UnitDataNodeId);
+                    log.Info("[CharacterDataRepository] Saving SLG unit data id:" + unit.UnitDataNodeId);
                 }
                 else
                 {
@@ -87,7 +87,7 @@ namespace Ebonor.DataCtrl
 
         public async  UniTask SaveSlgSquadDataSupporterAsync(SlgUnitSquadAttributesDataSupportor dataSupportor)
         {
-            log.Debug("[CharacterDataRepository] Starting save SLG Squad data");
+            log.Info("[CharacterDataRepository] Starting save SLG Squad data");
             
             foreach (var squad in dataSupportor.SquadAttributesDic.Values)
             {
@@ -100,7 +100,7 @@ namespace Ebonor.DataCtrl
                         _dicSlgSquadAttriDatasByName.Add(squad.UnitName, squad);
                     }
                     
-                    log.Debug("[CharacterDataRepository] Saving SLG Squad data id:" + squad.UnitDataNodeId);
+                    log.Info("[CharacterDataRepository] Saving SLG Squad data id:" + squad.UnitDataNodeId);
                 }
                 else
                 {
@@ -174,7 +174,7 @@ namespace Ebonor.DataCtrl
         
         public void Dispose()
         {
-            log.Debug("[CharacterDataRepository], Starting Dispose");
+            log.Info("[CharacterDataRepository], Starting Dispose");
             _dicUnitAttriDatas.Clear();
             _dicUnitAttriDatasByName.Clear();
             _dicListUnitDatas.Clear();
@@ -189,7 +189,7 @@ namespace Ebonor.DataCtrl
 
         public void Initialize()
         {
-            log.Debug("[CharacterDataRepository], Starting Initialize");
+            log.Info("[CharacterDataRepository], Starting Initialize");
         }
     }
 

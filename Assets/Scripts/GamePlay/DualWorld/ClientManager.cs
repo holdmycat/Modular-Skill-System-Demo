@@ -16,7 +16,7 @@ namespace Ebonor.GamePlay
         {
             _clientRoomManager = roomManager;
             GOHelper.ResetLocalGameObject(gameObject,_clientRoomManager.gameObject,true, 1f);
-            log.Debug("[ClientManager] Constructed (Injected).");
+            log.Info("[ClientManager] Constructed (Injected).");
         }
         
         public void InitAsync()

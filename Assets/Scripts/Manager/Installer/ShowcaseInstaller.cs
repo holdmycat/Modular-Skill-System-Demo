@@ -54,7 +54,7 @@ namespace Ebonor.Manager
             
             
             // --- Scene Root ---
-            log.Debug("[ShowcaseInstaller] InstallBindings called.");
+            log.Info("[ShowcaseInstaller] InstallBindings called.");
             Container.BindInterfacesAndSelfTo<ShowcaseSceneManager>().AsSingle().NonLazy();
             
           

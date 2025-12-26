@@ -26,17 +26,17 @@ namespace Ebonor.Manager
         {
             _serverManager = serverManager;
             _clientManager = clientManager;
-            log.Debug("[ShowcaseSceneManager] Constructed with Dual World Managers.");
+            log.Info("[ShowcaseSceneManager] Constructed with Dual World Managers.");
         }
         
         public ShowcaseSceneManager()
         {
-            log.Debug("[ShowcaseSceneManager] Starting Construction (Wait for Inject)");
+            log.Info("[ShowcaseSceneManager] Starting Construction (Wait for Inject)");
         }
         
         public void Dispose()
         {
-            log.Debug("[ShowcaseSceneManager] Starting Dispose");
+            log.Info("[ShowcaseSceneManager] Starting Dispose");
             _serverManager.ShutdownAsync().Forget();
             //_clientManager.ShutdownAsync().Forget();
         }

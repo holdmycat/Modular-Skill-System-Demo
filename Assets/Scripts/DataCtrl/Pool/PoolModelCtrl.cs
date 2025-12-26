@@ -26,7 +26,7 @@ namespace Ebonor.DataCtrl
         
         public override void ClearAllPoolItem()
         {
-            log.Debug("[PoolModelCtrl] ClearAllPoolItem");
+            log.Info("[PoolModelCtrl] ClearAllPoolItem");
 
             foreach (var list in _pooledActors.Values)
             {

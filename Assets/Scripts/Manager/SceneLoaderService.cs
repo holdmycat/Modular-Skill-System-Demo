@@ -25,7 +25,7 @@ namespace Ebonor.Manager
 
         public async UniTask LoadSceneAsync(string sceneName)
         {
-            log.Debug($"[SceneLoaderService] Starting load sequence for: {sceneName}");
+            log.Info($"[SceneLoaderService] Starting load sequence for: {sceneName}");
 
             var obj = await _resourceLoader.LoadAsset<UObject>(sceneName, ResourceAssetType.SceneStateManager);
 
@@ -40,7 +40,7 @@ namespace Ebonor.Manager
             var prefab = obj as GameObject;
             var instance = _instantiator.InstantiatePrefab(prefab);
             instance.name = prefab.name;
-            log.Debug($"[SceneLoaderService] Instantiated: {instance.name}, Active: {instance.activeInHierarchy}");
+            log.Info($"[SceneLoaderService] Instantiated: {instance.name}, Active: {instance.activeInHierarchy}");
             
             // Ensure root before moving to current scene (required by MoveGameObjectToScene)
             instance.transform.SetParent(null, worldPositionStays: false);
@@ -60,7 +60,7 @@ namespace Ebonor.Manager
                 var sceneManager = context.Container.Resolve<ISceneManager>();
                 if (sceneManager != null)
                 {
-                    log.Debug("[SceneLoaderService] Calling ISceneManager.StartupSequence...");
+                    log.Info("[SceneLoaderService] Calling ISceneManager.StartupSequence...");
                     await sceneManager.StartupSequence();
                 }
                 else
@@ -73,7 +73,7 @@ namespace Ebonor.Manager
                 log.Warn("[SceneLoaderService] GameObjectContext component not found on instantiated object.");
             }
             
-            log.Debug($"[SceneLoaderService] Load complete: {sceneName}");
+            log.Info($"[SceneLoaderService] Load complete: {sceneName}");
         }
     }
 }

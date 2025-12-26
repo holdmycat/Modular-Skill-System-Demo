@@ -25,7 +25,7 @@ namespace Ebonor.DataCtrl
         
         public void SaveModelAsync(IList<UObject> list)
         {
-            log.Debug("[ModelRepository], Starting save model");
+            log.Info("[ModelRepository], Starting save model");
             
             _dicGameModel.Clear();
             
@@ -55,7 +55,7 @@ namespace Ebonor.DataCtrl
 
                 _dicGameModel.Add(modelId, model);
                 
-                log.DebugFormat("[ModelRepository], modelId:{0}, ModelName:{1}", unitAttr.UnitDataNodeId, unitAttr.UnitName);
+                log.InfoFormat("[ModelRepository], modelId:{0}, ModelName:{1}", unitAttr.UnitDataNodeId, unitAttr.UnitName);
                 
             }
             
@@ -64,14 +64,14 @@ namespace Ebonor.DataCtrl
 
         public void Dispose()
         {
-            log.Debug("[ModelRepository], Starting Dispose");
+            log.Info("[ModelRepository], Starting Dispose");
             _dicGameModel.Clear();
             _dicModelName.Clear();
         }
 
         public void Initialize()
         {
-            log.Debug("[ModelRepository], Starting Initialize");
+            log.Info("[ModelRepository], Starting Initialize");
             _dicModelName.Clear();
             _dicGameModel.Clear();
            
@@ -79,7 +79,7 @@ namespace Ebonor.DataCtrl
         
         public ModelRepository(ICharacterDataRepository characterDataRepository)
         {
-            log.Debug("[ModelRepository], Starting Construction");
+            log.Info("[ModelRepository], Starting Construction");
             _characterDataRepository = characterDataRepository;
             _dicGameModel = new Dictionary<long, UObject>();
             _dicModelName = new Dictionary<string, UObject>();

@@ -24,7 +24,7 @@ namespace Ebonor.DataCtrl
         /// <summary>Per-frame update hook for pool maintenance.</summary>
         public virtual void OnUpdate(PoolManager poolMgr)
         {
-            log.DebugFormat("[PoolCtrlBase] OnUpdate poolType={0}", poolType);
+            log.InfoFormat("[PoolCtrlBase] OnUpdate poolType={0}", poolType);
 
             if (resourcePoolConfig == null)
             {
@@ -41,7 +41,7 @@ namespace Ebonor.DataCtrl
         /// <summary>Initialize pool with its type and container.</summary>
         public virtual void InitPool(ePoolObjectType type)
         {
-            log.DebugFormat("[PoolCtrlBase] InitPool type={0}", type);
+            log.InfoFormat("[PoolCtrlBase] InitPool type={0}", type);
             poolType = type;
            // _container = container;
         }
@@ -49,20 +49,20 @@ namespace Ebonor.DataCtrl
         /// <summary>Create and register an item in the pool.</summary>
         public virtual void InitPoolItem<T>(string name) where T : PoolItemBase
         {
-            log.DebugFormat("[PoolCtrlBase] InitPoolItem type={0} name={1}", typeof(T).Name, name);
+            log.InfoFormat("[PoolCtrlBase] InitPoolItem type={0} name={1}", typeof(T).Name, name);
         }
         
         /// <summary>Spawn an item by key from the pool.</summary>
         public virtual T SpawnItemFromPool<T>(string _name) where T : PoolItemBase
         {
-            log.DebugFormat("[PoolCtrlBase] SpawnItemFromPool type={0} name={1}", typeof(T).Name, _name);
+            log.InfoFormat("[PoolCtrlBase] SpawnItemFromPool type={0} name={1}", typeof(T).Name, _name);
             return null;
         }
         
         /// <summary>Return an item to the pool.</summary>
         public virtual void DespawnItemFromPool<T>(T t) where T : PoolItemBase
         {
-            log.DebugFormat("[PoolCtrlBase] DespawnItemFromPool type={0} name={1}", typeof(T).Name, t != null ? t.name : "null");
+            log.InfoFormat("[PoolCtrlBase] DespawnItemFromPool type={0} name={1}", typeof(T).Name, t != null ? t.name : "null");
         }
         
         /// <summary>Clear all pooled items.</summary>

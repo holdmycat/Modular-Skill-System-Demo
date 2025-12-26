@@ -12,7 +12,7 @@ namespace Ebonor.GamePlay
         public ServerManager(ServerRoomManager roomManager)
         {
             _serverRoomManager = roomManager;
-            log.Debug("[ServerManager] Constructed.");
+            log.Info("[ServerManager] Constructed.");
         }
 
         public void InitAsync()

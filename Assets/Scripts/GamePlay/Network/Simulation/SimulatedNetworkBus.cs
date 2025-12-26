@@ -32,7 +32,7 @@ namespace Ebonor.GamePlay
         
         public SimulatedNetworkBus()
         {
-            log.Debug("[SimulatedNetworkBus] Network Bus Initialized.");
+            log.Info("[SimulatedNetworkBus] Network Bus Initialized.");
         }
 
         public void SendCommand<T>(uint netId, T cmd) where T : ICommand
@@ -146,7 +146,7 @@ namespace Ebonor.GamePlay
                     RegisterRpcListener(netId, behaviour.OnRpc);
                 }
               
-                log.DebugFormat("[RegisterSpawns] netId:{0}, count:{1}", netId, list.Count);
+                log.InfoFormat("[RegisterSpawns] netId:{0}, count:{1}", netId, list.Count);
             }
             else
             {

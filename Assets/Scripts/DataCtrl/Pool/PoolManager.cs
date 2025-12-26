@@ -65,7 +65,7 @@ namespace Ebonor.DataCtrl
                 ctrl.transform.localPosition = Vector3.up * 100; // Legacy positioning
                 ctrl.InitPool(type); // Pass container to the controller
                 mDicPoolCtrl.Add(type, ctrl);
-                log.Debug($"[PoolManager] Created pool controller for {type}");
+                log.Info($"[PoolManager] Created pool controller for {type}");
             }
             else
             {

@@ -1,0 +1,43 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9eebd496e5eb1459ea6b1b0180ee1a7c, type: 3}
+  m_Name: AllSlgCommanderAttrDataGraph
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  serializedGraph:
+    nodes:
+    - type: Plugins.NodeEditor.MollyCommanderNode, NodeGraphProcessor.Examples, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      jsonDatas: '{"nodeCustomName":"","GUID":"10101fa1-0da3-478d-ae55-f6777d93836d","computeOrder":0,"position":{"serializedVersion":"2","x":217.0,"y":165.0,"width":100.0,"height":100.0},"expanded":false,"debug":false,"nodeLock":false,"Data":{"rid":1000},"references":{"version":2,"RefIds":[{"rid":1000,"type":{"class":"MollyCommanderAttributesNodeData","ns":"Ebonor.DataCtrl","asm":"Ebonor.DataCtrl"},"data":{"typeStr":"Plugins.NodeEditor.MollyCommanderNode","UnitDataNodeId":2181382299519022680,"CommanderName":"Molly","Level":10,"GlobalInfantryAtkMod":20,"GlobalMarchSpeedMod":10,"GlobalConstructionSpeedMod":200,"GlobalResearchSpeedMod":150}}]}}'
+    - type: Plugins.NodeEditor.SergeyCommanderNode, NodeGraphProcessor.Examples,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      jsonDatas: '{"nodeCustomName":"","GUID":"1b012c99-a2bb-4022-990d-e12bf0ea029a","computeOrder":1,"position":{"serializedVersion":"2","x":424.0,"y":165.0,"width":160.0,"height":42.0},"expanded":false,"debug":false,"nodeLock":false,"Data":{"rid":1000},"references":{"version":2,"RefIds":[{"rid":1000,"type":{"class":"SergeyCommanderAttributesNodeData","ns":"Ebonor.DataCtrl","asm":"Ebonor.DataCtrl"},"data":{"typeStr":"Plugins.NodeEditor.SergeyCommanderNode","UnitDataNodeId":5247934821822272100,"CommanderName":"Sergey","Level":10,"GlobalInfantryAtkMod":300,"GlobalMarchSpeedMod":100,"GlobalConstructionSpeedMod":5,"GlobalResearchSpeedMod":30}}]}}'
+    edges: []
+    stackNodes: []
+    pinnedElements: []
+    exposedParameters: []
+    stickyNotes: []
+    position: {x: 0, y: 0, z: 0}
+    scale: {x: 1, y: 1, z: 1}
+  edges: []
+  stackNodes: []
+  pinnedElements: []
+  exposedParameters: []
+  serializedParameterList: []
+  stickyNotes: []
+  position: {x: 0, y: 0, z: 0}
+  scale: {x: 1, y: 1, z: 1}
+  Name: SlgCommanderData
+  SavePath: Assets/Resources/AllCharacterData
+  references:
+    version: 2
+    RefIds: []

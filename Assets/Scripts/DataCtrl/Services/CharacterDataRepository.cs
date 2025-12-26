@@ -22,6 +22,10 @@ namespace Ebonor.DataCtrl
         private Dictionary<long, SlgUnitSquadAttributesNodeData> _dicSlgSquadAttriDatas;
         private Dictionary<string, SlgUnitSquadAttributesNodeData> _dicSlgSquadAttriDatasByName;
         
+        // SLG Commander Data
+        private Dictionary<long, SlgCommanderAttributesNodeData> _dicCommanderAttriDatas;
+        private Dictionary<string, SlgCommanderAttributesNodeData> _dicCommanderAttriDatasByName;
+        
         public CharacterDataRepository()
         {
             
@@ -31,6 +35,9 @@ namespace Ebonor.DataCtrl
             
             _dicSlgSquadAttriDatas = new Dictionary<long, SlgUnitSquadAttributesNodeData>();
             _dicSlgSquadAttriDatasByName = new Dictionary<string, SlgUnitSquadAttributesNodeData>();
+            
+            _dicCommanderAttriDatas = new Dictionary<long, SlgCommanderAttributesNodeData>();
+            _dicCommanderAttriDatasByName = new Dictionary<string, SlgCommanderAttributesNodeData>();
             
             
             _dicUnitAttriDatas = new Dictionary<long, UnitAttributesNodeDataBase>();
@@ -185,6 +192,9 @@ namespace Ebonor.DataCtrl
             
             _dicSlgSquadAttriDatas.Clear();
             _dicSlgSquadAttriDatasByName.Clear();
+            
+            _dicCommanderAttriDatas.Clear();
+            _dicCommanderAttriDatasByName.Clear();
         }
 
         public void Initialize()

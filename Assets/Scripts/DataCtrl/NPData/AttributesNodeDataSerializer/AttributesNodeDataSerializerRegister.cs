@@ -76,11 +76,33 @@ namespace Ebonor.DataCtrl
             }
             
             
+            if (null == BsonSerializer.SerializerRegistry.GetSerializer(typeof(SlgCommanderAttributesNodeData)))
+            { 
+                // BsonSerializer.RegisterSerializer(typeof(UnitAttributesNodeDataBase), new AttributesDataSerializer<UnitAttributesNodeDataBase>());
+                BsonClassMap.RegisterClassMap<SlgCommanderAttributesNodeData>(cm =>
+                {
+                    cm.AutoMap();
+                    cm.SetIsRootClass(true); // supports inheritance
+                });
+            }
+
+            
+            
             
             // if (null == BsonSerializer.SerializerRegistry.GetSerializer(typeof(SkillAttributesNodeDataBase)))
             // {
             //     BsonSerializer.RegisterSerializer(typeof(SkillAttributesNodeDataBase), new AttributesDataSerializer<SkillAttributesNodeDataBase>());
             // }
+            
+
+            if (null == BsonSerializer.SerializerRegistry.GetSerializer(typeof(SlgCommanderAttributesNodeData)))
+            { 
+                BsonClassMap.RegisterClassMap<SlgCommanderAttributesNodeData>(cm =>
+                {
+                    cm.AutoMap();
+                    cm.SetIsRootClass(true); // supports inheritance
+                });
+            }
             //
             //
             // if (null == BsonSerializer.SerializerRegistry.GetSerializer(typeof(DropAttributesNodeDataBase)))

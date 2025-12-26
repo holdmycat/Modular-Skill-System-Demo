@@ -129,6 +129,13 @@ namespace Plugins.NodeEditor
             ProjectWindowUtil.CreateAsset(graph, "AllSlgSquadAttrDataGraph.asset");
         }
       
+        [MenuItem("Assets/Create/AllSlgCommanderAttributesData", false, 12)]
+        public static void CreateGraphProcessor_AllSlgCommanderAttributesData()
+        {
+            var graph = ScriptableObject.CreateInstance<SlgCommanderAttributesDataGraph>();
+            ProjectWindowUtil.CreateAsset(graph, "AllSlgCommanderAttrDataGraph.asset");
+        }
+        
         
         // [MenuItem("Assets/Create/AllWeaponAttributesData", false, 10)]
         // public static void CreateGraphPorcessor_AllWeaponAttributesData()
@@ -189,6 +196,10 @@ namespace Plugins.NodeEditor
                 case SlgUnitSquadAttributesDataGraph slgSquadGraph:
                     NodeGraphWindowHelper.GetAndShowNodeGraphWindow<SlgUnitSquadAttributesDataGraphWindow>(slgSquadGraph)
                         .InitializeGraph(slgSquadGraph);
+                    return true;
+                case SlgCommanderAttributesDataGraph slgCommanderGraph:
+                    NodeGraphWindowHelper.GetAndShowNodeGraphWindow<SlgCommanderAttributesDataGraphWindow>(slgCommanderGraph)
+                        .InitializeGraph(slgCommanderGraph);
                     return true;
                 default:
                     NodeGraphWindowHelper.GetAndShowNodeGraphWindow<FallbackGraphWindow>(baseGraph)

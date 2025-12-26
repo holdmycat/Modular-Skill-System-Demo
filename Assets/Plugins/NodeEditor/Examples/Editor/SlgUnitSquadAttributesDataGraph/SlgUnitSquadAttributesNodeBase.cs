@@ -4,7 +4,7 @@ using Ebonor.DataCtrl;
 namespace Plugins.NodeEditor
 {
     [System.Serializable]
-    public class SlgUnitSquadAttributesNodeBase : BaseNode
+    public abstract class SlgUnitSquadAttributesNodeBase : BaseNode
     {
         public override bool isRenamable => true;
         public override bool needsInspector => true;

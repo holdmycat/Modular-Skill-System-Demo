@@ -55,7 +55,7 @@ namespace Ebonor.DataCtrl
     [System.Serializable]
     public struct CommanderSpawnPayload
     {
-        public uint CommanderNetId;
+        // Redundant: public uint CommanderNetId;
         public ulong LegionId;
         public CommanderBootstrapInfo Bootstrap;
 
@@ -64,7 +64,7 @@ namespace Ebonor.DataCtrl
             var ms = new System.IO.MemoryStream();
             using (var writer = new System.IO.BinaryWriter(ms))
             {
-                writer.Write(CommanderNetId);
+                // writer.Write(CommanderNetId);
                 writer.Write(LegionId);
                 bool hasBootstrap = Bootstrap != null;
                 writer.Write(hasBootstrap);
@@ -83,7 +83,7 @@ namespace Ebonor.DataCtrl
             using (var reader = new System.IO.BinaryReader(ms))
             {
                 var payload = new CommanderSpawnPayload();
-                payload.CommanderNetId = reader.ReadUInt32();
+                // payload.CommanderNetId = reader.ReadUInt32();
                 payload.LegionId = reader.ReadUInt64();
                 bool hasBootstrap = reader.ReadBoolean();
                 if (!hasBootstrap)

@@ -12,7 +12,7 @@ namespace Ebonor.GamePlay
         private ClientLegion.Factory _legionFactory;
         
         [Inject]
-        public ClientCommander(INetworkBus networkBus, IDataLoaderService dataLoaderService, ClientLegion.Factory legionFactory)
+        public ClientCommander(INetworkBus networkBus, IDataLoaderService dataLoaderService, ClientLegion.Factory legionFactory, CommanderContextData contextData)
         {
             log.Info($"[ClientCommander] Construction");
 
@@ -21,7 +21,11 @@ namespace Ebonor.GamePlay
             _legionFactory = legionFactory;
             
             _dataLoaderService = dataLoaderService;
+            
+            _contextData = contextData;
         }
+        
+        private CommanderContextData _contextData;
         
         public override void InitAsync()
         {
@@ -35,19 +39,21 @@ namespace Ebonor.GamePlay
             {
                 throw new System.InvalidOperationException("[ClientCommander] InitFromSpawnPayload received empty payload.");
             }
-
-            if (data.CommanderNetId != 0 && data.CommanderNetId != NetId)
-            {
-                throw new System.InvalidOperationException($"[ClientCommander] NetId mismatch: payload {data.CommanderNetId} vs bound {NetId}");
-            }
-
+            
             if (data.Bootstrap == null)
             {
                 throw new System.InvalidOperationException("[ClientCommander] InitFromSpawnPayload received null bootstrap.");
             }
 
             _legionId = data.LegionId;
-            log.Info($"[ClientCommander] InitFromSpawnPayload commanderNetId:{data.CommanderNetId}, legionId:{_legionId}");
+            
+            // Populate Context (Write Once)
+            _contextData.SetContext(_legionId, data.Bootstrap);
+            
+            // Helper access check
+            // var f = _contextData.Faction; 
+            
+            log.Info($"[ClientCommander] InitFromSpawnPayload commanderNetId:{NetId}, legionId:{_legionId}");
 
             Configure(data.Bootstrap);
         }
@@ -64,10 +70,10 @@ namespace Ebonor.GamePlay
                 
                 var squadList = _bootstrapInfo.LegionConfig.SquadIds;
                 
-                legion.Configure(spawnMsg.NetId, (ulong)legionPayload.LegionId, squadList, false);
+                legion.Configure(spawnMsg.NetId, squadList, false);
                 legion.InitFromSpawnPayload(spawnMsg.Payload);
 
-                _networkBus.RegisterSpawns(legion.NetId, legion);
+                // _networkBus.RegisterSpawns(legion.NetId, legion); // Handled in Configure
                 
                 legion.InitAsync();
                 

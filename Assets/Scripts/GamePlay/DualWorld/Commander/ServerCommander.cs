@@ -16,7 +16,8 @@ namespace Ebonor.GamePlay
             ServerLegion.Factory factory, 
             INetworkBus networkBus, 
             IDataLoaderService dataLoaderService,
-            ILegionIdGenerator legionIdGenerator)
+            ILegionIdGenerator legionIdGenerator,
+            CommanderContextData contextData)
         {
             log.Info($"[ServerCommander] Construction");
 
@@ -27,7 +28,11 @@ namespace Ebonor.GamePlay
             _dataLoaderService = dataLoaderService;
 
             _legionIdGenerator = legionIdGenerator;
+
+            _contextData = contextData;
         }
+        
+        private CommanderContextData _contextData;
         
         public override void Configure(CommanderBootstrapInfo bootstrapInfo)
         {
@@ -38,13 +43,22 @@ namespace Ebonor.GamePlay
                 throw new System.InvalidOperationException("[ServerCommander] Configure failed: bootstrap info missing.");
             }
 
-            _seed = _bootstrapInfo.LegionConfig.Seed ?? new CommanderSeed();
-            var commanderNetId = _legionIdGenerator.GetCommanderNetId(_seed);
-
-            BindId(commanderNetId);
+            if (_bootstrapInfo.LegionConfig.Seed == null)
+            {
+                log.Error("[ServerCommander] Configure failed: LegionConfig.Seed is null. This is a critical data error.");
+                throw new System.InvalidOperationException("[ServerCommander] Configure failed: LegionConfig.Seed is null.");
+            }
+            
+            _seed = _bootstrapInfo.LegionConfig.Seed;
+            var netId = _dataLoaderService.NextId();
+            
+            _legionId = _legionIdGenerator.Next(netId); // gameplay id
+            
+            // Populate Context Data (Write Once)
+            _contextData.SetContext(_legionId, _bootstrapInfo);
+            
+            BindId(netId);
             _networkBus.RegisterSpawns(NetId, this, true);
-
-            _legionId = _legionIdGenerator.Next(NetId); // gameplay id (64-bit)
         }
         
         public override void InitAsync()
@@ -62,10 +76,8 @@ namespace Ebonor.GamePlay
             var squadList = _bootstrapInfo.LegionConfig.SquadIds;
             
             var legionNetId = _dataLoaderService.NextId(); // network id (uint)
-            _baseLegion.Configure(legionNetId, _legionId, squadList, true);
+            _baseLegion.Configure(legionNetId, squadList, true);
 
-            _baseLegion.InitAsync();
-            
             var legionPayloadBytes = new LegionSpawnPayload
             {
                 LegionId = (long)_legionId,
@@ -74,12 +86,7 @@ namespace Ebonor.GamePlay
                 OwnerNetId = NetId
             }.Serialize();
 
-            _networkBus.SendRpc(_netId, new RpcSpawnObject
-            {
-                Type = NetworkPrefabType.Legion,
-                NetId = _baseLegion.NetId,
-                Payload = legionPayloadBytes
-            });
+            SpawnChild(_networkBus, _baseLegion, legionPayloadBytes, NetworkPrefabType.Legion, true);
             
         }
         

@@ -11,6 +11,8 @@ namespace Ebonor.GamePlay
         protected ICharacterDataRepository _characterDataRepository;
 
         protected SlgUnitSquadAttributesNodeData _squadUnitAttr;
+
+        protected FactionType _faction;
         
         /// <summary>
         /// Bind net id and register to network bus. Call right after construction.
@@ -23,6 +25,7 @@ namespace Ebonor.GamePlay
             }
 
             _squadUnitAttr = squadUnitAttr;
+            // Faction is injected
             
             BindId(netId);
            

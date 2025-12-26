@@ -11,12 +11,14 @@ namespace Ebonor.GamePlay
         private static readonly ILog log = LogManager.GetLogger(typeof(ClientLegion));
 
         private readonly ClientSquad.Factory _factory;
-
         
         [Inject]
         public ClientLegion(
             ClientSquad.Factory factory, 
-            INetworkBus networkBus, IDataLoaderService dataLoaderService, ICharacterDataRepository characterDataRepository)
+            INetworkBus networkBus, 
+            IDataLoaderService dataLoaderService, 
+            ICharacterDataRepository characterDataRepository,
+            CommanderContextData contextData)
         {
             log.Info($"[ClientLegion] Construction");
             _factory = factory;
@@ -24,6 +26,10 @@ namespace Ebonor.GamePlay
             _characterDataRepository = characterDataRepository;
             _networkBus = networkBus;
             _dataLoaderService = dataLoaderService;
+            
+            // Inject Context
+            _legionId = contextData.LegionId;
+            _faction = contextData.Faction;
         }
         
         public override void InitAsync()
@@ -44,9 +50,15 @@ namespace Ebonor.GamePlay
             }
             if (team.SquadList == null)
             {
-                team.SquadList = new System.Collections.Generic.List<long>();
+                log.Error("[ClientLegion] InitFromSpawnPayload failed: SquadList is null in payload.");
+                throw new System.InvalidOperationException("[ClientLegion] InitFromSpawnPayload failed: SquadList is null.");
             }
-            log.Info($"[ClientLegion] InitFromSpawnPayload legionId:{team.LegionId}, owner:{team.OwnerNetId}, squads:{team.SquadList?.Count ?? 0}");
+            
+            // Faction is already injected via DI, but payload might have overrides? 
+            // For now, assume DI is truth for this Commander Context.
+            // _faction = team.Faction; 
+            
+            log.Info($"[ClientLegion] InitFromSpawnPayload legionId:{team.LegionId}, owner:{team.OwnerNetId}, squads:{team.SquadList?.Count ?? 0}, faction:{team.Faction}");
             base.InitFromSpawnPayload(payload);
         }
         
@@ -68,6 +80,32 @@ namespace Ebonor.GamePlay
             
         }
         
+        public override void OnRpc(IRpc rpc)
+        {
+            if (rpc is RpcSpawnObject spawnMsg && spawnMsg.Type == NetworkPrefabType.Squad)
+            {
+                log.Info($"[ClientLegion] Received Squad Spawn RPC: NetId:{spawnMsg.NetId}");
+
+                var squadPayload = SquadSpawnPayload.Deserialize(spawnMsg.Payload);
+                var squadData = _characterDataRepository.GetSlgSquadData(squadPayload.SquadId);
+
+                if (squadData == null)
+                {
+                    log.Error($"[ClientLegion] Failed to find squad data for id: {squadPayload.SquadId}");
+                    return;
+                }
+                
+                var squad = _factory.Create();
+                squad.Configure(spawnMsg.NetId, squadData, false);
+                squad.InitFromSpawnPayload(spawnMsg.Payload);
+                squad.InitAsync();
+                _listBaseSquads.Add(squad);
+                log.Info($"[ClientLegion] Spawned Squad {squad.NetId}");
+                return;
+            }
+            base.OnRpc(rpc);
+        }
+
         public override void OnUpdate()
         {
             

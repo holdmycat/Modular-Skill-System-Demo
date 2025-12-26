@@ -1,7 +1,5 @@
-using System.Collections;
 using System.Collections.Generic;
 using Ebonor.DataCtrl;
-using UnityEngine;
 
 namespace Ebonor.GamePlay
 {
@@ -13,6 +11,8 @@ namespace Ebonor.GamePlay
         protected ulong _legionId;
 
         protected ICharacterDataRepository _characterDataRepository;
+
+        protected FactionType _faction;
         
         protected List<long> _squadList;
         
@@ -21,14 +21,17 @@ namespace Ebonor.GamePlay
         /// <summary>
         /// Bind net id and register to network bus. Call right after construction.
         /// </summary>
-        public void Configure(uint netId, ulong legionId, List<long> list, bool isServer = false)
+        public void Configure(uint netId, List<long> list, bool isServer = false)
         {
             if (NetId != 0)
             {
                 return;
             }
+            
+            _dataLoaderService.NextId();
+            
             BindId(netId);
-            _legionId = legionId;
+            // LegionId and Faction should be set via DI context in partials
             _squadList = list;
             if (_networkBus == null)
             {

@@ -6,11 +6,7 @@ namespace Ebonor.DataCtrl
 {
     public interface ILegionIdGenerator
     {
-        /// <summary>
-        /// Generates a deterministic commander net id from its seed.
-        /// </summary>
-        uint GetCommanderNetId(CommanderSeed seed);
-
+        
         /// <summary>
         /// Returns the next LegionId for a commander, using a per-commander increment.
         /// </summary>

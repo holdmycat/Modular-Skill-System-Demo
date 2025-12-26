@@ -10,19 +10,25 @@ namespace Ebonor.GamePlay
         private static readonly ILog log = LogManager.GetLogger(typeof(ServerSquad));
         
         [Inject]
-        public ServerSquad(INetworkBus networkBus, IDataLoaderService dataLoaderService, ICharacterDataRepository characterDataRepository)
+        public ServerSquad(
+            INetworkBus networkBus, 
+            IDataLoaderService dataLoaderService, 
+            ICharacterDataRepository characterDataRepository,
+            CommanderContextData contextData)
         {
             log.Info($"[ServerSquad] Construction");
             
             _characterDataRepository = characterDataRepository;
             _networkBus = networkBus;
             _dataLoaderService = dataLoaderService;
+            
+            _faction = contextData.Faction;
         }
         
         public override void InitAsync()
         {
             log.Info($"[ServerSquad] InitAsync");
-
+            
           
         }
         

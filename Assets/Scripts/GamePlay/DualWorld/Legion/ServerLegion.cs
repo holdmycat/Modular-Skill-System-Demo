@@ -17,38 +17,53 @@ namespace Ebonor.GamePlay
             ServerSquad.Factory factory, 
             INetworkBus networkBus, 
             IDataLoaderService dataLoaderService, 
-            ICharacterDataRepository characterDataRepository)
+            ICharacterDataRepository characterDataRepository,
+            CommanderContextData contextData)
         {
             log.Info($"[ServerLegion] Construction");
             _listBaseSquads = new List<BaseSquad>();
             _characterDataRepository = characterDataRepository;
             _networkBus = networkBus;
             _dataLoaderService = dataLoaderService;
+            _factory = factory;
+            // Inject Context
+            _legionId = contextData.LegionId;
+            _faction = contextData.Faction;
         }
         
         public override void InitAsync()
         {
             log.Info($"[ServerLegion] InitAsync");
 
-            foreach (var variable in _squadList)
+            foreach (var squadId in _squadList)
             {
-                log.Info($"[ServerLegion] InitAsync, squadId:" + variable);
+                log.Info($"[ServerLegion] InitAsync, creating squadId: {squadId}");
 
-                var slgSquadData = _characterDataRepository.GetSlgSquadData(variable);
+                var slgSquadData = _characterDataRepository.GetSlgSquadData(squadId);
+                if (slgSquadData == null)
+                {
+                    log.Error($"[ServerLegion] InitAsync failed to get data for squadId: {squadId}");
+                    continue;
+                }
                 
                 var baseSquad = _factory.Create();
 
                 var squadNetId = _dataLoaderService.NextId();
                 
                 baseSquad.Configure(squadNetId, slgSquadData, true);
+                
+                _listBaseSquads.Add(baseSquad);
+                
+                var squadPayload = new SquadSpawnPayload
+                {
+                    SquadId = squadId,
+                    OwnerNetId = _netId,
+                    LegionNetId = _netId,
+                    Faction = _faction
+                }.Serialize();
 
-                baseSquad.InitAsync();
-                
-                
-                
-
+                SpawnChild(_networkBus, baseSquad, squadPayload, NetworkPrefabType.Squad, true);
             }
-            
         }
         
         public override async UniTask ShutdownAsync()

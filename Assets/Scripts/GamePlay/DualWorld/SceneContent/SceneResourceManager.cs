@@ -52,13 +52,15 @@ namespace Ebonor.GamePlay
 
             var legionConfig = _gameSceneResource.LegionConfig;
             
-            _commander = new CommanderBootstrapInfo(legionConfig.Seed.Faction.ToString() + legionConfig.Seed.Slot, legionConfig.Seed.Faction, legionConfig);
+            _commander = new CommanderBootstrapInfo(legionConfig.Seed.Faction.ToString() + legionConfig.Seed.Slot, legionConfig);
 
             var playerLegionConfig = _globalGameConfig?.CommanderBirthConfigInst?.LegionConfig;
             
             if (playerLegionConfig != null)
             {
-                _playerCommander = new CommanderBootstrapInfo(playerLegionConfig.Seed.Faction.ToString() + playerLegionConfig.Seed.Slot, playerLegionConfig.Seed.Faction, playerLegionConfig);
+                _playerCommander = new CommanderBootstrapInfo(
+                    playerLegionConfig.Seed.Faction.ToString() + playerLegionConfig.Seed.Slot, 
+                    playerLegionConfig);
             }
             else
             {

@@ -29,11 +29,9 @@ namespace Ebonor.GamePlay
 
             _baseCommander.Configure(bootstrap);
 
-
-
+            
             var payload = new CommanderSpawnPayload
             {
-                CommanderNetId = _baseCommander.NetId,
                 LegionId = _baseCommander.LegionId,
                 Bootstrap = bootstrap
             };

@@ -148,6 +148,11 @@ namespace Ebonor.GamePlay
               
                 log.DebugFormat("[RegisterSpawns] netId:{0}, count:{1}", netId, list.Count);
             }
+            else
+            {
+                // Strict check: Do not allow duplicate registration
+                throw new InvalidOperationException($"[SimulatedNetworkBus] Duplicate registration detected for NetId:{netId}, Type:{behaviour.GetType().Name}. This indicates a logic error.");
+            }
         }
 
         public void UnRegisterSpawns(uint netId, INetworkBehaviour behaviour, bool isServer = false, bool isAutoUnRegisterRpc = true)

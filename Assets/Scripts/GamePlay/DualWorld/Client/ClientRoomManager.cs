@@ -90,14 +90,12 @@ namespace Ebonor.GamePlay
         private ICharacterDataRepository _characterDataRepository;
         private BaseCommander _baseCommander;
         private ClientCommander.Factory _factory; 
-        private ClientLegion.Factory _legionFactory;
         
         [Inject]
-        public void Construct(ClientCommander.Factory factory, ClientLegion.Factory legionFactory, INetworkBus networkBus, ICharacterDataRepository characterDataRepository)
+        public void Construct(ClientCommander.Factory factory, INetworkBus networkBus, ICharacterDataRepository characterDataRepository)
         {
             log.Info($"[ClientRoomManager] Construct");
             _factory = factory;
-            _legionFactory = legionFactory;
             _networkBus = networkBus;
             _characterDataRepository = characterDataRepository;
             BindId(NetworkConstants.ROOM_MANAGER_NET_ID);//client room manager

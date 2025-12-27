@@ -10,10 +10,13 @@ namespace Ebonor.GamePlay
         private static readonly ILog log = LogManager.GetLogger(typeof(ServerCommander));
 
         private readonly ServerLegion.Factory _factory;
+
+        private readonly CommanderNumericComponent.Factory _commanderNumericFactory;
         
         [Inject]
         public ServerCommander(
             ServerLegion.Factory factory, 
+            CommanderNumericComponent.Factory commanderNumericFactory,
             INetworkBus networkBus, 
             IDataLoaderService dataLoaderService,
             ILegionIdGenerator legionIdGenerator,
@@ -22,6 +25,8 @@ namespace Ebonor.GamePlay
             log.Info($"[ServerCommander] Construction");
 
             _factory = factory;
+
+            _commanderNumericFactory = commanderNumericFactory;
             
             _networkBus = networkBus;
             
@@ -36,7 +41,11 @@ namespace Ebonor.GamePlay
         
         public override void Configure(CommanderBootstrapInfo bootstrapInfo)
         {
-            base.Configure(bootstrapInfo);
+            // base.Configure(bootstrapInfo); // MOVED TO END
+            
+            // Manual set for local logic usage if needed, though we use param 'bootstrapInfo'
+            _bootstrapInfo = bootstrapInfo; 
+            
             if (_bootstrapInfo == null || _bootstrapInfo.LegionConfig == null)
             {
                 log.Error("[ServerCommander] Configure failed: bootstrap info missing.");
@@ -55,8 +64,11 @@ namespace Ebonor.GamePlay
             _legionId = _legionIdGenerator.Next(netId); // gameplay id
             
             // Populate Context Data (Write Once)
-            _contextData.SetContext(_legionId, _bootstrapInfo);
+            _contextData.SetContext(true, _legionId, _bootstrapInfo);
             
+            // Now call base to trigger Numeric Init (which depends on Context)
+            base.Configure(bootstrapInfo);
+
             BindId(netId);
             _networkBus.RegisterSpawns(NetId, this, true);
         }
@@ -70,7 +82,7 @@ namespace Ebonor.GamePlay
                 log.Error("[ServerCommander] InitAsync aborted: commander not configured (NetId==0).");
                 return;
             }
-
+            
             _baseLegion = _factory.Create();
 
             var squadList = _bootstrapInfo.LegionConfig.SquadIds;
@@ -97,6 +109,11 @@ namespace Ebonor.GamePlay
             _networkBus.UnRegisterSpawns(_netId, this,true);
 
             await _baseLegion.ShutdownAsync();
+        }
+        
+        protected override void InitializeNumeric()
+        {
+            _numericComponent = _commanderNumericFactory.Create();
         }
         
         public class Factory : PlaceholderFactory<ServerCommander> 

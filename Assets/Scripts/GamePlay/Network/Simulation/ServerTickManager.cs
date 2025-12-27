@@ -16,10 +16,10 @@ namespace Ebonor.GamePlay
         private float _timer;
         private bool _isRunning = false;
 
-        private readonly ServerManager _serverManager;
+        private readonly BaseServerManager _serverManager;
 
         [Inject]
-        public ServerTickManager(INetworkBus networkBus, ServerManager serverManager)
+        public ServerTickManager(INetworkBus networkBus, BaseServerManager serverManager)
         {
             _networkBus = networkBus;
             _serverManager = serverManager;

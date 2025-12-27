@@ -19,6 +19,7 @@ MonoBehaviour:
         Usage: 4
         ScenarioId: showcasescene
         Faction: 3
+        CommanderId: 5247934821822272100
         Slot: 0
         Variant: 
       SquadIds: ab24cf1a0799041dcfca8f25f182ab34

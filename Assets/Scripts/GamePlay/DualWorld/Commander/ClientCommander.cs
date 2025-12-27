@@ -11,14 +11,23 @@ namespace Ebonor.GamePlay
         
         private ClientLegion.Factory _legionFactory;
         
+        private readonly CommanderNumericComponent.Factory _commanderNumericFactory;
+        
         [Inject]
-        public ClientCommander(INetworkBus networkBus, IDataLoaderService dataLoaderService, ClientLegion.Factory legionFactory, CommanderContextData contextData)
+        public ClientCommander(
+            INetworkBus networkBus, 
+            IDataLoaderService dataLoaderService, 
+            ClientLegion.Factory legionFactory, 
+            CommanderNumericComponent.Factory commanderNumericFactory,
+            CommanderContextData contextData)
         {
             log.Info($"[ClientCommander] Construction");
 
             _networkBus = networkBus;
             
             _legionFactory = legionFactory;
+            
+            _commanderNumericFactory = commanderNumericFactory;
             
             _dataLoaderService = dataLoaderService;
             
@@ -48,7 +57,7 @@ namespace Ebonor.GamePlay
             _legionId = data.LegionId;
             
             // Populate Context (Write Once)
-            _contextData.SetContext(_legionId, data.Bootstrap);
+            _contextData.SetContext(false,_legionId, data.Bootstrap);
             
             // Helper access check
             // var f = _contextData.Faction; 
@@ -56,6 +65,11 @@ namespace Ebonor.GamePlay
             log.Info($"[ClientCommander] InitFromSpawnPayload commanderNetId:{NetId}, legionId:{_legionId}");
 
             Configure(data.Bootstrap);
+        }
+        
+        protected override void InitializeNumeric()
+        {
+            _numericComponent = _commanderNumericFactory.Create();
         }
         
         public override void OnRpc(IRpc rpc)

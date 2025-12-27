@@ -3,11 +3,8 @@ using Ebonor.DataCtrl;
 
 namespace Ebonor.GamePlay
 {
-    public class BaseLegion : NetworkBehaviour
+    public abstract class BaseLegion : SlgBattleEntity
     {
-        protected INetworkBus _networkBus;
-        
-        protected  IDataLoaderService _dataLoaderService;
         protected ulong _legionId;
 
         protected ICharacterDataRepository _characterDataRepository;
@@ -38,6 +35,13 @@ namespace Ebonor.GamePlay
                 throw new System.InvalidOperationException("[BaseLegion] Configure failed: network bus is null.");
             }
             _networkBus.RegisterSpawns(NetId, this, isServer);
+
+           
+        }
+        
+        protected override void InitializeNumeric()
+        {
+           
         }
     }
 }

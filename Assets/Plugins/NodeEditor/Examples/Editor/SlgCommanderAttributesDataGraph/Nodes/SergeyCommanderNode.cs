@@ -17,7 +17,7 @@ namespace Plugins.NodeEditor
             if (Data == null)
             {
                 Data = new SergeyCommanderAttributesNodeData();
-                Data.CommanderName = "Sergey";
+                Data.UnitName = "Sergey";
                 Data.Level = 10;
                 // Military Focus
                 Data.GlobalInfantryAtkMod = 300;     // 30%

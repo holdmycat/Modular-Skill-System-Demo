@@ -36,13 +36,13 @@ namespace Ebonor.DataCtrl
 
             log.Info("[DataLoaderService] Starting Data Loading...");
             
-            //Load Unit Attribute Data Supportor
-            log.Info("[DataLoaderService] Starting Loading character data...");
-            var heroData = await _resourceLoader.LoadAsset<TextAsset>(_globalGameConfig.allCharacterDataPath, ResourceAssetType.AllCharacterData);
-            using var bsonReader = new BsonBinaryReader(new MemoryStream(heroData.bytes));
-            var heroItems = BsonSerializer.Deserialize<UnitAttributesDataSupportor>(bsonReader);
-            await _characterDataRepository.SaveUnitDataSupporterAsync(heroItems);
-            log.Info("[DataLoaderService] Loading character data complete...");
+            // //Load Unit Attribute Data Supportor
+            // log.Info("[DataLoaderService] Starting Loading character data...");
+            // var heroData = await _resourceLoader.LoadAsset<TextAsset>(_globalGameConfig.allCharacterDataPath, ResourceAssetType.AllCharacterData);
+            // using var bsonReader = new BsonBinaryReader(new MemoryStream(heroData.bytes));
+            // var heroItems = BsonSerializer.Deserialize<UnitAttributesDataSupportor>(bsonReader);
+            // await _characterDataRepository.SaveUnitDataSupporterAsync(heroItems);
+            // log.Info("[DataLoaderService] Loading character data complete...");
             
             //Load slg unit Attribute Data Supporter - SlgUnitAttributesDataSupportor
             log.Info("[DataLoaderService] Starting Loading SLG Unit data...");
@@ -75,7 +75,20 @@ namespace Ebonor.DataCtrl
                 log.Warn($"[DataLoaderService] Failed to load SLG Squad Data at path: {_globalGameConfig.allSlgSquadDataPath}");
             }
             
-            
+            //Load slg commander Attribute Data Supporter - SlgUnitSquadAttributesDataSupportor
+            log.Info("[DataLoaderService] Starting Loading SLG Commander data...");
+            var commanderSquadData = await _resourceLoader.LoadAsset<TextAsset>(_globalGameConfig.allSlgCommanderDataPath, ResourceAssetType.AllCharacterData);
+            if (commanderSquadData != null)
+            {
+                using var slgCommanderReader = new BsonBinaryReader(new MemoryStream(commanderSquadData.bytes));
+                var slgCommanderItems = BsonSerializer.Deserialize<SlgCommanderAttributesDataSupportor>(slgCommanderReader);
+                await _characterDataRepository.SaveSlgCommanderDataSupporterAsync(slgCommanderItems);
+                log.Info("[DataLoaderService] Loading SLG Commander data complete...");
+            }
+            else
+            {
+                log.Warn($"[DataLoaderService] Failed to load SLG Commander Data at path: {_globalGameConfig.allSlgCommanderDataPath}");
+            }
             
             //Load Unit Models
             log.Info("[DataLoaderService] Starting Loading Models...");

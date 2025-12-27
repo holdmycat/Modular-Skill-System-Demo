@@ -9,6 +9,7 @@ namespace Ebonor.DataCtrl
 
         UniTask SaveSlgUnitDataSupporterAsync(SlgUnitAttributesDataSupportor dataSupportor);
         UniTask SaveSlgSquadDataSupporterAsync(SlgUnitSquadAttributesDataSupportor dataSupportor);
+        UniTask SaveSlgCommanderDataSupporterAsync(SlgCommanderAttributesDataSupportor dataSupportor);
         
         UnitAttributesNodeDataBase GetUnitAttribteData(long unitId);
 
@@ -23,6 +24,14 @@ namespace Ebonor.DataCtrl
         SlgUnitAttributesNodeData GetSlgUnitData(long unitId);
         
         SlgUnitSquadAttributesNodeData GetSlgSquadData(long unitId);
+
+
+        SlgCommanderAttributesNodeData GetSlgCommanderData(long unitId);
+
+        SlgCommanderAttributesNodeData GetSlgCommanderDataBySquadName(string unitId);
+
+        Dictionary<long, SlgCommanderAttributesNodeData> GetAllSlgCommanderAttribteData();
+
 
     }
 }

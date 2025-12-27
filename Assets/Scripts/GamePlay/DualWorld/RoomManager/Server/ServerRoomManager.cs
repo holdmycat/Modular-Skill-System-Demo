@@ -1,4 +1,3 @@
-using System;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
@@ -13,7 +12,6 @@ namespace Ebonor.GamePlay
         
     }
     
-    
     //commander - player
     public partial class ServerRoomManager : NetworkBehaviour, IRoomManager
     {
@@ -26,7 +24,7 @@ namespace Ebonor.GamePlay
             {
                 throw new System.InvalidOperationException("[ServerRoomManager] InitPlayerCommander failed: bootstrap is null.");
             }
-
+            
             _baseCommander.Configure(bootstrap);
 
             

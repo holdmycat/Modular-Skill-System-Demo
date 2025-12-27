@@ -27,6 +27,10 @@ namespace Ebonor.DataCtrl
         public string allSlgSquadDataPath = "AllCharacterData/SlgSquadData";
         
         [Header("Character Data")]
+        [Tooltip("Path for loading all slg commander data assets.")]
+        public string allSlgCommanderDataPath = "AllCharacterData/SlgCommanderData";
+        
+        [Header("Character Data")]
         [Tooltip("Path for loading all slg unit data assets.")]
         public string allSlgUnitDataPath = "AllCharacterData/SlgUnitData";
         
@@ -46,5 +50,11 @@ namespace Ebonor.DataCtrl
         [Header("Default Player Commander Config")] 
         [SerializeField]
         public CommanderBirthConfig CommanderBirthConfigInst;
+
+
+        [Header("Character Level up add percent")]
+        [Range(-2f, 2f)]
+        public float characterLevelupAddPercent;
+
     }
 }

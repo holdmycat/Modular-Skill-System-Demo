@@ -30,12 +30,9 @@ namespace Ebonor.Manager
             
             // --- Server Logic World ---
             Container.Bind<ServerRoomManager>().AsSingle();
-            Container.Bind<ServerManager>().AsSingle();
 
             // --- Client Presentation World ---
-            // --- Client Presentation World ---
             Container.Bind<ClientRoomManager>().FromNewComponentOnNewGameObject().AsSingle();
-            Container.Bind<ClientManager>().FromNewComponentOnNewGameObject().AsSingle();
             
             // Bind Commanders with SubContainer
             Container.BindFactory<ServerCommander, ServerCommander.Factory>()
@@ -51,14 +48,16 @@ namespace Ebonor.Manager
             // Logic for Legion/Squad factories is now inside the Commander's SubContainer
             
             // --- Scene Root ---
+            // 1. 绑定抽象基类指向具体的 Showcase 实现
+            Container.Bind<BaseServerManager>().To<ShowCaseSceneServerManager>().AsSingle();
+            Container.Bind<BaseClientManager>().To<ShowCaseSceneClientManager>().FromNewComponentOnNewGameObject().AsSingle();
             
+            // 2. 绑定通用的双世界管理器
+            // 它可以直接注入 BaseServerManager/BaseClientManager
+            Container.BindInterfacesAndSelfTo<DualWorldSceneManager>().AsSingle().NonLazy();
             
             // --- Scene Root ---
             log.Info("[ShowcaseInstaller] InstallBindings called.");
-            Container.BindInterfacesAndSelfTo<ShowcaseSceneManager>().AsSingle().NonLazy();
-            
-          
-            
         }
         
 
@@ -84,8 +83,18 @@ namespace Ebonor.Manager
             // Bind Factories in this Scope so they can access CommanderContextData
             subContainer.BindFactory<ServerLegion, ServerLegion.Factory>().AsSingle();
             subContainer.BindFactory<ServerSquad, ServerSquad.Factory>().AsSingle();
+            
+            // Bind Numeric Factories
+            subContainer.BindFactory<CommanderNumericComponent, CommanderNumericComponent.Factory>().AsSingle();
+            subContainer.BindFactory<LegionNumericComponent, LegionNumericComponent.Factory>().AsSingle();
+            subContainer.BindFactory<SquadNumericComponent, SquadNumericComponent.Factory>().AsSingle();
+            
+            // Bind the Wrapper Factory
+            subContainer.Bind<NumericComponentFactory>().AsSingle();
+            
+            
         }
-
+        
         private void InstallClientCommander(DiContainer subContainer)
         {
             subContainer.Bind<CommanderContextData>().AsSingle();
@@ -94,6 +103,15 @@ namespace Ebonor.Manager
             
             subContainer.BindFactory<ClientLegion, ClientLegion.Factory>().AsSingle();
             subContainer.BindFactory<ClientSquad, ClientSquad.Factory>().AsSingle();
+            
+            // Bind Numeric Factories
+            subContainer.BindFactory<CommanderNumericComponent, CommanderNumericComponent.Factory>().AsSingle();
+            subContainer.BindFactory<LegionNumericComponent, LegionNumericComponent.Factory>().AsSingle();
+            subContainer.BindFactory<SquadNumericComponent, SquadNumericComponent.Factory>().AsSingle();
+            
+            // Bind the Wrapper Factory
+            subContainer.Bind<NumericComponentFactory>().AsSingle();
+            
         }
     }
 }

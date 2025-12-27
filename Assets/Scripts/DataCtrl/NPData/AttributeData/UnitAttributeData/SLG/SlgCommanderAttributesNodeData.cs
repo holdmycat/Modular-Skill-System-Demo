@@ -27,8 +27,8 @@ namespace Ebonor.DataCtrl
         public long UnitDataNodeId;
         
         [Tooltip("领主名称/ID标识")]
-        [BsonElement("CommanderName")]
-        public string CommanderName;
+        [BsonElement("UnitName")]
+        public string UnitName;
         
         [Tooltip("领主等级")]
         [BsonElement("Level")]
@@ -54,7 +54,7 @@ namespace Ebonor.DataCtrl
         
         public virtual string BuildRoleKey()
         {
-            return $"{CommanderName}_{Level}";
+            return $"{UnitName}_{Level}";
         }
 
         public virtual long GenerateRoleIdFromData()
@@ -80,7 +80,7 @@ namespace Ebonor.DataCtrl
         private static readonly string[] BaseProperties =
         {
             "UnitDataNodeId",
-            "CommanderName",
+            "UnitName",
             "Level"
         };
 
@@ -197,11 +197,21 @@ namespace Ebonor.DataCtrl
                  long id = GenerateId(property);
                  Debug.Log($"Generated ID: {id}");
             }
+            
+            if (GUI.Button(new Rect(row.x + btnW + 4, row.y, btnW, row.height), "Copy ID"))
+            {
+                var idProp = property.FindPropertyRelative("UnitDataNodeId");
+                if (idProp != null)
+                {
+                    EditorGUIUtility.systemCopyBuffer = idProp.longValue.ToString();
+                    Debug.Log($"Copied ID to clipboard: {idProp.longValue}");
+                }
+            }
         }
         
         private static long GenerateId(SerializedProperty property)
         {
-            string name = property.FindPropertyRelative("CommanderName")?.stringValue ?? "Cmd";
+            string name = property.FindPropertyRelative("UnitName")?.stringValue ?? "Cmd";
             int level = property.FindPropertyRelative("Level")?.intValue ?? 1;
             string key = $"{name}_{level}";
             long id = GlobalHelper.GetRoleID(key);

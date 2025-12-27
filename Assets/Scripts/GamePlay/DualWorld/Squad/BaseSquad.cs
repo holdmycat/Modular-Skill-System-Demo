@@ -2,11 +2,9 @@ using Ebonor.DataCtrl;
 
 namespace Ebonor.GamePlay
 {
-    public class BaseSquad : NetworkBehaviour
+    
+    public abstract class BaseSquad : SlgBattleEntity
     {
-        protected INetworkBus _networkBus;
-        
-        protected  IDataLoaderService _dataLoaderService;
         
         protected ICharacterDataRepository _characterDataRepository;
 
@@ -35,5 +33,11 @@ namespace Ebonor.GamePlay
             }
             _networkBus.RegisterSpawns(NetId, this, isServer);
         }
+        
+        protected override void InitializeNumeric()
+        {
+           
+        }
+        
     }
 }

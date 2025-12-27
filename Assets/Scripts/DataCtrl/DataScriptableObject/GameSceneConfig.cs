@@ -18,6 +18,7 @@ namespace Ebonor.DataCtrl
         [Header("Legion Config")]
         public LegionConfigDefinition LegionConfig = new LegionConfigDefinition();
         
+        public List<string> ListUIName = new List<string>();
     }
     
     [CreateAssetMenu(menuName = "Ebonor/Config/Game Scene Config", fileName = "GameSceneConfig")]

@@ -17,7 +17,7 @@ namespace Plugins.NodeEditor
             if (Data == null)
             {
                 Data = new MollyCommanderAttributesNodeData();
-                Data.CommanderName = "Molly";
+                Data.UnitName = "Molly";
                 Data.Level = 10;
                 // Economy Focus
                 Data.GlobalConstructionSpeedMod = 200; // 20%

@@ -2,10 +2,10 @@ using Ebonor.DataCtrl;
 
 namespace Ebonor.GamePlay
 {
-    public class BaseCommander : NetworkBehaviour
+    public abstract class BaseCommander : SlgBattleEntity
     {
-        protected INetworkBus _networkBus;
-        protected  IDataLoaderService _dataLoaderService;
+       
+        
         protected ILegionIdGenerator _legionIdGenerator;
         protected CommanderSeed _seed;
         protected ulong _legionId;
@@ -20,6 +20,9 @@ namespace Ebonor.GamePlay
         public virtual void Configure(CommanderBootstrapInfo bootstrapInfo)
         {
             _bootstrapInfo = bootstrapInfo;
+            
+            InitializeNumeric();
         }
+        
     }
 }

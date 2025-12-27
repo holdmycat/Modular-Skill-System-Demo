@@ -25,6 +25,7 @@ namespace Ebonor.DataCtrl
         public CommanderUsageType Usage;
         public string ScenarioId;
         public FactionType Faction;
+        public long CommanderId; // Added CommanderId
         public int Slot;
         public string Variant;
 
@@ -33,6 +34,7 @@ namespace Ebonor.DataCtrl
             writer.Write((int)Usage);
             writer.Write(ScenarioId ?? string.Empty);
             writer.Write((int)Faction);
+            writer.Write(CommanderId);
             writer.Write(Slot);
             writer.Write(Variant ?? string.Empty);
         }
@@ -44,6 +46,7 @@ namespace Ebonor.DataCtrl
                 Usage = (CommanderUsageType)reader.ReadInt32(),
                 ScenarioId = reader.ReadString(),
                 Faction = (FactionType)reader.ReadInt32(),
+                CommanderId = reader.ReadInt64(),
                 Slot = reader.ReadInt32(),
                 Variant = reader.ReadString()
             };

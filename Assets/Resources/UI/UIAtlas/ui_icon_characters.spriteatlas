@@ -37,12 +37,21 @@ SpriteAtlas:
     isAtlasV2: 0
     cachedData: {fileID: 0}
     packedSpriteRenderDataKeys:
+    - e4aeeed42bb3a4f308aa70ca3d92d17c: 21300000
+    - 54251ab8657674a24bd5adfd3ec2704a: 21300000
     - 944d76298c3f1476abe32e5e0a23013e: 21300000
+    - fc4c35b96b2ad4b848e55bfa5bfcdede: 21300000
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
+  - {fileID: 21300000, guid: e4aeeed42bb3a4f308aa70ca3d92d17c, type: 3}
+  - {fileID: 21300000, guid: 54251ab8657674a24bd5adfd3ec2704a, type: 3}
   - {fileID: 21300000, guid: 944d76298c3f1476abe32e5e0a23013e, type: 3}
+  - {fileID: 21300000, guid: fc4c35b96b2ad4b848e55bfa5bfcdede, type: 3}
   m_PackedSpriteNamesToIndex:
+  - ui_icon_sergey
+  - ui_icon_molly
   - ui_icon_spuddo
+  - ui_icon_zombie
   m_RenderDataMap: {}
   m_Tag: ui_icon_characters
   m_IsVariant: 0

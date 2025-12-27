@@ -16,6 +16,7 @@ MonoBehaviour:
   playerInputPrefabPath: PlayerInput
   allCharacterDataPath: HeroData
   allSlgSquadDataPath: SlgSquadData
+  allSlgCommanderDataPath: SlgCommanderData
   allSlgUnitDataPath: SlgUnitData
   defaultPlayerHeroId: 6070748851497539930
   ResourcePoolConfig:
@@ -30,6 +31,8 @@ MonoBehaviour:
         Usage: 0
         ScenarioId: showcasescene
         Faction: 1
+        CommanderId: 2181382299519022680
         Slot: 0
         Variant: 
       SquadIds: ab24cf1a0799041dcfca8f25f182ab34
+  characterLevelupAddPercent: 1.1

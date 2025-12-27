@@ -49,7 +49,7 @@ namespace Ebonor.GamePlay
                 log.ErrorFormat("[SceneResourceManager] Construct, targetSceneId:{0} not found", targetSceneId);
                 throw new System.InvalidOperationException($"[SceneResourceManager] SceneId '{targetSceneId}' not found in config.");
             }
-
+            
             var legionConfig = _gameSceneResource.LegionConfig;
             
             _commander = new CommanderBootstrapInfo(legionConfig.Seed.Faction.ToString() + legionConfig.Seed.Slot, legionConfig);
@@ -69,7 +69,7 @@ namespace Ebonor.GamePlay
             
             log.Info($"[SceneResourceManager] Construct");
         }
-
+        
         public GameSceneResource GetSceneResource()
         {
             return _gameSceneResource;

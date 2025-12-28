@@ -13,13 +13,16 @@ namespace Ebonor.GamePlay
         
         private readonly CommanderNumericComponent.Factory _commanderNumericFactory;
         
+        private ShowcaseContext _showcaseContext; // Injected Data Context
+        
         [Inject]
         public ClientCommander(
             INetworkBus networkBus, 
             IDataLoaderService dataLoaderService, 
             ClientLegion.Factory legionFactory, 
             CommanderNumericComponent.Factory commanderNumericFactory,
-            CommanderContextData contextData)
+            CommanderContextData contextData,
+            ShowcaseContext showcaseContext) // Inject ShowcaseContext
         {
             log.Info($"[ClientCommander] Construction");
 
@@ -32,6 +35,8 @@ namespace Ebonor.GamePlay
             _dataLoaderService = dataLoaderService;
             
             _contextData = contextData;
+            
+            _showcaseContext = showcaseContext;
         }
         
         private CommanderContextData _contextData;
@@ -70,6 +75,12 @@ namespace Ebonor.GamePlay
         protected override void InitializeNumeric()
         {
             _numericComponent = _commanderNumericFactory.Create();
+            
+            // Register Data to ShowcaseContext (Data Layer)
+            if (_showcaseContext != null)
+            {
+                 _showcaseContext.Register(NetId, _numericComponent);
+            }
         }
         
         public override void OnRpc(IRpc rpc)
@@ -101,6 +112,12 @@ namespace Ebonor.GamePlay
         public override async UniTask  ShutdownAsync()
         {
             log.Info($"[ClientCommander] ShutdownAsync");
+            
+            // Unregister Data
+            if (_showcaseContext != null)
+            {
+                _showcaseContext.Unregister(NetId);
+            }
             
             if (_baseLegion != null)
             {

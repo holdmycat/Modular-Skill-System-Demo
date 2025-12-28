@@ -15,6 +15,13 @@ namespace Ebonor.Manager
         
         public override void InstallBindings()
         {
+            // --- Signals & Event Bus ---
+            SignalBusInstaller.Install(Container);
+            
+            // Declare Signals
+            Container.DeclareSignal<SignalUI_UnitSelected>();
+
+
             // --- Network Layer ---
             // Bind NetworkBus
             Container.BindInterfacesAndSelfTo<SimulatedNetworkBus>().AsSingle();
@@ -33,6 +40,12 @@ namespace Ebonor.Manager
             
             // --- Client Presentation World ---
             Container.Bind<ClientRoomManager>().FromNewComponentOnNewGameObject().AsSingle();
+            
+            // Bind Context (Data Layer)
+            Container.Bind<ShowcaseContext>().AsSingle();
+            
+            // Bind ViewModels (Logic Layer)
+            Container.Bind<ShowcaseViewModel>().AsTransient();
             
             // Bind Commanders with SubContainer
             Container.BindFactory<ServerCommander, ServerCommander.Factory>()
@@ -114,4 +127,7 @@ namespace Ebonor.Manager
             
         }
     }
+
+    
 }
+

@@ -38,6 +38,7 @@ namespace Ebonor.Manager
         {
             log.Info("[DualWorldSceneManager] Starting Dispose");
             _serverManager.ShutdownAsync().Forget();
+            _clientManager.ShutdownAsync().Forget();
         }
 
         public async UniTask StartupSequence()

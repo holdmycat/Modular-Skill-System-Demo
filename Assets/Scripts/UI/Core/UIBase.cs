@@ -24,8 +24,7 @@ namespace Ebonor.UI
     [RequireComponent(typeof(RectTransform))]
     public abstract class UIBase : MonoBehaviour
     {
-        [Header("Blackboard")]
-        [SerializeField] protected UIBlackboardBase blackboard;
+      
         
         [SerializeField] protected CanvasGroup _bufferCanvasGroup;
         
@@ -65,8 +64,7 @@ namespace Ebonor.UI
             CurrentState = UIState.Deactive;
         }
 
-        /// <summary>Typed access to attached blackboard.</summary>
-        public T GetBlackboard<T>() where T : UIBlackboardBase => blackboard as T;
+       
 
         public async UniTask InternalOpenAsync()
         {

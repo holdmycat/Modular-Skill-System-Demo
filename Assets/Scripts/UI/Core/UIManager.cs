@@ -25,12 +25,14 @@ namespace Ebonor.UI
         private IInputService _inputService;
 
         private ResourceLoader _resourceLoader;
+        private IInstantiator _container;
 
         [Inject]
-        public void Construct(IInputService inputService, ResourceLoader loader)
+        public void Construct(IInputService inputService, ResourceLoader loader, IInstantiator container)
         {
             _inputService = inputService;
             _resourceLoader = loader;
+            _container = container;
             _uiDict = new Dictionary<Type, UIBase>();
             _activeStack = new List<UIBase>();
         }
@@ -66,7 +68,12 @@ namespace Ebonor.UI
         /// <summary>
         /// Open a UI panel. Loads it if not already cached.
         /// </summary>
-        public async UniTask<T> OpenUIAsync<T>(Action<T> beforeOpen = null) where T : UIBase
+        /// <summary>
+        /// Open a UI panel. Loads it if not already cached.
+        /// </summary>
+        /// <param name="beforeOpen">Action to configure the UI before it opens</param>
+        /// <param name="canvasScope">Optional: The DI Container to use for instantiation (e.g., Scene Context)</param>
+        public async UniTask<T> OpenUIAsync<T>(Action<T> beforeOpen = null, IInstantiator canvasScope = null) where T : UIBase
         {
             
             Type type = typeof(T);
@@ -89,15 +96,22 @@ namespace Ebonor.UI
                     return null;
                 }
             
-                var go = Instantiate(prefab, gameObject.transform);
-                go.name = prefab.name;
-                ui = go.GetComponent<T>();
+                // Use the provided scope (Scene) or fallback to global (Project)
+                IInstantiator containerToUse = canvasScope != null ? canvasScope : _container;
+
+                // Use Zenject to Instantiate, ensuring [Inject] works inside the UI Prefab
+                ui = containerToUse.InstantiatePrefabForComponent<T>(prefab, gameObject.transform);
                 if (ui == null)
                 {
                     log.Error($"Prefab at {prefabPath} does not have component {type.Name}");
-                    Destroy(go);
+                    // InstantiatePrefabForComponent might return null if component missing? 
+                    // Actually it throws exception usually if missing, or returns null. 
+                    // If null, we can't destroy the GO easily because we don't have reference if it failed.
+                    // But safe to assume if T is missing it might be an issue.
                     return null;
                 }
+                
+                ui.gameObject.name = prefab.name;
             
                 await ui.InternalCreateAsync();
                 _uiDict.Add(type, ui);

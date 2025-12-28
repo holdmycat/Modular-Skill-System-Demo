@@ -18,6 +18,7 @@ namespace Ebonor.DataCtrl
     
     public enum NetworkPrefabType : int
     {
+        None = 0,
         Player = 1, 
         Legion = 10, 
         Squad = 1000, 

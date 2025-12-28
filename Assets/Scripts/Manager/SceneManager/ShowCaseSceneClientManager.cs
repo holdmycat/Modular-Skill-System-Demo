@@ -3,6 +3,7 @@ using Ebonor.DataCtrl;
 using Ebonor.Framework;
 using Ebonor.GamePlay;
 using Ebonor.UI;
+using UnityEngine.SceneManagement;
 using Zenject;
 
 namespace Ebonor.Manager
@@ -76,6 +77,9 @@ namespace Ebonor.Manager
                 // UI Init Logic
                 log.Info($"[ShowCaseSceneClientManager] UI Opened. Context Available: {_showcaseContext != null}");
             }, _container);
+            
+            _uiSceneShowCaseScene.transform.SetParent(null);
+            SceneManager.MoveGameObjectToScene(_uiSceneShowCaseScene.gameObject, gameObject.scene);
             
             log.Info("[ShowCaseSceneClientManager] OnInitAsync, sceneName:" + sceneName);
         }

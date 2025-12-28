@@ -11,7 +11,7 @@ namespace Ebonor.GamePlay
         
         private ClientLegion.Factory _legionFactory;
         
-        private readonly CommanderNumericComponent.Factory _commanderNumericFactory;
+       
         
         private ShowcaseContext _showcaseContext; // Injected Data Context
         
@@ -19,8 +19,7 @@ namespace Ebonor.GamePlay
         public ClientCommander(
             INetworkBus networkBus, 
             IDataLoaderService dataLoaderService, 
-            ClientLegion.Factory legionFactory, 
-            CommanderNumericComponent.Factory commanderNumericFactory,
+            ClientLegion.Factory legionFactory,
             CommanderContextData contextData,
             ShowcaseContext showcaseContext) // Inject ShowcaseContext
         {
@@ -30,7 +29,7 @@ namespace Ebonor.GamePlay
             
             _legionFactory = legionFactory;
             
-            _commanderNumericFactory = commanderNumericFactory;
+          
             
             _dataLoaderService = dataLoaderService;
             
@@ -74,12 +73,12 @@ namespace Ebonor.GamePlay
         
         protected override void InitializeNumeric()
         {
-            _numericComponent = _commanderNumericFactory.Create();
+            _numericComponent = _numericFactory.CreateCommander(_netId);
             
             // Register Data to ShowcaseContext (Data Layer)
             if (_showcaseContext != null)
             {
-                 _showcaseContext.Register(NetId, _numericComponent);
+                 _showcaseContext.Register(NetId, _numericComponent, Faction);
             }
         }
         

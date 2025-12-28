@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
-using UnityEngine;
 using Zenject;
 
 namespace Ebonor.UI
@@ -15,13 +14,16 @@ namespace Ebonor.UI
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(BaseWindow<TViewModel>));
         
-        protected TViewModel ViewModel { get; private set; }
-
+        public TViewModel ViewModel { get; protected set; }
+        
+        protected IInstantiator _instantiator;
+        
         [Inject]
-        public void Construct(TViewModel viewModel)
+        public void Construct(TViewModel viewModel, IInstantiator instantiator)
         {
             log.Info($"[{GetType().Name}] Construct.");
             ViewModel = viewModel;
+            _instantiator = instantiator;
         }
 
         protected override async UniTask OnOpenAsync()

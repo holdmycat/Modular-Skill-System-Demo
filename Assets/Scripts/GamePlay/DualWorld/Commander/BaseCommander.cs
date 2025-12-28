@@ -13,13 +13,15 @@ namespace Ebonor.GamePlay
         protected BaseLegion _baseLegion;
 
         public ulong LegionId => _legionId;
-
+        
         /// <summary>
         /// Inject commander bootstrap data and bind net id (call once after creation).
         /// </summary>
         public virtual void Configure(CommanderBootstrapInfo bootstrapInfo)
         {
             _bootstrapInfo = bootstrapInfo;
+
+            Faction = bootstrapInfo.LegionConfig.Seed.Faction;
             
             InitializeNumeric();
         }

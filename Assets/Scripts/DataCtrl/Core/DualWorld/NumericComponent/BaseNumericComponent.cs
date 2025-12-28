@@ -28,6 +28,14 @@ namespace Ebonor.DataCtrl
 
         protected string _unitName;
         public string UnitName => _unitName;
+
+        protected uint _netId;
+        public uint NetId => _netId;
+
+        protected FactionType _factionType;
+
+        public FactionType FactionType => _factionType;
+        
         
         public int GetLevel()
         {

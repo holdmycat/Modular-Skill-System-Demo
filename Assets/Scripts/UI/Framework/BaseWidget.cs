@@ -12,14 +12,37 @@ namespace Ebonor.UI
     /// <typeparam name="TViewModel">The specific SubViewModel type.</typeparam>
     public abstract class BaseWidget<TViewModel> : UIPanelBase where TViewModel : BaseViewModel
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(BaseWidget<TViewModel>));
+        protected static readonly ILog log = LogManager.GetLogger(typeof(BaseWidget<TViewModel>));
 
         protected TViewModel ViewModel { get; private set; }
 
+        /// <summary>
+        /// 1. Factory Creation: Zenject calls this with the ViewModel.
+        /// 2. Scene Object: Zenject calls this with null (Optional=true), so we can use Open() later manually.
+        /// </summary>
         [Inject]
-        public void Construct(TViewModel viewModel)
+        public void Construct([Inject(Optional = true)] TViewModel viewModel)
         {
-            ViewModel = viewModel;
+            if (viewModel != null)
+            {
+                ViewModel = viewModel;
+            }
+        }
+
+        /// <summary>
+        /// Manual Binding Entry Point.
+        /// Use this for Scene Objects where Construct() cannot be easily used.
+        /// </summary>
+        public virtual void Open(TViewModel vm)
+        {
+            ViewModel = vm;
+            Show();
+        }
+
+        public virtual void Show()
+        {
+            gameObject.SetActive(true);
+            ShowAsync().Forget();
         }
 
         protected override async UniTask OnShowAsync()

@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   SceneId: ShowcaseScene
+  UICommanderInfoWidget: {fileID: 5829078226587506339, guid: 6a51e1c5a369d469ca66d9e80a5efd13,
+    type: 3}
 --- !u!1 &6056631543384735579
 GameObject:
   m_ObjectHideFlags: 0

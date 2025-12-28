@@ -27,5 +27,7 @@ namespace Ebonor.DataCtrl
         /// 析构：清理内存，解绑事件
         /// </summary>
         void Dispose();
+        
+         uint NetId { get; }
     }
 }

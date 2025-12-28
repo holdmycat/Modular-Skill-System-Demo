@@ -32,7 +32,7 @@ namespace Ebonor.UI
             InstantHide();
         }
 
-        public async UniTask ShowAsync()
+        protected async UniTask ShowAsync()
         {
             if (IsVisible) return;
 
@@ -62,7 +62,7 @@ namespace Ebonor.UI
             IsVisible = false;
         }
 
-        public void InstantHide()
+        private void InstantHide()
         {
             canvasGroup.alpha = 0f;
             canvasGroup.interactable = false;

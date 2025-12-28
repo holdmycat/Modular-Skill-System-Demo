@@ -1,6 +1,7 @@
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
 using Ebonor.GamePlay;
+using Ebonor.UI;
 using UnityEngine;
 using Zenject;
 
@@ -12,6 +13,8 @@ namespace Ebonor.Manager
 
         [Header("Scene Id")]
         public string SceneId;
+        
+        public GameObject UICommanderInfoWidget;
         
         public override void InstallBindings()
         {
@@ -46,6 +49,10 @@ namespace Ebonor.Manager
             
             // Bind ViewModels (Logic Layer)
             Container.Bind<ShowcaseViewModel>().AsTransient();
+            
+            // 在 Installer 中绑定
+            Container.BindFactory<CommanderInfoViewModel, CommanderInfoWidget, CommanderInfoWidget.Factory>()
+                .FromComponentInNewPrefab(UICommanderInfoWidget);
             
             // Bind Commanders with SubContainer
             Container.BindFactory<ServerCommander, ServerCommander.Factory>()
@@ -98,7 +105,7 @@ namespace Ebonor.Manager
             subContainer.BindFactory<ServerSquad, ServerSquad.Factory>().AsSingle();
             
             // Bind Numeric Factories
-            subContainer.BindFactory<CommanderNumericComponent, CommanderNumericComponent.Factory>().AsSingle();
+            subContainer.BindFactory<uint, CommanderNumericComponent, CommanderNumericComponent.Factory>().AsSingle();
             subContainer.BindFactory<LegionNumericComponent, LegionNumericComponent.Factory>().AsSingle();
             subContainer.BindFactory<SquadNumericComponent, SquadNumericComponent.Factory>().AsSingle();
             
@@ -118,7 +125,7 @@ namespace Ebonor.Manager
             subContainer.BindFactory<ClientSquad, ClientSquad.Factory>().AsSingle();
             
             // Bind Numeric Factories
-            subContainer.BindFactory<CommanderNumericComponent, CommanderNumericComponent.Factory>().AsSingle();
+            subContainer.BindFactory<uint, CommanderNumericComponent, CommanderNumericComponent.Factory>().AsSingle();
             subContainer.BindFactory<LegionNumericComponent, LegionNumericComponent.Factory>().AsSingle();
             subContainer.BindFactory<SquadNumericComponent, SquadNumericComponent.Factory>().AsSingle();
             

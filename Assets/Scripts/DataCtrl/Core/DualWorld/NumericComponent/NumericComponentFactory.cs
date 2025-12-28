@@ -23,9 +23,9 @@ namespace Ebonor.DataCtrl
             _squadFactory = squadFactory;
         }
         
-        public CommanderNumericComponent CreateCommander()
+        public CommanderNumericComponent CreateCommander(uint netId)
         {
-            return _commanderFactory.Create();
+            return _commanderFactory.Create(netId);
         }
 
         public LegionNumericComponent CreateLegion()

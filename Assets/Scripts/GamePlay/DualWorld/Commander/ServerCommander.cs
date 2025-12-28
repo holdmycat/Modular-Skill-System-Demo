@@ -11,12 +11,10 @@ namespace Ebonor.GamePlay
 
         private readonly ServerLegion.Factory _factory;
 
-        private readonly CommanderNumericComponent.Factory _commanderNumericFactory;
         
         [Inject]
         public ServerCommander(
-            ServerLegion.Factory factory, 
-            CommanderNumericComponent.Factory commanderNumericFactory,
+            ServerLegion.Factory factory,
             INetworkBus networkBus, 
             IDataLoaderService dataLoaderService,
             ILegionIdGenerator legionIdGenerator,
@@ -25,8 +23,7 @@ namespace Ebonor.GamePlay
             log.Info($"[ServerCommander] Construction");
 
             _factory = factory;
-
-            _commanderNumericFactory = commanderNumericFactory;
+            
             
             _networkBus = networkBus;
             
@@ -113,7 +110,7 @@ namespace Ebonor.GamePlay
         
         protected override void InitializeNumeric()
         {
-            _numericComponent = _commanderNumericFactory.Create();
+            _numericComponent = _numericFactory.CreateCommander(_netId);
         }
         
         public class Factory : PlaceholderFactory<ServerCommander> 

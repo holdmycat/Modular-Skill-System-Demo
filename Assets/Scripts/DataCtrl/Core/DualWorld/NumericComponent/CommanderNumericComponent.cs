@@ -17,6 +17,12 @@ namespace Ebonor.DataCtrl
         private GlobalGameConfig _globalGameConfig;
         
         [Inject]
+        public CommanderNumericComponent(uint netId)
+        {
+            _netId = netId;
+        }
+        
+        [Inject]
         public void Construct(ICharacterDataRepository characterDataRepository, CommanderContextData commanderContextData, GlobalGameConfig globalGameConfig)
         {
             log.Info("[CommanderNumericComponent] Construct");
@@ -30,6 +36,8 @@ namespace Ebonor.DataCtrl
             _commanderBootstrapInfo = commanderContextData.BootstrapInfo;
 
             _globalGameConfig = globalGameConfig;
+
+            _factionType = commanderContextData.Faction;
             
             Initialize();
         }
@@ -64,7 +72,7 @@ namespace Ebonor.DataCtrl
         }
         
         
-        public class Factory : PlaceholderFactory<CommanderNumericComponent>
+        public class Factory : PlaceholderFactory<uint, CommanderNumericComponent>
         {
             public Factory()
             {

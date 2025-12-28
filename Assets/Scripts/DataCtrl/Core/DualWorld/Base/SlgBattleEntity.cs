@@ -19,6 +19,8 @@ namespace Ebonor.GamePlay
         protected INetworkBus _networkBus;
         protected IDataLoaderService _dataLoaderService;
         
+        public FactionType Faction { get; protected set; } = FactionType.Neutral;
+        
         /// <summary>
         /// Initialize the numeric component specific to this entity type.
         /// Should be called during the Configure/Init phase.

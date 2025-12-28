@@ -1,0 +1,44 @@
+using Ebonor.Framework;
+using UnityEngine;
+using Zenject;
+
+namespace Ebonor.DataCtrl
+{
+    /// <summary>
+    /// SubViewModel for a single Commander's UI module.
+    /// Manages data for one specific Commander instance (Player or Enemy).
+    /// </summary>
+    public class CommanderInfoViewModel : SubViewModel
+    {
+        private CommanderNumericComponent _commander;
+
+        public FactionType FactionType => _commander.FactionType;
+        
+        // Observable Properties (simplified for demo, typically use ReactiveProperty)
+        public float Health => _commander != null ? _commander[eNumericType.Hp] : 0;
+        public float MaxHealth => _commander != null ? _commander[eNumericType.Hp] : 100;
+        public int Level => _commander != null ? _commander.GetLevelForUI() : 1;
+        public string Name => _commander != null ? _commander.UnitName : "Unknown";
+
+        // Bind a specific commander data component to this ViewModel
+        public void BindData(CommanderNumericComponent commander)
+        {
+            _commander = commander;
+            if (_commander != null)
+            {
+                log.Info($"[CommanderInfoViewModel] Bound to Commander: {_commander.UnitName}");
+                // Trigger UI refresh here if using events
+            }
+            else
+            {
+                log.Warn("[CommanderInfoViewModel] Bound to NULL Commander");
+            }
+        }
+
+        public override void OnOpen()
+        {
+            base.OnOpen();
+            // Subscribe to data changes if needed
+        }
+    }
+}

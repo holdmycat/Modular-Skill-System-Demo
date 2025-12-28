@@ -30,7 +30,7 @@ namespace Ebonor.Manager
             
             // --- Server Logic World ---
             Container.Bind<ServerRoomManager>().AsSingle();
-
+            
             // --- Client Presentation World ---
             Container.Bind<ClientRoomManager>().FromNewComponentOnNewGameObject().AsSingle();
             

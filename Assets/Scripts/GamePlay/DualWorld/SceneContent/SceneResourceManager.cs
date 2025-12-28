@@ -1,5 +1,6 @@
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
+using Zenject;
 
 namespace Ebonor.GamePlay
 {
@@ -11,6 +12,8 @@ namespace Ebonor.GamePlay
         private readonly string _sceneId;
         private readonly GlobalGameConfig _globalGameConfig;
         private readonly GameSceneResource _gameSceneResource;
+        
+        [Inject]
         public SceneResourceManager(string sceneId /* 其他依赖 */, GlobalGameConfig config, IScenarioIdRegistry idRegistry) {
             _sceneId = sceneId;
             _globalGameConfig = config;

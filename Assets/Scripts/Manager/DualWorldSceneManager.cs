@@ -45,10 +45,10 @@ namespace Ebonor.Manager
             log.Info("[DualWorldSceneManager] StartupSequence: Initializing Dual World...");
 
             // 1. Init Client First (To Listen for Events)
-            _clientManager.InitAsync();
+            await _clientManager.InitAsync();
             
             // 2. Init Server (To Generate Events)
-            _serverManager.InitAsync();
+            await _serverManager.InitAsync();
             
             log.Info("[DualWorldSceneManager] Dual World Initialized.");
         }

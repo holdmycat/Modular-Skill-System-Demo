@@ -15,7 +15,7 @@ namespace Ebonor.GamePlay
             log.Info("[BaseServerManager] Constructed.");
         }
 
-        public virtual void InitAsync()
+        public virtual async UniTask InitAsync()
         {
             log.Info("[BaseServerManager] Initializing...");
             _serverRoomManager.InitAsync();

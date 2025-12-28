@@ -12,11 +12,15 @@ namespace Ebonor.GamePlay
         protected ClientRoomManager _clientRoomManager;
         
         
-        public void InitAsync()
+        public async UniTask InitAsync()
         {
             log.Info("[BaseClientManager] Initializing...");
             _clientRoomManager.InitAsync();
+            await OnInitAsync();
         }
+
+        protected abstract UniTask OnInitAsync();
+
 
         private void Update()
         {

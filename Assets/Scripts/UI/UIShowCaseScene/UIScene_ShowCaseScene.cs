@@ -8,15 +8,9 @@ namespace Ebonor.UI
 {
     public class UIScene_ShowCaseScene : BaseWindow<ShowcaseViewModel>
     {
-        // No explicit injection needed here anymore, BaseWindow handles it via [Inject] Property.
-        // [Header("Widgets")]
-        // [UnityEngine.SerializeField] private CommanderInfoWidget _playerWidget;
-        // [UnityEngine.SerializeField] private CommanderInfoWidget _enemyWidget;
-        
         private static readonly ILog log = LogManager.GetLogger(typeof(UIScene_ShowCaseScene));
 
         private CommanderInfoWidget _playerWidget;
-        
         private CommanderInfoWidget.Factory _factory;
         
         [Inject]
@@ -33,8 +27,6 @@ namespace Ebonor.UI
             _playerWidget = _factory.Create(ViewModel.PlayerInfo);
             _playerWidget.transform.SetParent(transform);
             _playerWidget.RectTransform.anchoredPosition = Vector2.zero;
-            
-           
         }
         
         protected override async UniTask OnOpenAsync()

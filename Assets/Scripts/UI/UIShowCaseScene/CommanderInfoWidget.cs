@@ -17,6 +17,7 @@ namespace Ebonor.UI
         [SerializeField] private Slider _hpSlider;
         [SerializeField] private TMP_Text _hpText;
         [SerializeField] private Button _levelBtn;
+        [SerializeField] private Button _levelResetBtn;
 
         public RectTransform RectTransform => _rectTransform;
         
@@ -48,7 +49,12 @@ namespace Ebonor.UI
             if (ViewModel == null) return;
             
             if (_nameText) _nameText.text = ViewModel.Name;
-            // if (_levelText) _levelText.text = $"Lv.{ViewModel.Level}";
+            if (_levelText) 
+                _levelText.text = $"Commander Lv.{ViewModel.Level}";
+            
+            if (_buffText) 
+                _buffText.text = $"{ViewModel.BuffText}";
+            
             //
             // if (_hpSlider)
             // {
@@ -67,7 +73,15 @@ namespace Ebonor.UI
         protected override void OnAwake()
         {
             base.OnAwake();
-            _levelBtn.onClick.AddListener(BtnClickLevelUp);
+            if (_levelBtn != null)
+            {
+                _levelBtn.onClick.AddListener(BtnClickLevelUp);
+            }
+
+            if (_levelResetBtn != null)
+            {
+                _levelResetBtn.onClick.AddListener(BtnClickLevelReset);
+            }
         }
 
         protected override void OnDestroy()
@@ -76,6 +90,12 @@ namespace Ebonor.UI
             {
                 _levelBtn.onClick.RemoveListener(BtnClickLevelUp);
             }
+            
+            if (_levelResetBtn != null)
+            {
+                _levelResetBtn.onClick.RemoveListener(BtnClickLevelReset);
+            }
+            
             base.OnDestroy();
         }
 
@@ -85,6 +105,19 @@ namespace Ebonor.UI
         private void BtnClickLevelUp()
         {
             log.Info($"[{GetType().Name}] BtnClickLevelUp.");
+            if (ViewModel != null)
+            {
+                ViewModel.LevelUp();
+            }
+        }
+        
+        private void BtnClickLevelReset()
+        {
+            log.Info($"[{GetType().Name}] BtnClickLevelReset.");
+            if (ViewModel != null)
+            {
+                ViewModel.LevelReset();
+            }
         }
         
         public class Factory : PlaceholderFactory<CommanderInfoViewModel, CommanderInfoWidget>

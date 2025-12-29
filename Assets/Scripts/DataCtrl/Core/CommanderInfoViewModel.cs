@@ -1,7 +1,3 @@
-using Ebonor.Framework;
-using UnityEngine;
-using Zenject;
-
 namespace Ebonor.DataCtrl
 {
     /// <summary>
@@ -19,7 +15,10 @@ namespace Ebonor.DataCtrl
         // Observable Properties (simplified for demo, typically use ReactiveProperty)
         public float Health => _commander != null ? _commander[eNumericType.Hp] : 0;
         public float MaxHealth => _commander != null ? _commander[eNumericType.Hp] : 100;
+        
         public int Level => _commander != null ? _commander.GetLevelForUI() : 1;
+        
+        public string BuffText => _commander != null ? eNumericType.InfantryAttackMod + " +" + _commander[eNumericType.InfantryAttackMod] + "%": "";
         public string Name => _commander != null ? _commander.UnitName : "Unknown";
 
         // Bind a specific commander data component to this ViewModel
@@ -37,10 +36,31 @@ namespace Ebonor.DataCtrl
             }
         }
 
-        public override void OnOpen()
+        // public override void OnOpen()
+        // {
+        //     base.OnOpen();
+        //     // Subscribe to data changes if needed
+        // }
+
+        public void LevelUp()
         {
-            base.OnOpen();
-            // Subscribe to data changes if needed
+            if (_commander != null)
+            {
+                _commander.LevelUp();
+                log.Info($"[CommanderInfoViewModel] Leveled Up to {_commander.GetLevelForUI()}");
+                OnDataUpdated?.Invoke();
+            }
         }
+
+        public void LevelReset()
+        {
+            if (_commander != null)
+            {
+                _commander.Reset();
+                log.Info($"[CommanderInfoViewModel] Leveled Up to {_commander.GetLevelForUI()}");
+                OnDataUpdated?.Invoke();
+            }
+        }
+        
     }
 }

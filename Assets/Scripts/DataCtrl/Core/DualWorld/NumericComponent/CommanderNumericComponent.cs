@@ -55,8 +55,8 @@ namespace Ebonor.DataCtrl
             SetValueForOrig(eNumericType.UnitLv, 0f);
             SetValueForOrig(eNumericType.UnitMaxLv, _slgCommanderAttributesNodeData.Level);
             
-            SetValueForOrig(eNumericType.InfantryAttackModBase, _slgCommanderAttributesNodeData.GlobalInfantryAtkMod);
-            SetValueForOrig(eNumericType.MarchSpeedBase, _slgCommanderAttributesNodeData.GlobalMarchSpeedMod);
+            SetValueForOrig(eNumericType.InfantryAttackMod, _slgCommanderAttributesNodeData.GlobalInfantryAtkMod);
+            SetValueForOrig(eNumericType.MarchSpeed, _slgCommanderAttributesNodeData.GlobalMarchSpeedMod);
         }
         
         protected override void OnLevelUp()
@@ -64,10 +64,10 @@ namespace Ebonor.DataCtrl
 
             var lv = GetLevel();
 
-            var newValue = mOriNumericDic[(int)eNumericType.InfantryAttackModBase] * (lv) * _globalGameConfig.characterLevelupAddPercent;
+            var newValue = mOriNumericDic[(int)eNumericType.InfantryAttackModBase] * (1 + lv * _globalGameConfig.characterLevelupAddPercent);
             UpdateNumeric_SetOperation(eNumericType.InfantryAttackModBase, newValue, true, true);
             
-            newValue = mOriNumericDic[(int)eNumericType.MarchSpeedBase] * (lv) * _globalGameConfig.characterLevelupAddPercent;
+            newValue = mOriNumericDic[(int)eNumericType.MarchSpeedBase] * (1 + lv * _globalGameConfig.characterLevelupAddPercent);
             UpdateNumeric_SetOperation(eNumericType.MarchSpeedBase, newValue, true, true);
         }
         

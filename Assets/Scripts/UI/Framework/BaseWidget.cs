@@ -27,6 +27,8 @@ namespace Ebonor.UI
             {
                 ViewModel = viewModel;
             }
+            
+            OnAwake();
         }
 
         protected virtual void OnAwake()

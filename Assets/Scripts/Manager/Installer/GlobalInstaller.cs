@@ -61,6 +61,8 @@ namespace Ebonor.Manager
             //Container.Bind<IEntityFactory>().To<EntitySpawnService>().AsSingle();
             
             Container.BindInterfacesAndSelfTo<DataEventBusManager>().AsSingle();
+            
+            Container.Bind<IUIAtlasRepository>().To<UIAtlasRepository>().AsSingle();
 
             // Bind NumericComponent Factory
             //Container.Bind<IActorNumericComponentFactory>().To<ActorNumericComponentFactory>().AsSingle();

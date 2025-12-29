@@ -10,6 +10,7 @@ namespace Ebonor.UI
     {
 
         private CommanderInfoWidget _playerWidget;
+        private CommanderInfoWidget _enemyWidget;
         private CommanderInfoWidget.Factory _factory;
         
         [Inject]
@@ -17,6 +18,7 @@ namespace Ebonor.UI
         {
             log.Info($"[{GetType().Name}] Construct.");
             _factory = factory;
+           
         }
         
         protected override async UniTask OnCreateAsync()
@@ -25,6 +27,14 @@ namespace Ebonor.UI
             _playerWidget = _factory.Create(ViewModel.PlayerInfo);
             _playerWidget.transform.SetParent(transform);
             _playerWidget.RectTransform.anchoredPosition = Vector2.zero;
+            
+            _enemyWidget = _factory.Create(ViewModel.EnemyInfo);
+            _enemyWidget.transform.SetParent(transform);
+            _enemyWidget.RectTransform.anchoredPosition = new Vector2(Screen.width - _enemyWidget.RectTransform.sizeDelta.x, 0f);
+
+
+
+
         }
         
         protected override async UniTask OnOpenAsync()
@@ -36,6 +46,7 @@ namespace Ebonor.UI
             if (ViewModel != null)
             {
                 await _playerWidget.Show();
+                await _enemyWidget.Show();
                 
                // // Bind Widgets
                // if(_playerWidget) _playerWidget.Open(ViewModel.PlayerInfo);
@@ -49,6 +60,7 @@ namespace Ebonor.UI
             if (ViewModel != null)
             {
                 await _playerWidget.Hide();
+                await _enemyWidget.Hide();
             }
             await base.OnCloseAsync();
         }

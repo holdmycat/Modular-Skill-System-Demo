@@ -57,7 +57,7 @@ namespace Ebonor.DataCtrl
                 return entities;
             }
 
-            log.Warn($"[ShowcaseContext] GetEntities Faction: {faction} not found at _factionMap");
+            //log.Warn($"[ShowcaseContext] GetEntities Faction: {faction} not found at _factionMap");
             return null;
         }
 

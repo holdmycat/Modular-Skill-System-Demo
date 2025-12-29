@@ -132,6 +132,8 @@ namespace Ebonor.DataCtrl
                     return "AllCharacterData";
                 case ResourceAssetType.SceneStateManager:
                     return "SceneStateManager";
+                case ResourceAssetType.UIAtlas:
+                    return "UI/UIAtlas";
                 default:
                     return string.Empty;
             }

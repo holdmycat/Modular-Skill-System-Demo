@@ -48,10 +48,12 @@ namespace Ebonor.DataCtrl
         private void TryBindExisting()
         {
              var playerCmder = _context.PlayerCommander;
-             if(playerCmder != null) PlayerInfo.BindData(playerCmder);
+             if(playerCmder != null) 
+                 PlayerInfo.BindData(playerCmder);
 
              var enemyCmder = _context.GetEntities(FactionType.Enemy)?.FirstCommander;
-             if(enemyCmder != null) EnemyInfo.BindData(enemyCmder);
+             if(enemyCmder != null) 
+                 EnemyInfo.BindData(enemyCmder);
         }
 
         private void HandleCommanderAdded(CommanderNumericComponent commander)

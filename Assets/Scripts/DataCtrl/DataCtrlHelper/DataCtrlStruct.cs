@@ -240,6 +240,7 @@ namespace Ebonor.DataCtrl
         /// <summary>All character data under Resources/AllCharacterData/</summary>
         AllCharacterData,
         SceneStateManager,
+        UIAtlas,
     }
     
     /// <summary>

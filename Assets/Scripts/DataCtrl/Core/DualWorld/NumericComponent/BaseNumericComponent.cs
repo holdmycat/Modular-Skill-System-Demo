@@ -29,6 +29,11 @@ namespace Ebonor.DataCtrl
         protected string _unitName;
         public string UnitName => _unitName;
 
+        
+        protected string _unitIcon;
+        public string UnitIcon => _unitIcon;
+        
+        
         protected uint _netId;
         public uint NetId => _netId;
 

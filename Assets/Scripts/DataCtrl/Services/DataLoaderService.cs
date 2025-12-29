@@ -16,13 +16,15 @@ namespace Ebonor.DataCtrl
         private ResourceLoader _resourceLoader;
         private IModelRepository _modelRepository;
         private ICharacterDataRepository _characterDataRepository;
+        private IUIAtlasRepository _uiAtlasRepository;
         private GlobalGameConfig _globalGameConfig;
         private  int _counter = 1;
-        public DataLoaderService(GlobalGameConfig config, ResourceLoader resourceLoader, IModelRepository modelRepository, ICharacterDataRepository characterDataRepository)
+        public DataLoaderService(GlobalGameConfig config, ResourceLoader resourceLoader, IModelRepository modelRepository, ICharacterDataRepository characterDataRepository, IUIAtlasRepository uiAtlasRepository)
         {
             _modelRepository = modelRepository;
             _resourceLoader = resourceLoader;
             _characterDataRepository = characterDataRepository;
+            _uiAtlasRepository = uiAtlasRepository;
             _globalGameConfig = config;
         }
         
@@ -96,7 +98,15 @@ namespace Ebonor.DataCtrl
             _modelRepository.SaveModelAsync(list);
             log.Info("[DataLoaderService] Loading Models complete...");
             
-           
+            // Load UI Atlases
+            log.Info("[DataLoaderService] Loading UI Atlases...");
+            var iconAtlas = await _resourceLoader.LoadAsset<UnityEngine.U2D.SpriteAtlas>(ConstData.UIATLAS_CHARACTERICON, ResourceAssetType.UIAtlas);
+            //var commonAtlas = await _resourceLoader.LoadAsset<UnityEngine.U2D.SpriteAtlas>("ui_common", ResourceAssetType.UIAtlas);
+            
+            _uiAtlasRepository.SaveAtlas(ConstData.UIATLAS_CHARACTERICON, iconAtlas);
+            //_uiAtlasRepository.SaveAtlas("ui_common", commonAtlas);
+            log.Info("[DataLoaderService] Loading UI Atlases complete.");
+            
             
             _isInitialized = true;
             log.Info("[DataLoaderService] Data Loading complete.");

@@ -18,7 +18,18 @@ namespace Ebonor.UI
         [SerializeField] private TMP_Text _hpText;
         [SerializeField] private Button _levelBtn;
         [SerializeField] private Button _levelResetBtn;
+        [SerializeField] private Image _commanderImg;
 
+        private IUIAtlasRepository _uiAtlasRepository;
+        
+        [Inject]
+        public void Construct(IUIAtlasRepository uiAtlasRepository)
+        {
+            _uiAtlasRepository = uiAtlasRepository;
+        }
+            
+            
+        
         public RectTransform RectTransform => _rectTransform;
         
         protected override async UniTask OnShowAsync()
@@ -54,6 +65,8 @@ namespace Ebonor.UI
             
             if (_buffText) 
                 _buffText.text = $"{ViewModel.BuffText}";
+
+            _commanderImg.sprite = _uiAtlasRepository.GetUICharacterAtlas(ViewModel.IconName);
             
             //
             // if (_hpSlider)

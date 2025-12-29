@@ -20,6 +20,8 @@ namespace Ebonor.DataCtrl
         
         public string BuffText => _commander != null ? eNumericType.InfantryAttackMod + " +" + _commander[eNumericType.InfantryAttackMod] + "%": "";
         public string Name => _commander != null ? _commander.UnitName : "Unknown";
+        
+        public string IconName => _commander != null ? _commander.UnitIcon : "Unknown";
 
         // Bind a specific commander data component to this ViewModel
         public void BindData(CommanderNumericComponent commander)

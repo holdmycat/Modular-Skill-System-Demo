@@ -31,6 +31,8 @@ namespace Ebonor.Framework
 
         public const string UI_PLAYERACTION = "PlayerInput";
 
+        public const string UIATLAS_CHARACTERICON = "ui_icon_characters";
+
         #endregion
     }
 }

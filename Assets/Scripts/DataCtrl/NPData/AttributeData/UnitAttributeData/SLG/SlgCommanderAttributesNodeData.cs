@@ -30,6 +30,11 @@ namespace Ebonor.DataCtrl
         [BsonElement("UnitName")]
         public string UnitName;
         
+        [Tooltip("领主名称/Icon")]
+        [BsonElement("UnitIcon")]
+        public string UnitIcon;
+        
+        
         [Tooltip("领主等级")]
         [BsonElement("Level")]
         public int Level = 1;
@@ -81,6 +86,7 @@ namespace Ebonor.DataCtrl
         {
             "UnitDataNodeId",
             "UnitName",
+            "UnitIcon",
             "Level"
         };
 

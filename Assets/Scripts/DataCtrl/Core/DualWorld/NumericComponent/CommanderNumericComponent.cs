@@ -52,6 +52,8 @@ namespace Ebonor.DataCtrl
 
             _unitName = _slgCommanderAttributesNodeData.UnitName;
             
+            _unitIcon= _slgCommanderAttributesNodeData.UnitIcon;
+            
             SetValueForOrig(eNumericType.UnitLv, 0f);
             SetValueForOrig(eNumericType.UnitMaxLv, _slgCommanderAttributesNodeData.Level);
             

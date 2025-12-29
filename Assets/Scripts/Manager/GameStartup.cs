@@ -66,7 +66,7 @@ namespace Ebonor.Manager
             progressReporter.Report(0.3f);
             log.Info("[GameStartup] 2. System Initialized. Loading Data From ResourceLoader...");
             await RunCriticalModule("DataLoader", () => _dataLoaderService.InitializeAsync()); 
-
+            
             // 2.5 Optional modules (graceful degradation)
             await RunOptionalModule("VoiceChat", () => _voiceChatService.InitializeAsync(), () =>
             {

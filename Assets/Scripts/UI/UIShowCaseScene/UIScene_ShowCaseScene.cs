@@ -8,7 +8,6 @@ namespace Ebonor.UI
 {
     public class UIScene_ShowCaseScene : BaseWindow<ShowcaseViewModel>
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(UIScene_ShowCaseScene));
 
         private CommanderInfoWidget _playerWidget;
         private CommanderInfoWidget.Factory _factory;
@@ -20,7 +19,6 @@ namespace Ebonor.UI
             _factory = factory;
         }
         
-        
         protected override async UniTask OnCreateAsync()
         {
             log.Info($"[{GetType().Name}] OnCreateAsync.");
@@ -31,13 +29,13 @@ namespace Ebonor.UI
         
         protected override async UniTask OnOpenAsync()
         {
+            log.Info($"[{GetType().Name}] OnOpenAsync.");
             // Call base to trigger ViewModel.OnOpen()
             await base.OnOpenAsync();
            
             if (ViewModel != null)
             {
-                _playerWidget.Show();
-               
+                await _playerWidget.Show();
                 
                // // Bind Widgets
                // if(_playerWidget) _playerWidget.Open(ViewModel.PlayerInfo);
@@ -45,10 +43,15 @@ namespace Ebonor.UI
             }
         }
 
-        // protected override async UniTask OnCloseAsync()
-        // {
-        //     await base.OnCloseAsync();
-        // }
+        protected override async UniTask OnCloseAsync()
+        {
+            log.Info($"[{GetType().Name}] OnCloseAsync.");
+            if (ViewModel != null)
+            {
+                await _playerWidget.Hide();
+            }
+            await base.OnCloseAsync();
+        }
 
         // protected override async UniTask OnDestroyAsync()
         // {

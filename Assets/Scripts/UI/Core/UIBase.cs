@@ -24,7 +24,7 @@ namespace Ebonor.UI
     [RequireComponent(typeof(RectTransform))]
     public abstract class UIBase : MonoBehaviour
     {
-      
+        protected static readonly ILog log = LogManager.GetLogger(typeof(UIBase));
         
         [SerializeField] protected CanvasGroup _bufferCanvasGroup;
         
@@ -48,6 +48,7 @@ namespace Ebonor.UI
 
         public async UniTask InternalCreateAsync()
         {
+            log.Info($"[{GetType().Name}] InternalCreateAsync.");
             _canvasGroup = GetComponent<CanvasGroup>();
             _rectTransform = GetComponent<RectTransform>();
             
@@ -64,10 +65,11 @@ namespace Ebonor.UI
             CurrentState = UIState.Deactive;
         }
 
-       
-
+        
         public async UniTask InternalOpenAsync()
         {
+            
+            log.Info($"[{GetType().Name}] InternalOpenAsync.");
             if (CurrentState == UIState.Opening || CurrentState == UIState.Active) return;
             
             CurrentState = UIState.Opening;
@@ -78,7 +80,9 @@ namespace Ebonor.UI
 
             // Play Animation
             _canvasGroup.interactable = false; // Lock input during anim
-            await PlayOpenAnimAsync();
+            await PlayOpenAnimAsync().AttachExternalCancellation(this.GetCancellationTokenOnDestroy());
+            
+            if (this == null) return;
             
             _canvasGroup.interactable = true;
             _canvasGroup.blocksRaycasts = true;
@@ -87,6 +91,7 @@ namespace Ebonor.UI
 
         public async UniTask InternalCloseAsync()
         {
+            log.Info($"[{GetType().Name}] InternalCloseAsync.");
             if (CurrentState == UIState.Closing || CurrentState == UIState.Deactive) return;
             
             UIHelper.OnSetCanvasState(_bufferCanvasGroup, false);
@@ -100,13 +105,21 @@ namespace Ebonor.UI
             {
                 try
                 {
-                    await PlayCloseAnimAsync();
+                    await PlayCloseAnimAsync().AttachExternalCancellation(this.GetCancellationTokenOnDestroy());
                 }
                 catch (MissingReferenceException)
                 {
                     // UI was destroyed during shutdown; skip animation.
+                    return;
+                }
+                catch (System.OperationCanceledException)
+                {
+                    // Cancelled by destroy
+                    return;
                 }
             }
+            
+            if (this == null) return;
             
             // Cleanup
             await OnCloseAsync();
@@ -117,6 +130,7 @@ namespace Ebonor.UI
 
         public async UniTask InternalDestroyAsync()
         {
+            log.Info($"[{GetType().Name}] InternalDestroyAsync.");
             await OnDestroyAsync();
             Destroy(gameObject);
         }

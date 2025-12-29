@@ -19,6 +19,9 @@ namespace Ebonor.DataCtrl
         public LegionConfigDefinition LegionConfig = new LegionConfigDefinition();
 
         public string UIName;
+        
+        public bool IsDebugUIName;
+        
     }
     
     [CreateAssetMenu(menuName = "Ebonor/Config/Game Scene Config", fileName = "GameSceneConfig")]

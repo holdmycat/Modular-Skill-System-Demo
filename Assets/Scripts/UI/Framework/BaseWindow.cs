@@ -12,18 +12,15 @@ namespace Ebonor.UI
     /// <typeparam name="TViewModel">The specific ViewModel type.</typeparam>
     public abstract class BaseWindow<TViewModel> : UIBase where TViewModel : BaseViewModel
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(BaseWindow<TViewModel>));
         
         public TViewModel ViewModel { get; protected set; }
         
-        protected IInstantiator _instantiator;
         
         [Inject]
-        public void Construct(TViewModel viewModel, IInstantiator instantiator)
+        public void Construct(TViewModel viewModel)
         {
             log.Info($"[{GetType().Name}] Construct.");
             ViewModel = viewModel;
-            _instantiator = instantiator;
         }
 
         protected override async UniTask OnOpenAsync()

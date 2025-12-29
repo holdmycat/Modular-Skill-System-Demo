@@ -11,7 +11,6 @@ namespace Ebonor.Manager
 
         protected ClientRoomManager _clientRoomManager;
         
-        
         public async UniTask InitAsync()
         {
             log.Info("[BaseClientManager] Initializing...");
@@ -20,8 +19,7 @@ namespace Ebonor.Manager
         }
 
         protected abstract UniTask OnInitAsync();
-
-
+        
         private void Update()
         {
             // Frame-based updates for visuals

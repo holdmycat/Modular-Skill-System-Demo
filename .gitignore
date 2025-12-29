@@ -109,5 +109,11 @@ Desktop.ini
 # --- User Added: VS Code (If you or teammates use it) ---
 .vscode/
 
+
 # --- User Added: JetBrains Rider (Extra safety) ---
 .idea/
+
+# --- Custom Debug (Local only) ---
+/[Aa]ssets/Scripts/Manager/Debug/
+!/[Aa]ssets/Scripts/Manager/Debug/BaseDebugShortcuts.cs
+!/[Aa]ssets/Scripts/Manager/Debug/ShowcaseDebugShortcuts.cs

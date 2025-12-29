@@ -3,6 +3,7 @@
 // Purpose: Base class for embedded UI panels with shared animation.
 //------------------------------------------------------------
 using Cysharp.Threading.Tasks;
+using Ebonor.Framework;
 using UnityEngine;
 
 namespace Ebonor.UI
@@ -11,6 +12,9 @@ namespace Ebonor.UI
     [RequireComponent(typeof(RectTransform))]
     public abstract class UIPanelBase : MonoBehaviour
     {
+        
+        private static readonly ILog log = LogManager.GetLogger(typeof(UIPanelBase));
+        
         [Header("Animation")]
         [SerializeField] private UIAnimStyle showAnim = UIAnimStyle.Scale;
         [SerializeField] private UIAnimStyle hideAnim = UIAnimStyle.Scale;
@@ -22,10 +26,12 @@ namespace Ebonor.UI
         protected CanvasGroup canvasGroup;
         protected RectTransform rectTransform;
 
-        public bool IsVisible { get; private set; }
+        protected bool IsVisible { get; private set; }
 
         protected virtual void Awake()
         {
+            
+            log.Info($"[{GetType().Name}] OnCreateAsync.");
             canvasGroup = GetComponent<CanvasGroup>();
             rectTransform = GetComponent<RectTransform>();
            
@@ -34,6 +40,9 @@ namespace Ebonor.UI
 
         protected async UniTask ShowAsync()
         {
+            
+            log.Info($"[{GetType().Name}] ShowAsync.");
+            
             if (IsVisible) return;
 
             gameObject.SetActive(true);
@@ -41,7 +50,15 @@ namespace Ebonor.UI
             canvasGroup.blocksRaycasts = false;
 
             await OnShowAsync();
-            await UIAnimUtil.PlayAsync(canvasGroup, rectTransform, showAnim, true, showDuration, slideDistance, scaleOvershoot);
+            
+            // Check if destroyed during OnShowAsync
+            if (this == null || canvasGroup == null) return;
+            
+            await UIAnimUtil.PlayAsync(canvasGroup, rectTransform, showAnim, true, showDuration, slideDistance, scaleOvershoot)
+                .AttachExternalCancellation(this.GetCancellationTokenOnDestroy());
+
+            // Check if destroyed during PlayAsync
+            if (this == null || canvasGroup == null) return;
 
             canvasGroup.interactable = true;
             canvasGroup.blocksRaycasts = true;
@@ -50,13 +67,22 @@ namespace Ebonor.UI
 
         public async UniTask HideAsync()
         {
+            
+            log.Info($"[{GetType().Name}] HideAsync.");
+            
             if (!IsVisible) return;
 
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;
 
-            await UIAnimUtil.PlayAsync(canvasGroup, rectTransform, hideAnim, false, hideDuration, slideDistance, scaleOvershoot);
+            await UIAnimUtil.PlayAsync(canvasGroup, rectTransform, hideAnim, false, hideDuration, slideDistance, scaleOvershoot)
+                .AttachExternalCancellation(this.GetCancellationTokenOnDestroy());
+            
+            if (this == null) return;
+
             await OnHideAsync();
+
+            if (this == null) return;
 
             gameObject.SetActive(false);
             IsVisible = false;
@@ -64,6 +90,8 @@ namespace Ebonor.UI
 
         private void InstantHide()
         {
+            
+            log.Info($"[{GetType().Name}] InstantHide.");
             canvasGroup.alpha = 0f;
             canvasGroup.interactable = false;
             canvasGroup.blocksRaycasts = false;

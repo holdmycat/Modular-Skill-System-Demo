@@ -7,7 +7,7 @@ using Zenject;
 
 namespace Ebonor.Manager
 {
-    public class ShowcaseInstaller : MonoInstaller
+    public partial class ShowcaseInstaller : MonoInstaller
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ShowcaseInstaller));
 
@@ -75,11 +75,24 @@ namespace Ebonor.Manager
             // 2. 绑定通用的双世界管理器
             // 它可以直接注入 BaseServerManager/BaseClientManager
             Container.BindInterfacesAndSelfTo<DualWorldSceneManager>().AsSingle().NonLazy();
+
+            InstallLocalBindings();
             
             // --- Scene Root ---
             log.Info("[ShowcaseInstaller] InstallBindings called.");
         }
-        
+
+
+        private GlobalGameConfig _globalGameConfig;
+        private IScenarioIdRegistry _scenarioIdRegistry;
+
+        [Inject]
+        public void Construct(GlobalGameConfig globalGameConfig, IScenarioIdRegistry scenarioIdRegistry)
+        {
+            _globalGameConfig = globalGameConfig;
+            _scenarioIdRegistry = scenarioIdRegistry;
+
+        }
 
         private void InstallServerCommander(DiContainer subContainer)
         {
@@ -132,7 +145,10 @@ namespace Ebonor.Manager
             // Bind the Wrapper Factory
             subContainer.Bind<NumericComponentFactory>().AsSingle();
             
+            
         }
+
+        partial void InstallLocalBindings();
     }
 
     

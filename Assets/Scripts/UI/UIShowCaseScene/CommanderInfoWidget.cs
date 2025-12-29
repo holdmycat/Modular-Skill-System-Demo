@@ -45,9 +45,7 @@ namespace Ebonor.UI
             
             log.Info("[CommanderInfoWidget] Refresh");
         }
-
-        // Ideally, subscribe to ViewModel events here to auto-refresh
-
+        
         public class Factory : PlaceholderFactory<CommanderInfoViewModel, CommanderInfoWidget>
         {
             public Factory()

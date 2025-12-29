@@ -33,17 +33,26 @@ namespace Ebonor.UI
         /// Manual Binding Entry Point.
         /// Use this for Scene Objects where Construct() cannot be easily used.
         /// </summary>
-        public virtual void Open(TViewModel vm)
+        public virtual async UniTask ManualBindAndShow(TViewModel vm)
         {
             ViewModel = vm;
-            Show();
+            await Show();
         }
 
-        public virtual void Show()
+        public virtual async UniTask Show()
         {
+            log.Info($"[{GetType().Name}] Show.");
             gameObject.SetActive(true);
-            ShowAsync().Forget();
+            await ShowAsync();
         }
+
+        public virtual async UniTask Hide()
+        {
+            log.Info($"[{GetType().Name}] Hide.");
+            await HideAsync();
+            gameObject.SetActive(false);
+        }
+        
 
         protected override async UniTask OnShowAsync()
         {

@@ -22,6 +22,12 @@ namespace Ebonor.DataCtrl
         public string Name => _commander != null ? _commander.UnitName : "Unknown";
         
         public string IconName => _commander != null ? _commander.UnitIcon : "Unknown";
+        
+        // List of owned Legions
+        private readonly System.Collections.Generic.List<LegionNumericComponent> _legions = new System.Collections.Generic.List<LegionNumericComponent>();
+        public System.Collections.Generic.IReadOnlyList<LegionNumericComponent> Legions => _legions;
+        
+        public string LegionCountText => $"Legions: {_legions.Count}";
 
         // Bind a specific commander data component to this ViewModel
         public void BindData(CommanderNumericComponent commander)
@@ -37,13 +43,7 @@ namespace Ebonor.DataCtrl
                 log.Warn("[CommanderInfoViewModel] Bound to NULL Commander");
             }
         }
-
-        // public override void OnOpen()
-        // {
-        //     base.OnOpen();
-        //     // Subscribe to data changes if needed
-        // }
-
+        
         public void LevelUp()
         {
             if (_commander != null)
@@ -64,5 +64,14 @@ namespace Ebonor.DataCtrl
             }
         }
         
+        public void AddLegion(LegionNumericComponent legion)
+        {
+            if (legion != null && !_legions.Contains(legion))
+            {
+                _legions.Add(legion);
+                log.Info($"[CommanderInfoViewModel] Added Legion: {legion.NetId}");
+                OnDataUpdated?.Invoke();
+            }
+        }
     }
 }

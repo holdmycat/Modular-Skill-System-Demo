@@ -18,7 +18,8 @@ namespace Ebonor.GamePlay
             INetworkBus networkBus, 
             IDataLoaderService dataLoaderService, 
             ICharacterDataRepository characterDataRepository,
-            CommanderContextData contextData)
+            CommanderContextData contextData,
+            ShowcaseContext showcaseContext)
         {
             log.Info($"[ClientLegion] Construction");
             _factory = factory;
@@ -26,6 +27,7 @@ namespace Ebonor.GamePlay
             _characterDataRepository = characterDataRepository;
             _networkBus = networkBus;
             _dataLoaderService = dataLoaderService;
+            _showcaseContext = showcaseContext;
             
             // Inject Context
             _legionId = contextData.LegionId;
@@ -79,6 +81,18 @@ namespace Ebonor.GamePlay
         {
             
         }
+        
+        protected override void InitializeNumeric()
+        {
+            _numericComponent = _numericFactory.CreateLegion(_netId);
+            
+            // Register Data to ShowcaseContext (Data Layer)
+            if (_showcaseContext != null)
+            {
+                _showcaseContext.Register(NetId, _numericComponent, Faction);
+            }
+        }
+        
         
         public override void OnRpc(IRpc rpc)
         {

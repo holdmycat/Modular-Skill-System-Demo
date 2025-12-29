@@ -19,6 +19,8 @@ namespace Ebonor.GamePlay
         protected INetworkBus _networkBus;
         protected IDataLoaderService _dataLoaderService;
         
+        protected ShowcaseContext _showcaseContext; // Injected Data Context
+        
         public FactionType Faction { get; protected set; } = FactionType.Neutral;
         
         /// <summary>

@@ -13,7 +13,7 @@ namespace Ebonor.GamePlay
         
        
         
-        private ShowcaseContext _showcaseContext; // Injected Data Context
+        
         
         [Inject]
         public ClientCommander(

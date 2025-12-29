@@ -14,6 +14,7 @@ namespace Ebonor.DataCtrl
         private static readonly ILog log = LogManager.GetLogger(typeof(ShowcaseContext));
 
         public event Action<CommanderNumericComponent> OnCommanderAdded;
+        public event Action<LegionNumericComponent> OnLegionAdded;
 
         // Stores numeric components by NetId. 
         // Using BaseNumericComponent to allow storing Commander, Legion, Squad components uniformly,
@@ -22,6 +23,7 @@ namespace Ebonor.DataCtrl
         
         // Optional: Keep separate tracks for fast access if needed
         private readonly Dictionary<uint, CommanderNumericComponent> _commanderComponents = new Dictionary<uint, CommanderNumericComponent>();
+        private readonly Dictionary<uint, LegionNumericComponent> _legionComponents = new Dictionary<uint, LegionNumericComponent>();
         
         // Faction Map: Type -> Structured Entity Collection
         private readonly Dictionary<FactionType, FactionEntities> _factionMap = new Dictionary<FactionType, FactionEntities>();
@@ -76,6 +78,11 @@ namespace Ebonor.DataCtrl
                     _commanderComponents[netId] = commanderNumeric;
                     OnCommanderAdded?.Invoke(commanderNumeric);
                 }
+                else if (component is LegionNumericComponent legionNumeric)
+                {
+                    _legionComponents[netId] = legionNumeric;
+                    OnLegionAdded?.Invoke(legionNumeric);
+                }
                 
                 // Add to Faction Map
                 if (!_factionMap.ContainsKey(faction))
@@ -113,6 +120,7 @@ namespace Ebonor.DataCtrl
             {
                 _numericComponents.Remove(netId);
                 _commanderComponents.Remove(netId);
+                _legionComponents.Remove(netId);
                 
                 // Remove from all faction maps
                 // Iterate factions to find where it is stored.
@@ -156,6 +164,18 @@ namespace Ebonor.DataCtrl
         public CommanderNumericComponent GetCommanderData(uint netId)
         {
             if (_commanderComponents.TryGetValue(netId, out var component))
+            {
+                return component;
+            }
+            return null;
+        }
+
+        /// <summary>
+        /// Retrieves specific Legion data.
+        /// </summary>
+        public LegionNumericComponent GetLegionData(uint netId)
+        {
+            if (_legionComponents.TryGetValue(netId, out var component))
             {
                 return component;
             }

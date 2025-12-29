@@ -29,6 +29,11 @@ namespace Ebonor.UI
             }
         }
 
+        protected virtual void OnAwake()
+        {
+            
+        }
+        
         /// <summary>
         /// Manual Binding Entry Point.
         /// Use this for Scene Objects where Construct() cannot be easily used.

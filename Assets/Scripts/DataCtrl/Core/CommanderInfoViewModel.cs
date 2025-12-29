@@ -10,6 +10,8 @@ namespace Ebonor.DataCtrl
     /// </summary>
     public class CommanderInfoViewModel : SubViewModel
     {
+        public event System.Action OnDataUpdated;
+
         private CommanderNumericComponent _commander;
 
         public FactionType FactionType => _commander.FactionType;
@@ -27,7 +29,7 @@ namespace Ebonor.DataCtrl
             if (_commander != null)
             {
                 log.Info($"[CommanderInfoViewModel] Bound to Commander: {_commander.UnitName}");
-                // Trigger UI refresh here if using events
+                OnDataUpdated?.Invoke();
             }
             else
             {

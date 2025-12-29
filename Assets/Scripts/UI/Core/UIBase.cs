@@ -2,7 +2,6 @@
 // File: UIBase.cs
 // Purpose: Async-first base class for all UI panels.
 //------------------------------------------------------------
-using System;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
@@ -43,9 +42,9 @@ namespace Ebonor.UI
         [SerializeField] private float closeDuration = 0.2f;
         [SerializeField] private float slideDistance = 600f;
         [SerializeField] private float scaleOvershoot = 1.05f;
-
+        
         #region Lifecycle API (Called by UIManager)
-
+        
         public async UniTask InternalCreateAsync()
         {
             log.Info($"[{GetType().Name}] InternalCreateAsync.");
@@ -64,13 +63,13 @@ namespace Ebonor.UI
             await OnCreateAsync();
             CurrentState = UIState.Deactive;
         }
-
         
         public async UniTask InternalOpenAsync()
         {
             
             log.Info($"[{GetType().Name}] InternalOpenAsync.");
-            if (CurrentState == UIState.Opening || CurrentState == UIState.Active) return;
+            if (CurrentState == UIState.Opening || CurrentState == UIState.Active || CurrentState == UIState.Closing) 
+                return;
             
             CurrentState = UIState.Opening;
             gameObject.SetActive(true);
@@ -92,11 +91,15 @@ namespace Ebonor.UI
         public async UniTask InternalCloseAsync()
         {
             log.Info($"[{GetType().Name}] InternalCloseAsync.");
-            if (CurrentState == UIState.Closing || CurrentState == UIState.Deactive) return;
-            
-            UIHelper.OnSetCanvasState(_bufferCanvasGroup, false);
+            if (CurrentState == UIState.Closing || CurrentState == UIState.Deactive || CurrentState == UIState.Opening) return;
             
             CurrentState = UIState.Closing;
+            
+            if (_bufferCanvasGroup != null)
+            {
+                UIHelper.OnSetCanvasState(_bufferCanvasGroup, false);
+            }
+            
             _canvasGroup.interactable = false;
             _canvasGroup.blocksRaycasts = false;
 
@@ -136,7 +139,7 @@ namespace Ebonor.UI
         }
 
         #endregion
-
+        
         #region Virtual Lifecycle Methods (For Subclasses)
 
         protected abstract UniTask OnCreateAsync();
@@ -145,7 +148,7 @@ namespace Ebonor.UI
         protected abstract UniTask OnDestroyAsync();
 
         #endregion
-
+        
         #region Animation
 
         protected virtual async UniTask PlayOpenAnimAsync()
@@ -159,7 +162,7 @@ namespace Ebonor.UI
         }
 
         #endregion
-
+        
         #region Input
         /// <summary>
         /// Per-frame update driven by UIManager for the top-most active UI.

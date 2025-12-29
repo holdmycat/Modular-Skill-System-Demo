@@ -27,6 +27,7 @@ namespace Ebonor.UI
         protected RectTransform rectTransform;
 
         protected bool IsVisible { get; private set; }
+        protected bool _isAnimating;
 
         protected virtual void Awake()
         {
@@ -43,26 +44,34 @@ namespace Ebonor.UI
             
             log.Info($"[{GetType().Name}] ShowAsync.");
             
-            if (IsVisible) return;
+            if (IsVisible || _isAnimating) return;
 
-            gameObject.SetActive(true);
-            canvasGroup.interactable = false;
-            canvasGroup.blocksRaycasts = false;
-
-            await OnShowAsync();
-            
-            // Check if destroyed during OnShowAsync
-            if (this == null || canvasGroup == null) return;
-            
-            await UIAnimUtil.PlayAsync(canvasGroup, rectTransform, showAnim, true, showDuration, slideDistance, scaleOvershoot)
-                .AttachExternalCancellation(this.GetCancellationTokenOnDestroy());
-
-            // Check if destroyed during PlayAsync
-            if (this == null || canvasGroup == null) return;
-
-            canvasGroup.interactable = true;
-            canvasGroup.blocksRaycasts = true;
-            IsVisible = true;
+            _isAnimating = true;
+            try
+            {
+                gameObject.SetActive(true);
+                canvasGroup.interactable = false;
+                canvasGroup.blocksRaycasts = false;
+    
+                await OnShowAsync();
+                
+                // Check if destroyed during OnShowAsync
+                if (this == null || canvasGroup == null) return;
+                
+                await UIAnimUtil.PlayAsync(canvasGroup, rectTransform, showAnim, true, showDuration, slideDistance, scaleOvershoot)
+                    .AttachExternalCancellation(this.GetCancellationTokenOnDestroy());
+    
+                // Check if destroyed during PlayAsync
+                if (this == null || canvasGroup == null) return;
+    
+                canvasGroup.interactable = true;
+                canvasGroup.blocksRaycasts = true;
+                IsVisible = true;
+            }
+            finally
+            {
+                _isAnimating = false;
+            }
         }
 
         public async UniTask HideAsync()
@@ -70,22 +79,30 @@ namespace Ebonor.UI
             
             log.Info($"[{GetType().Name}] HideAsync.");
             
-            if (!IsVisible) return;
+            if (!IsVisible || _isAnimating) return;
 
-            canvasGroup.interactable = false;
-            canvasGroup.blocksRaycasts = false;
-
-            await UIAnimUtil.PlayAsync(canvasGroup, rectTransform, hideAnim, false, hideDuration, slideDistance, scaleOvershoot)
-                .AttachExternalCancellation(this.GetCancellationTokenOnDestroy());
-            
-            if (this == null) return;
-
-            await OnHideAsync();
-
-            if (this == null) return;
-
-            gameObject.SetActive(false);
-            IsVisible = false;
+            _isAnimating = true;
+            try
+            {
+                canvasGroup.interactable = false;
+                canvasGroup.blocksRaycasts = false;
+    
+                await UIAnimUtil.PlayAsync(canvasGroup, rectTransform, hideAnim, false, hideDuration, slideDistance, scaleOvershoot)
+                    .AttachExternalCancellation(this.GetCancellationTokenOnDestroy());
+                
+                if (this == null) return;
+    
+                await OnHideAsync();
+    
+                if (this == null) return;
+    
+                gameObject.SetActive(false);
+                IsVisible = false;
+            }
+            finally
+            {
+                _isAnimating = false;
+            }
         }
 
         private void InstantHide()

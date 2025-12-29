@@ -177,8 +177,8 @@ MonoBehaviour:
   _bufferCanvasGroup: {fileID: 5293960244504632569}
   openAnim: 1
   closeAnim: 1
-  openDuration: 0.3
-  closeDuration: 0.2
+  openDuration: 0.15
+  closeDuration: 0.15
   slideDistance: 600
   scaleOvershoot: 1.05
 --- !u!1 &3507972709831265986

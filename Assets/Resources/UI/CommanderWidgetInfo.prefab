@@ -436,15 +436,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showAnim: 1
   hideAnim: 1
-  showDuration: 0.25
-  hideDuration: 0.2
+  showDuration: 0.15
+  hideDuration: 0.15
   slideDistance: 600
   scaleOvershoot: 1.05
   _rectTransform: {fileID: 2524242555709530035}
-  _nameText: {fileID: 0}
+  _nameText: {fileID: 1177845959718903792}
   _levelText: {fileID: 0}
+  _buffText: {fileID: 0}
   _hpSlider: {fileID: 0}
   _hpText: {fileID: 0}
+  _levelBtn: {fileID: 486356133521743058}
 --- !u!1 &6257424948534016860
 GameObject:
   m_ObjectHideFlags: 0

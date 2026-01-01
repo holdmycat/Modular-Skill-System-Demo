@@ -2,6 +2,8 @@
 // Script: ClientRoomManager.cs
 // Purpose: Client-side room coordinator that listens for RPC spawn/destroy messages and wires up local actors.
 // ---------------------------------------------
+
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
@@ -34,28 +36,35 @@ namespace Ebonor.GamePlay
         {
             log.Info($"[ClientRoomManager] Spawn Request: {msg.Type} (NetId:{msg.NetId})");
             
-            INetworkBehaviour newActor = null;
-
             switch (msg.Type)
             {
                 case NetworkPrefabType.Player:
                 {
-                    _baseCommander = _factory.Create();
-                    newActor = _baseCommander;
-                    newActor.BindId(msg.NetId);
-                    newActor.InitFromSpawnPayload(msg.Payload);
+                    var data = CommanderSpawnPayload.Deserialize(msg.Payload);
+                    if (data.Equals(default(CommanderSpawnPayload)))
+                    {
+                        throw new System.InvalidOperationException("[ClientCommander] received empty payload.");
+                    }
+            
+                    if (data.Bootstrap == null)
+                    {
+                        throw new System.InvalidOperationException("[ClientCommander] received null bootstrap.");
+                    }
+                    
+                    var baseCommander = _factory.Create();
+                    baseCommander.Configure(data.Bootstrap);
+                    baseCommander.InitAsync();
+                    
+                    log.Info($"[ClientRoomManager] Successfully Spawned {baseCommander.GetType().Name} [NetId:{msg.NetId}]");
+                    
+                    _listBaseCommander.Add(baseCommander);
+                    
                     break;
                 }
                 default:
                     log.Error($"[ClientRoomManager] Unknown or Handled-by-Commander Spawn Type: {msg.Type}");
                     return;
             }
-            
-            _networkBus.RegisterSpawns(newActor.NetId, newActor);
-            
-            newActor.InitAsync();
-            
-            log.Info($"[ClientRoomManager] Successfully Spawned {newActor.GetType().Name} [NetId:{msg.NetId}]");
         }
 
         private void OnDestroyObject(RpcDestroyObject msg)
@@ -87,8 +96,7 @@ namespace Ebonor.GamePlay
         private static readonly ILog log = LogManager.GetLogger(typeof(ClientRoomManager));
         
         private INetworkBus _networkBus;
-        private ICharacterDataRepository _characterDataRepository;
-        private BaseCommander _baseCommander;
+        private readonly List<BaseCommander> _listBaseCommander = new List<BaseCommander>();
         private ClientCommander.Factory _factory; 
         
         [Inject]
@@ -113,24 +121,29 @@ namespace Ebonor.GamePlay
         public override void OnUpdate()
         {
             // Update loop if needed
-            if (null != _baseCommander)
+            foreach (var variable in _listBaseCommander)
             {
-                _baseCommander.OnUpdate();
+                variable.OnUpdate();
             }
+          
         }
 
         public override void Tick(int tick)
         {
             // Tick sync if needed
-            if (null != _baseCommander)
+            foreach (var variable in _listBaseCommander)
             {
-                _baseCommander.Tick(tick);
+                variable.Tick(tick);
             }
         }
         
         public override async UniTask ShutdownAsync()
         {
-            await _baseCommander.ShutdownAsync();
+            foreach (var variable in _listBaseCommander)
+            {
+                await variable.ShutdownAsync();
+            }
+            //await _baseCommander.ShutdownAsync();
             
             // if (_networkBus != null)
             //     _networkBus.UnregisterRpcListener(NetId, OnRpcReceived, false);

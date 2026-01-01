@@ -9,17 +9,14 @@ namespace Ebonor.DataCtrl
         private static readonly ILog log = LogManager.GetLogger(typeof(NumericComponentFactory));
 
         private readonly CommanderNumericComponent.Factory _commanderFactory;
-        private readonly LegionNumericComponent.Factory _legionFactory;
         private readonly SquadNumericComponent.Factory _squadFactory;
 
         public NumericComponentFactory(
             CommanderNumericComponent.Factory commanderFactory,
-            LegionNumericComponent.Factory legionFactory,
             SquadNumericComponent.Factory squadFactory)
         {
             log.Info("[NumericComponentFactory] Construction");
             _commanderFactory = commanderFactory;
-            _legionFactory = legionFactory;
             _squadFactory = squadFactory;
         }
         
@@ -28,14 +25,9 @@ namespace Ebonor.DataCtrl
             return _commanderFactory.Create(netId);
         }
 
-        public LegionNumericComponent CreateLegion(uint netId)
+        public SquadNumericComponent CreateSquad(uint netid)
         {
-            return _legionFactory.Create(netId);
-        }
-
-        public SquadNumericComponent CreateSquad()
-        {
-            return _squadFactory.Create();
+            return _squadFactory.Create(netid);
         }
         
         

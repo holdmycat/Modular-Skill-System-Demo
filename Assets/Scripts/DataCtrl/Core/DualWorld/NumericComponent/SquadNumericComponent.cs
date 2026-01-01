@@ -7,12 +7,14 @@ namespace Ebonor.DataCtrl
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(SquadNumericComponent));
 
-        public SquadNumericComponent()
+        [Inject]
+        public SquadNumericComponent(uint netId)
         {
             log.Info("[SquadNumericComponent] Construction");
+            _netId = netId;
         }
 
-        public class Factory : PlaceholderFactory<SquadNumericComponent>
+        public class Factory : PlaceholderFactory<uint, SquadNumericComponent>
         {
         }
 

@@ -21,6 +21,10 @@ namespace Ebonor.GamePlay
         
         protected ShowcaseContext _showcaseContext; // Injected Data Context
         
+        protected CommanderContextData _contextData;
+        
+        protected ICharacterDataRepository _characterDataRepository;
+        
         public FactionType Faction { get; protected set; } = FactionType.Neutral;
         
         /// <summary>

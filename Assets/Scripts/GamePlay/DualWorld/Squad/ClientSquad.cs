@@ -30,9 +30,15 @@ namespace Ebonor.GamePlay
             log.Info($"[ClientSquad] InitAsync");
         }
 
-        public override void InitFromSpawnPayload(byte[] payload)
+        protected override void InitializeNumeric()
         {
-            base.InitFromSpawnPayload(payload);
+            _numericComponent = _numericFactory.CreateCommander(_netId);
+            
+            // Register Data to ShowcaseContext (Data Layer)
+            if (_showcaseContext != null)
+            {
+                _showcaseContext.Register(NetId, _numericComponent, Faction);
+            }
         }
         
         public override async UniTask ShutdownAsync()

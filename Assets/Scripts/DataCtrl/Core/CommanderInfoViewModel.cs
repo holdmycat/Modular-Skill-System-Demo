@@ -23,11 +23,11 @@ namespace Ebonor.DataCtrl
         
         public string IconName => _commander != null ? _commander.UnitIcon : "Unknown";
         
-        // List of owned Legions
-        private readonly System.Collections.Generic.List<LegionNumericComponent> _legions = new System.Collections.Generic.List<LegionNumericComponent>();
-        public System.Collections.Generic.IReadOnlyList<LegionNumericComponent> Legions => _legions;
+        // List of owned Squads
+        private readonly System.Collections.Generic.List<SquadNumericComponent> _squads = new System.Collections.Generic.List<SquadNumericComponent>();
+        public System.Collections.Generic.IReadOnlyList<SquadNumericComponent> Squads => _squads;
         
-        public string LegionCountText => $"Legions: {_legions.Count}";
+        public string SquadCountText => $"Squads: {_squads.Count}";
 
         // Bind a specific commander data component to this ViewModel
         public void BindData(CommanderNumericComponent commander)
@@ -64,12 +64,12 @@ namespace Ebonor.DataCtrl
             }
         }
         
-        public void AddLegion(LegionNumericComponent legion)
+        public void AddSquad(SquadNumericComponent squad)
         {
-            if (legion != null && !_legions.Contains(legion))
+            if (squad != null && !_squads.Contains(squad))
             {
-                _legions.Add(legion);
-                log.Info($"[CommanderInfoViewModel] Added Legion: {legion.NetId}");
+                _squads.Add(squad);
+                log.Info($"[CommanderInfoViewModel] Added Squad: {squad.NetId}");
                 OnDataUpdated?.Invoke();
             }
         }

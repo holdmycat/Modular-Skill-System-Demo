@@ -114,13 +114,11 @@ namespace Ebonor.Manager
             subContainer.Bind<ServerCommander>().AsSingle();
             
             // Bind Factories in this Scope so they can access CommanderContextData
-            subContainer.BindFactory<ServerLegion, ServerLegion.Factory>().AsSingle();
             subContainer.BindFactory<ServerSquad, ServerSquad.Factory>().AsSingle();
             
             // Bind Numeric Factories
             subContainer.BindFactory<uint, CommanderNumericComponent, CommanderNumericComponent.Factory>().AsSingle();
-            subContainer.BindFactory<uint, LegionNumericComponent, LegionNumericComponent.Factory>().AsSingle();
-            subContainer.BindFactory<SquadNumericComponent, SquadNumericComponent.Factory>().AsSingle();
+            subContainer.BindFactory<uint, SquadNumericComponent, SquadNumericComponent.Factory>().AsSingle();
             
             // Bind the Wrapper Factory
             subContainer.Bind<NumericComponentFactory>().AsSingle();
@@ -134,13 +132,11 @@ namespace Ebonor.Manager
             
             subContainer.Bind<ClientCommander>().AsSingle();
             
-            subContainer.BindFactory<ClientLegion, ClientLegion.Factory>().AsSingle();
             subContainer.BindFactory<ClientSquad, ClientSquad.Factory>().AsSingle();
             
             // Bind Numeric Factories
             subContainer.BindFactory<uint, CommanderNumericComponent, CommanderNumericComponent.Factory>().AsSingle();
-            subContainer.BindFactory<uint, LegionNumericComponent, LegionNumericComponent.Factory>().AsSingle();
-            subContainer.BindFactory<SquadNumericComponent, SquadNumericComponent.Factory>().AsSingle();
+            subContainer.BindFactory<uint, SquadNumericComponent, SquadNumericComponent.Factory>().AsSingle();
             
             // Bind the Wrapper Factory
             subContainer.Bind<NumericComponentFactory>().AsSingle();

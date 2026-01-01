@@ -6,8 +6,6 @@ namespace Ebonor.GamePlay
     public abstract class BaseSquad : SlgBattleEntity
     {
         
-        protected ICharacterDataRepository _characterDataRepository;
-
         protected SlgUnitSquadAttributesNodeData _squadUnitAttr;
 
         protected FactionType _faction;
@@ -27,6 +25,8 @@ namespace Ebonor.GamePlay
             
             BindId(netId);
            
+            InitializeNumeric();
+            
             if (_networkBus == null)
             {
                 throw new System.InvalidOperationException("[BaseLegion] Configure failed: network bus is null.");

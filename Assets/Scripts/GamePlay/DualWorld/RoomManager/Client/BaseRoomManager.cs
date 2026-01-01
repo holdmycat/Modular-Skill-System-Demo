@@ -15,6 +15,9 @@ namespace Ebonor.GamePlay
         protected NetworkIdHandle _netHandle;
         public uint NetId => _netHandle.NetId;
         public void BindId(uint netid) => _netHandle.BindId(netid);
+        
+        protected ICharacterDataRepository _characterDataRepository;
+        
         public virtual void OnRpc(IRpc rpc)
         {
            
@@ -25,10 +28,6 @@ namespace Ebonor.GamePlay
            
         }
         
-        public virtual void InitFromSpawnPayload(byte[] payload)
-        {
-            
-        }
 
         public virtual async UniTask ShutdownAsync()
         {

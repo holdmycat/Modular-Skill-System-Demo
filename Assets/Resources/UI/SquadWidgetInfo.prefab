@@ -982,6 +982,8 @@ MonoBehaviour:
   _countText: {fileID: 5118731445834846437}
   _atkText: {fileID: 227116648027802832}
   _hpText: {fileID: 4917253980337193471}
+  _levelBtn: {fileID: 486356133521743058}
+  _levelResetBtn: {fileID: 1999141017986383506}
 --- !u!1 &5923908000295634882
 GameObject:
   m_ObjectHideFlags: 0

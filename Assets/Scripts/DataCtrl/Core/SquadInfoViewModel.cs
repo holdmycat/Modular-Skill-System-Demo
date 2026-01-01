@@ -1,6 +1,3 @@
-using Zenject;
-using Ebonor.Framework;
-
 namespace Ebonor.DataCtrl
 {
     public class SquadInfoViewModel : SubViewModel
@@ -34,6 +31,28 @@ namespace Ebonor.DataCtrl
                 OnDataUpdated?.Invoke();
             }
         }
+        
+        
+        public void LevelUp()
+        {
+            if (_squad != null)
+            {
+                _squad.LevelUp();
+                log.Info($"[SquadInfoViewModel] Leveled Up to {_squad.GetLevelForUI()}");
+                OnDataUpdated?.Invoke();
+            }
+        }
+
+        public void LevelReset()
+        {
+            if (_squad != null)
+            {
+                _squad.Reset();
+                log.Info($"[SquadInfoViewModel] Leveled Up to {_squad.GetLevelForUI()}");
+                OnDataUpdated?.Invoke();
+            }
+        }
+        
         
         private void OnNumericChanged(eNumericType type, float value)
         {

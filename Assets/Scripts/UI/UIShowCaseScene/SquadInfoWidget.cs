@@ -17,6 +17,9 @@ namespace Ebonor.UI
         [SerializeField] private TMP_Text _atkText;
         [SerializeField] private TMP_Text _hpText;
 
+        [SerializeField] private Button _levelBtn;
+        [SerializeField] private Button _levelResetBtn;
+        
         private IUIAtlasRepository _uiAtlasRepository;
 
         [Inject]
@@ -54,7 +57,7 @@ namespace Ebonor.UI
             
             if (_levelText) _levelText.text = $"Lv.{ViewModel.Level}";
             
-            if (_countText) _countText.text = $"x{ViewModel.Count}";
+            if (_countText) _countText.text = $"SOLIDER: {ViewModel.Count}";
             
             if (_atkText) _atkText.text = $"ATK: {ViewModel.Attack:F0}";
             
@@ -74,6 +77,58 @@ namespace Ebonor.UI
                 _iconImg.sprite = _uiAtlasRepository.GetUICharacterAtlas(iconName);
             }
         }
+        
+        
+        /// <summary>
+        /// _levelBtn : Click to Level Up
+        /// </summary>
+        private void BtnClickLevelUp()
+        {
+            log.Info($"[{GetType().Name}] BtnClickLevelUp.");
+            if (ViewModel != null)
+            {
+                ViewModel.LevelUp();
+            }
+        }
+        
+        private void BtnClickLevelReset()
+        {
+            log.Info($"[{GetType().Name}] BtnClickLevelReset.");
+            if (ViewModel != null)
+            {
+                ViewModel.LevelReset();
+            }
+        }
+        
+        protected override void OnAwake()
+        {
+            base.OnAwake();
+            if (_levelBtn != null)
+            {
+                _levelBtn.onClick.AddListener(BtnClickLevelUp);
+            }
+
+            if (_levelResetBtn != null)
+            {
+                _levelResetBtn.onClick.AddListener(BtnClickLevelReset);
+            }
+        }
+        
+        protected override void OnDestroy()
+        {
+            if (_levelBtn != null)
+            {
+                _levelBtn.onClick.RemoveListener(BtnClickLevelUp);
+            }
+            
+            if (_levelResetBtn != null)
+            {
+                _levelResetBtn.onClick.RemoveListener(BtnClickLevelReset);
+            }
+            
+            base.OnDestroy();
+        }
+
         
         public class Factory : PlaceholderFactory<SquadInfoViewModel, SquadInfoWidget>
         {

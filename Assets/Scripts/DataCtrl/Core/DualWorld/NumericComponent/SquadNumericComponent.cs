@@ -60,6 +60,10 @@ namespace Ebonor.DataCtrl
 
             _unitIcon = _slgUnitAttributesNodeData.UnitSprite;
             
+            
+            SetValueForOrig(eNumericType.UnitLv, 0f);
+            SetValueForOrig(eNumericType.UnitMaxLv, _slgSquadAttributesNodeData.UnitLv);
+            
             // Set Soldier Counts
             var initialCount = _slgSquadAttributesNodeData.InitialCount;
             SetValueForOrig(eNumericType.SoldierCount, initialCount);
@@ -139,7 +143,7 @@ namespace Ebonor.DataCtrl
             }
             
             // Apply Mod to Add Stats using Modifier System
-            var atkFactor = attackMod / 10000f; 
+            var atkFactor = attackMod / 100f; 
             
             if (_comAttackMod != null)
             {

@@ -14,13 +14,15 @@ namespace Ebonor.GamePlay
             INetworkBus networkBus, 
             IDataLoaderService dataLoaderService, 
             ICharacterDataRepository characterDataRepository,
-            CommanderContextData contextData)
+            CommanderContextData contextData, ShowcaseContext showcaseContext)
         {
             log.Info($"[ClientSquad] Construction");
             
-            _characterDataRepository = characterDataRepository;
             _networkBus = networkBus;
+            _characterDataRepository = characterDataRepository;
             _dataLoaderService = dataLoaderService;
+            _showcaseContext = showcaseContext;
+            _contextData = contextData;
             _faction = contextData.Faction;
         }
         

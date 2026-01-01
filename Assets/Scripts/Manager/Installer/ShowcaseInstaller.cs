@@ -14,7 +14,11 @@ namespace Ebonor.Manager
         [Header("Scene Id")]
         public string SceneId;
         
+        [Header("UI Commander Info Widget")]
         public GameObject UICommanderInfoWidget;
+        
+        [Header("UI Squad Info Widget")]
+        public GameObject UISquadInfoWidget;
         
         public override void InstallBindings()
         {
@@ -23,8 +27,7 @@ namespace Ebonor.Manager
             
             // Declare Signals
             Container.DeclareSignal<SignalUI_UnitSelected>();
-
-
+            
             // --- Network Layer ---
             // Bind NetworkBus
             Container.BindInterfacesAndSelfTo<SimulatedNetworkBus>().AsSingle();
@@ -50,9 +53,13 @@ namespace Ebonor.Manager
             // Bind ViewModels (Logic Layer)
             Container.Bind<ShowcaseViewModel>().AsTransient();
             
-            // 在 Installer 中绑定
+            // Bind Prefab(UICommanderInfoWidget)
             Container.BindFactory<CommanderInfoViewModel, CommanderInfoWidget, CommanderInfoWidget.Factory>()
                 .FromComponentInNewPrefab(UICommanderInfoWidget);
+            
+            // Bind Prefab(UISquadInfoWidget)
+            Container.BindFactory<SquadInfoViewModel, SquadInfoWidget, SquadInfoWidget.Factory>()
+                .FromComponentInNewPrefab(UISquadInfoWidget);
             
             // Bind Commanders with SubContainer
             Container.BindFactory<ServerCommander, ServerCommander.Factory>()

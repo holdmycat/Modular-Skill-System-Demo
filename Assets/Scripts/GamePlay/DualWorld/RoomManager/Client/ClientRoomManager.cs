@@ -52,7 +52,7 @@ namespace Ebonor.GamePlay
                     }
                     
                     var baseCommander = _factory.Create();
-                    baseCommander.Configure(data.Bootstrap);
+                    baseCommander.Configure(data.Bootstrap, false, msg.NetId);
                     baseCommander.InitAsync();
                     
                     log.Info($"[ClientRoomManager] Successfully Spawned {baseCommander.GetType().Name} [NetId:{msg.NetId}]");

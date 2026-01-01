@@ -14,7 +14,7 @@ namespace Ebonor.GamePlay
         /// <summary>
         /// Inject commander bootstrap data and bind net id (call once after creation).
         /// </summary>
-        public void Configure(CommanderBootstrapInfo bootstrapInfo)
+        public void Configure(CommanderBootstrapInfo bootstrapInfo, bool isServer = true, uint tmpnetId = 0)
         {
             _bootstrapInfo = bootstrapInfo;
 
@@ -37,9 +37,13 @@ namespace Ebonor.GamePlay
                 log.Error("[ServerCommander] Configure failed: LegionConfig.Seed is null. This is a critical data error.");
                 throw new System.InvalidOperationException("[ServerCommander] Configure failed: LegionConfig.Seed is null.");
             }
-            
-            _seed = _bootstrapInfo.LegionConfig.Seed;
-            var netId = _dataLoaderService.NextId();
+
+            uint netId = tmpnetId;
+            if (isServer)
+            {
+                _seed = _bootstrapInfo.LegionConfig.Seed;
+                netId = _dataLoaderService.NextId();
+            }
             
             // Populate Context Data (Write Once)
             _contextData.SetContext(true, _bootstrapInfo);
@@ -49,7 +53,7 @@ namespace Ebonor.GamePlay
             // Now call base to trigger Numeric Init (which depends on Context)
             InitializeNumeric();
             
-            _networkBus.RegisterSpawns(NetId, this, true);
+            _networkBus.RegisterSpawns(NetId, this, isServer);
             
             
         }

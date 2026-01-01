@@ -19,16 +19,11 @@ namespace Ebonor.GamePlay
         {
             log.Info($"[ClientCommander] Construction");
 
-            _networkBus = networkBus;
-            
             _squadFactory = squadFactory;
-
+            _networkBus = networkBus;
             _characterDataRepository = characterDataRepository;
-            
             _dataLoaderService = dataLoaderService;
-            
             _contextData = contextData;
-            
             _showcaseContext = showcaseContext;
         }
         

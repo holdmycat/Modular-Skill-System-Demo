@@ -67,7 +67,7 @@ namespace Ebonor.GamePlay
                     OwnerNetId = _netId, // Owned by Commander now
                     Faction = _seed.Faction
                 }.Serialize();
-                
+                 
                 SpawnChild(_networkBus, baseSquad, squadPayload, NetworkPrefabType.Squad, true);
             }
             

@@ -57,6 +57,8 @@ namespace Ebonor.DataCtrl
             log.Info("[SquadNumericComponent] OnInitialize");
             
             _unitName = _slgSquadAttributesNodeData.UnitName;
+
+            _unitIcon = _slgUnitAttributesNodeData.UnitSprite;
             
             // Set Soldier Counts
             var initialCount = _slgSquadAttributesNodeData.InitialCount;

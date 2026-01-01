@@ -1,79 +1,42 @@
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
-using Ebonor.Framework;
 using Zenject;
 
 namespace Ebonor.GamePlay
 {
     public class ClientCommander : BaseCommander
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ClientCommander));
-        
-        private ClientLegion.Factory _legionFactory;
-        
-       
-        
-        
+        private ClientSquad.Factory _squadFactory;
         
         [Inject]
         public ClientCommander(
             INetworkBus networkBus, 
             IDataLoaderService dataLoaderService, 
-            ClientLegion.Factory legionFactory,
+            ClientSquad.Factory squadFactory,
             CommanderContextData contextData,
+            ICharacterDataRepository characterDataRepository,
             ShowcaseContext showcaseContext) // Inject ShowcaseContext
         {
             log.Info($"[ClientCommander] Construction");
 
+            _squadFactory = squadFactory;
             _networkBus = networkBus;
-            
-            _legionFactory = legionFactory;
-            
-          
-            
+            _characterDataRepository = characterDataRepository;
             _dataLoaderService = dataLoaderService;
-            
             _contextData = contextData;
-            
             _showcaseContext = showcaseContext;
         }
-        
-        private CommanderContextData _contextData;
         
         public override void InitAsync()
         {
             log.Info($"[ClientCommander] InitAsync");
         }
-
-        public override void InitFromSpawnPayload(byte[] payload)
-        {
-            var data = CommanderSpawnPayload.Deserialize(payload);
-            if (data.Equals(default(CommanderSpawnPayload)))
-            {
-                throw new System.InvalidOperationException("[ClientCommander] InitFromSpawnPayload received empty payload.");
-            }
-            
-            if (data.Bootstrap == null)
-            {
-                throw new System.InvalidOperationException("[ClientCommander] InitFromSpawnPayload received null bootstrap.");
-            }
-
-            _legionId = data.LegionId;
-            
-            // Populate Context (Write Once)
-            _contextData.SetContext(false,_legionId, data.Bootstrap);
-            
-            // Helper access check
-            // var f = _contextData.Faction; 
-            
-            log.Info($"[ClientCommander] InitFromSpawnPayload commanderNetId:{NetId}, legionId:{_legionId}");
-
-            Configure(data.Bootstrap);
-        }
         
         protected override void InitializeNumeric()
         {
+            log.Info($"[ClientCommander] InitializeNumeric");
             _numericComponent = _numericFactory.CreateCommander(_netId);
+            _contextData.SetNumericComponent(_numericComponent as CommanderNumericComponent);
             
             // Register Data to ShowcaseContext (Data Layer)
             if (_showcaseContext != null)
@@ -84,24 +47,26 @@ namespace Ebonor.GamePlay
         
         public override void OnRpc(IRpc rpc)
         {
-            if (rpc is RpcSpawnObject spawnMsg && spawnMsg.Type == NetworkPrefabType.Legion)
+            if (rpc is RpcSpawnObject spawnMsg && spawnMsg.Type == NetworkPrefabType.Squad)
             {
-                log.Info($"[ClientCommander] Received Legion Spawn RPC: NetId:{spawnMsg.NetId}");
+                log.Info($"[ClientCommander] Received Squad Spawn RPC: NetId:{spawnMsg.NetId}");
                 
-                var legionPayload = LegionSpawnPayload.Deserialize(spawnMsg.Payload);
-                var legion = _legionFactory.Create();
-                _baseLegion = legion;
+                var squadPayload = SquadSpawnPayload.Deserialize(spawnMsg.Payload);
                 
-                var squadList = _bootstrapInfo.LegionConfig.SquadIds;
+                var squadData = _characterDataRepository.GetSlgSquadData(squadPayload.SquadId);
+                if (squadData == null)
+                {
+                    log.Error($"[ClientCommander] Squad Data not found for id {squadPayload.SquadId}");
+                    return;
+                }
                 
-                legion.Configure(spawnMsg.NetId, squadList, false);
-                legion.InitFromSpawnPayload(spawnMsg.Payload);
-
-                // _networkBus.RegisterSpawns(legion.NetId, legion); // Handled in Configure
+                var squad = _squadFactory.Create();
+                squad.Configure(spawnMsg.NetId, squadData, squadPayload.Faction, false);
+                squad.InitAsync();
+                _spawnedSquads.Add(squad);
                 
-                legion.InitAsync();
+                log.Info($"[ClientCommander] Spawned Squad {squad.NetId}");
                 
-                log.Info($"[ClientCommander] Spawned Legion {legion.NetId}");
                 return;
             }
 
@@ -118,23 +83,29 @@ namespace Ebonor.GamePlay
                 _showcaseContext.Unregister(NetId);
             }
             
-            if (_baseLegion != null)
+            foreach (var squad in _spawnedSquads)
             {
-                _networkBus.UnRegisterSpawns(_baseLegion.NetId, _baseLegion);
-                await _baseLegion.ShutdownAsync();
+                await squad.ShutdownAsync();
             }
+            _spawnedSquads.Clear();
 
             await base.ShutdownAsync();
         }
         
         public override void Tick(int tick)
         {
-            
+            for (var i = 0; i < _spawnedSquads.Count; i++)
+            {
+                _spawnedSquads[i].Tick(tick);
+            }
         }
         
         public override void OnUpdate()
         {
-            
+            for (var i = 0; i < _spawnedSquads.Count; i++)
+            {
+                _spawnedSquads[i].OnUpdate();
+            }
         }
         
         public class Factory : PlaceholderFactory<ClientCommander> 

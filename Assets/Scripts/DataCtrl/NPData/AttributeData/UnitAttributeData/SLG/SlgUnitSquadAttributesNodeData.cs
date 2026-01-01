@@ -33,6 +33,9 @@ namespace Ebonor.DataCtrl
         [BsonElement("UnitName")]
         public string UnitName;
         
+        [BsonElement("UnitLv")]
+        public int UnitLv;
+        
         [BsonElement("UnitSprite")]
         public string UnitSprite;
         
@@ -89,6 +92,7 @@ namespace Ebonor.DataCtrl
             "UnitDataNodeId",
             "UnitName",
             "UnitId",
+            "UnitLv",
             "Formation"
         };
 

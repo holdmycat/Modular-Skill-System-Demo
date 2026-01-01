@@ -37,14 +37,14 @@ namespace Ebonor.DataCtrl
 
             // 2. Subscribe for Future (Reactive)
             _context.OnCommanderAdded += HandleCommanderAdded;
-            _context.OnLegionAdded += HandleLegionAdded;
+            _context.OnSquadAdded += HandleSquadAdded;
         }
 
         public override void OnClose()
         {
             base.OnClose();
             _context.OnCommanderAdded -= HandleCommanderAdded;
-            _context.OnLegionAdded -= HandleLegionAdded;
+            _context.OnSquadAdded -= HandleSquadAdded;
         }
 
         private void TryBindExisting()
@@ -53,11 +53,11 @@ namespace Ebonor.DataCtrl
              if(playerCmder != null) 
                  PlayerInfo.BindData(playerCmder);
              
-             // Bind Player Legions
+             // Bind Player Squads
              var playerEntities = _context.GetEntities(FactionType.Player);
              if (playerEntities != null)
              {
-                 foreach(var legion in playerEntities.Legions) PlayerInfo.AddLegion(legion);
+                 foreach(var squad in playerEntities.Squads) PlayerInfo.AddSquad(squad);
              }
 
              var enemyEntities = _context.GetEntities(FactionType.Enemy);
@@ -65,10 +65,10 @@ namespace Ebonor.DataCtrl
              if(enemyCmder != null) 
                  EnemyInfo.BindData(enemyCmder);
              
-             // Bind Enemy Legions
+             // Bind Enemy Squads
              if (enemyEntities != null)
              {
-                 foreach(var legion in enemyEntities.Legions) EnemyInfo.AddLegion(legion);
+                 foreach(var squad in enemyEntities.Squads) EnemyInfo.AddSquad(squad);
              }
         }
 
@@ -85,15 +85,15 @@ namespace Ebonor.DataCtrl
              }
         }
 
-        private void HandleLegionAdded(LegionNumericComponent legion)
+        private void HandleSquadAdded(SquadNumericComponent squad)
         {
-             if (legion.FactionType == FactionType.Player)
+             if (squad.FactionType == FactionType.Player)
              {
-                 PlayerInfo.AddLegion(legion);
+                 PlayerInfo.AddSquad(squad);
              }
-             else if (legion.FactionType == FactionType.Enemy || legion.FactionType == FactionType.Terrorist)
+             else if (squad.FactionType == FactionType.Enemy || squad.FactionType == FactionType.Terrorist)
              {
-                 EnemyInfo.AddLegion(legion);
+                 EnemyInfo.AddSquad(squad);
              }
         }
 

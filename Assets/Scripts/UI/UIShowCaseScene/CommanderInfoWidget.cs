@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
 using TMPro;
@@ -20,12 +21,23 @@ namespace Ebonor.UI
         [SerializeField] private Button _levelResetBtn;
         [SerializeField] private Image _commanderImg;
 
+        [Header("GridLayout")]
+        [SerializeField] private Transform _rtGridLayout;
+        
         private IUIAtlasRepository _uiAtlasRepository;
+
+        private SquadInfoWidget.Factory _squadFactory;
+        
+        private readonly List<SquadInfoWidget> _listSquadInfoWidget = new List<SquadInfoWidget>();
         
         [Inject]
-        public void Construct(IUIAtlasRepository uiAtlasRepository)
+        public void Construct(IUIAtlasRepository uiAtlasRepository, SquadInfoWidget.Factory factory)
         {
             _uiAtlasRepository = uiAtlasRepository;
+
+            _squadFactory = factory;
+            
+            
         }
             
             
@@ -39,6 +51,11 @@ namespace Ebonor.UI
             if (ViewModel != null)
             {
                 ViewModel.OnDataUpdated += Refresh;
+                
+                foreach (var variable in _listSquadInfoWidget)
+                {
+                    variable.Show().Forget();
+                }
             }
             
             Refresh();
@@ -51,6 +68,10 @@ namespace Ebonor.UI
             if (ViewModel != null)
             {
                 ViewModel.OnDataUpdated -= Refresh;
+                foreach (var variable in _listSquadInfoWidget)
+                {
+                    variable.Hide().Forget();
+                }
             }
             await base.OnHideAsync();
         }
@@ -67,19 +88,34 @@ namespace Ebonor.UI
                 _buffText.text = $"{ViewModel.BuffText}";
 
             _commanderImg.sprite = _uiAtlasRepository.GetUICharacterAtlas(ViewModel.IconName);
+
+            if (ViewModel.Squads.Count - _listSquadInfoWidget.Count == 1)
+            {
+                CreateSquadInfoWidget(ViewModel.Squads[^1]);
+            }
+            else if ((ViewModel.Squads.Count - _listSquadInfoWidget.Count > 1) && _listSquadInfoWidget.Count == 0)
+            {
+                foreach (var variable in ViewModel.Squads)
+                {
+                    CreateSquadInfoWidget(variable);
+                }
+            }
             
-            //
-            // if (_hpSlider)
-            // {
-            //     _hpSlider.maxValue = ViewModel.MaxHealth;
-            //     _hpSlider.value = ViewModel.Health;
-            // }
-            //
-            // if (_hpText)
-            // {
-            //     _hpText.text = $"{ViewModel.Health}/{ViewModel.MaxHealth}";
-            // }
+            foreach (var variable in _listSquadInfoWidget)
+            {
+                variable.Refresh();
+            }
+
+            void CreateSquadInfoWidget(SquadInfoViewModel viewModel)
+            {
+                var squadWidget = _squadFactory.Create(viewModel);
+                squadWidget.transform.SetParent(_rtGridLayout);
+                _listSquadInfoWidget.Add(squadWidget);
+                squadWidget.Show().Forget();
+                LayoutRebuilder.ForceRebuildLayoutImmediate(_rtGridLayout as RectTransform);
+            }
             
+        
             log.Info("[CommanderInfoWidget] Refresh");
         }
 
@@ -95,6 +131,15 @@ namespace Ebonor.UI
             {
                 _levelResetBtn.onClick.AddListener(BtnClickLevelReset);
             }
+
+            _listSquadInfoWidget.Clear();
+
+            // foreach (var variable in ViewModel.Squads)
+            // {
+            //     var squadWidget = _squadFactory.Create(variable);
+            //     squadWidget.transform.SetParent(_rtGridLayout);
+            //     _listSquadInfoWidget.Add(squadWidget);
+            // }
         }
 
         protected override void OnDestroy()
@@ -108,6 +153,8 @@ namespace Ebonor.UI
             {
                 _levelResetBtn.onClick.RemoveListener(BtnClickLevelReset);
             }
+            
+            _listSquadInfoWidget.Clear();
             
             base.OnDestroy();
         }

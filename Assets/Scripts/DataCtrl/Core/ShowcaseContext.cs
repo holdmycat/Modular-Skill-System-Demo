@@ -9,12 +9,17 @@ namespace Ebonor.DataCtrl
     /// Strictly adheres to the Data Layer; only stores Data Objects (Numeric Components).
     /// Does NOT reference Gameplay or Manager layers.
     /// </summary>
+    /// <summary>
+    /// Provides a unified data access layer for the Showcase UI.
+    /// Strictly adheres to the Data Layer; only stores Data Objects (Numeric Components).
+    /// Does NOT reference Gameplay or Manager layers.
+    /// </summary>
     public class ShowcaseContext : IContext
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ShowcaseContext));
 
         public event Action<CommanderNumericComponent> OnCommanderAdded;
-        public event Action<LegionNumericComponent> OnLegionAdded;
+        public event Action<SquadNumericComponent> OnSquadAdded; // Squad event
 
         // Stores numeric components by NetId. 
         // Using BaseNumericComponent to allow storing Commander, Legion, Squad components uniformly,
@@ -23,7 +28,7 @@ namespace Ebonor.DataCtrl
         
         // Optional: Keep separate tracks for fast access if needed
         private readonly Dictionary<uint, CommanderNumericComponent> _commanderComponents = new Dictionary<uint, CommanderNumericComponent>();
-        private readonly Dictionary<uint, LegionNumericComponent> _legionComponents = new Dictionary<uint, LegionNumericComponent>();
+        private readonly Dictionary<uint, SquadNumericComponent> _squadComponents = new Dictionary<uint, SquadNumericComponent>(); // Squad map
         
         // Faction Map: Type -> Structured Entity Collection
         private readonly Dictionary<FactionType, FactionEntities> _factionMap = new Dictionary<FactionType, FactionEntities>();
@@ -76,12 +81,12 @@ namespace Ebonor.DataCtrl
                 if (component is CommanderNumericComponent commanderNumeric)
                 {
                     _commanderComponents[netId] = commanderNumeric;
-                    OnCommanderAdded?.Invoke(commanderNumeric);
+                    // OnCommanderAdded moved to end
                 }
-                else if (component is LegionNumericComponent legionNumeric)
+                else if (component is SquadNumericComponent squadNumeric)
                 {
-                    _legionComponents[netId] = legionNumeric;
-                    OnLegionAdded?.Invoke(legionNumeric);
+                    _squadComponents[netId] = squadNumeric;
+                    // OnSquadAdded moved to end
                 }
                 
                 // Add to Faction Map
@@ -95,14 +100,12 @@ namespace Ebonor.DataCtrl
                 if (component is CommanderNumericComponent c)
                 {
                     entities.Commanders.Add(c);
-                }
-                else if (component is LegionNumericComponent l)
-                {
-                    entities.Legions.Add(l);
+                    OnCommanderAdded?.Invoke(c);
                 }
                 else if (component is SquadNumericComponent s)
                 {
                     entities.Squads.Add(s);
+                    OnSquadAdded?.Invoke(s);
                 }
             }
             else
@@ -120,7 +123,7 @@ namespace Ebonor.DataCtrl
             {
                 _numericComponents.Remove(netId);
                 _commanderComponents.Remove(netId);
-                _legionComponents.Remove(netId);
+                _squadComponents.Remove(netId); // Remove squad
                 
                 // Remove from all faction maps
                 // Iterate factions to find where it is stored.
@@ -131,10 +134,6 @@ namespace Ebonor.DataCtrl
                     if (component is CommanderNumericComponent c)
                     {
                         if(entities.Commanders.Remove(c)) break;
-                    }
-                    else if (component is LegionNumericComponent l)
-                    {
-                        if(entities.Legions.Remove(l)) break;
                     }
                     else if (component is SquadNumericComponent s)
                     {
@@ -171,11 +170,11 @@ namespace Ebonor.DataCtrl
         }
 
         /// <summary>
-        /// Retrieves specific Legion data.
+        /// Retrieves specific Squad data.
         /// </summary>
-        public LegionNumericComponent GetLegionData(uint netId)
+        public SquadNumericComponent GetSquadData(uint netId)
         {
-            if (_legionComponents.TryGetValue(netId, out var component))
+            if (_squadComponents.TryGetValue(netId, out var component))
             {
                 return component;
             }
@@ -194,7 +193,6 @@ namespace Ebonor.DataCtrl
         public class FactionEntities
         {
              public readonly HashSet<CommanderNumericComponent> Commanders = new HashSet<CommanderNumericComponent>();
-             public readonly HashSet<LegionNumericComponent> Legions = new HashSet<LegionNumericComponent>();
              public readonly HashSet<SquadNumericComponent> Squads = new HashSet<SquadNumericComponent>();
              
              // Helper logic

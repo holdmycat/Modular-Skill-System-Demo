@@ -37,18 +37,30 @@ SpriteAtlas:
     isAtlasV2: 0
     cachedData: {fileID: 0}
     packedSpriteRenderDataKeys:
+    - 898236107c7b64a33baec8a24d87336d: 21300000
+    - fb9d9de06c4904a55acd1f0d88cee1c7: 21300000
     - e4aeeed42bb3a4f308aa70ca3d92d17c: 21300000
+    - 9d2e8f25ee62f4271be6c57ca197d224: 21300000
     - 54251ab8657674a24bd5adfd3ec2704a: 21300000
     - fc4c35b96b2ad4b848e55bfa5bfcdede: 21300000
+    - 48b3aa8b85de54e8da62dca070f05836: 21300000
   m_MasterAtlas: {fileID: 0}
   m_PackedSprites:
+  - {fileID: 21300000, guid: 898236107c7b64a33baec8a24d87336d, type: 3}
+  - {fileID: 21300000, guid: fb9d9de06c4904a55acd1f0d88cee1c7, type: 3}
   - {fileID: 21300000, guid: e4aeeed42bb3a4f308aa70ca3d92d17c, type: 3}
+  - {fileID: 21300000, guid: 9d2e8f25ee62f4271be6c57ca197d224, type: 3}
   - {fileID: 21300000, guid: 54251ab8657674a24bd5adfd3ec2704a, type: 3}
   - {fileID: 21300000, guid: fc4c35b96b2ad4b848e55bfa5bfcdede, type: 3}
+  - {fileID: 21300000, guid: 48b3aa8b85de54e8da62dca070f05836, type: 3}
   m_PackedSpriteNamesToIndex:
+  - ui_icon_dk_blue
+  - ui_icon_dk_red
   - ui_icon_sergey
+  - ui_icon_clinkz_red
   - ui_icon_molly
   - ui_icon_zombie
+  - ui_icon_clinkz_blue
   m_RenderDataMap: {}
   m_Tag: ui_icon_characters
   m_IsVariant: 0

@@ -14,14 +14,15 @@ namespace Ebonor.GamePlay
             INetworkBus networkBus, 
             IDataLoaderService dataLoaderService, 
             ICharacterDataRepository characterDataRepository,
-            CommanderContextData contextData)
+            CommanderContextData contextData, ShowcaseContext showcaseContext)
         {
             log.Info($"[ClientSquad] Construction");
             
-            _characterDataRepository = characterDataRepository;
             _networkBus = networkBus;
+            _characterDataRepository = characterDataRepository;
             _dataLoaderService = dataLoaderService;
-            
+            _showcaseContext = showcaseContext;
+            _contextData = contextData;
             _faction = contextData.Faction;
         }
         
@@ -30,9 +31,15 @@ namespace Ebonor.GamePlay
             log.Info($"[ClientSquad] InitAsync");
         }
 
-        public override void InitFromSpawnPayload(byte[] payload)
+        protected override void InitializeNumeric()
         {
-            base.InitFromSpawnPayload(payload);
+            _numericComponent = _numericFactory.CreateSquad(_netId, _squadUnitAttr);
+            
+            // Register Data to ShowcaseContext (Data Layer)
+            if (_showcaseContext != null)
+            {
+                _showcaseContext.Register(NetId, _numericComponent, Faction);
+            }
         }
         
         public override async UniTask ShutdownAsync()

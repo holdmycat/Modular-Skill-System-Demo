@@ -47,6 +47,11 @@ namespace Ebonor.GamePlay
 
         }
         
+        protected override void InitializeNumeric()
+        {
+            _numericComponent = _numericFactory.CreateSquad(_netId, _squadUnitAttr);
+        }
+        
         public override async UniTask ShutdownAsync()
         {
             log.Info("[ServerSquad] ShutdownAsync");

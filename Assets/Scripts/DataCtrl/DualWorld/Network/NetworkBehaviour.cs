@@ -34,10 +34,7 @@ namespace Ebonor.DataCtrl
             log.Info($"[NetworkBehaviour] InitAsync");
         }
 
-        public virtual void InitFromSpawnPayload(byte[] payload)
-        {
-            log.Info($"[NetworkBehaviour] InitFromSpawnPayload");
-        }
+        
 
         public virtual async UniTask InitAsync(RpcSpawnObject msg)
         {

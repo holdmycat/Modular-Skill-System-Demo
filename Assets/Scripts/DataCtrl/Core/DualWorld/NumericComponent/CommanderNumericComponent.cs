@@ -7,14 +7,10 @@ namespace Ebonor.DataCtrl
     public class CommanderNumericComponent : BaseNumericComponent
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(CommanderNumericComponent));
-
-        private CommanderContextData _commanderContext;
         
         private CommanderBootstrapInfo _commanderBootstrapInfo;
-
         private SlgCommanderAttributesNodeData _slgCommanderAttributesNodeData;
 
-        private GlobalGameConfig _globalGameConfig;
         
         [Inject]
         public CommanderNumericComponent(uint netId)
@@ -23,7 +19,10 @@ namespace Ebonor.DataCtrl
         }
         
         [Inject]
-        public void Construct(ICharacterDataRepository characterDataRepository, CommanderContextData commanderContextData, GlobalGameConfig globalGameConfig)
+        public void Construct(
+            ICharacterDataRepository characterDataRepository, 
+            CommanderContextData commanderContextData, 
+            GlobalGameConfig globalGameConfig)
         {
             log.Info("[CommanderNumericComponent] Construct");
             

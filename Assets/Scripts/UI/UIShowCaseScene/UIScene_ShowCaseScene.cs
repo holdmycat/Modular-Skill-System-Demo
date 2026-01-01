@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
-using Ebonor.Framework;
 using UnityEngine;
 using Zenject;
 

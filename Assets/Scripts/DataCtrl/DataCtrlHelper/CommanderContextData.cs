@@ -5,10 +5,12 @@ namespace Ebonor.DataCtrl
     public class CommanderContextData
     {
         private bool _isInitialized;
-
-        public ulong LegionId { get; private set; }
+        
         public bool IsServer { get; private set; }
         public CommanderBootstrapInfo BootstrapInfo { get; private set; }
+        
+        // Added to allow Squads to access Commander stats
+        public CommanderNumericComponent NumericComponent { get; private set; }
 
         // --- Convenience Read-Only Properties ---
         
@@ -73,7 +75,7 @@ namespace Ebonor.DataCtrl
         /// Initializes the context data. Can only be called once.
         /// Should only be called by ServerCommander or ClientCommander.
         /// </summary>
-        public void SetContext(bool isServer, ulong legionId, CommanderBootstrapInfo info)
+        public void SetContext(bool isServer, CommanderBootstrapInfo info)
         {
             if (_isInitialized)
             {
@@ -81,9 +83,13 @@ namespace Ebonor.DataCtrl
             }
 
             IsServer = isServer;
-            LegionId = legionId;
             BootstrapInfo = info ?? throw new System.ArgumentNullException(nameof(info), "[CommanderContextData] BootstrapInfo cannot be null.");
             _isInitialized = true;
+        }
+
+        public void SetNumericComponent(CommanderNumericComponent component)
+        {
+            NumericComponent = component;
         }
     }
 }

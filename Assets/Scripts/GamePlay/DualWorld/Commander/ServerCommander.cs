@@ -1,75 +1,38 @@
 using Cysharp.Threading.Tasks;
 using Ebonor.DataCtrl;
-using Ebonor.Framework;
 using Zenject;
 
 namespace Ebonor.GamePlay
 {
     public class ServerCommander : BaseCommander
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ServerCommander));
+        
 
-        private readonly ServerLegion.Factory _factory;
-
+        private readonly ServerSquad.Factory _factory;
+        
         
         [Inject]
         public ServerCommander(
-            ServerLegion.Factory factory,
+            ServerSquad.Factory factory,
             INetworkBus networkBus, 
             IDataLoaderService dataLoaderService,
-            ILegionIdGenerator legionIdGenerator,
+            ICharacterDataRepository characterDataRepository, // Inject here
             CommanderContextData contextData)
         {
             log.Info($"[ServerCommander] Construction");
 
             _factory = factory;
             
+            _characterDataRepository = characterDataRepository; // Assign here
             
             _networkBus = networkBus;
             
             _dataLoaderService = dataLoaderService;
-
-            _legionIdGenerator = legionIdGenerator;
-
+            
             _contextData = contextData;
         }
-        
-        private CommanderContextData _contextData;
-        
-        public override void Configure(CommanderBootstrapInfo bootstrapInfo)
-        {
-            // base.Configure(bootstrapInfo); // MOVED TO END
-            
-            // Manual set for local logic usage if needed, though we use param 'bootstrapInfo'
-            _bootstrapInfo = bootstrapInfo; 
-            
-            if (_bootstrapInfo == null || _bootstrapInfo.LegionConfig == null)
-            {
-                log.Error("[ServerCommander] Configure failed: bootstrap info missing.");
-                throw new System.InvalidOperationException("[ServerCommander] Configure failed: bootstrap info missing.");
-            }
 
-            if (_bootstrapInfo.LegionConfig.Seed == null)
-            {
-                log.Error("[ServerCommander] Configure failed: LegionConfig.Seed is null. This is a critical data error.");
-                throw new System.InvalidOperationException("[ServerCommander] Configure failed: LegionConfig.Seed is null.");
-            }
-            
-            _seed = _bootstrapInfo.LegionConfig.Seed;
-            var netId = _dataLoaderService.NextId();
-            
-            _legionId = _legionIdGenerator.Next(netId); // gameplay id
-            
-            // Populate Context Data (Write Once)
-            _contextData.SetContext(true, _legionId, _bootstrapInfo);
-            
-            // Now call base to trigger Numeric Init (which depends on Context)
-            base.Configure(bootstrapInfo);
 
-            BindId(netId);
-            _networkBus.RegisterSpawns(NetId, this, true);
-        }
-        
         public override void InitAsync()
         {
             log.Info($"[ServerCommander] InitAsync");
@@ -80,22 +43,33 @@ namespace Ebonor.GamePlay
                 return;
             }
             
-            _baseLegion = _factory.Create();
-
             var squadList = _bootstrapInfo.LegionConfig.SquadIds;
             
-            var legionNetId = _dataLoaderService.NextId(); // network id (uint)
-            _baseLegion.Configure(legionNetId, squadList, true);
-
-            var legionPayloadBytes = new LegionSpawnPayload
+            foreach (var squadId in squadList)
             {
-                LegionId = (long)_legionId,
-                SquadList = _bootstrapInfo?.LegionConfig?.SquadIds ?? new System.Collections.Generic.List<long>(),
-                Faction = _seed.Faction,
-                OwnerNetId = NetId
-            }.Serialize();
+                var baseSquad = _factory.Create();
+                
+                var slgSquadData = _characterDataRepository.GetSlgSquadData(squadId);
+                if (slgSquadData == null)
+                {
+                    log.Error($"[ServerCommander] InitAsync failed to get data for squadId: {squadId}");
+                    continue; // Skip if data missing
+                }
 
-            SpawnChild(_networkBus, _baseLegion, legionPayloadBytes, NetworkPrefabType.Legion, true);
+                var squadNetId = _dataLoaderService.NextId();
+                baseSquad.Configure(squadNetId, slgSquadData, _seed.Faction, true);
+                
+                _spawnedSquads.Add(baseSquad);
+                
+                var squadPayload = new SquadSpawnPayload
+                {
+                    SquadId = squadId,
+                    OwnerNetId = _netId, // Owned by Commander now
+                    Faction = _seed.Faction
+                }.Serialize();
+                 
+                SpawnChild(_networkBus, baseSquad, squadPayload, NetworkPrefabType.Squad, true);
+            }
             
         }
         
@@ -105,12 +79,17 @@ namespace Ebonor.GamePlay
             await base.ShutdownAsync();
             _networkBus.UnRegisterSpawns(_netId, this,true);
 
-            await _baseLegion.ShutdownAsync();
+            foreach (var squad in _spawnedSquads)
+            {
+                await squad.ShutdownAsync();
+            }
+            _spawnedSquads.Clear();
         }
         
         protected override void InitializeNumeric()
         {
             _numericComponent = _numericFactory.CreateCommander(_netId);
+            _contextData.SetNumericComponent(_numericComponent as CommanderNumericComponent);
         }
         
         public class Factory : PlaceholderFactory<ServerCommander> 

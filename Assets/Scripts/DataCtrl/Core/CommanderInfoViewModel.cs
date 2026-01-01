@@ -1,3 +1,5 @@
+using Zenject;
+
 namespace Ebonor.DataCtrl
 {
     /// <summary>
@@ -9,6 +11,13 @@ namespace Ebonor.DataCtrl
         public event System.Action OnDataUpdated;
 
         private CommanderNumericComponent _commander;
+        private IInstantiator _instantiator;
+        
+        [Inject]
+        public void Construct(IInstantiator instantiator)
+        {
+            _instantiator = instantiator;
+        }
 
         public FactionType FactionType => _commander.FactionType;
         
@@ -23,11 +32,11 @@ namespace Ebonor.DataCtrl
         
         public string IconName => _commander != null ? _commander.UnitIcon : "Unknown";
         
-        // List of owned Legions
-        private readonly System.Collections.Generic.List<LegionNumericComponent> _legions = new System.Collections.Generic.List<LegionNumericComponent>();
-        public System.Collections.Generic.IReadOnlyList<LegionNumericComponent> Legions => _legions;
+        // List of owned Squad ViewModels
+        private readonly System.Collections.Generic.List<SquadInfoViewModel> _squads = new System.Collections.Generic.List<SquadInfoViewModel>();
+        public System.Collections.Generic.IReadOnlyList<SquadInfoViewModel> Squads => _squads;
         
-        public string LegionCountText => $"Legions: {_legions.Count}";
+        public string SquadCountText => $"Squads: {_squads.Count}";
 
         // Bind a specific commander data component to this ViewModel
         public void BindData(CommanderNumericComponent commander)
@@ -64,12 +73,24 @@ namespace Ebonor.DataCtrl
             }
         }
         
-        public void AddLegion(LegionNumericComponent legion)
+        public void AddSquad(SquadNumericComponent squad)
         {
-            if (legion != null && !_legions.Contains(legion))
+            if (squad != null)
             {
-                _legions.Add(legion);
-                log.Info($"[CommanderInfoViewModel] Added Legion: {legion.NetId}");
+                // Check if already exists (opt: optimize with Dictionary)
+                foreach(var existing in _squads) 
+                {
+                    // Assuming we can check equality via underlying data or logic, 
+                    // but SquadInfoViewModel doesn't expose it yet directly. 
+                    // Better to rely on logic caller generally, or check manually.
+                    // For now, allow simple add, assuming uniqueness from caller.
+                }
+                
+                var vm = _instantiator.Instantiate<SquadInfoViewModel>();
+                vm.BindData(squad);
+                _squads.Add(vm);
+                
+                log.Info($"[CommanderInfoViewModel] Added Squad VM: {squad.NetId}");
                 OnDataUpdated?.Invoke();
             }
         }

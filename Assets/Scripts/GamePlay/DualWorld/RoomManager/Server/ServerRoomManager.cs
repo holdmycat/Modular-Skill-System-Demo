@@ -20,23 +20,13 @@ namespace Ebonor.GamePlay
             }
             
             _baseSceneEnemyCommander.Configure(bootstrap);
-
             
-            var payload = new CommanderSpawnPayload
+            var spawnPayload = new CommanderSpawnPayload
             {
-                LegionId = _baseSceneEnemyCommander.LegionId,
                 Bootstrap = bootstrap
-            };
-            var spawnPayload = payload.Serialize();
-
-            _networkBus.SendRpc(NetworkConstants.ROOM_MANAGER_NET_ID, new RpcSpawnObject 
-            { 
-                Type = NetworkPrefabType.Player,
-                NetId = _baseSceneEnemyCommander.NetId,
-                Payload = spawnPayload
-            });
+            }.Serialize();
             
-            _baseSceneEnemyCommander.InitAsync();
+            SpawnChild(_networkBus, _baseSceneEnemyCommander, spawnPayload, NetworkPrefabType.Player, true);
         }
     }
     
@@ -54,24 +44,13 @@ namespace Ebonor.GamePlay
             }
             
             _baseCommander.Configure(bootstrap);
-
             
-            var payload = new CommanderSpawnPayload
+            var spawnPayload = new CommanderSpawnPayload
             {
-                LegionId = _baseCommander.LegionId,
                 Bootstrap = bootstrap
-            };
-            var spawnPayload = payload.Serialize();
-
-            _networkBus.SendRpc(NetworkConstants.ROOM_MANAGER_NET_ID, new RpcSpawnObject 
-            { 
-                Type = NetworkPrefabType.Player,
-                NetId = _baseCommander.NetId,
-                Payload = spawnPayload
-            });
+            }.Serialize();
             
-            _baseCommander.InitAsync();
-            
+            SpawnChild(_networkBus, _baseCommander, spawnPayload, NetworkPrefabType.Player, true);
         }
     }
     
@@ -109,7 +88,6 @@ namespace Ebonor.GamePlay
 
         public override void Tick(int tick)
         {
-        
         }
 
         public override async UniTask ShutdownAsync()

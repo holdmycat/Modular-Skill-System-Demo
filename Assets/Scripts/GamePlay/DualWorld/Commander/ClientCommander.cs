@@ -40,6 +40,7 @@ namespace Ebonor.GamePlay
         protected override void InitializeNumeric()
         {
             _numericComponent = _numericFactory.CreateCommander(_netId);
+            _contextData.SetNumericComponent(_numericComponent as CommanderNumericComponent);
             
             // Register Data to ShowcaseContext (Data Layer)
             if (_showcaseContext != null)

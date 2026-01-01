@@ -89,6 +89,7 @@ namespace Ebonor.GamePlay
         protected override void InitializeNumeric()
         {
             _numericComponent = _numericFactory.CreateCommander(_netId);
+            _contextData.SetNumericComponent(_numericComponent as CommanderNumericComponent);
         }
         
         public class Factory : PlaceholderFactory<ServerCommander> 

@@ -8,6 +8,9 @@ namespace Ebonor.DataCtrl
         
         public bool IsServer { get; private set; }
         public CommanderBootstrapInfo BootstrapInfo { get; private set; }
+        
+        // Added to allow Squads to access Commander stats
+        public CommanderNumericComponent NumericComponent { get; private set; }
 
         // --- Convenience Read-Only Properties ---
         
@@ -82,6 +85,11 @@ namespace Ebonor.DataCtrl
             IsServer = isServer;
             BootstrapInfo = info ?? throw new System.ArgumentNullException(nameof(info), "[CommanderContextData] BootstrapInfo cannot be null.");
             _isInitialized = true;
+        }
+
+        public void SetNumericComponent(CommanderNumericComponent component)
+        {
+            NumericComponent = component;
         }
     }
 }

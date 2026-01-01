@@ -21,7 +21,6 @@ namespace Ebonor.GamePlay
             _characterDataRepository = characterDataRepository;
             _networkBus = networkBus;
             _dataLoaderService = dataLoaderService;
-            
             _faction = contextData.Faction;
         }
         
@@ -32,7 +31,7 @@ namespace Ebonor.GamePlay
 
         protected override void InitializeNumeric()
         {
-            _numericComponent = _numericFactory.CreateCommander(_netId);
+            _numericComponent = _numericFactory.CreateSquad(_netId, _squadUnitAttr);
             
             // Register Data to ShowcaseContext (Data Layer)
             if (_showcaseContext != null)

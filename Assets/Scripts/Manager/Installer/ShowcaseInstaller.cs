@@ -118,7 +118,7 @@ namespace Ebonor.Manager
             
             // Bind Numeric Factories
             subContainer.BindFactory<uint, CommanderNumericComponent, CommanderNumericComponent.Factory>().AsSingle();
-            subContainer.BindFactory<uint, SquadNumericComponent, SquadNumericComponent.Factory>().AsSingle();
+            subContainer.BindFactory<uint, SlgUnitSquadAttributesNodeData, SquadNumericComponent, SquadNumericComponent.Factory>().AsSingle();
             
             // Bind the Wrapper Factory
             subContainer.Bind<NumericComponentFactory>().AsSingle();
@@ -136,7 +136,7 @@ namespace Ebonor.Manager
             
             // Bind Numeric Factories
             subContainer.BindFactory<uint, CommanderNumericComponent, CommanderNumericComponent.Factory>().AsSingle();
-            subContainer.BindFactory<uint, SquadNumericComponent, SquadNumericComponent.Factory>().AsSingle();
+            subContainer.BindFactory<uint, SlgUnitSquadAttributesNodeData,SquadNumericComponent, SquadNumericComponent.Factory>().AsSingle();
             
             // Bind the Wrapper Factory
             subContainer.Bind<NumericComponentFactory>().AsSingle();

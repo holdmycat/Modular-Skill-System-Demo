@@ -67,6 +67,18 @@ namespace Ebonor.DataCtrl
         AttackSpeedAdd = AttackSpeed * 10 + 2,
 
         /// <summary>
+        /// Current Soldier Count in Squad
+        /// </summary>
+        [InspectorName("SoldierCount")]
+        SoldierCount = 1020,
+
+        /// <summary>
+        /// Max Soldier Count in Squad
+        /// </summary>
+        [InspectorName("SoldierMaxCount")]
+        SoldierMaxCount = 1021,
+
+        /// <summary>
         /// World Map March Speed
         /// </summary>
         [InspectorName("MarchSpeed")]

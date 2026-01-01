@@ -40,6 +40,9 @@ namespace Ebonor.DataCtrl.Editor
             AddAttr(schema, "Defense", 1012, AttributeType.Base, "Physical Defense");
             AddAttr(schema, "AttackSpeed", 1013, AttributeType.Base, "Attack Speed (Attacks per sec)");
             
+            AddAttr(schema, "SoldierCount", 1020, AttributeType.Final, "Current Soldier Count in Squad");
+            AddAttr(schema, "SoldierMaxCount", 1021, AttributeType.Final, "Max Soldier Count in Squad");
+            
             // --- 2. SLG Military Attributes (2000 - 2999) ---
             // Used by Commander (Modifiers) and Legion (March Stats)
             

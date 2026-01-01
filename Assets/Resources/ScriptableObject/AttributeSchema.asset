@@ -45,6 +45,14 @@ MonoBehaviour:
     Id: 1013
     Type: 1
     Description: Attack Speed (Attacks per sec)
+  - Name: SoldierCount
+    Id: 1020
+    Type: 0
+    Description: Current Soldier Count in Squad
+  - Name: SoldierMaxCount
+    Id: 1021
+    Type: 0
+    Description: Max Soldier Count in Squad
   - Name: MarchSpeed
     Id: 2001
     Type: 1

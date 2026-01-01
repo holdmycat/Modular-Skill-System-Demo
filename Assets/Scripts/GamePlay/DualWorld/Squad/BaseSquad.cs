@@ -34,10 +34,5 @@ namespace Ebonor.GamePlay
             _networkBus.RegisterSpawns(NetId, this, isServer);
         }
         
-        protected override void InitializeNumeric()
-        {
-           
-        }
-        
     }
 }

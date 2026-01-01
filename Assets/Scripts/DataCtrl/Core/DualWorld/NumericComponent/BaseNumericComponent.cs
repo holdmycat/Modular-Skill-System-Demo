@@ -14,6 +14,8 @@ namespace Ebonor.DataCtrl
         private bool _isInit;
 
         protected ICharacterDataRepository _characterDataRepository;
+        protected GlobalGameConfig _globalGameConfig;
+        protected CommanderContextData _commanderContext;
         
         protected bool _isServer;
         public bool IsServer => _isServer;

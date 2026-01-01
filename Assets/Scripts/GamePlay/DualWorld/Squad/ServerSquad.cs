@@ -49,7 +49,7 @@ namespace Ebonor.GamePlay
         
         protected override void InitializeNumeric()
         {
-            _numericComponent = _numericFactory.CreateSquad(_netId);
+            _numericComponent = _numericFactory.CreateSquad(_netId, _squadUnitAttr);
         }
         
         public override async UniTask ShutdownAsync()

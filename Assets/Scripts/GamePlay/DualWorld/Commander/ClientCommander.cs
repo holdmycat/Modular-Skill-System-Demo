@@ -60,7 +60,7 @@ namespace Ebonor.GamePlay
                 }
                 
                 var squad = _squadFactory.Create();
-                squad.Configure(spawnMsg.NetId, squadData, false);
+                squad.Configure(spawnMsg.NetId, squadData, squadPayload.Faction, false);
                 squad.InitAsync();
                 _spawnedSquads.Add(squad);
                 

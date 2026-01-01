@@ -54,7 +54,7 @@ namespace Ebonor.UI
                 
                 foreach (var variable in _listSquadInfoWidget)
                 {
-                    await variable.Show();
+                    variable.Show().Forget();
                 }
             }
             
@@ -70,7 +70,7 @@ namespace Ebonor.UI
                 ViewModel.OnDataUpdated -= Refresh;
                 foreach (var variable in _listSquadInfoWidget)
                 {
-                    await variable.Hide();
+                    variable.Hide().Forget();
                 }
             }
             await base.OnHideAsync();
@@ -91,17 +91,30 @@ namespace Ebonor.UI
 
             if (ViewModel.Squads.Count - _listSquadInfoWidget.Count == 1)
             {
-                var squadWidget = _squadFactory.Create(ViewModel.Squads[^1]);
-                squadWidget.transform.SetParent(_rtGridLayout);
-                _listSquadInfoWidget.Add(squadWidget);
-                squadWidget.Show().Forget();
-                LayoutRebuilder.ForceRebuildLayoutImmediate(_rtGridLayout as RectTransform);
+                CreateSquadInfoWidget(ViewModel.Squads[^1]);
+            }
+            else if ((ViewModel.Squads.Count - _listSquadInfoWidget.Count > 1) && _listSquadInfoWidget.Count == 0)
+            {
+                foreach (var variable in ViewModel.Squads)
+                {
+                    CreateSquadInfoWidget(variable);
+                }
             }
             
             foreach (var variable in _listSquadInfoWidget)
             {
                 variable.Refresh();
             }
+
+            void CreateSquadInfoWidget(SquadInfoViewModel viewModel)
+            {
+                var squadWidget = _squadFactory.Create(viewModel);
+                squadWidget.transform.SetParent(_rtGridLayout);
+                _listSquadInfoWidget.Add(squadWidget);
+                squadWidget.Show().Forget();
+                LayoutRebuilder.ForceRebuildLayoutImmediate(_rtGridLayout as RectTransform);
+            }
+            
         
             log.Info("[CommanderInfoWidget] Refresh");
         }
@@ -140,6 +153,8 @@ namespace Ebonor.UI
             {
                 _levelResetBtn.onClick.RemoveListener(BtnClickLevelReset);
             }
+            
+            _listSquadInfoWidget.Clear();
             
             base.OnDestroy();
         }

@@ -13,7 +13,7 @@ namespace Ebonor.GamePlay
         /// <summary>
         /// Bind net id and register to network bus. Call right after construction.
         /// </summary>
-        public void Configure(uint netId, SlgUnitSquadAttributesNodeData squadUnitAttr, bool isServer = false)
+        public void Configure(uint netId, SlgUnitSquadAttributesNodeData squadUnitAttr, FactionType factionType, bool isServer = false)
         {
             if (NetId != 0)
             {
@@ -22,6 +22,8 @@ namespace Ebonor.GamePlay
 
             _squadUnitAttr = squadUnitAttr;
             // Faction is injected
+
+            Faction = factionType;
             
             BindId(netId);
            

@@ -972,8 +972,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showAnim: 1
   hideAnim: 1
-  showDuration: 0.25
-  hideDuration: 0.2
+  showDuration: 0.04
+  hideDuration: 0.04
   slideDistance: 600
   scaleOvershoot: 1.05
   _iconImg: {fileID: 429536479946623000}

@@ -14,7 +14,7 @@ namespace Ebonor.GamePlay
         /// <summary>
         /// Inject commander bootstrap data and bind net id (call once after creation).
         /// </summary>
-        public void Configure(CommanderBootstrapInfo bootstrapInfo, bool isServer = true, uint tmpnetId = 0)
+        public void Configure(CommanderBootstrapInfo bootstrapInfo,  bool isServer = true, uint tmpnetId = 0)
         {
             _bootstrapInfo = bootstrapInfo;
 

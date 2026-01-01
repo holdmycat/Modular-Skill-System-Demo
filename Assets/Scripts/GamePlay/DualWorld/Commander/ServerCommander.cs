@@ -57,7 +57,7 @@ namespace Ebonor.GamePlay
                 }
 
                 var squadNetId = _dataLoaderService.NextId();
-                baseSquad.Configure(squadNetId, slgSquadData, true);
+                baseSquad.Configure(squadNetId, slgSquadData, _seed.Faction, true);
                 
                 _spawnedSquads.Add(baseSquad);
                 

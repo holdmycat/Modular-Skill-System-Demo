@@ -738,8 +738,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   showAnim: 1
   hideAnim: 1
-  showDuration: 0.15
-  hideDuration: 0.15
+  showDuration: 0.04
+  hideDuration: 0.04
   slideDistance: 600
   scaleOvershoot: 1.05
   _rectTransform: {fileID: 2524242555709530035}

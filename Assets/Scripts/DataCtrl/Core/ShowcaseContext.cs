@@ -81,12 +81,12 @@ namespace Ebonor.DataCtrl
                 if (component is CommanderNumericComponent commanderNumeric)
                 {
                     _commanderComponents[netId] = commanderNumeric;
-                    OnCommanderAdded?.Invoke(commanderNumeric);
+                    // OnCommanderAdded moved to end
                 }
                 else if (component is SquadNumericComponent squadNumeric)
                 {
                     _squadComponents[netId] = squadNumeric;
-                    OnSquadAdded?.Invoke(squadNumeric);
+                    // OnSquadAdded moved to end
                 }
                 
                 // Add to Faction Map
@@ -100,10 +100,12 @@ namespace Ebonor.DataCtrl
                 if (component is CommanderNumericComponent c)
                 {
                     entities.Commanders.Add(c);
+                    OnCommanderAdded?.Invoke(c);
                 }
                 else if (component is SquadNumericComponent s)
                 {
                     entities.Squads.Add(s);
+                    OnSquadAdded?.Invoke(s);
                 }
             }
             else

@@ -20,6 +20,7 @@ namespace Ebonor.DataCtrl
         
         public void BindData(SquadNumericComponent squad)
         {
+            log.Info($"[SquadInfoViewModel] BindData: {squad?.UnitName}");
             _squad = squad;
             if (_squad != null)
             {

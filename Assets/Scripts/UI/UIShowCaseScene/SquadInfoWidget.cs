@@ -25,6 +25,7 @@ namespace Ebonor.UI
         [Inject]
         public void Construct(IUIAtlasRepository uiAtlasRepository)
         {
+            log.Info($"[{GetType().Name}] Construct.");
             _uiAtlasRepository = uiAtlasRepository;
         }
 
@@ -51,6 +52,7 @@ namespace Ebonor.UI
 
         public void Refresh()
         {
+            log.Info($"[{GetType().Name}] Refresh.");
             if (ViewModel == null) return;
 
             if (_nameText) _nameText.text = ViewModel.UnitName;
@@ -132,6 +134,7 @@ namespace Ebonor.UI
         
         public class Factory : PlaceholderFactory<SquadInfoViewModel, SquadInfoWidget>
         {
+            public Factory() => log.Info($"[{GetType().Name}] Constructed.");
         }
     }
 }

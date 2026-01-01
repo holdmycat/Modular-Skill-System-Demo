@@ -34,6 +34,7 @@ namespace Ebonor.GamePlay
         
         protected override void InitializeNumeric()
         {
+            log.Info($"[ClientCommander] InitializeNumeric");
             _numericComponent = _numericFactory.CreateCommander(_netId);
             _contextData.SetNumericComponent(_numericComponent as CommanderNumericComponent);
             

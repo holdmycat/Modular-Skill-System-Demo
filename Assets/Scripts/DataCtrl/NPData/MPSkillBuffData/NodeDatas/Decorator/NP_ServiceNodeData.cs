@@ -1,7 +1,9 @@
+using UnityEngine;
 using Action = System.Action;
 
 namespace Ebonor.DataCtrl
 {
+    [System.Serializable]
     public class NP_ServiceNodeData: NP_NodeDataBase
     {
         public Service m_Service;
@@ -10,7 +12,8 @@ namespace Ebonor.DataCtrl
         
         public float interval;
 
-        public NP_ClassForStoreAction NpClassForStoreAction;
+        [SerializeReference]
+        public NP_ClassForStoreAction NpClassForStoreAction = new NP_ClassForStoreAction();
 
         public override Node NP_GetNode()
         {

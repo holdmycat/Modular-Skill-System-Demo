@@ -1,5 +1,6 @@
 namespace Ebonor.DataCtrl
 {
+    [System.Serializable]
     public class NP_WaitUntilStoppedData: NP_NodeDataBase
     {
         private WaitUntilStopped m_WaitUntilStopped;

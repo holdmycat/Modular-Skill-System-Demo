@@ -17,30 +17,22 @@ namespace GraphProcessor
 
         public override void OnInspectorGUI()
         {
-            if (serializedObject == null)
+            serializedObject.Update();
+
+            var inspector = (NodeInspectorObject)target;
+            if (inspector.selectedNodeData == null || inspector.selectedNodeData.Count == 0)
             {
-                EditorGUILayout.HelpBox("No inspector data.", MessageType.Info);
+                EditorGUILayout.HelpBox("在图中选中结点即可在此查看和编辑结点数据。", MessageType.Info);
+                serializedObject.ApplyModifiedProperties();
                 return;
             }
 
-            serializedObject.Update();
-            try
-            {
-                selectedNodesProp ??= serializedObject.FindProperty("selectedNodeData");
-                currentDataProp ??= serializedObject.FindProperty("currentData");
+            if (selectedNodesProp != null)
+                EditorGUILayout.PropertyField(selectedNodesProp, new GUIContent("Selected Nodes"), true);
 
-                if (selectedNodesProp != null)
-                    EditorGUILayout.PropertyField(selectedNodesProp, new GUIContent("Selected Nodes"), true);
+            if (currentDataProp != null)
+                EditorGUILayout.PropertyField(currentDataProp, new GUIContent("Current Data"), true);
 
-                EditorGUILayout.Space();
-
-                if (currentDataProp != null)
-                    EditorGUILayout.PropertyField(currentDataProp, new GUIContent("Current Data"), true);
-            }
-            catch (System.Exception ex)
-            {
-                EditorGUILayout.HelpBox($"Failed to draw inspector: {ex.Message}", MessageType.Error);
-            }
             serializedObject.ApplyModifiedProperties();
         }
     }

@@ -1,9 +1,11 @@
 namespace Ebonor.DataCtrl
 {
+    [System.Serializable]
     public class NP_ActionNodeData : NP_NodeDataBase
     {
         private Action m_ActionNode;
 
+        [UnityEngine.SerializeReference]
         public NP_ClassForStoreAction NpClassForStoreAction;
 
         public override Task CreateTask(uint unit, NP_RuntimeTree runtimeTree)

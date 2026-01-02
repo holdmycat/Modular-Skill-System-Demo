@@ -1,6 +1,7 @@
 
 namespace Ebonor.DataCtrl
 {
+    [System.Serializable]
     public class NP_SelectorNodeData:NP_NodeDataBase
     {
         private Selector m_SelectorNode;

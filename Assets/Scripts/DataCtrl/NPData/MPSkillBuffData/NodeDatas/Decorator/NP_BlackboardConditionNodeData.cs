@@ -1,6 +1,7 @@
 
 namespace Ebonor.DataCtrl
 {
+    [System.Serializable]
     public class NP_BlackboardConditionNodeData: NP_NodeDataBase
     {
         private BlackboardCondition m_BlackboardConditionNode;

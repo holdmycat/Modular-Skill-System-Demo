@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Ebonor.DataCtrl
 {
+    [System.Serializable]
     [BsonDeserializerRegister]
     public abstract class NP_NodeDataBase
     {

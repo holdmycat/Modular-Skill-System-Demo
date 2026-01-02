@@ -1,6 +1,7 @@
 
 namespace Ebonor.DataCtrl
 {
+    [System.Serializable]
     public class NP_TimeRepeaterNodeData:NP_NodeDataBase
     {
         public TimeRepeater m_Repeater;

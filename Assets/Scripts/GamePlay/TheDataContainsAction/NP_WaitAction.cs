@@ -8,6 +8,7 @@ namespace Ebonor.GamePlay
 {
     
     
+    [System.Serializable]
     public class NP_WaitAction : NP_ClassForStoreAction
     {
         static readonly ILog log = LogManager.GetLogger(typeof(NP_WaitAction));

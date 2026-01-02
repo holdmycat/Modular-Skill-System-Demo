@@ -9,6 +9,7 @@ namespace GraphProcessor
 	public delegate IEnumerable< PortData > CustomPortBehaviorDelegate(List< SerializableEdge > edges);
 	public delegate IEnumerable< PortData > CustomPortTypeBehaviorDelegate(string fieldName, string displayName, object value);
 	
+	[System.Serializable]
 	public abstract class BaseNode
 	{
 		[HideInInspector]

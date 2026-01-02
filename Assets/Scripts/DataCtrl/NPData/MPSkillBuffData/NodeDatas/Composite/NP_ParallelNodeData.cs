@@ -1,6 +1,7 @@
 
 namespace Ebonor.DataCtrl
 {
+    [System.Serializable]
     public class NP_ParallelNodeData: NP_NodeDataBase
     {
         private Parallel m_ParallelNode;

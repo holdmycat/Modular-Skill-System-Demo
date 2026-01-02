@@ -5,7 +5,9 @@ namespace Ebonor.DataCtrl
     {
         CommanderBootstrapInfo GetCommanderBootstrapInfo();
         CommanderBootstrapInfo GetPlayerCommanderBootstrapInfo();
-        
+
+        GameSceneResource GetSceneResource();
+
     }
 }
 

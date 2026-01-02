@@ -27,9 +27,46 @@ namespace Ebonor.GamePlay
             _showcaseContext = showcaseContext;
         }
         
-        public override void InitAsync()
+        private UnityEngine.GameObject _debugVisual;
+        private UnityEngine.Transform _debugRoot;
+
+        public void SetDebugVisualRoot(UnityEngine.Transform root)
+        {
+            _debugRoot = root;
+            if (_debugVisual != null)
+            {
+                log.Info($"[ClientCommander] Reparenting Visual {_debugVisual.name} to Root {root.name}");
+                _debugVisual.transform.SetParent(_debugRoot);
+            }
+        }
+
+        public override async void InitAsync()
         {
             log.Info($"[ClientCommander] InitAsync");
+            
+#if UNITY_EDITOR
+            if (_globalGameConfig != null && _globalGameConfig.IsDebugVisualsEnabled && _globalGameConfig.ShowCommanderVisual)
+            {
+                var prefab = await UnityEngine.Resources.LoadAsync<UnityEngine.GameObject>("Models/DebugCommander") as UnityEngine.GameObject;
+                if (prefab != null)
+                {
+                   log.Info($"[ClientCommander] Instantiating Debug Visual for NetId {NetId}");
+                   _debugVisual = UnityEngine.Object.Instantiate(prefab);
+                   if (_debugRoot != null)
+                   {
+                       _debugVisual.transform.SetParent(_debugRoot);
+                   }
+                   _debugVisual.transform.position = Position;
+                   _debugVisual.transform.rotation = Rotation;
+                   _debugVisual.name = $"Cmd_{Faction}_{NetId}";
+                   log.Info($"[ClientCommander] Debug Visual Created: {_debugVisual.name}");
+                }
+                else
+                {
+                    log.Warn("[ClientCommander] Failed to load DebugCommander prefab.");
+                }
+            }
+#endif
         }
         
         protected override void InitializeNumeric()
@@ -59,11 +96,17 @@ namespace Ebonor.GamePlay
                     log.Error($"[ClientCommander] Squad Data not found for id {squadPayload.SquadId}");
                     return;
                 }
+
+                var unitData = _characterDataRepository.GetSlgUnitData(squadData.UnitId);
                 
                 var squad = _squadFactory.Create();
-                squad.Configure(spawnMsg.NetId, squadData, squadPayload.Faction, false);
+                squad.Configure(spawnMsg.NetId, squadData, unitData, squadPayload.Faction, false);
+                // Pass debug root to squad
+                squad.SetDebugVisualRoot(_debugRoot);
+                
                 squad.InitAsync();
                 _spawnedSquads.Add(squad);
+                RecalculateSquadPositions();
                 
                 log.Info($"[ClientCommander] Spawned Squad {squad.NetId}");
                 
@@ -76,6 +119,13 @@ namespace Ebonor.GamePlay
         public override async UniTask  ShutdownAsync()
         {
             log.Info($"[ClientCommander] ShutdownAsync");
+            
+            if (_debugVisual != null)
+            {
+                log.Info($"[ClientCommander] Destroying Debug Visual {_debugVisual.name}");
+                UnityEngine.Object.Destroy(_debugVisual);
+                _debugVisual = null;
+            }
             
             // Unregister Data
             if (_showcaseContext != null)
@@ -102,6 +152,12 @@ namespace Ebonor.GamePlay
         
         public override void OnUpdate()
         {
+            if (_globalGameConfig != null && _globalGameConfig.IsDebugVisualsEnabled && _globalGameConfig.ShowCommanderVisual && _debugVisual != null)
+            {
+                 _debugVisual.transform.position = Position;
+                 _debugVisual.transform.rotation = Rotation;
+            }
+
             for (var i = 0; i < _spawnedSquads.Count; i++)
             {
                 _spawnedSquads[i].OnUpdate();

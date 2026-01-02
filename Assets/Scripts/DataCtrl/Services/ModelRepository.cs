@@ -46,17 +46,44 @@ namespace Ebonor.DataCtrl
 
                 var unitAttr = variable.Value;
                 
-                if (!_dicModelName.TryGetValue(unitAttr.UnitName, out var model))
+                bool found = false;
+                
+                // Check exact match first
+                if (_dicModelName.TryGetValue(unitAttr.UnitName, out var model))
                 {
-                    log.ErrorFormat("[ModelRepository] Fatal error, unitName:{0} not exist", unitAttr.UnitName);
-                    return;
+                    if (!_dicGameModel.ContainsKey(modelId))
+                    {
+                        _dicGameModel.Add(modelId, model);
+                    }
+                    found = true;
                 }
-                
+                else
+                {
+                    // Check Faction Suffixes
+                    foreach (FactionType faction in Enum.GetValues(typeof(FactionType)))
+                    {
+                        string suffixedName = $"{unitAttr.UnitName}_{faction}";
+                        if (_dicModelName.TryGetValue(suffixedName, out var factionModel))
+                        {
+                            if (!_dicGameModel.ContainsKey(modelId))
+                            {
+                                _dicGameModel.Add(modelId, factionModel);
+                            }
+                            found = true;
+                            // found at least one variant, mark as found. 
+                            // We construct the map with *one* of them to avoid ID collision.
+                        }
+                    }
+                }
 
-                _dicGameModel.Add(modelId, model);
-                
-                log.InfoFormat("[ModelRepository], modelId:{0}, ModelName:{1}", unitAttr.UnitDataNodeId, unitAttr.UnitName);
-                
+                if (!found)
+                {
+                    // Just continue, no fatal error block.
+                    // log.WarnFormat("[ModelRepository] UnitName:{0} not found (checked suffixes).", unitAttr.UnitName);
+                    continue;
+                }
+
+                log.InfoFormat("[ModelRepository], modelId:{0}, ModelName:{1}, Found Valid Model", unitAttr.UnitDataNodeId, unitAttr.UnitName);
             }
             
             

@@ -49,6 +49,7 @@ namespace GraphProcessor
 		public Vector3 scale;
 	}
 
+	//public virtual funs
 	public partial class BaseGraph : ScriptableObject, ISerializationCallbackReceiver
 	{
 		
@@ -76,7 +77,7 @@ namespace GraphProcessor
 	}
 	
 	//system
-	public partial class BaseGraph : ScriptableObject
+	public partial class BaseGraph : ScriptableObject,ISerializationCallbackReceiver
 	{
 		static readonly int			maxComputeOrderDepth = 1000;
 		

@@ -101,8 +101,8 @@ namespace Ebonor.DataCtrl
     public enum CombatPositionType
     {
         Melee = 0,
-        MidRange = 1,
-        Ranged = 2
+        // MidRange = 1,
+        Ranged = 1
     }
 
     public enum UnitClassType

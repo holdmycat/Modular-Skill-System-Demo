@@ -14,24 +14,64 @@ namespace Ebonor.DataCtrl
     /// <summary>
     /// Canvas data manager for editor use, including blackboard, event, and ID mappings.
     /// </summary>
-    public class NP_BlackBoardDataManager
+    [System.Serializable]
+    public class NP_BlackBoardDataManager : ISerializationCallbackReceiver
     {
-        [Header("Blackboard Entries")]
-        [Tooltip("All blackboard entries for this NPBehave canvas. Key: string, Value: NP_BBValue subtype.")]
+        // Runtime/Logical Storage
         public Dictionary<string, ANP_BBValue> BBValues = new Dictionary<string, ANP_BBValue>();
-        
-        [Header("Event Names")]
-        [Tooltip("All event names referenced by this NPBehave canvas.")]
         public List<string> EventValues = new List<string>();
-        
-        [Header("Id Mappings")]
-        [Tooltip("Mapping of ID descriptions to their numeric values.")]
         public Dictionary<string,long> Ids = new Dictionary<string, long>();
 
+        // Serialization Backing Fields
+        [SerializeField] private List<string> _bbValueKeys = new List<string>();
+        [SerializeReference] private List<ANP_BBValue> _bbValueValues = new List<ANP_BBValue>(); // Polymorphic serialization for ANP_BBValue
+
+        [SerializeField] private List<string> _idKeys = new List<string>();
+        [SerializeField] private List<long> _idValues = new List<long>();
+
+        public void OnBeforeSerialize()
+        {
+            _bbValueKeys.Clear();
+            _bbValueValues.Clear();
+            foreach (var kvp in BBValues)
+            {
+                _bbValueKeys.Add(kvp.Key);
+                _bbValueValues.Add(kvp.Value);
+            }
+
+            _idKeys.Clear();
+            _idValues.Clear();
+            foreach (var kvp in Ids)
+            {
+                _idKeys.Add(kvp.Key);
+                _idValues.Add(kvp.Value);
+            }
+        }
+
+        public void OnAfterDeserialize()
+        {
+            BBValues.Clear();
+            if (_bbValueKeys.Count == _bbValueValues.Count)
+            {
+                for (int i = 0; i < _bbValueKeys.Count; i++)
+                {
+                    if (!string.IsNullOrEmpty(_bbValueKeys[i]) && _bbValueValues[i] != null)
+                        BBValues[_bbValueKeys[i]] = _bbValueValues[i];
+                }
+            }
+
+            Ids.Clear();
+            if (_idKeys.Count == _idValues.Count)
+            {
+                for (int i = 0; i < _idKeys.Count; i++)
+                {
+                    if (!string.IsNullOrEmpty(_idKeys[i]))
+                        Ids[_idKeys[i]] = _idValues[i];
+                }
+            }
+        }
+
 #if UNITY_EDITOR
-        /// <summary>
-        /// Set by the GraphEditor when the Blackboard button is clicked.
-        /// </summary>
         public static NP_BlackBoardDataManager CurrentEditedNP_BlackBoardDataManager;
 #endif
     }

@@ -26,6 +26,9 @@ namespace Ebonor.GamePlay
         protected ICharacterDataRepository _characterDataRepository;
         
         public FactionType Faction { get; protected set; } = FactionType.Neutral;
+
+        public Vector3 Position { get; set; }
+        public Quaternion Rotation { get; set; } = Quaternion.identity;
         
         /// <summary>
         /// Initialize the numeric component specific to this entity type.

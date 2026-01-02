@@ -9,11 +9,14 @@ namespace Ebonor.GamePlay
     {
         private static readonly ILog log = LogManager.GetLogger(typeof(ClientSquad));
 
+        private ResourceLoader _resourceLoader;
+
         [Inject]
         public ClientSquad(
             INetworkBus networkBus, 
             IDataLoaderService dataLoaderService, 
             ICharacterDataRepository characterDataRepository,
+            ResourceLoader resourceLoader,
             CommanderContextData contextData, ShowcaseContext showcaseContext)
         {
             log.Info($"[ClientSquad] Construction");
@@ -21,6 +24,7 @@ namespace Ebonor.GamePlay
             _networkBus = networkBus;
             _characterDataRepository = characterDataRepository;
             _dataLoaderService = dataLoaderService;
+            _resourceLoader = resourceLoader;
             _showcaseContext = showcaseContext;
             _contextData = contextData;
             _faction = contextData.Faction;
@@ -71,7 +75,43 @@ namespace Ebonor.GamePlay
 #endif
             
             //Load Squad Solider
+            LoadSoldierVisuals().Forget();
+        }
+
+        private UnityEngine.GameObject _visualsRoot;
+
+        private async UniTaskVoid LoadSoldierVisuals()
+        {
+            if (_unitAttr == null)
+            {
+                log.Warn($"[ClientSquad] UnitAttr is null, cannot load soldiers.");
+                return;
+            }
+
+            string avatar = _unitAttr.UnitAvatar;
+            log.Info($"[ClientSquad] Loading Soldier Model: {avatar} for Unit: {_unitAttr.UnitName}");
+
+            var avatarName = avatar + "_" + _faction;
             
+            var prefab = await _resourceLoader.LoadAsset<UnityEngine.GameObject>(avatarName, ResourceAssetType.HeroModelPrefab);
+            if (prefab == null)
+            {
+                log.Error($"[ClientSquad] Failed to load soldier model: {avatarName}");
+                return;
+            }
+
+            _visualsRoot = new UnityEngine.GameObject($"Visuals_{_faction}_{_unitAttr.UnitName}_{NetId}");
+            _visualsRoot.transform.position = Position;
+            _visualsRoot.transform.rotation = Rotation;
+
+            int count = GetInitialCount();
+            for (int i = 0; i < count; i++)
+            {
+                var soldier = UnityEngine.Object.Instantiate(prefab, _visualsRoot.transform);
+                soldier.transform.localPosition = GetSoldierLocalPosition(i);
+                soldier.transform.localRotation = UnityEngine.Quaternion.identity;
+            }
+            log.Info($"[ClientSquad] Loaded {count} soldiers.");
         }
 
         protected override void InitializeNumeric()
@@ -96,6 +136,12 @@ namespace Ebonor.GamePlay
                 _debugVisual = null;
             }
 
+            if (_visualsRoot != null)
+            {
+                UnityEngine.Object.Destroy(_visualsRoot);
+                _visualsRoot = null;
+            }
+
             await base.ShutdownAsync();
         }
         
@@ -110,6 +156,12 @@ namespace Ebonor.GamePlay
              {
                   _debugVisual.transform.position = Position;
                   _debugVisual.transform.rotation = Rotation;
+             }
+             
+             if (_visualsRoot != null)
+             {
+                 _visualsRoot.transform.position = Position;
+                 _visualsRoot.transform.rotation = Rotation;
              }
         }
         

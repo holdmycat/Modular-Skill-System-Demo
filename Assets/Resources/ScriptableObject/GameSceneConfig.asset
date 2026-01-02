@@ -27,8 +27,8 @@ MonoBehaviour:
     IsDebugUIName: 1
     FactionSpawnPoints:
     - Faction: 1
-      SpawnPosition: {x: 0, y: 0, z: -3}
+      SpawnPosition: {x: 0, y: 0, z: -2}
       SpawnRotation: {x: 0, y: 0, z: 0}
     - Faction: 3
-      SpawnPosition: {x: 0, y: 0, z: 3}
+      SpawnPosition: {x: 0, y: 0, z: 2}
       SpawnRotation: {x: 0, y: 180, z: 0}

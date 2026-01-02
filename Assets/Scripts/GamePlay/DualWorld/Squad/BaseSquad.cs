@@ -64,33 +64,26 @@ namespace Ebonor.GamePlay
 
              int maxRow = _globalGameConfig.SlgSquadMaxRowSize;
              if (maxRow <= 0) maxRow = 1;
+             
+             int totalCount = GetInitialCount();
 
              // Which row?
              int row = index / maxRow;
              // Which col in that row?
              int col = index % maxRow;
              
-             // Calculate row width for centering
-             // Usually full rows have maxRow. Last row might have remainder.
-             // But usually soldiers fill from front-center? Or front-left?
-             // Assuming Standard Centered Grid.
-             // We verify if this row is full?
-             // Actually, a simple grid usually aligns columns.
-             // If we want "Center, Left, Right" fill, that's different.
-             // "Squad arrangement" had strict Center-Left-Right rules.
-             // "Soldier arrangement" said "Each row based on MaxRowSize".
-             // I will use standard grid centering.
+             // Calculate how many items are in this specific row
+             // If this is a full row, it's maxRow.
+             // If it's the last row, it's the remainder (or maxRow if exact multiple).
+             // Math.Min(maxRow, RemainingItems)
+             // Remaining items starting from this row's start index:
+             int startIndex = row * maxRow;
+             int countInRow = Mathf.Min(maxRow, totalCount - startIndex);
              
-             // Full width for X offset calculation?
-             // If we want columns to align across rows, we should use fixed column positions.
-             // e.g. Col 0 is Center? Or Col 0 is Left?
-             // "MaxRowSize" implies width.
-             // Let's assume standard alignment:
-             // X = (col - (maxRow - 1) / 2.0f) * IntervalX
-             // This centers the grid relative to Squad Center.
-             
-             float xOffset = (col - (maxRow - 1) * 0.5f) * _globalGameConfig.SlgSoldierInterval.x;
-             float zOffset = -row * _globalGameConfig.SlgSoldierInterval.y; // Y in Vector2 is Z interval
+             // Center based on the actual count in this row
+             // X = (col - (count - 1) / 2.0f) * IntervalX
+             float xOffset = (col - (countInRow - 1) * 0.5f) * _globalGameConfig.SlgSoldierInterval.x;
+             float zOffset = -row * _globalGameConfig.SlgSoldierInterval.y;
 
              return new Vector3(xOffset, 0, zOffset);
         }

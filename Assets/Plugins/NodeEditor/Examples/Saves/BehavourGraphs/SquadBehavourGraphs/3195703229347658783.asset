@@ -17,13 +17,16 @@ MonoBehaviour:
     nodes:
     - type: Plugins.NodeEditor.NP_RootNode, NodeGraphProcessor.Examples, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-      jsonDatas: '{"nodeCustomName":"","GUID":"11f086f0-5b71-43b6-8f23-9decc2a959bc","computeOrder":0,"position":{"serializedVersion":"2","x":251.0,"y":67.0,"width":100.0,"height":100.0},"expanded":false,"debug":false,"nodeLock":false,"Level":0}'
+      jsonDatas: '{"nodeCustomName":"","GUID":"11f086f0-5b71-43b6-8f23-9decc2a959bc","computeOrder":0,"position":{"serializedVersion":"2","x":71.5,"y":67.0,"width":0.0,"height":0.0},"expanded":false,"debug":false,"nodeLock":false,"Level":0,"MRootNodeData":{"id":3195703229347658783,"LinkedIds":[3256370107051474946],"NodeDes":""}}'
     - type: Plugins.NodeEditor.NP_SequenceNode, NodeGraphProcessor.Examples, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-      jsonDatas: '{"nodeCustomName":"","GUID":"79c228ff-b22f-40aa-8ecc-f16d18226ced","computeOrder":1,"position":{"serializedVersion":"2","x":251.0,"y":191.0,"width":113.0,"height":85.0},"expanded":false,"debug":false,"nodeLock":false,"Level":0}'
+      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"79c228ff-b22f-40aa-8ecc-f16d18226ced\",\"computeOrder\":1,\"position\":{\"serializedVersion\":\"2\",\"x\":82.5,\"y\":192.0,\"width\":0.0,\"height\":0.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NP_SequenceNodeData\":{\"id\":3256370107051474946,\"LinkedIds\":[3256370107051474945],\"NodeDes\":\"\u5E8F\u5217\u7EC4\u5408\u5668\"}}"
     - type: Plugins.NodeEditor.NP_PrintDebugLogNode, NodeGraphProcessor.Examples,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      jsonDatas: '{"nodeCustomName":"","GUID":"340f44c1-ed30-4eae-98b6-044d07bae9c1","computeOrder":2,"position":{"serializedVersion":"2","x":221.0,"y":350.8800048828125,"width":114.0,"height":75.0},"expanded":false,"debug":false,"nodeLock":false,"Level":0}'
+      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"340f44c1-ed30-4eae-98b6-044d07bae9c1\",\"computeOrder\":2,\"position\":{\"serializedVersion\":\"2\",\"x\":0.0,\"y\":327.0,\"width\":0.0,\"height\":0.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NP_ActionNodeData\":{\"id\":3256370107051474945,\"LinkedIds\":[],\"NodeDes\":\"\u6253\u5370\u65E5\u5FD7\",\"NpClassForStoreAction\":{\"rid\":1000}},\"references\":{\"version\":2,\"RefIds\":[{\"rid\":1000,\"type\":{\"class\":\"NP_PrintDebugLog\",\"ns\":\"Ebonor.GamePlay\",\"asm\":\"Ebonor.GamePlay\"},\"data\":{\"BelongToUnit\":0,\"BelongtoRuntimeTree\":{\"instanceID\":0},\"DebugContent\":\"\"}}]}}"
+    - type: Plugins.NodeEditor.NP_PrintDebugLogNode, NodeGraphProcessor.Examples,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"2b12aa00-ad22-4c96-ade2-18be0f7ef0a6\",\"computeOrder\":3,\"position\":{\"serializedVersion\":\"2\",\"x\":164.0,\"y\":327.0,\"width\":0.0,\"height\":0.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NP_ActionNodeData\":{\"id\":0,\"LinkedIds\":[],\"NodeDes\":\"\u6253\u5370\u65E5\u5FD7\",\"NpClassForStoreAction\":{\"rid\":1000}},\"references\":{\"version\":2,\"RefIds\":[{\"rid\":1000,\"type\":{\"class\":\"NP_PrintDebugLog\",\"ns\":\"Ebonor.GamePlay\",\"asm\":\"Ebonor.GamePlay\"},\"data\":{\"BelongToUnit\":0,\"BelongtoRuntimeTree\":{\"instanceID\":0},\"DebugContent\":\"\"}}]}}"
     edges:
     - GUID: 5c71b972-047f-4e98-91db-7c29dbb07f66
       owner: {fileID: 11400000}
@@ -41,12 +44,20 @@ MonoBehaviour:
       outputFieldName: NextNode
       inputPortIdentifier: 
       outputPortIdentifier: 
+    - GUID: e65ac144-89ff-4629-b0e6-043abb040cf3
+      owner: {fileID: 11400000}
+      inputNodeGUID: 2b12aa00-ad22-4c96-ade2-18be0f7ef0a6
+      outputNodeGUID: 79c228ff-b22f-40aa-8ecc-f16d18226ced
+      inputFieldName: PrevNode
+      outputFieldName: NextNode
+      inputPortIdentifier: 
+      outputPortIdentifier: 
     stackNodes: []
     pinnedElements: []
     exposedParameters: []
     stickyNotes: []
-    position: {x: 0, y: -37, z: 0}
-    scale: {x: 1, y: 1, z: 1}
+    position: {x: 240, y: 18, z: 0}
+    scale: {x: 0.8695652, y: 0.8695652, z: 1}
   edges:
   - GUID: 5c71b972-047f-4e98-91db-7c29dbb07f66
     owner: {fileID: 11400000}
@@ -64,15 +75,26 @@ MonoBehaviour:
     outputFieldName: NextNode
     inputPortIdentifier: 
     outputPortIdentifier: 
+  - GUID: e65ac144-89ff-4629-b0e6-043abb040cf3
+    owner: {fileID: 11400000}
+    inputNodeGUID: 2b12aa00-ad22-4c96-ade2-18be0f7ef0a6
+    outputNodeGUID: 79c228ff-b22f-40aa-8ecc-f16d18226ced
+    inputFieldName: PrevNode
+    outputFieldName: NextNode
+    inputPortIdentifier: 
+    outputPortIdentifier: 
   stackNodes: []
   pinnedElements: []
   exposedParameters: []
   serializedParameterList: []
   stickyNotes: []
-  position: {x: 0, y: -37, z: 0}
-  scale: {x: 1, y: 1, z: 1}
+  position: {x: 240, y: 18, z: 0}
+  scale: {x: 0.8695652, y: 0.8695652, z: 1}
   _name: 3195703229347658783
   _configPath: Assets/Resources/AllSquadBehavour
+  _squadBehavourGraphdDataSupportor:
+    NpDataSupportorBase:
+      NPBehaveTreeDataId: 3195703229347658783
   references:
     version: 2
     RefIds: []

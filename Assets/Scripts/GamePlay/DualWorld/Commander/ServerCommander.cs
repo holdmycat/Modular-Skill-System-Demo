@@ -55,9 +55,12 @@ namespace Ebonor.GamePlay
                     log.Error($"[ServerCommander] InitAsync failed to get data for squadId: {squadId}");
                     continue; // Skip if data missing
                 }
+                
+                var slgUnitData = _characterDataRepository.GetSlgUnitData(slgSquadData.UnitId);
+                // If null, we might want a null check, but BaseSquad handles null unitAttr gracefully (default to Melee).
 
                 var squadNetId = _dataLoaderService.NextId();
-                baseSquad.Configure(squadNetId, slgSquadData, _seed.Faction, true);
+                baseSquad.Configure(squadNetId, slgSquadData, slgUnitData, _seed.Faction, true);
                 
                 _spawnedSquads.Add(baseSquad);
                 
@@ -70,6 +73,9 @@ namespace Ebonor.GamePlay
                  
                 SpawnChild(_networkBus, baseSquad, squadPayload, NetworkPrefabType.Squad, true);
             }
+            
+            // Recalculate positions
+            RecalculateSquadPositions();
             
         }
         

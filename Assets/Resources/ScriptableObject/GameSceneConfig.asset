@@ -25,3 +25,10 @@ MonoBehaviour:
       SquadIds: ab24cf1a0799041dcfca8f25f182ab34
     UIName: UIScene_ShowCaseScene
     IsDebugUIName: 1
+    FactionSpawnPoints:
+    - Faction: 1
+      SpawnPosition: {x: 0, y: 0, z: -3}
+      SpawnRotation: {x: 0, y: 0, z: 0}
+    - Faction: 3
+      SpawnPosition: {x: 0, y: 0, z: 3}
+      SpawnRotation: {x: 0, y: 180, z: 0}

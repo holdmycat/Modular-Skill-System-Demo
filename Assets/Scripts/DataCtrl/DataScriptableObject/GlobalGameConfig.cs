@@ -56,5 +56,24 @@ namespace Ebonor.DataCtrl
         [Range(-2f, 2f)]
         public float characterLevelupAddPercent;
 
+        [Header("Debug Visuals")]
+        [Tooltip("Master switch for all debug visuals. If disabled, sub-toggles (Commander, Squad, Soldier) will be ignored.")]
+        public bool IsDebugVisualsEnabled = true;
+        public bool ShowCommanderVisual = true;
+        public bool ShowSquadVisual = true;
+        public bool ShowSoldierVisual = true;
+
+        [Header("SLG Squad Config")]
+        [Tooltip("The dimensions (width, depth) of a single squad in world units.")]
+        public Vector2 SlgSquadDimensions = new Vector2(10f, 10f);
+
+        [Tooltip("The space between squads on the X axis.")]
+        public float SlgSquadInterval = 5f;
+
+        [Tooltip("Max number of soldiers per row in a squad.")]
+        public int SlgSquadMaxRowSize = 5;
+
+        [Tooltip("Interval between soldiers (X, Z).")]
+        public Vector2 SlgSoldierInterval = new Vector2(1f, 1f);
     }
 }

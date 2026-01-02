@@ -21,7 +21,18 @@ namespace Ebonor.DataCtrl
         public string UIName;
         
         public bool IsDebugUIName;
-        
+
+        [Header("Spawn Settings")]
+        [Tooltip("The world position where the Commander (and thus the Legion) will spawn.")]
+        public List<FactionSpawnPoint> FactionSpawnPoints;
+    }
+
+    [System.Serializable]
+    public struct FactionSpawnPoint
+    {
+        public FactionType Faction;
+        public Vector3 SpawnPosition;
+        public Vector3 SpawnRotation;
     }
     
     [CreateAssetMenu(menuName = "Ebonor/Config/Game Scene Config", fileName = "GameSceneConfig")]

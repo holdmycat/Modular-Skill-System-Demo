@@ -31,7 +31,7 @@ namespace Ebonor.GamePlay
 
         public virtual async UniTask ShutdownAsync()
         {
-            
+            await UniTask.CompletedTask;
         }
 
         public virtual void Tick(int tick)

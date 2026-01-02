@@ -38,17 +38,5 @@ namespace Ebonor.DataCtrl
             return this.m_Service;
         }
         
-        public override Decorator CreateNGDecoratorNode<T>(string unit, T runtimeTree, Clock clock, Node node)
-        {
-            this.NpClassForStoreAction.SetNGRuntimeTree<T>(unit, runtimeTree);
-            if(IsSelfSetInterval){
-                this.m_Service = new Service(interval, this.NpClassForStoreAction.GetActionToBeDone(), node);
-            }
-            else {
-                this.m_Service = new Service(NpClassForStoreAction, node);
-            }
-            
-            return this.m_Service;
-        }
     }
 }

@@ -23,14 +23,6 @@ namespace Ebonor.DataCtrl
             return this.m_ActionNode;
         }
 
-        public override Task CreateNGTask<T>(string uId, T runtimeTree)
-        {
-            this.NpClassForStoreAction.SetNGRuntimeTree(uId, runtimeTree);
-            this.m_ActionNode = this.NpClassForStoreAction._CreateNPBehaveAction();
-            return this.m_ActionNode;
-        }
-        
-        
         
         public override Node NP_GetNode()
         {

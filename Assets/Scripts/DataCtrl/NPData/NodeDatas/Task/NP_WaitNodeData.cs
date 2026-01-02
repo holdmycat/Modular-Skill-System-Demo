@@ -18,13 +18,6 @@ namespace Ebonor.DataCtrl
             this.m_WaitNode = new Wait(this.NPBalckBoardRelationData.BBKey);
             return this.m_WaitNode;
         }
-
-        public override Task CreateNGTask<T>(string uId, T runtimeTree)
-        {
-            this.m_WaitNode = new Wait(this.NPBalckBoardRelationData.BBKey);
-            return this.m_WaitNode;
-        }
-       
         
         public override Node NP_GetNode()
         {

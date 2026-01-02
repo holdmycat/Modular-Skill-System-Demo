@@ -46,8 +46,6 @@ namespace Ebonor.DataCtrl
         {
             return null;
         }
-
-      
         
         /// <summary>
         /// Create a task node.
@@ -57,20 +55,6 @@ namespace Ebonor.DataCtrl
             return null;
         }
         
-        /// <summary>
-        /// Create a decorator node for NG systems.
-        /// </summary>
-        public virtual Decorator CreateNGDecoratorNode<T>(string unit, T runtimeTree, Clock clock, Node node) where T : MonoBehaviour
-        {
-            return null;
-        }
-
-        /// <summary>
-        /// Create a task node for NG systems.
-        /// </summary>
-        public virtual Task CreateNGTask<T>(string uId, T runtimeTree) where T : MonoBehaviour
-        {
-            return null;
-        }
+        
     }
 }

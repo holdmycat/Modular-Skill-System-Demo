@@ -20,14 +20,7 @@ namespace Ebonor.DataCtrl
             
             return m_Root;
         }
-
-        public override Decorator CreateNGDecoratorNode<T>(string unit, T runtimeTree, Clock clock, Node node)
-        {
-            m_Root = new Root(node, clock);
-            
-            return m_Root;
-        }
-
+        
         public override Node NP_GetNode()
         {
             return this.m_Root;

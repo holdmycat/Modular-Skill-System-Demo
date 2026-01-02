@@ -26,14 +26,7 @@ namespace Ebonor.DataCtrl
             return this.m_BlackboardConditionNode;
         }
 
-        public override Decorator CreateNGDecoratorNode<T>(string unit, T runtimeTree, Clock clock, Node node)
-        {
-            this.m_BlackboardConditionNode = new BlackboardCondition(this.NPBalckBoardRelationData.BBKey,
-                this.Ope,
-                this.NPBalckBoardRelationData.NP_BBValue, this.Stop, node);
-            // value ， value 
-            return this.m_BlackboardConditionNode;
-        }
+       
         
         public override Node NP_GetNode()
         {

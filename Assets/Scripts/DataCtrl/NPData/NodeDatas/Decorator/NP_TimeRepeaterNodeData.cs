@@ -24,12 +24,6 @@ namespace Ebonor.DataCtrl
             this.m_Repeater = new TimeRepeater(Interval, node);
             return this.m_Repeater;
         }
-
-        public override Decorator CreateNGDecoratorNode<T>(string unit, T runtimeTree, Clock clock, Node node)
-        {
-            this.m_Repeater = new TimeRepeater(Interval, node);
-            return this.m_Repeater;
-        }
-
+        
     }
 }

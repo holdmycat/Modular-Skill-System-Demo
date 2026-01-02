@@ -22,11 +22,7 @@ namespace Ebonor.DataCtrl
             return this.m_WaitUntilStopped;
         }
 
-        public override Task CreateNGTask<T>(string uId, T runtimeTree)
-        {
-            this.m_WaitUntilStopped = new WaitUntilStopped();
-            return this.m_WaitUntilStopped;
-        }
+
       
     }
 }

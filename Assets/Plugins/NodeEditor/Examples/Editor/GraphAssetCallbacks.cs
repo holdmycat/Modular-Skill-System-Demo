@@ -30,6 +30,13 @@ namespace Plugins.NodeEditor
             ProjectWindowUtil.CreateAsset(graph, "AllSlgCommanderAttrDataGraph.asset");
         }
         
+        [MenuItem("Assets/Create/Behavour/SlgSquadBehavourGraph", false, 10)]
+        public static void CreateGraphPorcessor_NpcBehaviour()
+        {
+            var graph = ScriptableObject.CreateInstance<SlgSquadBehavourGraph>();
+            ProjectWindowUtil.CreateAsset(graph, "SlgSquadBehavourGraph.asset");
+        }
+        
         
         // [MenuItem("Assets/Create/AllWeaponAttributesData", false, 10)]
         // public static void CreateGraphPorcessor_AllWeaponAttributesData()
@@ -90,6 +97,12 @@ namespace Plugins.NodeEditor
                     NodeGraphWindowHelper.GetAndShowNodeGraphWindow<SlgCommanderAttributesDataGraphWindow>(slgCommanderGraph)
                         .InitializeGraph(slgCommanderGraph);
                     return true;
+                
+                case SlgSquadBehavourGraph slgSquadBehavourGraph:
+                    NodeGraphWindowHelper.GetAndShowNodeGraphWindow<SlgSquadBehavourGraphWindow>(slgSquadBehavourGraph)
+                        .InitializeGraph(slgSquadBehavourGraph);
+                    return true;
+                
                 default:
                     NodeGraphWindowHelper.GetAndShowNodeGraphWindow<FallbackGraphWindow>(baseGraph)
                         .InitializeGraph(baseGraph);

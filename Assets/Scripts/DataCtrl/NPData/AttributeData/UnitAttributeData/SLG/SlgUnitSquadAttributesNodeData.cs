@@ -3,6 +3,7 @@
 // Purpose: Squad-level default spawn attributes for each unit type.
 //------------------------------------------------------------
 
+using System;
 using System.Collections.Generic;
 using MongoDB.Bson.Serialization.Attributes;
 using UnityEngine;
@@ -59,10 +60,15 @@ namespace Ebonor.DataCtrl
         [BsonElement("SpawnYaw")]
         public float SpawnYaw;
 
+        [Tooltip("行为树ID")]
+        [BsonElement("BehaviorTreeId")]
+        public long BehaviorTreeId;
+
         public virtual string BuildRoleKey()
         {
             return $"{UnitId}_{Formation}_{MaxCount}";
         }
+
 
         public virtual long GenerateRoleIdFromData()
         {
@@ -71,6 +77,19 @@ namespace Ebonor.DataCtrl
             if (id < 0) 
                 id = 0;
             UnitDataNodeId= id;
+            return id;
+        }
+
+        public virtual string BuildBehaviorTreeKey()
+        {
+            return $"BT_{UnitId}_{Formation}_{UnitLv}_{InitialCount}_{MaxCount}";
+        }
+
+        public virtual long BuildBehaviorTreeId()
+        {
+            long id = GlobalHelper.GetRoleID(BuildBehaviorTreeKey());
+            if (id <= 0) id = 1;
+            BehaviorTreeId = id;
             return id;
         }
 
@@ -93,7 +112,8 @@ namespace Ebonor.DataCtrl
             "UnitName",
             "UnitId",
             "UnitLv",
-            "Formation"
+            "Formation",
+            "BehaviorTreeId"
         };
 
         private static readonly string[] CountProperties =
@@ -124,7 +144,9 @@ namespace Ebonor.DataCtrl
             height += EditorGUIUtility.standardVerticalSpacing;
             height += GetGroupedHeight(property, GetActiveTabProperties(property.propertyPath));
             height += EditorGUIUtility.standardVerticalSpacing;
-            height += EditorGUIUtility.singleLineHeight; // buttons
+            height += EditorGUIUtility.singleLineHeight; // buttons (Row 1)
+            height += EditorGUIUtility.standardVerticalSpacing;
+            height += EditorGUIUtility.singleLineHeight; // buttons (Row 2)
             return height;
         }
 
@@ -183,7 +205,7 @@ namespace Ebonor.DataCtrl
                 if (child == null) continue;
                 float h = EditorGUI.GetPropertyHeight(child, true);
                 Rect r = new Rect(fullPosition.x, y, fullPosition.width, h);
-                bool readonlyId = name == "UnitDataNodeId";
+                bool readonlyId = name == "UnitDataNodeId" || name == "BehaviorTreeId";
                 if (readonlyId) EditorGUI.BeginDisabledGroup(true);
                 EditorGUI.PropertyField(r, child, true);
                 if (readonlyId) EditorGUI.EndDisabledGroup();
@@ -196,7 +218,7 @@ namespace Ebonor.DataCtrl
         {
             return GUI.Toolbar(rect, currentIndex, TabTitles);
         }
-
+        
         private static IReadOnlyList<string> GetActiveTabProperties(string key)
         {
             int idx = GetTabIndex(key);
@@ -220,13 +242,14 @@ namespace Ebonor.DataCtrl
 
         private static void DrawActionButtons(Rect fullPosition, float startY, SerializedProperty property)
         {
-            Rect row = EditorGUI.IndentedRect(new Rect(fullPosition.x, startY, fullPosition.width, EditorGUIUtility.singleLineHeight));
-            float buttonWidth = (row.width - 4f) / 2f;
+            // Row 1: Squad ID Buttons
+            Rect row1 = EditorGUI.IndentedRect(new Rect(fullPosition.x, startY, fullPosition.width, EditorGUIUtility.singleLineHeight));
+            float buttonWidth = (row1.width - 4f) / 2f;
 
-            Rect generateRect = new Rect(row.x, row.y, buttonWidth, row.height);
-            Rect copyRect = new Rect(generateRect.xMax + 4f, row.y, buttonWidth, row.height);
+            Rect genSquadRect = new Rect(row1.x, row1.y, buttonWidth, row1.height);
+            Rect copySquadRect = new Rect(genSquadRect.xMax + 4f, row1.y, buttonWidth, row1.height);
 
-            if (GUI.Button(generateRect, "Generate Squad ID"))
+            if (GUI.Button(genSquadRect, "Generate Squad ID"))
             {
                 property.serializedObject.ApplyModifiedProperties();
                 property.serializedObject.Update();
@@ -235,13 +258,44 @@ namespace Ebonor.DataCtrl
                 property.serializedObject.ApplyModifiedProperties();
             }
 
-            if (GUI.Button(copyRect, "Copy Squad ID"))
+            if (GUI.Button(copySquadRect, "Copy Squad ID"))
             {
                 var idProp = property.FindPropertyRelative("UnitDataNodeId");
                 if (idProp != null)
                 {
                     EditorGUIUtility.systemCopyBuffer = idProp.longValue.ToString();
                     Debug.Log($"Copied squad id: {EditorGUIUtility.systemCopyBuffer}");
+                }
+            }
+
+            // Row 2: Behavior Tree ID Buttons
+            float y2 = row1.yMax + EditorGUIUtility.standardVerticalSpacing;
+            Rect row2 = EditorGUI.IndentedRect(new Rect(fullPosition.x, y2, fullPosition.width, EditorGUIUtility.singleLineHeight));
+
+            Rect genBtRect = new Rect(row2.x, row2.y, buttonWidth, row2.height);
+            Rect copyBtRect = new Rect(genBtRect.xMax + 4f, row2.y, buttonWidth, row2.height);
+
+            if (GUI.Button(genBtRect, "Generate BT ID"))
+            {
+                property.serializedObject.ApplyModifiedProperties();
+                property.serializedObject.Update();
+                long generatedId = BuildBehaviorTreeId(property);
+                var btProp = property.FindPropertyRelative("BehaviorTreeId");
+                if (btProp != null)
+                {
+                    btProp.longValue = generatedId;
+                    Debug.Log($"Generated Behavior Tree ID: {generatedId}");
+                }
+                property.serializedObject.ApplyModifiedProperties();
+            }
+
+            if (GUI.Button(copyBtRect, "Copy BT ID"))
+            {
+                var btProp = property.FindPropertyRelative("BehaviorTreeId");
+                if (btProp != null)
+                {
+                    EditorGUIUtility.systemCopyBuffer = btProp.longValue.ToString();
+                    Debug.Log($"Copied Behavior Tree ID: {EditorGUIUtility.systemCopyBuffer}");
                 }
             }
         }
@@ -265,6 +319,25 @@ namespace Ebonor.DataCtrl
             int maxCount = property.FindPropertyRelative("MaxCount")?.intValue ?? 0;
             return $"{unitId}_{formation}_{maxCount}";
         }
+        
+        private static long BuildBehaviorTreeId(SerializedProperty property)
+        {
+            string key = BuildBehaviorTreeKey(property);
+            long id = GlobalHelper.GetRoleID(key);
+            return id <= 0 ? 1 : id;
+        }
+
+        private static string BuildBehaviorTreeKey(SerializedProperty property)
+        {
+            long unitId = property.FindPropertyRelative("UnitId")?.longValue ?? 0;
+            string formation = property.FindPropertyRelative("Formation")?.stringValue ?? "Default";
+            int unitLv = property.FindPropertyRelative("UnitLv")?.intValue ?? 0;
+            int initialCount = property.FindPropertyRelative("InitialCount")?.intValue ?? 0;
+            int maxCount = property.FindPropertyRelative("MaxCount")?.intValue ?? 0;
+            
+            return $"BT_{unitId}_{formation}_{unitLv}_{initialCount}_{maxCount}";
+        }
+        
     }
 #endif
 }

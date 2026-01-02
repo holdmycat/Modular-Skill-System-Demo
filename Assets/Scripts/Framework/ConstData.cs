@@ -25,6 +25,11 @@ namespace Ebonor.Framework
         public const string BB_ISTARGETWITHINNPCATTACKRADIUS= "IsTargetWithinNpcAttackRadius";
         
         public const string BB_ISTreeStoped = "IsTreeStoped";
+
+        public const string BELONGTOSKILLID = "BelongToSkillId";
+        
+        public const string PATH_SLGSQUADBEHAVOUR = "Assets/Resources/AllSquadBehavour";
+        
         #endregion
         
         #region ui const

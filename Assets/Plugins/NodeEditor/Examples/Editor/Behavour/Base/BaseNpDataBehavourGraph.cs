@@ -13,12 +13,12 @@ namespace Plugins.NodeEditor
     /// </summary>
     public abstract partial class BaseNpDataBehavourGraph : BaseGraph
     {
-        [Header("本Canvas所有数据整理部分")] 
-        [Tooltip("保存文件名(技能树ID)")]
+        [Header("本Canvas所有数据整理部分 (ReadOnly)")] 
+        [Tooltip("保存文件名(技能树ID) - Auto Set")]
         [SerializeField]
         public string _name;
         
-        [Tooltip("保存路径")]
+        [Tooltip("保存路径 - ReadOnly")]
         [SerializeField]
         protected string _configPath = "Assets/AssetPackages/Res/BattleGraphData/SkillGraphData";
         
@@ -26,6 +26,8 @@ namespace Plugins.NodeEditor
         /// 黑板数据管理器
         /// </summary>
         protected NP_BlackBoardDataManager _npBlackBoardDataManager = new NP_BlackBoardDataManager();
+
+        public NP_BlackBoardDataManager NpBlackBoardDataManager => _npBlackBoardDataManager;
     }
 
     
@@ -127,7 +129,7 @@ namespace Plugins.NodeEditor
         {
             npDataSupportorBase.NP_BBValueManager.Clear();
             //设置黑板数据
-            foreach (var bbvalues in NP_BlackBoardDataManager.CurrentEditedNP_BlackBoardDataManager.BBValues)
+            foreach (var bbvalues in _npBlackBoardDataManager.BBValues)
             {
                 npDataSupportorBase.NP_BBValueManager.Add(bbvalues.Key, bbvalues.Value);
             }

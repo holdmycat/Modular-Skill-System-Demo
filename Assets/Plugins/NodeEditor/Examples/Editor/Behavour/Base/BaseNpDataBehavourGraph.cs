@@ -227,12 +227,26 @@ namespace Plugins.NodeEditor
             }
         }
 
+
+        protected virtual NP_BlackBoardDataManager AddNetPosBB()
+        {
+
+            _npBlackBoardDataManager.BBValues.TryAdd(ConstData.BELONGTOSKILLID, new NP_BBValue_Bool
+            {
+                Value = false,
+            });
+            
+            return _npBlackBoardDataManager;
+        }
+        
+        
         /// <summary>
         /// 连接树节点，设置树黑板数据
         /// </summary>
         /// <param name="isServer"></param>
         protected void AutoSetCanvasDatas(NP_DataSupportorBase supporterBase)
         {
+            AddNetPosBB();
             this.AutoSetNP_NodeData(supporterBase);
             this.AutoSetNP_BBDatas(supporterBase);
         }

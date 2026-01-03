@@ -32,11 +32,7 @@ namespace Ebonor.DataCtrl
 
         private void RegisterBsonMaps()
         {
-            // Copied from DataCtrl.OnLoadMPBattleGraphData
-            
-            if (BsonClassMap.IsClassMapRegistered(typeof(NP_BBValue_Int))) return; // Safety check
-
-            // Basic Types
+            // Basic Types (guard individually; do not early-return to ensure NP node maps are registered)
             if (!BsonClassMap.IsClassMapRegistered(typeof(NP_BBValue_Int))) BsonClassMap.LookupClassMap(typeof(NP_BBValue_Int));
             if (!BsonClassMap.IsClassMapRegistered(typeof(NP_BBValue_Bool))) BsonClassMap.LookupClassMap(typeof(NP_BBValue_Bool));
             if (!BsonClassMap.IsClassMapRegistered(typeof(NP_BBValue_Float))) BsonClassMap.LookupClassMap(typeof(NP_BBValue_Float));
@@ -63,6 +59,7 @@ namespace Ebonor.DataCtrl
 
             // Generated Registers
             AttributesNodeDataSerializerRegister.RegisterClassMaps();
+            NPNodeDataSerializerRegister.RegisterClassMaps();
             GeneratedTypeRegistry.RegisterAllBsonClassMaps();
         }
     }

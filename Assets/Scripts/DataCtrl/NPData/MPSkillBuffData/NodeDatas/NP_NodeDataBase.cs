@@ -5,9 +5,10 @@ using UnityEngine;
 
 namespace Ebonor.DataCtrl
 {
-    [System.Serializable]
-    [BsonDeserializerRegister]
-    public abstract class NP_NodeDataBase
+[System.Serializable]
+[BsonDeserializerRegister]
+[BsonDiscriminator(RootClass = true)]
+public abstract class NP_NodeDataBase
     {
         /// <summary>
         /// 此结点ID

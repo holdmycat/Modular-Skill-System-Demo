@@ -1,0 +1,5 @@
+<linker>
+  <assembly fullname="Assembly-CSharp">
+    <namespace fullname="Ebonor.DataCtrl.NPData.MPSkillBuffData.NodeDatas" preserve="all" />
+  </assembly>
+</linker>

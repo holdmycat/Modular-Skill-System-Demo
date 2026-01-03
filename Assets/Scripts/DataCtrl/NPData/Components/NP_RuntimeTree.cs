@@ -46,16 +46,6 @@ namespace Ebonor.DataCtrl
         /// </summary>
         public NPRuntimeContext Context { get; private set; }
         
-        /// <summary>
-        /// Scene/room identifier.
-        /// </summary>
-        public string RoomId;
-        
-
-        /// <summary>
-        /// Event or support skill index.
-        /// </summary>
-        public int EventSupportSkillIndex;
         
 #if UNITY_EDITOR
         /// <summary>
@@ -223,16 +213,18 @@ namespace Ebonor.DataCtrl
           
         }
 
-        public void OnInitSupportEventRuntimeTree(string _roomoId, uint belongid, uint startId, long _rootId,
-            NP_DataSupportor datasupport, Clock _clock, uint targetid = 0, int index = 0)
-        {
-            EventSupportSkillIndex = index;
-            OnInitRuntimeTree(_roomoId, belongid, startId, _rootId, datasupport, _clock, targetid);
-        }
+      
         
-        public void OnInitRuntimeTree(string _roomoId, uint belongid, uint startId, long _rootId, NP_DataSupportor datasupport, Clock _clock, uint targetid = 0, bool isServer = true, INPRuntimeEntityResolver resolver = null)
+        public void OnInitRuntimeTree(
+            uint belongid, 
+            uint startId, 
+            long _rootId, 
+            NP_DataSupportor datasupport, 
+            Clock _clock, 
+            uint targetid = 0, 
+            bool isServer = true, 
+            INPRuntimeEntityResolver resolver = null)
         {
-            RoomId = _roomoId;
             BelongToUnit = belongid;
             StartToUnit = startId;
             BelongNP_DataSupportor = datasupport;

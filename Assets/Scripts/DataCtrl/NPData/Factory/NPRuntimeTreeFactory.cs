@@ -8,7 +8,6 @@ namespace Ebonor.DataCtrl
 {
     public struct NPRuntimeTreeRequest
     {
-        public string RoomId;
         public uint BelongToUnit;
         public uint StartToUnit;
         public uint TargetToUnit;
@@ -87,11 +86,20 @@ namespace Ebonor.DataCtrl
             {
                 go.transform.SetParent(request.Parent, false);
             }
-
+            
             var runtimeTree = _instantiator.InstantiateComponent<NP_RuntimeTree>(go);
 
             var clock = request.IsServer ? _serverClock : _clientClock;
-            runtimeTree.OnInitRuntimeTree(request.RoomId, request.BelongToUnit, request.StartToUnit, request.RootId, data, clock, request.TargetToUnit, request.IsServer, _resolver);
+            
+            runtimeTree.OnInitRuntimeTree( 
+                request.BelongToUnit, 
+                request.StartToUnit, 
+                request.RootId, 
+                data, 
+                clock, 
+                request.TargetToUnit, 
+                request.IsServer,
+                _resolver);
 
             BuildTree(runtimeTree, data);
 

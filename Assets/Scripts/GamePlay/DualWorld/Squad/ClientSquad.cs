@@ -17,6 +17,8 @@ namespace Ebonor.GamePlay
             IDataLoaderService dataLoaderService, 
             ICharacterDataRepository characterDataRepository,
             ResourceLoader resourceLoader,
+            INPRuntimeTreeFactory npRuntimeTreeFactory,
+            GlobalGameConfig globalGameConfig,
             CommanderContextData contextData, ShowcaseContext showcaseContext)
         {
             log.Info($"[ClientSquad] Construction");
@@ -28,6 +30,8 @@ namespace Ebonor.GamePlay
             _showcaseContext = showcaseContext;
             _contextData = contextData;
             _faction = contextData.Faction;
+            _npRuntimeTreeFactory = npRuntimeTreeFactory;
+            _globalGameConfig = globalGameConfig;
         }
         
 

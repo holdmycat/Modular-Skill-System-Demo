@@ -49,8 +49,6 @@ namespace Ebonor.GamePlay
                 }
             }
             
-            // base.Configure(bootstrapInfo); // MOVED TO END
-            
             // Manual set for local logic usage if needed, though we use param 'bootstrapInfo'
             _bootstrapInfo = bootstrapInfo; 
             
@@ -80,11 +78,17 @@ namespace Ebonor.GamePlay
             
             // Now call base to trigger Numeric Init (which depends on Context)
             InitializeNumeric();
+
+            
             
             _networkBus.RegisterSpawns(NetId, this, isServer);
             
         }
 
+
+       
+        
+        
         public IReadOnlyList<BaseSquad> GetSpawnedSquads()
         {
             return _spawnedSquads;

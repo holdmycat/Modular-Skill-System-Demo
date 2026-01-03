@@ -16,6 +16,7 @@ namespace Ebonor.GamePlay
 
         protected NP_RuntimeTree _npRuntimeTree;
         
+        
         /// <summary>
         /// Bind net id and register to network bus. Call right after construction.
         /// </summary>
@@ -28,22 +29,39 @@ namespace Ebonor.GamePlay
 
             _squadUnitAttr = squadUnitAttr;
             _unitAttr = unitAttr;
-            // Faction is injected
-
+            _isServer = isServer;
             Faction = factionType;
             
             BindId(netId);
            
             InitializeNumeric();
             
+            ConstructBehaviorTree();
+            
             if (_networkBus == null)
             {
                 throw new System.InvalidOperationException("[BaseLegion] Configure failed: network bus is null.");
             }
+            
             _networkBus.RegisterSpawns(NetId, this, isServer);
         }
 
-        [Inject] protected GlobalGameConfig _globalGameConfig;
+        private void ConstructBehaviorTree()
+        {
+            NPRuntimeTreeRequest request = new NPRuntimeTreeRequest
+            {
+                IsServer = _isServer,
+                BelongToUnit = _netId,
+                StartToUnit = _netId,
+                TreeType = RuntimeTreeType.SlgSquadBehavour,
+                RootId = _squadUnitAttr.BehaviorTreeId
+            };
+
+            _npRuntimeTree = _npRuntimeTreeFactory.Create(request);
+        }
+        
+        
+        
 
         public CombatPositionType GetCombatPositionType()
         {

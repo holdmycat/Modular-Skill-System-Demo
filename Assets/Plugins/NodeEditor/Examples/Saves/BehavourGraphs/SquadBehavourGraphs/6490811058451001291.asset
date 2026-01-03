@@ -1,0 +1,193 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c1d87770c085460690ac91049bd7eb4, type: 3}
+  m_Name: 6490811058451001291
+  m_EditorClassIdentifier: 
+  serializedNodes: []
+  serializedGraph:
+    nodes:
+    - type: Plugins.NodeEditor.NP_RootNode, NodeGraphProcessor.Examples, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      jsonDatas: '{"nodeCustomName":"","GUID":"11f086f0-5b71-43b6-8f23-9decc2a959bc","computeOrder":0,"position":{"serializedVersion":"2","x":71.5,"y":67.0,"width":0.0,"height":0.0},"expanded":false,"debug":false,"nodeLock":false,"Level":0,"MRootNodeData":{"id":6490811058451001291,"LinkedIds":[3257605837862010883],"NodeDes":""}}'
+    - type: Plugins.NodeEditor.NP_SequenceNode, NodeGraphProcessor.Examples, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"79c228ff-b22f-40aa-8ecc-f16d18226ced\",\"computeOrder\":1,\"position\":{\"serializedVersion\":\"2\",\"x\":82.5,\"y\":192.0,\"width\":0.0,\"height\":0.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NP_SequenceNodeData\":{\"id\":3257605837862010883,\"LinkedIds\":[3257605837862010881,3257605837862010882],\"NodeDes\":\"\u5E8F\u5217\u7EC4\u5408\u5668\"}}"
+    - type: Plugins.NodeEditor.NP_PrintDebugLogNode, NodeGraphProcessor.Examples,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"340f44c1-ed30-4eae-98b6-044d07bae9c1\",\"computeOrder\":2,\"position\":{\"serializedVersion\":\"2\",\"x\":0.0,\"y\":327.0,\"width\":0.0,\"height\":0.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NP_ActionNodeData\":{\"id\":3257605837862010881,\"LinkedIds\":[],\"NodeDes\":\"\u6253\u5370\u65E5\u5FD7\",\"NpClassForStoreAction\":{\"rid\":1000}},\"references\":{\"version\":2,\"RefIds\":[{\"rid\":1000,\"type\":{\"class\":\"NP_PrintDebugLog\",\"ns\":\"Ebonor.GamePlay\",\"asm\":\"Ebonor.GamePlay\"},\"data\":{\"BelongToUnit\":0,\"DebugContent\":\"Squad
+        Behavior\"}}]}}"
+    - type: Plugins.NodeEditor.NP_WaitUntilStoppedNode, NodeGraphProcessor.Examples,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"1d84ca4e-aa39-473c-b422-ca9bcc03ae0c\",\"computeOrder\":3,\"position\":{\"serializedVersion\":\"2\",\"x\":160.00001525878907,\"y\":327.0,\"width\":202.0,\"height\":77.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NpWaitUntilStoppedData\":{\"id\":3257605837862010882,\"LinkedIds\":[],\"NodeDes\":\"\u963B\u6B62\u8F6E\u8BE2\uFF0C\u63D0\u9AD8\u6548\u7387\"}}"
+    edges:
+    - GUID: 5c71b972-047f-4e98-91db-7c29dbb07f66
+      owner: {fileID: 11400000}
+      inputNodeGUID: 79c228ff-b22f-40aa-8ecc-f16d18226ced
+      outputNodeGUID: 11f086f0-5b71-43b6-8f23-9decc2a959bc
+      inputFieldName: PrevNode
+      outputFieldName: NextNode
+      inputPortIdentifier: 
+      outputPortIdentifier: 
+    - GUID: 9211cdd2-ebd4-4390-b176-dae105e356f8
+      owner: {fileID: 11400000}
+      inputNodeGUID: 340f44c1-ed30-4eae-98b6-044d07bae9c1
+      outputNodeGUID: 79c228ff-b22f-40aa-8ecc-f16d18226ced
+      inputFieldName: PrevNode
+      outputFieldName: NextNode
+      inputPortIdentifier: 
+      outputPortIdentifier: 
+    - GUID: e87dc91e-1cf7-4658-ac3e-afe8069c98a5
+      owner: {fileID: 11400000}
+      inputNodeGUID: 1d84ca4e-aa39-473c-b422-ca9bcc03ae0c
+      outputNodeGUID: 79c228ff-b22f-40aa-8ecc-f16d18226ced
+      inputFieldName: PrevNode
+      outputFieldName: NextNode
+      inputPortIdentifier: 
+      outputPortIdentifier: 
+    stackNodes: []
+    pinnedElements: []
+    exposedParameters: []
+    stickyNotes: []
+    position: {x: 240, y: 18, z: 0}
+    scale: {x: 0.8695652, y: 0.8695652, z: 1}
+  nodes:
+  - rid: 1564770040848843010
+  - rid: 1564770040848843011
+  - rid: 1564770040848843012
+  - rid: 1564770040848843013
+  edges:
+  - GUID: 5c71b972-047f-4e98-91db-7c29dbb07f66
+    owner: {fileID: 11400000}
+    inputNodeGUID: 79c228ff-b22f-40aa-8ecc-f16d18226ced
+    outputNodeGUID: 11f086f0-5b71-43b6-8f23-9decc2a959bc
+    inputFieldName: PrevNode
+    outputFieldName: NextNode
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 9211cdd2-ebd4-4390-b176-dae105e356f8
+    owner: {fileID: 11400000}
+    inputNodeGUID: 340f44c1-ed30-4eae-98b6-044d07bae9c1
+    outputNodeGUID: 79c228ff-b22f-40aa-8ecc-f16d18226ced
+    inputFieldName: PrevNode
+    outputFieldName: NextNode
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: e87dc91e-1cf7-4658-ac3e-afe8069c98a5
+    owner: {fileID: 11400000}
+    inputNodeGUID: 1d84ca4e-aa39-473c-b422-ca9bcc03ae0c
+    outputNodeGUID: 79c228ff-b22f-40aa-8ecc-f16d18226ced
+    inputFieldName: PrevNode
+    outputFieldName: NextNode
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  stackNodes: []
+  pinnedElements: []
+  exposedParameters: []
+  serializedParameterList: []
+  stickyNotes: []
+  position: {x: 240, y: 18, z: 0}
+  scale: {x: 0.8695652, y: 0.8695652, z: 1}
+  _name: 6490811058451001291
+  _configPath: Assets/Resources/AllSquadBehavour
+  _squadBehavourGraphdDataSupportor:
+    NpDataSupportorBase:
+      NPBehaveTreeDataId: 6490811058451001291
+  references:
+    version: 2
+    RefIds:
+    - rid: 1564770040848843010
+      type: {class: NP_RootNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
+      data:
+        nodeCustomName: 
+        GUID: 11f086f0-5b71-43b6-8f23-9decc2a959bc
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 71.5
+          y: 67
+          width: 0
+          height: 0
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Level: 0
+        MRootNodeData:
+          id: 6490811058451001291
+          LinkedIds: 030001004057352d
+          NodeDes: 
+    - rid: 1564770040848843011
+      type: {class: NP_SequenceNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
+      data:
+        nodeCustomName: 
+        GUID: 79c228ff-b22f-40aa-8ecc-f16d18226ced
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 82.5
+          y: 192
+          width: 0
+          height: 0
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Level: 0
+        NP_SequenceNodeData:
+          id: 3257605837862010883
+          LinkedIds: 010001004057352d020001004057352d
+          NodeDes: "\u5E8F\u5217\u7EC4\u5408\u5668"
+    - rid: 1564770040848843012
+      type: {class: NP_PrintDebugLogNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
+      data:
+        nodeCustomName: 
+        GUID: 340f44c1-ed30-4eae-98b6-044d07bae9c1
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 0
+          y: 327
+          width: 0
+          height: 0
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Level: 0
+        NP_ActionNodeData:
+          id: 3257605837862010881
+          LinkedIds: 
+          NodeDes: "\u6253\u5370\u65E5\u5FD7"
+          NpClassForStoreAction:
+            rid: 1564770040848843014
+    - rid: 1564770040848843013
+      type: {class: NP_WaitUntilStoppedNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
+      data:
+        nodeCustomName: 
+        GUID: 1d84ca4e-aa39-473c-b422-ca9bcc03ae0c
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 160.00002
+          y: 327
+          width: 202
+          height: 77
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Level: 0
+        NpWaitUntilStoppedData:
+          id: 3257605837862010882
+          LinkedIds: 
+          NodeDes: "\u963B\u6B62\u8F6E\u8BE2\uFF0C\u63D0\u9AD8\u6548\u7387"
+    - rid: 1564770040848843014
+      type: {class: NP_PrintDebugLog, ns: Ebonor.GamePlay, asm: Ebonor.GamePlay}
+      data:
+        BelongToUnit: 0
+        DebugContent: Squad Behavior

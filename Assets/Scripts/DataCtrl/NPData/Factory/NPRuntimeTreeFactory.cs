@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using Ebonor.Framework;
-using UnityEngine;
 using Zenject;
 
 namespace Ebonor.DataCtrl
@@ -14,7 +13,6 @@ namespace Ebonor.DataCtrl
         public long RootId;
         public RuntimeTreeType TreeType;
         public bool IsServer;
-        public Transform Parent;
     }
 
     public interface INPRuntimeTreeFactory
@@ -81,13 +79,7 @@ namespace Ebonor.DataCtrl
                 throw new InvalidOperationException($"[NPRuntimeTreeFactory] No NP_DataSupportor for rootId:{request.RootId}, type:{request.TreeType}");
             }
 
-            var go = new GameObject($"RuntimeTree_netId({request.BelongToUnit})_rootId({request.RootId})");
-            if (request.Parent != null)
-            {
-                go.transform.SetParent(request.Parent, false);
-            }
-            
-            var runtimeTree = _instantiator.InstantiateComponent<NP_RuntimeTree>(go);
+            var runtimeTree = _instantiator.Instantiate<NP_RuntimeTree>();
 
             var clock = request.IsServer ? _serverClock : _clientClock;
             

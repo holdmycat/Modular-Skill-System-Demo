@@ -58,6 +58,9 @@ namespace Ebonor.GamePlay
             };
 
             _npRuntimeTree = _npRuntimeTreeFactory.Create(request);
+            
+            // Kick off the behaviour tree
+            _npRuntimeTree.Start();
         }
         
         

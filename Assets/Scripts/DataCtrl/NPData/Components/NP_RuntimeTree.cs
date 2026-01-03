@@ -7,12 +7,11 @@
 using System;
 using System.Collections.Generic;
 using Ebonor.Framework;
-using UnityEngine;
 
 namespace Ebonor.DataCtrl
 {
     
-    public class NP_RuntimeTree : MonoBehaviour
+    public class NP_RuntimeTree
     {
         static readonly ILog log = LogManager.GetLogger(typeof(NP_RuntimeTree));
         
@@ -26,14 +25,9 @@ namespace Ebonor.DataCtrl
         /// <summary>
         /// Owning unit NetId.
         /// </summary>
-        [Header("Runtime Tree Identifiers")]
-        [Tooltip("NetId of the unit that owns the skill.")]
         public uint BelongToUnit;
 
-        [Tooltip("NetId of the unit that triggers the skill.")]
         public uint StartToUnit;
-        
-        [Tooltip("NetId of the unit that is targeted by the skill.")]
         public uint TargetToUnit;
         
         /// <summary>
@@ -58,7 +52,6 @@ namespace Ebonor.DataCtrl
             public string value;
         }
         
-        [Tooltip("Blackboard entries (editor-only debug view).")]
         public List<BlackBordData> mBordValues = new List<BlackBordData>();
 #endif
         
@@ -99,6 +92,13 @@ namespace Ebonor.DataCtrl
         public void SetRootNode(Root rootNode)
         {
             this.m_RootNode = rootNode;
+            if (this.m_RootNode != null)
+            {
+                this.m_RootNode.OwnerTree = this;
+#if UNITY_EDITOR
+                this.m_RootNode.DebugListener = NPDebugEventManager.Listener;
+#endif
+            }
         }
 
 
@@ -121,9 +121,6 @@ namespace Ebonor.DataCtrl
             return this.m_RootNode.Blackboard;
         }
 
-        ///
-       
-        
         
         /// <summary>
         /// Start running the behaviour tree.
@@ -133,27 +130,13 @@ namespace Ebonor.DataCtrl
             this.m_RootNode.Start();
         }
         
-        private void Awake()
-        {
-            if (null == DicDynamicSkillEventNode)
-            {
-                DicDynamicSkillEventNode = new Dictionary<eSkillEventNode, CDynamicBuffMgr>();
-            }
-
-            // if (null == ListTimePauseResumeActions)
-            // {
-            //     ListTimePauseResumeActions = new List<Action<bool>>();
-            // }
-        }
-
-        private void OnDestroy()
+        public void Dispose()
         {
             DicDynamicSkillEventNode.Clear();
-            //ListTimePauseResumeActions.Clear();
         }
 
 #if UNITY_EDITOR      
-        void Update()
+        public void SnapshotBlackboardForDebug()
         {
             if (m_RootNode == null) 
                 return;
@@ -212,8 +195,6 @@ namespace Ebonor.DataCtrl
             }
           
         }
-
-      
         
         public void OnInitRuntimeTree(
             uint belongid, 
@@ -232,6 +213,10 @@ namespace Ebonor.DataCtrl
             RunTimeTreeId = _rootId;
             TargetToUnit = targetid;
             Context = new NPRuntimeContext(isServer, belongid, startId, targetid, log, resolver);
+            if (DicDynamicSkillEventNode == null)
+            {
+                DicDynamicSkillEventNode = new Dictionary<eSkillEventNode, CDynamicBuffMgr>();
+            }
         }
         
 

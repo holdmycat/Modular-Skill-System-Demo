@@ -33,6 +33,13 @@ namespace Ebonor.DataCtrl
             }
         }
 
+        /// <summary>Owning runtime tree for debug routing.</summary>
+        public NP_RuntimeTree OwnerTree { get; internal set; }
+
+#if UNITY_EDITOR
+        internal INPNodeDebugListener DebugListener { get; set; }
+#endif
+
 #if UNITY_EDITOR
         public int TotalNumStartCalls = 0;
         public int TotalNumStopCalls = 0;
@@ -60,6 +67,7 @@ namespace Ebonor.DataCtrl
             Assert.AreEqual(this, rootNode);
             base.SetRoot(rootNode);
             this.mainNode.SetRoot(rootNode);
+            rootNode.OwnerTree = this.OwnerTree;
         }
 
 

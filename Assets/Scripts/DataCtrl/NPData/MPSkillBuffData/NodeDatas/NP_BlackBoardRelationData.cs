@@ -15,6 +15,7 @@ namespace Ebonor.DataCtrl
     /// 与黑板节点相关的数据
     /// </summary>
     [System.Serializable]
+    [BsonDiscriminator(RootClass = true)]
     public class NP_BlackBoardRelationData
     {
         

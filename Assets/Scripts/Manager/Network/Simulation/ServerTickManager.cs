@@ -47,14 +47,13 @@ namespace Ebonor.Manager
         private void RunTick()
         {
             CurrentTick++;
-            
+
             // 1. Logic Update
              _serverManager.Tick(CurrentTick); 
             
             // 2. Sync to Clients
             _networkBus.SyncTick(CurrentTick);
         }
-
         public void Dispose()
         {
             _isRunning = false;

@@ -106,18 +106,20 @@ namespace Ebonor.GamePlay
         private INetworkBus _networkBus;
         private readonly List<BaseCommander> _listBaseCommander = new List<BaseCommander>();
         private ClientCommander.Factory _factory; 
+        private Clock _clock; 
         
         private GlobalGameConfig _globalGameConfig;
         private UnityEngine.GameObject _debugVisualsRoot;
 
         [Inject]
-        public void Construct(ClientCommander.Factory factory, INetworkBus networkBus, ICharacterDataRepository characterDataRepository, GlobalGameConfig globalGameConfig)
+        public void Construct(ClientCommander.Factory factory, INetworkBus networkBus, ICharacterDataRepository characterDataRepository, GlobalGameConfig globalGameConfig, [Inject(Id = ClockIds.Client)] Clock clock)
         {
             log.Info($"[ClientRoomManager] Construct");
             _factory = factory;
             _networkBus = networkBus;
             _characterDataRepository = characterDataRepository;
             _globalGameConfig = globalGameConfig;
+            _clock = clock;
             BindId(NetworkConstants.ROOM_MANAGER_NET_ID);//client room manager
             _networkBus.RegisterSpawns(NetId, this, false);
         }

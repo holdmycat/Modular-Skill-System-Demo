@@ -40,6 +40,11 @@ namespace Ebonor.DataCtrl
         /// Behaviour tree runtime ID.
         /// </summary>
         public long RunTimeTreeId;
+
+        /// <summary>
+        /// Runtime context (owner/target IDs, server/client flag, shared log).
+        /// </summary>
+        public NPRuntimeContext Context { get; private set; }
         
         /// <summary>
         /// Scene/room identifier.
@@ -225,7 +230,7 @@ namespace Ebonor.DataCtrl
             OnInitRuntimeTree(_roomoId, belongid, startId, _rootId, datasupport, _clock, targetid);
         }
         
-        public void OnInitRuntimeTree(string _roomoId, uint belongid, uint startId, long _rootId, NP_DataSupportor datasupport, Clock _clock, uint targetid = 0)
+        public void OnInitRuntimeTree(string _roomoId, uint belongid, uint startId, long _rootId, NP_DataSupportor datasupport, Clock _clock, uint targetid = 0, bool isServer = true, INPRuntimeEntityResolver resolver = null)
         {
             RoomId = _roomoId;
             BelongToUnit = belongid;
@@ -234,6 +239,7 @@ namespace Ebonor.DataCtrl
             m_clock = _clock;
             RunTimeTreeId = _rootId;
             TargetToUnit = targetid;
+            Context = new NPRuntimeContext(isServer, belongid, startId, targetid, log, resolver);
         }
         
 

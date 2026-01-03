@@ -86,14 +86,11 @@ namespace Ebonor.Manager
 
         public override async UniTask ShutdownAsync()
         {
-            
             log.Info("[ShowCaseSceneClientManager] ShutdownAsync");
-            
             if (null != _uiSceneShowCaseScene)
             {
                 await _uiManager.CloseUIAsync(_uiSceneShowCaseScene, true);
             }
-            
             await base.ShutdownAsync();
         }
     }

@@ -34,6 +34,14 @@ namespace Ebonor.Manager
             
             // Bind ServerTickManager
             Container.BindInterfacesAndSelfTo<ServerTickManager>().AsSingle();
+
+            // NPData Clocks (server/client) scoped to this scene
+            Container.Bind<Clock>().WithId(ClockIds.Server).AsCached().IfNotBound();
+            Container.Bind<Clock>().WithId(ClockIds.Client).AsCached().IfNotBound();
+            
+            // Bind Clock Drivers (Ticking)
+            Container.BindInterfacesAndSelfTo<ServerClockDriver>().AsSingle();
+            Container.BindInterfacesAndSelfTo<ClientClockDriver>().AsSingle();
             
             //Bind SceneResourceManager
             Container.Bind<ISceneResourceManager>()
@@ -71,6 +79,12 @@ namespace Ebonor.Manager
                 .FromSubContainerResolve()
                 .ByMethod(InstallClientCommander)
                 .AsSingle();
+
+            // NP runtime tree factory (shared by client/server, selects clock by flag)
+            Container.Bind<INPRuntimeTreeFactory>().To<NPRuntimeTreeFactory>().AsSingle();
+            
+            Container.Bind<INPRuntimeTreeDataProvider>().To<NPRuntimeTreeDataProvider>().AsSingle();
+            Container.Bind<INPRuntimeEntityResolver>().To<NetworkBusRuntimeEntityResolver>().AsSingle();
             
             // Logic for Legion/Squad factories is now inside the Commander's SubContainer
             
@@ -156,4 +170,3 @@ namespace Ebonor.Manager
 
     
 }
-

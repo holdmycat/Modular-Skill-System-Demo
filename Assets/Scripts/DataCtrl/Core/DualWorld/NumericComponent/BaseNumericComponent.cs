@@ -43,7 +43,10 @@ namespace Ebonor.DataCtrl
 
         public FactionType FactionType => _factionType;
 
-
+        //behavour tree id
+        protected long _behaviorTreeId;
+        public long BehavourTreeId => _behaviorTreeId;
+        
         public int GetLevel()
         {
             return (int)this[eNumericType.UnitLv];

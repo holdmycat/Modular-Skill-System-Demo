@@ -14,6 +14,8 @@ namespace Ebonor.GamePlay
         
         protected SlgUnitAttributesNodeData _unitAttr;
 
+        protected NP_RuntimeTree _npRuntimeTree;
+        
         /// <summary>
         /// Bind net id and register to network bus. Call right after construction.
         /// </summary>

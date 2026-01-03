@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using Ebonor.DataCtrl;
 using Ebonor.Framework;
 using Ebonor.GamePlay;
 
@@ -9,10 +10,12 @@ namespace Ebonor.Manager
         private static readonly ILog log = LogManager.GetLogger(typeof(BaseServerManager));
 
         protected readonly ServerRoomManager _serverRoomManager;
+        protected readonly Clock _clock;
         
-        public BaseServerManager(ServerRoomManager roomManager)
+        public BaseServerManager(ServerRoomManager roomManager, Clock clock)
         {
             _serverRoomManager = roomManager;
+            _clock = clock;
             log.Info("[BaseServerManager] Constructed.");
         }
 
@@ -22,10 +25,16 @@ namespace Ebonor.Manager
             _serverRoomManager.InitAsync();
         }
 
+        //server event frame
         public virtual void Tick(int tick)
         {
-            // Drive logical updates
             _serverRoomManager.Tick(tick);
+        }
+        
+        //server physics frame
+        public void OnFixedUpdate(float deltaTime)
+        {
+            _clock?.OnFixedUpdate(deltaTime);
         }
 
         public virtual async UniTask ShutdownAsync()

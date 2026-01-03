@@ -58,6 +58,11 @@ MonoBehaviour:
     stickyNotes: []
     position: {x: 240, y: 18, z: 0}
     scale: {x: 0.8695652, y: 0.8695652, z: 1}
+  nodes:
+  - rid: 1564770040848842752
+  - rid: 1564770040848842753
+  - rid: 1564770040848842754
+  - rid: 1564770040848842755
   edges:
   - GUID: 5c71b972-047f-4e98-91db-7c29dbb07f66
     owner: {fileID: 11400000}
@@ -97,4 +102,100 @@ MonoBehaviour:
       NPBehaveTreeDataId: 3195703229347658783
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1564770040848842752
+      type: {class: NP_RootNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
+      data:
+        nodeCustomName: 
+        GUID: 11f086f0-5b71-43b6-8f23-9decc2a959bc
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 71.5
+          y: 67
+          width: 0
+          height: 0
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Level: 0
+        MRootNodeData:
+          id: 3195703229347658783
+          LinkedIds: 020001005cf3302d
+          NodeDes: 
+    - rid: 1564770040848842753
+      type: {class: NP_SequenceNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
+      data:
+        nodeCustomName: 
+        GUID: 79c228ff-b22f-40aa-8ecc-f16d18226ced
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 82.5
+          y: 192
+          width: 0
+          height: 0
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Level: 0
+        NP_SequenceNodeData:
+          id: 3256370107051474946
+          LinkedIds: 010001005cf3302d
+          NodeDes: "\u5E8F\u5217\u7EC4\u5408\u5668"
+    - rid: 1564770040848842754
+      type: {class: NP_PrintDebugLogNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
+      data:
+        nodeCustomName: 
+        GUID: 340f44c1-ed30-4eae-98b6-044d07bae9c1
+        computeOrder: 2
+        position:
+          serializedVersion: 2
+          x: 0
+          y: 327
+          width: 0
+          height: 0
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Level: 0
+        NP_ActionNodeData:
+          id: 3256370107051474945
+          LinkedIds: 
+          NodeDes: "\u6253\u5370\u65E5\u5FD7"
+          NpClassForStoreAction:
+            rid: 1564770040848842756
+    - rid: 1564770040848842755
+      type: {class: NP_PrintDebugLogNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
+      data:
+        nodeCustomName: 
+        GUID: 2b12aa00-ad22-4c96-ade2-18be0f7ef0a6
+        computeOrder: 3
+        position:
+          serializedVersion: 2
+          x: 164
+          y: 327
+          width: 0
+          height: 0
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Level: 0
+        NP_ActionNodeData:
+          id: 0
+          LinkedIds: 
+          NodeDes: "\u6253\u5370\u65E5\u5FD7"
+          NpClassForStoreAction:
+            rid: 1564770040848842757
+    - rid: 1564770040848842756
+      type: {class: NP_PrintDebugLog, ns: Ebonor.GamePlay, asm: Ebonor.GamePlay}
+      data:
+        BelongToUnit: 0
+        BelongtoRuntimeTree: {fileID: 0}
+        DebugContent: 
+    - rid: 1564770040848842757
+      type: {class: NP_PrintDebugLog, ns: Ebonor.GamePlay, asm: Ebonor.GamePlay}
+      data:
+        BelongToUnit: 0
+        BelongtoRuntimeTree: {fileID: 0}
+        DebugContent: 

@@ -24,7 +24,7 @@ namespace Ebonor.DataCtrl
             _slgSquadAttributesNodeData = slgSquadAttributesNodeData;
             _squadId = slgSquadAttributesNodeData.UnitDataNodeId;
             _soldierId = slgSquadAttributesNodeData.UnitId;
-            
+            _behaviorTreeId = slgSquadAttributesNodeData.BehaviorTreeId;
         }
         
         [Inject]

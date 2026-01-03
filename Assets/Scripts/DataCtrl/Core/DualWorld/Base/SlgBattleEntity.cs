@@ -16,6 +16,8 @@ namespace Ebonor.GamePlay
         protected BaseNumericComponent _numericComponent;
         public BaseNumericComponent NumericComponent => _numericComponent;
 
+        protected bool _isServer;
+        
         protected INetworkBus _networkBus;
         protected IDataLoaderService _dataLoaderService;
         
@@ -24,6 +26,10 @@ namespace Ebonor.GamePlay
         protected CommanderContextData _contextData;
         
         protected ICharacterDataRepository _characterDataRepository;
+
+        protected INPRuntimeTreeFactory _npRuntimeTreeFactory;
+        
+        protected GlobalGameConfig _globalGameConfig;
         
         public FactionType Faction { get; protected set; } = FactionType.Neutral;
 
@@ -36,6 +42,8 @@ namespace Ebonor.GamePlay
         /// </summary>
         protected abstract void InitializeNumeric();
 
+     
+        
         /// <summary>
         /// Helper to access the concrete numeric component.
         /// </summary>

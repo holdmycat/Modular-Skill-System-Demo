@@ -7,12 +7,11 @@
 using System;
 using System.Collections.Generic;
 using Ebonor.Framework;
-using UnityEngine;
 
 namespace Ebonor.DataCtrl
 {
     
-    public class NP_RuntimeTree : MonoBehaviour
+    public class NP_RuntimeTree
     {
         static readonly ILog log = LogManager.GetLogger(typeof(NP_RuntimeTree));
         
@@ -26,31 +25,21 @@ namespace Ebonor.DataCtrl
         /// <summary>
         /// Owning unit NetId.
         /// </summary>
-        [Header("Runtime Tree Identifiers")]
-        [Tooltip("NetId of the unit that owns the skill.")]
         public uint BelongToUnit;
 
-        [Tooltip("NetId of the unit that triggers the skill.")]
         public uint StartToUnit;
-        
-        [Tooltip("NetId of the unit that is targeted by the skill.")]
         public uint TargetToUnit;
         
         /// <summary>
         /// Behaviour tree runtime ID.
         /// </summary>
         public long RunTimeTreeId;
-        
-        /// <summary>
-        /// Scene/room identifier.
-        /// </summary>
-        public string RoomId;
-        
 
         /// <summary>
-        /// Event or support skill index.
+        /// Runtime context (owner/target IDs, server/client flag, shared log).
         /// </summary>
-        public int EventSupportSkillIndex;
+        public NPRuntimeContext Context { get; private set; }
+        
         
 #if UNITY_EDITOR
         /// <summary>
@@ -63,7 +52,6 @@ namespace Ebonor.DataCtrl
             public string value;
         }
         
-        [Tooltip("Blackboard entries (editor-only debug view).")]
         public List<BlackBordData> mBordValues = new List<BlackBordData>();
 #endif
         
@@ -104,6 +92,13 @@ namespace Ebonor.DataCtrl
         public void SetRootNode(Root rootNode)
         {
             this.m_RootNode = rootNode;
+            if (this.m_RootNode != null)
+            {
+                this.m_RootNode.OwnerTree = this;
+#if UNITY_EDITOR
+                this.m_RootNode.DebugListener = NPDebugEventManager.Listener;
+#endif
+            }
         }
 
 
@@ -126,9 +121,6 @@ namespace Ebonor.DataCtrl
             return this.m_RootNode.Blackboard;
         }
 
-        ///
-       
-        
         
         /// <summary>
         /// Start running the behaviour tree.
@@ -138,27 +130,13 @@ namespace Ebonor.DataCtrl
             this.m_RootNode.Start();
         }
         
-        private void Awake()
-        {
-            if (null == DicDynamicSkillEventNode)
-            {
-                DicDynamicSkillEventNode = new Dictionary<eSkillEventNode, CDynamicBuffMgr>();
-            }
-
-            // if (null == ListTimePauseResumeActions)
-            // {
-            //     ListTimePauseResumeActions = new List<Action<bool>>();
-            // }
-        }
-
-        private void OnDestroy()
+        public void Dispose()
         {
             DicDynamicSkillEventNode.Clear();
-            //ListTimePauseResumeActions.Clear();
         }
 
 #if UNITY_EDITOR      
-        void Update()
+        public void SnapshotBlackboardForDebug()
         {
             if (m_RootNode == null) 
                 return;
@@ -217,23 +195,28 @@ namespace Ebonor.DataCtrl
             }
           
         }
-
-        public void OnInitSupportEventRuntimeTree(string _roomoId, uint belongid, uint startId, long _rootId,
-            NP_DataSupportor datasupport, Clock _clock, uint targetid = 0, int index = 0)
-        {
-            EventSupportSkillIndex = index;
-            OnInitRuntimeTree(_roomoId, belongid, startId, _rootId, datasupport, _clock, targetid);
-        }
         
-        public void OnInitRuntimeTree(string _roomoId, uint belongid, uint startId, long _rootId, NP_DataSupportor datasupport, Clock _clock, uint targetid = 0)
+        public void OnInitRuntimeTree(
+            uint belongid, 
+            uint startId, 
+            long _rootId, 
+            NP_DataSupportor datasupport, 
+            Clock _clock, 
+            uint targetid = 0, 
+            bool isServer = true, 
+            INPRuntimeEntityResolver resolver = null)
         {
-            RoomId = _roomoId;
             BelongToUnit = belongid;
             StartToUnit = startId;
             BelongNP_DataSupportor = datasupport;
             m_clock = _clock;
             RunTimeTreeId = _rootId;
             TargetToUnit = targetid;
+            Context = new NPRuntimeContext(isServer, belongid, startId, targetid, log, resolver);
+            if (DicDynamicSkillEventNode == null)
+            {
+                DicDynamicSkillEventNode = new Dictionary<eSkillEventNode, CDynamicBuffMgr>();
+            }
         }
         
 

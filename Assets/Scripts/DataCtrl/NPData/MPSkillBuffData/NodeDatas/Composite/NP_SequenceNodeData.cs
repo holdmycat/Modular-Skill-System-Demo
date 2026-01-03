@@ -1,6 +1,7 @@
 
 namespace Ebonor.DataCtrl
 {
+    [System.Serializable]
     public class NP_SequenceNodeData: NP_NodeDataBase
     {
         private Sequence m_SequenceNode;

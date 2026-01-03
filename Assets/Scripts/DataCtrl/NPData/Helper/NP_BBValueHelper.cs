@@ -128,6 +128,20 @@ namespace Ebonor.DataCtrl
 
         public static bool Compare(ANP_BBValue lhs, ANP_BBValue rhs, Operator op)
         {
+            if (lhs == null)
+            {
+                log.Error("Compare failed: lhs is null");
+                return false;
+            }
+
+            // For operators that rely on rhs, guard against null
+            bool rhsRequired = op != Operator.IS_SET && op != Operator.ALWAYS_TRUE;
+            if (rhsRequired && rhs == null)
+            {
+                log.Error($"Compare failed: rhs is null for operator {op} and lhs type {lhs.GetType().Name}");
+                return false;
+            }
+
             switch (op)
             {
                 case Operator.IS_SET: return true;

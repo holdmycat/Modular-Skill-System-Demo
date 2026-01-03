@@ -5,6 +5,7 @@ using MongoDB.Bson.Serialization.Options;
 
 namespace Ebonor.DataCtrl
 {
+    [System.Serializable]
     public class NP_DataSupportorBase
     {
         public long NPBehaveTreeDataId;

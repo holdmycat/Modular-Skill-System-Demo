@@ -14,6 +14,8 @@ namespace Ebonor.GamePlay
             INetworkBus networkBus, 
             IDataLoaderService dataLoaderService, 
             ICharacterDataRepository characterDataRepository,
+            INPRuntimeTreeFactory npRuntimeTreeFactory,
+            GlobalGameConfig globalGameConfig,
             CommanderContextData contextData)
         {
             log.Info($"[ServerSquad] Construction");
@@ -21,15 +23,15 @@ namespace Ebonor.GamePlay
             _characterDataRepository = characterDataRepository;
             _networkBus = networkBus;
             _dataLoaderService = dataLoaderService;
-            
+            _npRuntimeTreeFactory = npRuntimeTreeFactory;
             _faction = contextData.Faction;
+            _globalGameConfig = globalGameConfig;
         }
         
         public override void InitAsync()
         {
             log.Info($"[ServerSquad] InitAsync");
             
-          
             //create soldiers
             var formation = _squadUnitAttr.Formation;
 

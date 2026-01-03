@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Ebonor.DataCtrl
 {
+    [System.Serializable]
     [BsonDeserializerRegister]
     public class NP_ClassForStoreAction
     {
@@ -33,9 +34,15 @@ namespace Ebonor.DataCtrl
         [HideInInspector]
         public NP_RuntimeTree BelongtoRuntimeTree;
 
-        public virtual void SetNGRuntimeTree<T>(string _uid, T tree) where T : MonoBehaviour
+        /// <summary>
+        /// Per-tree context (owner/target IDs, server/client flag).
+        /// </summary>
+        [HideInInspector]
+        public NPRuntimeContext Context;
+        
+        public virtual void SetContext(NPRuntimeContext context)
         {
-            
+            Context = context;
         }
         
         /// <summary>

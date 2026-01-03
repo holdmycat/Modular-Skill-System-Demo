@@ -7,6 +7,7 @@ namespace Ebonor.GamePlay
 {
     
     
+    [System.Serializable]
     public class NP_PrintDebugLog : NP_ClassForStoreAction
     {
         static readonly ILog log = LogManager.GetLogger(typeof(NP_PrintDebugLog));

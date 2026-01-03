@@ -1,5 +1,6 @@
 namespace Ebonor.DataCtrl
 {
+    [System.Serializable]
     public class NP_WaitNodeData : NP_NodeDataBase
     {
         private Wait m_WaitNode;

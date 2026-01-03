@@ -32,11 +32,7 @@ namespace Ebonor.DataCtrl
 
         private void RegisterBsonMaps()
         {
-            // Copied from DataCtrl.OnLoadMPBattleGraphData
-            
-            if (BsonClassMap.IsClassMapRegistered(typeof(NP_BBValue_Int))) return; // Safety check
-
-            // Basic Types
+            // Basic Types (guard individually; do not early-return to ensure NP node maps are registered)
             if (!BsonClassMap.IsClassMapRegistered(typeof(NP_BBValue_Int))) BsonClassMap.LookupClassMap(typeof(NP_BBValue_Int));
             if (!BsonClassMap.IsClassMapRegistered(typeof(NP_BBValue_Bool))) BsonClassMap.LookupClassMap(typeof(NP_BBValue_Bool));
             if (!BsonClassMap.IsClassMapRegistered(typeof(NP_BBValue_Float))) BsonClassMap.LookupClassMap(typeof(NP_BBValue_Float));
@@ -47,23 +43,39 @@ namespace Ebonor.DataCtrl
             if (!BsonClassMap.IsClassMapRegistered(typeof(NP_BBValue_List_Long))) BsonClassMap.LookupClassMap(typeof(NP_BBValue_List_Long));
             if (!BsonClassMap.IsClassMapRegistered(typeof(NP_BBValue_List_Byte))) BsonClassMap.LookupClassMap(typeof(NP_BBValue_List_Byte));
 
-            // Custom Serializers
-            BsonSerializer.RegisterSerializer(typeof(System.Numerics.Vector2), new StructBsonSerialize<System.Numerics.Vector2>());
-            BsonSerializer.RegisterSerializer(typeof(System.Numerics.Vector3), new StructBsonSerialize<System.Numerics.Vector3>());
-            BsonSerializer.RegisterSerializer(typeof(VTD_Id), new StructBsonSerialize<VTD_Id>());
-            BsonSerializer.RegisterSerializer(typeof(VTD_EventId), new StructBsonSerialize<VTD_EventId>());
-            BsonSerializer.RegisterSerializer(typeof(UnityEngine.Keyframe), new StructBsonSerialize<UnityEngine.Keyframe>());
-            BsonSerializer.RegisterSerializer(typeof(UnityEngine.Color), new StructBsonSerialize<UnityEngine.Color>());
+            // Custom Serializers (guarded to avoid duplicate registration)
+            RegisterSerializerOnce(typeof(System.Numerics.Vector2), new StructBsonSerialize<System.Numerics.Vector2>());
+            RegisterSerializerOnce(typeof(System.Numerics.Vector3), new StructBsonSerialize<System.Numerics.Vector3>());
+            RegisterSerializerOnce(typeof(VTD_Id), new StructBsonSerialize<VTD_Id>());
+            RegisterSerializerOnce(typeof(VTD_EventId), new StructBsonSerialize<VTD_EventId>());
+            RegisterSerializerOnce(typeof(UnityEngine.Keyframe), new StructBsonSerialize<UnityEngine.Keyframe>());
+            RegisterSerializerOnce(typeof(UnityEngine.Color), new StructBsonSerialize<UnityEngine.Color>());
             
-            BsonSerializer.RegisterSerializer(typeof(UnityEngine.AnimationCurve), new AnimationCurveSerializer());
-            BsonSerializer.RegisterSerializer(typeof(UnityEngine.Vector2), new VectorSerializer<UnityEngine.Vector2>());
-            BsonSerializer.RegisterSerializer(typeof(UnityEngine.Vector3), new VectorSerializer<UnityEngine.Vector3>());
-            BsonSerializer.RegisterSerializer(typeof(Gradient), new GradientSerializer());
-            BsonSerializer.RegisterSerializer(typeof(LayerMask), new LayerMaskSerializer());
+            RegisterSerializerOnce(typeof(UnityEngine.AnimationCurve), new AnimationCurveSerializer());
+            RegisterSerializerOnce(typeof(UnityEngine.Vector2), new VectorSerializer<UnityEngine.Vector2>());
+            RegisterSerializerOnce(typeof(UnityEngine.Vector3), new VectorSerializer<UnityEngine.Vector3>());
+            RegisterSerializerOnce(typeof(Gradient), new GradientSerializer());
+            RegisterSerializerOnce(typeof(LayerMask), new LayerMaskSerializer());
 
             // Generated Registers
             AttributesNodeDataSerializerRegister.RegisterClassMaps();
+            NPActionSerializerRegister.RegisterClassMaps();
+            NPNodeDataSerializerRegister.RegisterClassMaps();
             GeneratedTypeRegistry.RegisterAllBsonClassMaps();
+        }
+        private static void RegisterSerializerOnce(System.Type type, IBsonSerializer serializer)
+        {
+            try
+            {
+                // Will throw if not registered; if returns a serializer, skip registration
+                var _ = BsonSerializer.SerializerRegistry.GetSerializer(type);
+                return;
+            }
+            catch
+            {
+                // not registered; continue to register
+            }
+            BsonSerializer.RegisterSerializer(type, serializer);
         }
     }
 }

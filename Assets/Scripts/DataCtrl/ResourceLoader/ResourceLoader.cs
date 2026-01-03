@@ -134,6 +134,8 @@ namespace Ebonor.DataCtrl
                     return "SceneStateManager";
                 case ResourceAssetType.UIAtlas:
                     return "UI/UIAtlas";
+                case ResourceAssetType.AllSquadBehavour:
+                    return "AllSquadBehavour";
                 default:
                     return string.Empty;
             }

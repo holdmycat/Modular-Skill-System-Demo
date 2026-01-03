@@ -28,6 +28,7 @@ namespace Plugins.NodeEditor
         protected NP_BlackBoardDataManager _npBlackBoardDataManager = new NP_BlackBoardDataManager();
 
         public NP_BlackBoardDataManager NpBlackBoardDataManager => _npBlackBoardDataManager;
+        
     }
 
     
@@ -142,7 +143,8 @@ namespace Plugins.NodeEditor
             _name = name;
             Debug.LogFormat("NPBehaveGraph-OnGraphEnabled, node count:{0}", nodes.Count);
             onGraphChanges += GraphChangesCallback;
-            //NP_BlackBoardHelper.SetCurrentBlackBoardDataManager(this);
+            AddNetPosBb(); 
+            NP_BlackBoardHelper.SetCurrentBlackBoardDataManager(this);
         }
         
         protected override void OnGraphDisabled()
@@ -228,13 +230,8 @@ namespace Plugins.NodeEditor
         }
 
 
-        protected virtual NP_BlackBoardDataManager AddNetPosBB()
+        protected virtual NP_BlackBoardDataManager AddNetPosBb()
         {
-
-            _npBlackBoardDataManager.BBValues.TryAdd(ConstData.BELONGTOSKILLID, new NP_BBValue_Bool
-            {
-                Value = false,
-            });
             
             return _npBlackBoardDataManager;
         }
@@ -246,7 +243,7 @@ namespace Plugins.NodeEditor
         /// <param name="isServer"></param>
         protected void AutoSetCanvasDatas(NP_DataSupportorBase supporterBase)
         {
-            AddNetPosBB();
+            //AddNetPosBb();
             this.AutoSetNP_NodeData(supporterBase);
             this.AutoSetNP_BBDatas(supporterBase);
         }

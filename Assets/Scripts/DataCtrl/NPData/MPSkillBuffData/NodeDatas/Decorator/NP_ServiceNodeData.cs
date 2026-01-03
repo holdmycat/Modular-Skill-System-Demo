@@ -1,7 +1,9 @@
+using UnityEngine;
 using Action = System.Action;
 
 namespace Ebonor.DataCtrl
 {
+    [System.Serializable]
     public class NP_ServiceNodeData: NP_NodeDataBase
     {
         public Service m_Service;
@@ -10,7 +12,8 @@ namespace Ebonor.DataCtrl
         
         public float interval;
 
-        public NP_ClassForStoreAction NpClassForStoreAction;
+        [SerializeReference]
+        public NP_ClassForStoreAction NpClassForStoreAction = new NP_ClassForStoreAction();
 
         public override Node NP_GetNode()
         {
@@ -32,17 +35,6 @@ namespace Ebonor.DataCtrl
             return this.m_Service;
         }
         
-        public override Decorator CreateNGDecoratorNode<T>(string unit, T runtimeTree, Clock clock, Node node)
-        {
-            this.NpClassForStoreAction.SetNGRuntimeTree<T>(unit, runtimeTree);
-            if(IsSelfSetInterval){
-                this.m_Service = new Service(interval, this.NpClassForStoreAction.GetActionToBeDone(), node);
-            }
-            else {
-                this.m_Service = new Service(NpClassForStoreAction, node);
-            }
-            
-            return this.m_Service;
-        }
+      
     }
 }

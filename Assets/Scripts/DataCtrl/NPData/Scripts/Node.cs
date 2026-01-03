@@ -25,6 +25,12 @@ namespace Ebonor.DataCtrl
         }
 
         public Root RootNode;
+        
+        /// <summary>Editor-only debug listener routed via root.</summary>
+        protected INPNodeDebugListener DebugListener
+        {
+            get { return RootNode != null ? RootNode.DebugListener : null; }
+        }
 
         private Container parentNode;
         public Container ParentNode
@@ -127,6 +133,9 @@ namespace Ebonor.DataCtrl
 #endif
             this.currentState = State.ACTIVE;
             DoStart();
+#if UNITY_EDITOR
+            DebugListener?.OnNodeEvent(RootNode?.OwnerTree, this, NPDebugEventType.Enter, false);
+#endif
         }
 
         /// <summary>
@@ -168,6 +177,9 @@ namespace Ebonor.DataCtrl
             this.DebugNumStoppedCalls++;
             this.DebugLastStoppedAt = UnityEngine.Time.time;
             DebugLastResult = success;
+#endif
+#if UNITY_EDITOR
+            DebugListener?.OnNodeEvent(RootNode?.OwnerTree, this, NPDebugEventType.Exit, success);
 #endif
             if (this.ParentNode != null)
             {

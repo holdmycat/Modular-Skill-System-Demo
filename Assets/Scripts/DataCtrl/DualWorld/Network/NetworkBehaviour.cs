@@ -29,6 +29,10 @@ namespace Ebonor.DataCtrl
         {
         }
 
+        public virtual void FixedTick(float deltaTime)
+        {
+        }
+        
         public virtual void InitAsync()
         {
             log.Info($"[NetworkBehaviour] InitAsync");

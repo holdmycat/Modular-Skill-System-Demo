@@ -921,6 +921,9 @@ namespace GraphProcessor
 
 		public void UpdateNodeInspectorSelection()
 		{
+			if (nodeInspector == null)
+				return;
+			
 			nodeInspector.selectedNodeData.Clear();
 			var selectedNodeViews = selection.OfType<BaseNodeView>().Where(v => this.Contains(v) && v.nodeTarget.needsInspector).ToList();
 			foreach (var v in selectedNodeViews)

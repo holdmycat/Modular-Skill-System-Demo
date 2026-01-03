@@ -3,6 +3,7 @@
 using System.Collections.Generic;
 using Ebonor.Framework;
 using MongoDB.Bson.Serialization.Attributes;
+using UnityEngine;
 
 #if UNITY_EDITOR
 
@@ -13,6 +14,8 @@ namespace Ebonor.DataCtrl
     /// <summary>
     /// 与黑板节点相关的数据
     /// </summary>
+    [System.Serializable]
+    [BsonDiscriminator(RootClass = true)]
     public class NP_BlackBoardRelationData
     {
         
@@ -25,6 +28,7 @@ namespace Ebonor.DataCtrl
         [BsonIgnore]
         public bool WriteOrCompareToBB;
         
+        [SerializeReference]
         public ANP_BBValue NP_BBValue;
 
 #if UNITY_EDITOR

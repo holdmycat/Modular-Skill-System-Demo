@@ -241,6 +241,7 @@ namespace Ebonor.DataCtrl
         AllCharacterData,
         SceneStateManager,
         UIAtlas,
+        AllSquadBehavour,
     }
     
     /// <summary>

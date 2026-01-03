@@ -1,9 +1,11 @@
 namespace Ebonor.DataCtrl
 {
+    [System.Serializable]
     public class NP_ActionNodeData : NP_NodeDataBase
     {
         private Action m_ActionNode;
 
+        [UnityEngine.SerializeReference]
         public NP_ClassForStoreAction NpClassForStoreAction;
 
         public override Task CreateTask(uint unit, NP_RuntimeTree runtimeTree)
@@ -15,15 +17,6 @@ namespace Ebonor.DataCtrl
             
             return this.m_ActionNode;
         }
-
-        public override Task CreateNGTask<T>(string uId, T runtimeTree)
-        {
-            this.NpClassForStoreAction.SetNGRuntimeTree(uId, runtimeTree);
-            this.m_ActionNode = this.NpClassForStoreAction._CreateNPBehaveAction();
-            return this.m_ActionNode;
-        }
-        
-        
         
         public override Node NP_GetNode()
         {

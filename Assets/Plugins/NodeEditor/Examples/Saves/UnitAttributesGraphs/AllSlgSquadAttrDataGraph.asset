@@ -20,7 +20,7 @@ MonoBehaviour:
       jsonDatas: '{"nodeCustomName":"Squad-DragonKnight","GUID":"d3a9e776-9886-4d0f-9583-1ad4efc7e82d","computeOrder":0,"position":{"serializedVersion":"2","x":229.0,"y":117.0,"width":186.0,"height":42.0},"expanded":false,"debug":false,"nodeLock":false,"data":{"rid":1000},"references":{"version":2,"RefIds":[{"rid":1000,"type":{"class":"ShieldInfantrySquadAttributesNodeData","ns":"Ebonor.DataCtrl","asm":"Ebonor.DataCtrl"},"data":{"typeStr":"Plugins.NodeEditor.ShieldInfantrySquadAttributesNode","UnitDataNodeId":2090964382800356523,"UnitId":9115565238967645920,"UnitName":"SquadDragonKnight","UnitLv":10,"UnitSprite":"","InitialCount":2,"MaxCount":2,"Formation":"Default","SpawnOffset":{"x":0.0,"y":0.0,"z":0.0},"SpawnYaw":0.0,"BehaviorTreeId":3195703229347658783}}]}}'
     - type: Plugins.NodeEditor.ArcherSquadAttributesNode, NodeGraphProcessor.Examples,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      jsonDatas: '{"nodeCustomName":"","GUID":"eac8d445-9148-4210-8461-01c08aad89d9","computeOrder":1,"position":{"serializedVersion":"2","x":459.0,"y":117.0,"width":229.0,"height":42.0},"expanded":false,"debug":false,"nodeLock":false,"data":{"rid":1000},"references":{"version":2,"RefIds":[{"rid":1000,"type":{"class":"ArcherSquadAttributesNodeData","ns":"Ebonor.DataCtrl","asm":"Ebonor.DataCtrl"},"data":{"typeStr":"Plugins.NodeEditor.ArcherSquadAttributesNode","UnitDataNodeId":3795271083218684623,"UnitId":1752794821622386297,"UnitName":"SquadClinkz","UnitLv":10,"UnitSprite":"","InitialCount":2,"MaxCount":2,"Formation":"Default","SpawnOffset":{"x":0.0,"y":0.0,"z":0.0},"SpawnYaw":0.0,"BehaviorTreeId":0}}]}}'
+      jsonDatas: '{"nodeCustomName":"","GUID":"eac8d445-9148-4210-8461-01c08aad89d9","computeOrder":1,"position":{"serializedVersion":"2","x":459.0,"y":117.0,"width":229.0,"height":42.0},"expanded":false,"debug":false,"nodeLock":false,"data":{"rid":1000},"references":{"version":2,"RefIds":[{"rid":1000,"type":{"class":"ArcherSquadAttributesNodeData","ns":"Ebonor.DataCtrl","asm":"Ebonor.DataCtrl"},"data":{"typeStr":"Plugins.NodeEditor.ArcherSquadAttributesNode","UnitDataNodeId":3795271083218684623,"UnitId":1752794821622386297,"UnitName":"SquadClinkz","UnitLv":10,"UnitSprite":"","InitialCount":2,"MaxCount":2,"Formation":"Default","SpawnOffset":{"x":0.0,"y":0.0,"z":0.0},"SpawnYaw":0.0,"BehaviorTreeId":6490811058451001291}}]}}'
     edges: []
     stackNodes: []
     pinnedElements: []
@@ -28,6 +28,9 @@ MonoBehaviour:
     stickyNotes: []
     position: {x: -5, y: 0, z: 0}
     scale: {x: 1, y: 1, z: 1}
+  nodes:
+  - rid: 1564770040848843006
+  - rid: 1564770040848843007
   edges: []
   stackNodes: []
   pinnedElements: []
@@ -40,4 +43,68 @@ MonoBehaviour:
   SavePath: Assets/Resources/AllCharacterData
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 1564770040848843006
+      type: {class: ShieldInfantrySquadAttributesNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
+      data:
+        nodeCustomName: Squad-DragonKnight
+        GUID: d3a9e776-9886-4d0f-9583-1ad4efc7e82d
+        computeOrder: 0
+        position:
+          serializedVersion: 2
+          x: 229
+          y: 117
+          width: 186
+          height: 42
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        data:
+          rid: 1564770040848843008
+    - rid: 1564770040848843007
+      type: {class: ArcherSquadAttributesNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
+      data:
+        nodeCustomName: 
+        GUID: eac8d445-9148-4210-8461-01c08aad89d9
+        computeOrder: 1
+        position:
+          serializedVersion: 2
+          x: 459
+          y: 117
+          width: 229
+          height: 42
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        data:
+          rid: 1564770040848843009
+    - rid: 1564770040848843008
+      type: {class: ShieldInfantrySquadAttributesNodeData, ns: Ebonor.DataCtrl, asm: Ebonor.DataCtrl}
+      data:
+        typeStr: Plugins.NodeEditor.ShieldInfantrySquadAttributesNode
+        UnitDataNodeId: 2090964382800356523
+        UnitId: 9115565238967645920
+        UnitName: SquadDragonKnight
+        UnitLv: 10
+        UnitSprite: 
+        InitialCount: 2
+        MaxCount: 2
+        Formation: Default
+        SpawnOffset: {x: 0, y: 0, z: 0}
+        SpawnYaw: 0
+        BehaviorTreeId: 3195703229347658783
+    - rid: 1564770040848843009
+      type: {class: ArcherSquadAttributesNodeData, ns: Ebonor.DataCtrl, asm: Ebonor.DataCtrl}
+      data:
+        typeStr: Plugins.NodeEditor.ArcherSquadAttributesNode
+        UnitDataNodeId: 3795271083218684623
+        UnitId: 1752794821622386297
+        UnitName: SquadClinkz
+        UnitLv: 10
+        UnitSprite: 
+        InitialCount: 2
+        MaxCount: 2
+        Formation: Default
+        SpawnOffset: {x: 0, y: 0, z: 0}
+        SpawnYaw: 0
+        BehaviorTreeId: 6490811058451001291

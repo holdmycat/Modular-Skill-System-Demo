@@ -60,6 +60,7 @@ namespace Ebonor.GamePlay
         private static readonly ILog log = LogManager.GetLogger(typeof(ServerRoomManager));
         
         private readonly INetworkBus _networkBus;
+        private readonly Clock _clock;
         private BaseCommander _baseCommander;
         private BaseCommander _baseSceneEnemyCommander;
         private readonly ServerCommander.Factory _factory; 
@@ -67,11 +68,12 @@ namespace Ebonor.GamePlay
         [Inject]
         public ServerRoomManager(
             ServerCommander.Factory factory, 
-            INetworkBus networkBus, ISceneResourceManager sceneResourceManager)
+            INetworkBus networkBus, ISceneResourceManager sceneResourceManager, [Inject(Id = ClockIds.Server)] Clock clock)
         {
             _factory = factory;
             _networkBus = networkBus;
             _sceneResourceManager = sceneResourceManager;
+            _clock = clock;
             BindId(NetworkConstants.ROOM_MANAGER_NET_ID);//server room manager
             _networkBus.RegisterSpawns(NetId, this, true);
             log.Info("[ServerRoomManager] Constructed (Static NetId: 1).");
@@ -89,6 +91,11 @@ namespace Ebonor.GamePlay
         public override void Tick(int tick)
         {
         }
+        
+        public override void FixedTick(float deltaTime)
+        {
+        }
+        
 
         public override async UniTask ShutdownAsync()
         {

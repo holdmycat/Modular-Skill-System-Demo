@@ -1,3 +1,4 @@
+using Ebonor.DataCtrl;
 using Ebonor.Framework;
 using Ebonor.GamePlay;
 using Zenject;
@@ -10,7 +11,7 @@ namespace Ebonor.Manager
 
         
         [Inject]
-        public ShowCaseSceneServerManager(ServerRoomManager roomManager) : base(roomManager)
+        public ShowCaseSceneServerManager(ServerRoomManager roomManager, [Inject(Id = ClockIds.Server)] Clock clock) : base(roomManager, clock)
         {
             log.Info("[ShowCaseSceneServerManager] Constructed.");
         }

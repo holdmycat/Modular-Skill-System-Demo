@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Ebonor.DataCtrl
 {
+    [System.Serializable]
     public class NP_RootNodeData : NP_NodeDataBase
     {
         public Root m_Root;

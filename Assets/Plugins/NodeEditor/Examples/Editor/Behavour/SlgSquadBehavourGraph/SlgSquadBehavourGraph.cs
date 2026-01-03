@@ -97,5 +97,24 @@ namespace Plugins.NodeEditor
             
         }
         
+        protected override NP_BlackBoardDataManager AddNetPosBb()
+        {
+            var mgr = _npBlackBoardDataManager;
+            if (null ==mgr || null == mgr.BBValues)
+                return null;
+                
+            mgr.BBValues.TryAdd(ConstData.BB_ISGETDEAD, new NP_BBValue_Bool()
+            {
+                Value = false,
+            });
+            
+            mgr.BBValues.TryAdd(ConstData.BB_ISGETBIRTH, new NP_BBValue_Bool()
+            {
+                Value = false,
+            });
+            
+            return mgr;
+        }
+        
     }
 }

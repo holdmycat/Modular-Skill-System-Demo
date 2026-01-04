@@ -16,6 +16,23 @@ namespace Ebonor.DataCtrl
         {
         
         }
+
+        public virtual NP_ClassForStoreAction Clone()
+        {
+            // Shallow Copy
+            var clone = (NP_ClassForStoreAction)this.MemberwiseClone();
+            
+            // Clear Runtime Data
+            clone.BelongToUnit = 0;
+            clone.BelongtoRuntimeTree = null;
+            clone.Context = null;
+            clone.Action = null;
+            clone.Func = null;
+            clone.Func1 = null;
+            clone.Func2 = null;
+            
+            return clone;
+        }
         
         // 判断逻辑，控制是否显示
         private bool IsTargetOfTypeSpecificClass()

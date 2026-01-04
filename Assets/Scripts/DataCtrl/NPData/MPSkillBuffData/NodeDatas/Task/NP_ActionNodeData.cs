@@ -8,6 +8,14 @@ namespace Ebonor.DataCtrl
         [UnityEngine.SerializeReference]
         public NP_ClassForStoreAction NpClassForStoreAction;
 
+        public override NP_NodeDataBase Clone()
+        {
+            var copy = (NP_ActionNodeData)base.Clone();
+            copy.NpClassForStoreAction = NpClassForStoreAction?.Clone();
+            copy.m_ActionNode = null;
+            return copy;
+        }
+
         public override Task CreateTask(uint unit, NP_RuntimeTree runtimeTree)
         {
             this.NpClassForStoreAction.BelongToUnit = unit;

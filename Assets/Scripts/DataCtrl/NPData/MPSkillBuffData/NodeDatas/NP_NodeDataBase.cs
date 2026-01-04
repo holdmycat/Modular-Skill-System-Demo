@@ -86,5 +86,13 @@ public abstract class NP_NodeDataBase
         {
             return null;
         }
+
+        public virtual NP_NodeDataBase Clone()
+        {
+            var copy = (NP_NodeDataBase)MemberwiseClone();
+            // Deep copy linked ids to avoid shared lists.
+            copy.LinkedIds = new List<long>(LinkedIds);
+            return copy;
+        }
     }
 }

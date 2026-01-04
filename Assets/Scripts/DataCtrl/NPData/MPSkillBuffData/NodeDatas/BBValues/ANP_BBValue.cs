@@ -11,5 +11,10 @@ namespace Ebonor.DataCtrl
         /// </summary>
         /// <param name="anpBbValue"></param>
         public abstract void SetValueFrom(ANP_BBValue anpBbValue);
+
+        public virtual ANP_BBValue Clone()
+        {
+            return (ANP_BBValue)MemberwiseClone();
+        }
     }
 }

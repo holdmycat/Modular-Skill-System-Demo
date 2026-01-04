@@ -31,6 +31,17 @@ namespace GraphProcessor
         
         public static void SaveGraphToDisk(BaseGraph baseGraphToSave)
         {
+            if (baseGraphToSave == null)
+                return;
+            
+            // Avoid writing runtime changes back to assets while in play mode.
+            if (Application.isPlaying)
+                return;
+            
+            // Avoid forcing a save (which reserializes reference IDs) when the asset isn't dirty.
+            if (!EditorUtility.IsDirty(baseGraphToSave))
+                return;
+
             EditorUtility.SetDirty(baseGraphToSave);
             AssetDatabase.SaveAssets();
         }

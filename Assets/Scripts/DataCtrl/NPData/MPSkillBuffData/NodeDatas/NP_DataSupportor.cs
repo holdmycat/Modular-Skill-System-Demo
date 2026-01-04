@@ -14,6 +14,12 @@ namespace Ebonor.DataCtrl
         // [BsonDictionaryOptions(DictionaryRepresentation.ArrayOfArrays)]
         // public Dictionary<long, BuffNodeDataBase> BuffNodeDataDic = new Dictionary<long, BuffNodeDataBase>();
 
+        public virtual NP_BaseDataSupportor Clone()
+        {
+            var clone = (NP_BaseDataSupportor)MemberwiseClone();
+            clone.Ids = new Dictionary<string, long>(Ids);
+            return clone;
+        }
     }
     
     /// <summary>
@@ -24,5 +30,12 @@ namespace Ebonor.DataCtrl
     public class NP_DataSupportor : NP_BaseDataSupportor
     {
         public NP_DataSupportorBase NpDataSupportorBase = new NP_DataSupportorBase();
+
+        public override NP_BaseDataSupportor Clone()
+        {
+            var clone = (NP_DataSupportor)base.Clone();
+            clone.NpDataSupportorBase = NpDataSupportorBase?.Clone();
+            return clone;
+        }
     }
 }

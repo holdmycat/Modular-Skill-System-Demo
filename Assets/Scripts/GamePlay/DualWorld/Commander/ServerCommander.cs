@@ -60,7 +60,7 @@ namespace Ebonor.GamePlay
                 // If null, we might want a null check, but BaseSquad handles null unitAttr gracefully (default to Melee).
 
                 var squadNetId = _dataLoaderService.NextId();
-                baseSquad.Configure(squadNetId, slgSquadData, slgUnitData, _seed.Faction, true);
+                baseSquad.Configure(squadNetId, slgSquadData, slgUnitData, _seed.Faction);
                 
                 _spawnedSquads.Add(baseSquad);
                 
@@ -83,7 +83,7 @@ namespace Ebonor.GamePlay
         {
             log.Info("[ServerCommander] ShutdownAsync");
             await base.ShutdownAsync();
-            _networkBus.UnRegisterSpawns(_netId, this,true);
+            _networkBus.UnRegisterSpawns(_netId, this);
 
             foreach (var squad in _spawnedSquads)
             {

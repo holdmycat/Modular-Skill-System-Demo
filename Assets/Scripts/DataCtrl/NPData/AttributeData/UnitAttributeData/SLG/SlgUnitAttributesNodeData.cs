@@ -110,7 +110,7 @@ namespace Ebonor.DataCtrl
         Infantry = 0,
         Cavalry = 1,
         Archer = 2,
-        Siege = 3
+        Hero = 3,
     }
 
     public enum ArmorType

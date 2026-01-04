@@ -75,7 +75,7 @@ namespace Ebonor.GamePlay
             _sceneResourceManager = sceneResourceManager;
             _clock = clock;
             BindId(NetworkConstants.ROOM_MANAGER_NET_ID);//server room manager
-            _networkBus.RegisterSpawns(NetId, this, true);
+            _networkBus.RegisterSpawns(NetId, this);
             log.Info("[ServerRoomManager] Constructed (Static NetId: 1).");
         }
         
@@ -101,7 +101,7 @@ namespace Ebonor.GamePlay
         {
             log.Info("[ServerRoomManager] ShutdownAsync");
 
-            _networkBus.UnRegisterSpawns(_netId, this, true,false);
+            _networkBus.UnRegisterSpawns(_netId, this, eMPNetPosition.eServerOnly,false);
             
             await _baseCommander.ShutdownAsync();
 

@@ -83,7 +83,9 @@ namespace Ebonor.DataCtrl
         {
             if (_dicRuntimeTree.TryGetValue(new KeyValuePair<RuntimeTreeType, long>(treeType, rootId), out var tree))
             {
-                return tree;
+                // Always hand out a cloned copy to avoid runtime mutations leaking back into the cached source.
+                var clone = NPDataCloneUtility.CloneSupportor(tree);
+                return clone ?? tree;
             }
             return null;
         }

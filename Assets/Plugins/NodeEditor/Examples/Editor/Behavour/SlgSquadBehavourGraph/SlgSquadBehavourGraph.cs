@@ -4,6 +4,9 @@ using Ebonor.Framework;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Plugins.NodeEditor
 {
@@ -79,11 +82,13 @@ namespace Plugins.NodeEditor
         [ContextMenu("一键配置")]
         public override void OneKeySet()
         {
-           
             BtnAutoSetCanvasDatas();
             Save();
             TestDe();
+            base.OneKeySet();
         }
+        
+
         
         private void AutoSetSquadBehavour_NodeData(NP_DataSupportor npDataSupportor)
         {
@@ -93,25 +98,31 @@ namespace Plugins.NodeEditor
             
             npDataSupportor.Ids.TryAdd(ConstData.BELONGTOSKILLID, skillNodeId);
             
-            _npBlackBoardDataManager.Ids.TryAdd(ConstData.BELONGTOSKILLID, skillNodeId);
+            _squadBehavourGraphdDataSupportor.Ids.TryAdd(ConstData.BELONGTOSKILLID, skillNodeId);
             
         }
         
         protected override NP_BlackBoardDataManager AddNetPosBb()
         {
+            // Use instance blackboard; avoid static during initialization
             var mgr = _npBlackBoardDataManager;
-            if (null ==mgr || null == mgr.BBValues)
+            if (null == mgr || null == mgr.BBValues)
                 return null;
-                
-            mgr.BBValues.TryAdd(ConstData.BB_ISGETDEAD, new NP_BBValue_Bool()
+
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
             {
-                Value = false,
-            });
+                mgr.BBValues.TryAdd(ConstData.BB_ISGETDEAD, new NP_BBValue_Bool()
+                {
+                    Value = false,
+                });
             
-            mgr.BBValues.TryAdd(ConstData.BB_ISGETBIRTH, new NP_BBValue_Bool()
-            {
-                Value = false,
-            });
+                mgr.BBValues.TryAdd(ConstData.BB_ISGETBIRTH, new NP_BBValue_Bool()
+                {
+                    Value = false,
+                });
+            }
+#endif
             
             return mgr;
         }

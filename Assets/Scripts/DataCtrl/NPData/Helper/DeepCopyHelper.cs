@@ -17,6 +17,9 @@ namespace Ebonor.DataCtrl
 {
     public static class DeepCloneHelper
     {
+        [ThreadStatic] private static MemoryStream _cachedStream;
+        private const int DefaultStreamSize = 64 * 1024;
+
         /// <summary>
         /// Deep copy via BSON serialization.
         /// </summary>
@@ -43,6 +46,32 @@ namespace Ebonor.DataCtrl
             {
                 Debug.LogError(e.Message);
                 return null;
+            }
+        }
+        
+        /// <summary>
+        /// Deep copy via a cached MemoryStream to reduce allocations (thread-safe via lock).
+        /// </summary>
+        public static T DeepCopyFast<T>(this T obj) where T : class
+        {
+            if (obj == null) return null;
+
+            var stream = _cachedStream ?? (_cachedStream = new MemoryStream(DefaultStreamSize));
+            lock (stream)
+            {
+                try
+                {
+                    stream.Position = 0;
+                    stream.SetLength(0);
+                    BsonSerializer.Serialize(new BsonBinaryWriter(stream), obj);
+                    stream.Position = 0;
+                    return BsonSerializer.Deserialize<T>(stream);
+                }
+                catch (Exception e)
+                {
+                    Debug.LogError(e.Message);
+                    return null;
+                }
             }
         }
         

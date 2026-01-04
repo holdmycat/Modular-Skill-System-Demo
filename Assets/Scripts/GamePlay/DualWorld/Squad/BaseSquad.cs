@@ -1,12 +1,13 @@
 using Ebonor.DataCtrl;
 using UnityEngine;
-using Zenject;
 
 namespace Ebonor.GamePlay
 {
     
     public abstract class BaseSquad : SlgBattleEntity
     {
+        protected SquadStackFsm.Factory _stackFsmFactory;
+        protected SquadStackFsm _stackFsm;
         
         protected SlgUnitSquadAttributesNodeData _squadUnitAttr;
 
@@ -20,7 +21,7 @@ namespace Ebonor.GamePlay
         /// <summary>
         /// Bind net id and register to network bus. Call right after construction.
         /// </summary>
-        public void Configure(uint netId, SlgUnitSquadAttributesNodeData squadUnitAttr, SlgUnitAttributesNodeData unitAttr, FactionType factionType, bool isServer = false)
+        public void Configure(uint netId, SlgUnitSquadAttributesNodeData squadUnitAttr, SlgUnitAttributesNodeData unitAttr, FactionType factionType, eMPNetPosition isServer = eMPNetPosition.eServerOnly)
         {
             if (NetId != 0)
             {
@@ -29,7 +30,7 @@ namespace Ebonor.GamePlay
 
             _squadUnitAttr = squadUnitAttr;
             _unitAttr = unitAttr;
-            _isServer = isServer;
+            _netPosition = isServer;
             Faction = factionType;
             
             BindId(netId);
@@ -50,7 +51,7 @@ namespace Ebonor.GamePlay
         {
             NPRuntimeTreeRequest request = new NPRuntimeTreeRequest
             {
-                IsServer = _isServer,
+                NetPosition = _netPosition,
                 BelongToUnit = _netId,
                 StartToUnit = _netId,
                 TreeType = RuntimeTreeType.SlgSquadBehavour,
@@ -62,10 +63,27 @@ namespace Ebonor.GamePlay
             // Kick off the behaviour tree
             _npRuntimeTree.Start();
         }
-        
-        
-        
 
+        /// <summary>
+        /// Create the stack FSM if not present. No side effects; server/client attach their own handlers.
+        /// </summary>
+        protected bool TryInitStackFsm(UnitClassType? overrideClassType = null)
+        {
+            if (_stackFsm != null)
+            {
+                return true;
+            }
+
+            var classType = overrideClassType ?? _unitAttr?.UnitClassType;
+            if (_stackFsmFactory == null || classType == null)
+            {
+                return false;
+            }
+            
+            _stackFsm = _stackFsmFactory.Create(classType.Value);
+            return true;
+        }
+        
         public CombatPositionType GetCombatPositionType()
         {
             if (_unitAttr != null)

@@ -1,12 +1,9 @@
-
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
 using UnityEngine;
 
 namespace Ebonor.GamePlay
 {
-    
-    
     [System.Serializable]
     public class NP_PrintDebugLog : NP_ClassForStoreAction
     {
@@ -14,7 +11,6 @@ namespace Ebonor.GamePlay
 
         [Header("打印内容")]
         public string DebugContent;
-
         
         public override System.Action GetActionToBeDone()
         {
@@ -27,7 +23,7 @@ namespace Ebonor.GamePlay
             #if UNITY_EDITOR
             if (string.IsNullOrEmpty(DebugContent))
                 return;
-            log.DebugFormat("打印日志：{0}", this.DebugContent);
+            log.DebugFormat("[{0}]-打印日志：{1}", BelongtoRuntimeTree.Context.netPosition, DebugContent);
             #endif
         }
     }

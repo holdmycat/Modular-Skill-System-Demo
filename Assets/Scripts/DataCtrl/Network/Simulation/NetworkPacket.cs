@@ -7,6 +7,16 @@ using System;
 
 namespace Ebonor.DataCtrl
 {
+    
+    [Flags]
+    public enum eMPNetPosition: byte
+    {
+        eNULL = 0,
+        eServerOnly = 1 << 0,
+        eLocalPlayer = 1 << 1,
+        eHost = 1 << 2,
+    }
+    
     public enum FactionType
     {
         Player = 1,
@@ -133,6 +143,16 @@ namespace Ebonor.DataCtrl
     {
         public uint NetId;
     }
+
+    /// <summary>
+    /// RPC: Sync squad stack animation state from server to clients.
+    /// </summary>
+    public struct RpcSquadStackStateChanged : IRpc
+    {
+        public uint NetId;
+        public UnitClassType ClassType;
+        public eBuffBindAnimStackState State;
+    }
     
     /// <summary>
     /// Network Interface for sending Commands and RPCs.
@@ -150,11 +170,11 @@ namespace Ebonor.DataCtrl
         void RegisterRpcListener(uint netId, System.Action<IRpc> handler);
         void UnregisterRpcListener(uint netId, System.Action<IRpc> handler);
 
-        void RegisterSpawns(uint netId, INetworkBehaviour behaviour, bool isServer = false, bool isAutoRegisterRpc = true);
+        void RegisterSpawns(uint netId, INetworkBehaviour behaviour, eMPNetPosition netPosition = eMPNetPosition.eServerOnly, bool isAutoRegisterRpc = true);
         
-        void UnRegisterSpawns(uint netId, INetworkBehaviour behaviour, bool isServer = false, bool isAutoUnRegisterRpc = true);
+        void UnRegisterSpawns(uint netId, INetworkBehaviour behaviour, eMPNetPosition netPosition = eMPNetPosition.eServerOnly, bool isAutoUnRegisterRpc = true);
 
-        INetworkBehaviour GetSpawnedOrNull(uint netId, bool preferServer = false);
+        INetworkBehaviour GetSpawnedOrNull(uint netId, eMPNetPosition netPosition = eMPNetPosition.eServerOnly);
         
         
         // Server -> Client (Sync)

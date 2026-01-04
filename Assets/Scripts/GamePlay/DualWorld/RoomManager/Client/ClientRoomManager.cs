@@ -53,7 +53,7 @@ namespace Ebonor.GamePlay
                     }
                     
                     var baseCommander = _factory.Create();
-                    baseCommander.Configure(data.Bootstrap, false, msg.NetId);
+                    baseCommander.Configure(data.Bootstrap, eMPNetPosition.eLocalPlayer, msg.NetId);
                     
 #if UNITY_EDITOR
                     if (_debugVisualsRoot != null)
@@ -77,7 +77,7 @@ namespace Ebonor.GamePlay
 
         private void OnDestroyObject(RpcDestroyObject msg)
         {
-            var actor = _networkBus.GetSpawnedOrNull(msg.NetId);
+            var actor = _networkBus.GetSpawnedOrNull(msg.NetId, eMPNetPosition.eLocalPlayer);
             if (actor != null)
             {
                  _networkBus.UnRegisterSpawns(msg.NetId, actor);
@@ -121,7 +121,7 @@ namespace Ebonor.GamePlay
             _globalGameConfig = globalGameConfig;
             _clock = clock;
             BindId(NetworkConstants.ROOM_MANAGER_NET_ID);//client room manager
-            _networkBus.RegisterSpawns(NetId, this, false);
+            _networkBus.RegisterSpawns(NetId, this, eMPNetPosition.eLocalPlayer);
         }
         
         public override void InitAsync()

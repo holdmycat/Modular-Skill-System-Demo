@@ -73,6 +73,9 @@ namespace Plugins.NodeEditor
         [OnOpenAsset(0)]
         public static bool OnBaseGraphOpened(int instanceID, int line)
         {
+            // Avoid touching graph assets while in play mode to prevent runtime data from resetting editor assets.
+            if (Application.isPlaying) return false;
+
             var baseGraph = EditorUtility.InstanceIDToObject(instanceID) as BaseGraph;
             // Only handle node graph assets; let Unity handle everything else so scene double-click works.
             if (baseGraph == null) return false;

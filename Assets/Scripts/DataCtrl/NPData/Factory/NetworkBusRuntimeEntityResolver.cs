@@ -15,7 +15,7 @@ namespace Ebonor.DataCtrl
             _networkBus = networkBus;
         }
 
-        public object Resolve(uint id, bool isServer)
+        public object Resolve(uint id, eMPNetPosition isServer)
         {
             try
             {

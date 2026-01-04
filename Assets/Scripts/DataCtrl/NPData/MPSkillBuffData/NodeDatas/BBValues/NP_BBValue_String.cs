@@ -110,5 +110,12 @@ namespace Ebonor.DataCtrl
         }
 
         #endregion
+
+        public override ANP_BBValue Clone()
+        {
+            var copy = new NP_BBValue_String();
+            copy.SetValueFrom(this);
+            return copy;
+        }
     }
 }

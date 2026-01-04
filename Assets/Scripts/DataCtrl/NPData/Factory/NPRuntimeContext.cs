@@ -7,16 +7,16 @@ namespace Ebonor.DataCtrl
     /// </summary>
     public class NPRuntimeContext
     {
-        public readonly bool IsServer;
+        public readonly eMPNetPosition netPosition;
         public readonly uint OwnerId;
         public readonly uint StarterId;
         public readonly uint TargetId;
         public readonly ILog Log;
         public readonly INPRuntimeEntityResolver Resolver;
 
-        public NPRuntimeContext(bool isServer, uint ownerId, uint starterId, uint targetId, ILog log, INPRuntimeEntityResolver resolver)
+        public NPRuntimeContext(eMPNetPosition tmpnetPosition, uint ownerId, uint starterId, uint targetId, ILog log, INPRuntimeEntityResolver resolver)
         {
-            IsServer = isServer;
+            netPosition = tmpnetPosition;
             OwnerId = ownerId;
             StarterId = starterId;
             TargetId = targetId;
@@ -26,7 +26,7 @@ namespace Ebonor.DataCtrl
 
         public T Resolve<T>(uint id) where T : class
         {
-            return Resolver?.Resolve(id, IsServer) as T;
+            return Resolver?.Resolve(id, netPosition) as T;
         }
     }
 }

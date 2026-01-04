@@ -148,5 +148,12 @@ namespace Ebonor.DataCtrl
         }
 
         #endregion
+
+        public override ANP_BBValue Clone()
+        {
+            var copy = new NP_BBValue_List_Byte();
+            copy.Value = new List<byte>(this.Value);
+            return copy;
+        }
     }
 }

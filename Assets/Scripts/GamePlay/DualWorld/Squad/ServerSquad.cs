@@ -83,7 +83,7 @@ namespace Ebonor.GamePlay
         {
             log.Info("[ServerSquad] ShutdownAsync");
             await base.ShutdownAsync();
-            _networkBus.UnRegisterSpawns(_netId, this, true);
+            _networkBus.UnRegisterSpawns(_netId, this);
         }
         
         public class Factory : PlaceholderFactory<ServerSquad> 

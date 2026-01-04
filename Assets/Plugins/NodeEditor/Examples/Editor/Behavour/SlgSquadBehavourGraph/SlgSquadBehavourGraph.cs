@@ -82,34 +82,13 @@ namespace Plugins.NodeEditor
         [ContextMenu("一键配置")]
         public override void OneKeySet()
         {
-           
             BtnAutoSetCanvasDatas();
             Save();
             TestDe();
-#if UNITY_EDITOR
-            RefreshExportedBinary();
-#endif
+            base.OneKeySet();
         }
         
-#if UNITY_EDITOR
-        /// <summary>
-        /// Force Unity to re-import the generated .bytes file so it is immediately usable without
-        /// having to change focus away from the editor.
-        /// </summary>
-        private void RefreshExportedBinary()
-        {
-            if (string.IsNullOrEmpty(_configPath) || string.IsNullOrEmpty(_name)) return;
 
-            // Ensure we only try to import assets that live under the project Assets folder.
-            if (_configPath.StartsWith("Assets"))
-            {
-                var assetPath = $"{_configPath}/{_name}.bytes";
-                AssetDatabase.ImportAsset(assetPath);
-            }
-
-            AssetDatabase.Refresh();
-        }
-#endif
         
         private void AutoSetSquadBehavour_NodeData(NP_DataSupportor npDataSupportor)
         {
@@ -119,25 +98,31 @@ namespace Plugins.NodeEditor
             
             npDataSupportor.Ids.TryAdd(ConstData.BELONGTOSKILLID, skillNodeId);
             
-            _npBlackBoardDataManager.Ids.TryAdd(ConstData.BELONGTOSKILLID, skillNodeId);
+            _squadBehavourGraphdDataSupportor.Ids.TryAdd(ConstData.BELONGTOSKILLID, skillNodeId);
             
         }
         
         protected override NP_BlackBoardDataManager AddNetPosBb()
         {
+            // Use instance blackboard; avoid static during initialization
             var mgr = _npBlackBoardDataManager;
-            if (null ==mgr || null == mgr.BBValues)
+            if (null == mgr || null == mgr.BBValues)
                 return null;
-                
-            mgr.BBValues.TryAdd(ConstData.BB_ISGETDEAD, new NP_BBValue_Bool()
+
+#if UNITY_EDITOR
+            if (!Application.isPlaying)
             {
-                Value = false,
-            });
+                mgr.BBValues.TryAdd(ConstData.BB_ISGETDEAD, new NP_BBValue_Bool()
+                {
+                    Value = false,
+                });
             
-            mgr.BBValues.TryAdd(ConstData.BB_ISGETBIRTH, new NP_BBValue_Bool()
-            {
-                Value = false,
-            });
+                mgr.BBValues.TryAdd(ConstData.BB_ISGETBIRTH, new NP_BBValue_Bool()
+                {
+                    Value = false,
+                });
+            }
+#endif
             
             return mgr;
         }

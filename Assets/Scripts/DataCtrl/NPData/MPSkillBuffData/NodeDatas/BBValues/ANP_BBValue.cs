@@ -2,6 +2,7 @@ using System;
 
 namespace Ebonor.DataCtrl
 {
+    [System.Serializable]
     public abstract class ANP_BBValue
     {
         public abstract Type NP_BBValueType { get; }

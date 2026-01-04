@@ -16,7 +16,7 @@ namespace Ebonor.GamePlay
         protected BaseNumericComponent _numericComponent;
         public BaseNumericComponent NumericComponent => _numericComponent;
 
-        protected bool _isServer;
+        protected eMPNetPosition _netPosition;
         
         protected INetworkBus _networkBus;
         protected IDataLoaderService _dataLoaderService;

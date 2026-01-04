@@ -100,7 +100,7 @@ namespace Ebonor.GamePlay
                 var unitData = _characterDataRepository.GetSlgUnitData(squadData.UnitId);
                 
                 var squad = _squadFactory.Create();
-                squad.Configure(spawnMsg.NetId, squadData, unitData, squadPayload.Faction, false);
+                squad.Configure(spawnMsg.NetId, squadData, unitData, squadPayload.Faction, eMPNetPosition.eLocalPlayer);
                 // Pass debug root to squad
                 squad.SetDebugVisualRoot(_debugRoot);
                 

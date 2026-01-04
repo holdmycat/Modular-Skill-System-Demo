@@ -18,7 +18,7 @@ namespace Ebonor.GamePlay
         /// <summary>
         /// Inject commander bootstrap data and bind net id (call once after creation).
         /// </summary>
-        public void Configure(CommanderBootstrapInfo bootstrapInfo,  bool isServer = true, uint tmpnetId = 0)
+        public void Configure(CommanderBootstrapInfo bootstrapInfo,  eMPNetPosition netPosition = eMPNetPosition.eServerOnly, uint tmpnetId = 0)
         {
             _bootstrapInfo = bootstrapInfo;
 
@@ -65,7 +65,7 @@ namespace Ebonor.GamePlay
             }
 
             uint netId = tmpnetId;
-            if (isServer)
+            if (netPosition == eMPNetPosition.eServerOnly)
             {
                 _seed = _bootstrapInfo.LegionConfig.Seed;
                 netId = _dataLoaderService.NextId();
@@ -81,7 +81,7 @@ namespace Ebonor.GamePlay
 
             
             
-            _networkBus.RegisterSpawns(NetId, this, isServer);
+            _networkBus.RegisterSpawns(NetId, this, netPosition);
             
         }
 

@@ -17,7 +17,7 @@ namespace Ebonor.DataCtrl
             public bool Success;
             public double Time;
             public uint OwnerId;
-            public bool IsServer;
+            public eMPNetPosition NetPosition;
         }
 
         private readonly Dictionary<long, State> _states = new Dictionary<long, State>();
@@ -34,7 +34,7 @@ namespace Ebonor.DataCtrl
                 Success = success,
                 Time = EditorApplication.timeSinceStartup,
                 OwnerId = tree.BelongToUnit,
-                IsServer = tree.Context?.IsServer ?? true
+                NetPosition = tree.Context?.netPosition ?? eMPNetPosition.eServerOnly
             };
         }
     }
@@ -67,7 +67,7 @@ namespace Ebonor.DataCtrl
             {
                 var state = kvp.Value;
                 EditorGUILayout.BeginVertical("box");
-                EditorGUILayout.LabelField($"TreeId: {kvp.Key} ({(state.IsServer ? "Server" : "Client")}) Owner:{state.OwnerId}");
+                EditorGUILayout.LabelField($"TreeId: {kvp.Key} ({(state.NetPosition == eMPNetPosition.eServerOnly ? "Server" : "Client")}) Owner:{state.OwnerId}");
                 EditorGUILayout.LabelField($"Node: {state.NodeName}");
                 EditorGUILayout.LabelField($"Event: {state.EventType} {(state.EventType == NPDebugEventType.Exit ? $"Success:{state.Success}" : string.Empty)}");
                 EditorGUILayout.LabelField($"Time: {state.Time:F2}");

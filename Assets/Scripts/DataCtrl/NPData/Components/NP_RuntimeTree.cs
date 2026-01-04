@@ -203,7 +203,7 @@ namespace Ebonor.DataCtrl
             NP_DataSupportor datasupport, 
             Clock _clock, 
             uint targetid = 0, 
-            bool isServer = true, 
+            eMPNetPosition isServer = eMPNetPosition.eServerOnly, 
             INPRuntimeEntityResolver resolver = null)
         {
             BelongToUnit = belongid;

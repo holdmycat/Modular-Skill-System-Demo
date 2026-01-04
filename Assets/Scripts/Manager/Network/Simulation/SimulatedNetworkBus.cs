@@ -26,8 +26,8 @@ namespace Ebonor.Manager
         private readonly Dictionary<uint, List<Action<ICommand>>> _cmdListeners = new Dictionary<uint, List<Action<ICommand>>>();
         private readonly Dictionary<uint, List<Action<IRpc>>> _rpcListeners = new Dictionary<uint, List<Action<IRpc>>>();
 
-        private readonly Dictionary<uint, List<(INetworkBehaviour behaviour, bool isServer)>> _dicSpawnActors =
-            new Dictionary<uint, List<(INetworkBehaviour behaviour, bool isServer)>>();
+        private readonly Dictionary<uint, List<(INetworkBehaviour behaviour, eMPNetPosition network)>> _dicSpawnActors =
+            new Dictionary<uint, List<(INetworkBehaviour behaviour, eMPNetPosition network)>>();
 
         
         public SimulatedNetworkBus()
@@ -129,18 +129,18 @@ namespace Ebonor.Manager
             }
         }
 
-        public void RegisterSpawns(uint netId, INetworkBehaviour behaviour, bool isServer = false, bool isAutoRegisterRpc = true)
+        public void RegisterSpawns(uint netId, INetworkBehaviour behaviour, eMPNetPosition netPosition = eMPNetPosition.eServerOnly, bool isAutoRegisterRpc = true)
         {
             if (!_dicSpawnActors.TryGetValue(netId, out var list))
             {
-                list = new List<(INetworkBehaviour behaviour, bool isServer)>();
+                list = new List<(INetworkBehaviour behaviour, eMPNetPosition isServer)>();
                 _dicSpawnActors[netId] = list;
             }
 
             if (!list.Exists(x => ReferenceEquals(x.behaviour, behaviour)))
             {
-                list.Add((behaviour, isServer));
-                if (isAutoRegisterRpc && !isServer)
+                list.Add((behaviour, netPosition));
+                if (isAutoRegisterRpc && netPosition != eMPNetPosition.eServerOnly)
                 {
                     // Auto-wire RPC listener
                     RegisterRpcListener(netId, behaviour.OnRpc);
@@ -154,8 +154,9 @@ namespace Ebonor.Manager
                 throw new InvalidOperationException($"[SimulatedNetworkBus] Duplicate registration detected for NetId:{netId}, Type:{behaviour.GetType().Name}. This indicates a logic error.");
             }
         }
+        
 
-        public void UnRegisterSpawns(uint netId, INetworkBehaviour behaviour, bool isServer = false, bool isAutoUnRegisterRpc = true)
+        public void UnRegisterSpawns(uint netId, INetworkBehaviour behaviour, eMPNetPosition netPosition = eMPNetPosition.eServerOnly, bool isAutoUnRegisterRpc = true)
         {
             if (_dicSpawnActors.TryGetValue(netId, out var list))
             {
@@ -178,16 +179,16 @@ namespace Ebonor.Manager
             log.WarnFormat("[UnRegisterSpawns] netId:{0} or behaviour not found", netId);
         }
 
-        public INetworkBehaviour GetSpawnedOrNull(uint netId, bool preferServer = false)
+        public INetworkBehaviour GetSpawnedOrNull(uint netId, eMPNetPosition netPosition = eMPNetPosition.eServerOnly)
         {
             if (!_dicSpawnActors.TryGetValue(netId, out var list) || list.Count == 0)
             {
                 throw new InvalidOperationException($"[SimulatedNetworkBus] No spawned behaviours found for NetId:{netId}");
             }
 
-            if (preferServer)
+            if (netPosition == eMPNetPosition.eServerOnly)
             {
-                var serverEntry = list.Find(x => x.isServer);
+                var serverEntry = list.Find(x => x.network == eMPNetPosition.eServerOnly);
                 if (serverEntry.behaviour != null)
                 {
                     return serverEntry.behaviour;
@@ -195,8 +196,8 @@ namespace Ebonor.Manager
 
                 throw new InvalidOperationException($"[SimulatedNetworkBus] Requested server behaviour for NetId:{netId} but none registered.");
             }
-
-            var clientEntry = list.FindLast(x => !x.isServer);
+            
+            var clientEntry = list.FindLast(x => x.network != eMPNetPosition.eServerOnly);
             if (clientEntry.behaviour != null)
             {
                 return clientEntry.behaviour;

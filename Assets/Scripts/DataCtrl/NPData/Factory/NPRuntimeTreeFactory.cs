@@ -12,7 +12,7 @@ namespace Ebonor.DataCtrl
         public uint TargetToUnit;
         public long RootId;
         public RuntimeTreeType TreeType;
-        public bool IsServer;
+        public eMPNetPosition NetPosition;
     }
 
     public interface INPRuntimeTreeFactory
@@ -81,7 +81,7 @@ namespace Ebonor.DataCtrl
 
             var runtimeTree = _instantiator.Instantiate<NP_RuntimeTree>();
 
-            var clock = request.IsServer ? _serverClock : _clientClock;
+            var clock = request.NetPosition == eMPNetPosition.eServerOnly ? _serverClock : _clientClock;
             
             runtimeTree.OnInitRuntimeTree( 
                 request.BelongToUnit, 
@@ -90,7 +90,7 @@ namespace Ebonor.DataCtrl
                 data, 
                 clock, 
                 request.TargetToUnit, 
-                request.IsServer,
+                request.NetPosition,
                 _resolver);
 
             BuildTree(runtimeTree, data);

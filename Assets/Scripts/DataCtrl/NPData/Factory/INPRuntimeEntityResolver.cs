@@ -5,7 +5,7 @@ namespace Ebonor.DataCtrl
     /// </summary>
     public interface INPRuntimeEntityResolver
     {
-        object Resolve(uint id, bool isServer);
+        object Resolve(uint id, eMPNetPosition isServer);
     }
 
     /// <summary>
@@ -13,7 +13,7 @@ namespace Ebonor.DataCtrl
     /// </summary>
     public sealed class NullNPRuntimeEntityResolver : INPRuntimeEntityResolver
     {
-        public object Resolve(uint id, bool isServer)
+        public object Resolve(uint id, eMPNetPosition isServer)
         {
             return null;
         }

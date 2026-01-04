@@ -21,7 +21,7 @@ namespace Ebonor.GamePlay
         /// <summary>
         /// Bind net id and register to network bus. Call right after construction.
         /// </summary>
-        public void Configure(uint netId, SlgUnitSquadAttributesNodeData squadUnitAttr, SlgUnitAttributesNodeData unitAttr, FactionType factionType, bool isServer = false)
+        public void Configure(uint netId, SlgUnitSquadAttributesNodeData squadUnitAttr, SlgUnitAttributesNodeData unitAttr, FactionType factionType, eMPNetPosition isServer = eMPNetPosition.eServerOnly)
         {
             if (NetId != 0)
             {
@@ -30,7 +30,7 @@ namespace Ebonor.GamePlay
 
             _squadUnitAttr = squadUnitAttr;
             _unitAttr = unitAttr;
-            _isServer = isServer;
+            _netPosition = isServer;
             Faction = factionType;
             
             BindId(netId);
@@ -51,7 +51,7 @@ namespace Ebonor.GamePlay
         {
             NPRuntimeTreeRequest request = new NPRuntimeTreeRequest
             {
-                IsServer = _isServer,
+                NetPosition = _netPosition,
                 BelongToUnit = _netId,
                 StartToUnit = _netId,
                 TreeType = RuntimeTreeType.SlgSquadBehavour,

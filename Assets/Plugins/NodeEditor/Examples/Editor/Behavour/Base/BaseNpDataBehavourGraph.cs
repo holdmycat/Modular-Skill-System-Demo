@@ -4,6 +4,7 @@ using System.Text;
 using Ebonor.DataCtrl;
 using Ebonor.Framework;
 using GraphProcessor;
+using UnityEditor;
 using UnityEngine;
 
 namespace Plugins.NodeEditor
@@ -143,8 +144,9 @@ namespace Plugins.NodeEditor
             _name = name;
             Debug.LogFormat("NPBehaveGraph-OnGraphEnabled, node count:{0}", nodes.Count);
             onGraphChanges += GraphChangesCallback;
-            AddNetPosBb(); 
+            // Ensure the static reference is set before any default injection.
             NP_BlackBoardHelper.SetCurrentBlackBoardDataManager(this);
+            AddNetPosBb();
         }
         
         protected override void OnGraphDisabled()
@@ -159,6 +161,37 @@ namespace Plugins.NodeEditor
           
         }
         #endregion
+
+
+        [ContextMenu("一键配置")]
+        public override void OneKeySet()
+        {
+#if UNITY_EDITOR
+            RefreshExportedBinary();
+#endif
+        }
+        
+#if UNITY_EDITOR
+        /// <summary>
+        /// Force Unity to re-import the generated .bytes file so it is immediately usable without
+        /// having to change focus away from the editor.
+        /// </summary>
+        private void RefreshExportedBinary()
+        {
+            if (string.IsNullOrEmpty(_configPath) || string.IsNullOrEmpty(_name)) return;
+
+            // Ensure we only try to import assets that live under the project Assets folder.
+            if (_configPath.StartsWith("Assets"))
+            {
+                var assetPath = $"{_configPath}/{_name}.bytes";
+                AssetDatabase.ImportAsset(assetPath);
+                Debug.Log($"反序列化主动技能 {_configPath}/{this._name}.bytes 刷新成功");
+            }
+
+            AssetDatabase.Refresh();
+        }
+#endif
+        
     }
     
     
@@ -249,4 +282,3 @@ namespace Plugins.NodeEditor
         }
     }
 }
-

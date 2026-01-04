@@ -4,6 +4,9 @@ using Ebonor.Framework;
 using MongoDB.Bson.IO;
 using MongoDB.Bson.Serialization;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Plugins.NodeEditor
 {
@@ -83,7 +86,30 @@ namespace Plugins.NodeEditor
             BtnAutoSetCanvasDatas();
             Save();
             TestDe();
+#if UNITY_EDITOR
+            RefreshExportedBinary();
+#endif
         }
+        
+#if UNITY_EDITOR
+        /// <summary>
+        /// Force Unity to re-import the generated .bytes file so it is immediately usable without
+        /// having to change focus away from the editor.
+        /// </summary>
+        private void RefreshExportedBinary()
+        {
+            if (string.IsNullOrEmpty(_configPath) || string.IsNullOrEmpty(_name)) return;
+
+            // Ensure we only try to import assets that live under the project Assets folder.
+            if (_configPath.StartsWith("Assets"))
+            {
+                var assetPath = $"{_configPath}/{_name}.bytes";
+                AssetDatabase.ImportAsset(assetPath);
+            }
+
+            AssetDatabase.Refresh();
+        }
+#endif
         
         private void AutoSetSquadBehavour_NodeData(NP_DataSupportor npDataSupportor)
         {

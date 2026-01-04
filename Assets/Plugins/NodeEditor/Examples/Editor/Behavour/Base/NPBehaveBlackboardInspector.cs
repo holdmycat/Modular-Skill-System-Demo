@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.IO;
 using Ebonor.DataCtrl;
 using UnityEditor;
 using UnityEngine;
@@ -21,7 +22,7 @@ namespace Plugins.NodeEditor
         private static bool _showAddValueForm;
         private static readonly Type[] _bbValueTypes = AppDomain.CurrentDomain.GetAssemblies()
             .SelectMany(a => SafeGetTypes(a))
-            .Where(t => typeof(ANP_BBValue).IsAssignableFrom(t) && !t.IsAbstract)
+            .Where(IsAssignableBbValue)
             .OrderBy(t => t.Name)
             .ToArray();
         private static readonly string[] _bbValueTypeNames = _bbValueTypes.Select(t => t.Name).ToArray();
@@ -229,10 +230,24 @@ namespace Plugins.NodeEditor
 
         private object GetDefault(Type t) => t.IsValueType ? Activator.CreateInstance(t) : null;
 
+        private static bool IsAssignableBbValue(Type type)
+        {
+            try
+            {
+                return typeof(ANP_BBValue).IsAssignableFrom(type) && !type.IsAbstract;
+            }
+            catch (System.Exception ex) when (ex is TypeLoadException || ex is FileNotFoundException)
+            {
+                // Skip types that cannot be loaded because of missing dependencies.
+                return false;
+            }
+        }
+
         private static IEnumerable<Type> SafeGetTypes(Assembly asm)
         {
             try { return asm.GetTypes(); }
             catch (ReflectionTypeLoadException ex) { return ex.Types.Where(t => t != null); }
+            catch (TypeLoadException) { return Enumerable.Empty<Type>(); }
         }
 
         #endregion

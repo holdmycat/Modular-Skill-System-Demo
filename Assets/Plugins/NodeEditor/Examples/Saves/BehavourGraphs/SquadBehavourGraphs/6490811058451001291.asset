@@ -60,10 +60,10 @@ MonoBehaviour:
     position: {x: 240, y: 18, z: 0}
     scale: {x: 0.8695652, y: 0.8695652, z: 1}
   nodes:
-  - rid: 1564770040848843010
-  - rid: 1564770040848843011
-  - rid: 1564770040848843012
-  - rid: 1564770040848843013
+  - rid: 1564770063397158978
+  - rid: 1564770063397158979
+  - rid: 1564770063397158980
+  - rid: 1564770063397158981
   edges:
   - GUID: 5c71b972-047f-4e98-91db-7c29dbb07f66
     owner: {fileID: 11400000}
@@ -104,7 +104,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1564770040848843010
+    - rid: 1564770063397158978
       type: {class: NP_RootNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
       data:
         nodeCustomName: 
@@ -124,7 +124,7 @@ MonoBehaviour:
           id: 6490811058451001291
           LinkedIds: 030001004057352d
           NodeDes: 
-    - rid: 1564770040848843011
+    - rid: 1564770063397158979
       type: {class: NP_SequenceNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
       data:
         nodeCustomName: 
@@ -144,7 +144,7 @@ MonoBehaviour:
           id: 3257605837862010883
           LinkedIds: 010001004057352d020001004057352d
           NodeDes: "\u5E8F\u5217\u7EC4\u5408\u5668"
-    - rid: 1564770040848843012
+    - rid: 1564770063397158980
       type: {class: NP_PrintDebugLogNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
       data:
         nodeCustomName: 
@@ -165,8 +165,8 @@ MonoBehaviour:
           LinkedIds: 
           NodeDes: "\u6253\u5370\u65E5\u5FD7"
           NpClassForStoreAction:
-            rid: 1564770040848843014
-    - rid: 1564770040848843013
+            rid: 1564770063397158982
+    - rid: 1564770063397158981
       type: {class: NP_WaitUntilStoppedNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
       data:
         nodeCustomName: 
@@ -186,7 +186,7 @@ MonoBehaviour:
           id: 3257605837862010882
           LinkedIds: 
           NodeDes: "\u963B\u6B62\u8F6E\u8BE2\uFF0C\u63D0\u9AD8\u6548\u7387"
-    - rid: 1564770040848843014
+    - rid: 1564770063397158982
       type: {class: NP_PrintDebugLog, ns: Ebonor.GamePlay, asm: Ebonor.GamePlay}
       data:
         BelongToUnit: 0

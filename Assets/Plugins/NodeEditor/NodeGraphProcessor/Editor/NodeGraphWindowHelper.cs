@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEditor;
+using UnityEngine;
 
 namespace GraphProcessor
 {
@@ -16,7 +17,15 @@ namespace GraphProcessor
                 return universalGraphWindow as T;
             }
 
-            T resultWindow = EditorWindow.CreateWindow<T>(typeof(T));
+#if UNITY_2020_1_OR_NEWER
+            // Create a fresh window (instead of reusing GetWindow) so each asset opens in its own tab,
+            // and dock it next to the Scene view by default.
+            T resultWindow = EditorWindow.CreateWindow<T>(new[] { typeof(SceneView) });
+            resultWindow.titleContent = new GUIContent(typeof(T).Name);
+            resultWindow.Focus();
+#else
+            T resultWindow = EditorWindow.GetWindow<T>();
+#endif
             AllNodeGraphWindows[path] = resultWindow;
             return resultWindow;
         }

@@ -18,6 +18,7 @@ namespace Ebonor.GamePlay
             ICharacterDataRepository characterDataRepository,
             ResourceLoader resourceLoader,
             INPRuntimeTreeFactory npRuntimeTreeFactory,
+            SquadStackFsm.Factory stackFsmFactory,
             GlobalGameConfig globalGameConfig,
             CommanderContextData contextData, ShowcaseContext showcaseContext)
         {
@@ -32,6 +33,7 @@ namespace Ebonor.GamePlay
             _faction = contextData.Faction;
             _npRuntimeTreeFactory = npRuntimeTreeFactory;
             _globalGameConfig = globalGameConfig;
+            _stackFsmFactory = stackFsmFactory;
         }
         
 
@@ -167,6 +169,24 @@ namespace Ebonor.GamePlay
                  _visualsRoot.transform.position = Position;
                  _visualsRoot.transform.rotation = Rotation;
              }
+        }
+
+        private void ApplyRemoteStackState(RpcSquadStackStateChanged rpc)
+        {
+            // Server is authoritative for class type when constructing FSM on client.
+            if (!TryInitStackFsm(rpc.ClassType)) return;
+            _stackFsm.SetState(rpc.State, true);
+        }
+
+        public override void OnRpc(IRpc rpc)
+        {
+            if (rpc is RpcSquadStackStateChanged stackRpc)
+            {
+                ApplyRemoteStackState(stackRpc);
+                return;
+            }
+
+            base.OnRpc(rpc);
         }
         
         public class Factory : PlaceholderFactory<ClientSquad> 

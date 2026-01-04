@@ -133,6 +133,16 @@ namespace Ebonor.DataCtrl
     {
         public uint NetId;
     }
+
+    /// <summary>
+    /// RPC: Sync squad stack animation state from server to clients.
+    /// </summary>
+    public struct RpcSquadStackStateChanged : IRpc
+    {
+        public uint NetId;
+        public UnitClassType ClassType;
+        public eBuffBindAnimStackState State;
+    }
     
     /// <summary>
     /// Network Interface for sending Commands and RPCs.

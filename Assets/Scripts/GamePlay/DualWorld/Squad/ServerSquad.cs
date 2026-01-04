@@ -15,6 +15,7 @@ namespace Ebonor.GamePlay
             IDataLoaderService dataLoaderService, 
             ICharacterDataRepository characterDataRepository,
             INPRuntimeTreeFactory npRuntimeTreeFactory,
+            SquadStackFsm.Factory stackFsmFactory,
             GlobalGameConfig globalGameConfig,
             CommanderContextData contextData)
         {
@@ -26,27 +27,51 @@ namespace Ebonor.GamePlay
             _npRuntimeTreeFactory = npRuntimeTreeFactory;
             _faction = contextData.Faction;
             _globalGameConfig = globalGameConfig;
+            _stackFsmFactory = stackFsmFactory;
         }
         
         public override void InitAsync()
         {
             log.Info($"[ServerSquad] InitAsync");
             
-            //create soldiers
-            var formation = _squadUnitAttr.Formation;
+            if (EnsureStackFsm())
+            {
+                // Birth -> Idle
+                //_stackFsm.BootstrapBirthThenIdle();
+            }
+        }
+        
+        private bool EnsureStackFsm()
+        {
+            if (!TryInitStackFsm())
+            {
+                return false;
+            }
 
-            var count = _squadUnitAttr.MaxCount;
-            
-            //我需要知道加载的模型id
-            var unitId = _squadUnitAttr.UnitId;
+            _stackFsm.OnStateChanged -= OnServerStackStateChanged;
+            _stackFsm.OnStateChanged += OnServerStackStateChanged;
+            return true;
+        }
 
-            //我需要知道加载的位置
+        private void OnServerStackStateChanged(eBuffBindAnimStackState state)
+        {
+            if (_networkBus == null || _stackFsm == null) return;
 
-            //我需要知道阵型
+            _networkBus.SendRpc(NetId, new RpcSquadStackStateChanged
+            {
+                NetId = NetId,
+                ClassType = _stackFsm.ClassType,
+                State = state
+            });
+        }
 
-
-
-
+        /// <summary>
+        /// Server-only entry to drive stack state changes.
+        /// </summary>
+        public void SetStackStateOnServer(eBuffBindAnimStackState state, bool force = false)
+        {
+            if (!EnsureStackFsm()) return;
+            _stackFsm.SetState(state, force);
         }
         
         protected override void InitializeNumeric()

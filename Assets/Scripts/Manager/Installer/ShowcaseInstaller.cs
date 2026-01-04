@@ -136,6 +136,7 @@ namespace Ebonor.Manager
             
             // Bind Factories in this Scope so they can access CommanderContextData
             subContainer.BindFactory<ServerSquad, ServerSquad.Factory>().AsSingle();
+            subContainer.BindFactory<UnitClassType, SquadStackFsm, SquadStackFsm.Factory>().AsTransient();
             
             // Bind Numeric Factories
             subContainer.BindFactory<uint, CommanderNumericComponent, CommanderNumericComponent.Factory>().AsSingle();
@@ -154,6 +155,7 @@ namespace Ebonor.Manager
             subContainer.Bind<ClientCommander>().AsSingle();
             
             subContainer.BindFactory<ClientSquad, ClientSquad.Factory>().AsSingle();
+            subContainer.BindFactory<UnitClassType, SquadStackFsm, SquadStackFsm.Factory>().AsTransient();
             
             // Bind Numeric Factories
             subContainer.BindFactory<uint, CommanderNumericComponent, CommanderNumericComponent.Factory>().AsSingle();

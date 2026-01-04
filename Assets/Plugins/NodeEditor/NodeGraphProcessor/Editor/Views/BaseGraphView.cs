@@ -25,6 +25,12 @@ namespace GraphProcessor
 		/// </summary>
 		public BaseGraph							graph;
 
+		void MarkGraphDirty()
+		{
+			if (graph != null)
+				EditorUtility.SetDirty(graph);
+		}
+
 		/// <summary>
 		/// Connector listener that will create the edges between ports
 		/// </summary>
@@ -407,7 +413,8 @@ namespace GraphProcessor
 
 		public  void GraphChangesCallback(GraphChanges changes)
 		{
-			
+			MarkGraphDirty();
+
 			if (changes.removedEdge != null)
 			{
 				var edge = edgeViews.FirstOrDefault(e => e.serializedEdge == changes.removedEdge);
@@ -422,6 +429,7 @@ namespace GraphProcessor
 			{
 				graph.position = viewTransform.position;
 				graph.scale = viewTransform.scale;
+				MarkGraphDirty();
 			}
 		}
 

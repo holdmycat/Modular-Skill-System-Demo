@@ -36,7 +36,7 @@ MonoBehaviour:
       jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"603d78a8-1c3a-417b-94f6-b3cb686a3651\",\"computeOrder\":5,\"position\":{\"serializedVersion\":\"2\",\"x\":366.0,\"y\":309.0000305175781,\"width\":202.0,\"height\":77.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NpWaitUntilStoppedData\":{\"id\":3258676693467987972,\"LinkedIds\":[],\"NodeDes\":\"\u963B\u6B62\u8F6E\u8BE2\uFF0C\u63D0\u9AD8\u6548\u7387\"}}"
     - type: Plugins.NodeEditor.NP_WaitUntilStoppedNode, NodeGraphProcessor.Examples,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"d91db51a-6bfc-4457-afa7-350fbcb4598e\",\"computeOrder\":6,\"position\":{\"serializedVersion\":\"2\",\"x\":138.00003051757813,\"y\":570.0001220703125,\"width\":202.0,\"height\":77.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NpWaitUntilStoppedData\":{\"id\":3258676693467987969,\"LinkedIds\":[],\"NodeDes\":\"\u963B\u6B62\u8F6E\u8BE2\uFF0C\u63D0\u9AD8\u6548\u7387\"}}"
+      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"d91db51a-6bfc-4457-afa7-350fbcb4598e\",\"computeOrder\":6,\"position\":{\"serializedVersion\":\"2\",\"x\":233.219970703125,\"y\":583.6481323242188,\"width\":202.0,\"height\":77.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NpWaitUntilStoppedData\":{\"id\":3258676693467987969,\"LinkedIds\":[],\"NodeDes\":\"\u963B\u6B62\u8F6E\u8BE2\uFF0C\u63D0\u9AD8\u6548\u7387\"}}"
     edges:
     - GUID: 6e8120d2-bda9-4eb3-a1f8-9a231490f4e9
       owner: {fileID: 11400000}
@@ -90,16 +90,9 @@ MonoBehaviour:
     pinnedElements: []
     exposedParameters: []
     stickyNotes: []
-    position: {x: 112, y: -15, z: 0}
+    position: {x: 112, y: -142, z: 0}
     scale: {x: 0.7561437, y: 0.7561437, z: 1}
-  nodes:
-  - rid: 1564770063397158969
-  - rid: 1564770063397158970
-  - rid: 1564770063397158971
-  - rid: 1564770063397158972
-  - rid: 1564770063397158973
-  - rid: 1564770063397158974
-  - rid: 1564770063397158975
+  nodes: []
   edges:
   - GUID: 6e8120d2-bda9-4eb3-a1f8-9a231490f4e9
     owner: {fileID: 11400000}
@@ -154,7 +147,7 @@ MonoBehaviour:
   exposedParameters: []
   serializedParameterList: []
   stickyNotes: []
-  position: {x: 112, y: -15, z: 0}
+  position: {x: 112, y: -142, z: 0}
   scale: {x: 0.7561437, y: 0.7561437, z: 1}
   _name: 3195703229347658783
   _configPath: Assets/Resources/AllSquadBehavour
@@ -163,163 +156,4 @@ MonoBehaviour:
       NPBehaveTreeDataId: 3195703229347658783
   references:
     version: 2
-    RefIds:
-    - rid: 1564770063397158969
-      type: {class: NP_RootNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
-      data:
-        nodeCustomName: 
-        GUID: 11f086f0-5b71-43b6-8f23-9decc2a959bc
-        computeOrder: 0
-        position:
-          serializedVersion: 2
-          x: 50.999985
-          y: 60.708
-          width: 135
-          height: 75
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        Level: 0
-        MRootNodeData:
-          id: 3195703229347658783
-          LinkedIds: 060001003025392d
-          NodeDes: 
-    - rid: 1564770063397158970
-      type: {class: NP_SelectorNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
-      data:
-        nodeCustomName: 
-        GUID: b179f973-31b1-42f0-870c-65993833b161
-        computeOrder: 1
-        position:
-          serializedVersion: 2
-          x: 72.00001
-          y: 177
-          width: 114
-          height: 85
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        Level: 0
-        NP_SelectorNodeData:
-          id: 3258676693467987974
-          LinkedIds: 050001003025392d040001003025392d
-          NodeDes: "\u9009\u62E9\u7EC4\u5408\u5668"
-    - rid: 1564770063397158971
-      type: {class: NP_BlackboardConditionNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
-      data:
-        nodeCustomName: 
-        GUID: 28e17526-678d-4a13-b42d-58cbef936bf7
-        computeOrder: 2
-        position:
-          serializedVersion: 2
-          x: 46.000004
-          y: 303.15
-          width: 140
-          height: 85
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        Level: 0
-        NP_BlackboardConditionNodeData:
-          id: 3258676693467987973
-          LinkedIds: 030001003025392d
-          NodeDes: IsGetBirth
-          Ope: 2
-          Stop: 4
-          NPBalckBoardRelationData:
-            BBKey: IsGetBirth
-            NP_BBValueType: System.Boolean
-            WriteOrCompareToBB: 1
-            NP_BBValue:
-              rid: 1564770063397158976
-    - rid: 1564770063397158972
-      type: {class: NP_SequenceNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
-      data:
-        nodeCustomName: 
-        GUID: b8e04e82-f007-412b-a3e7-b8219bb44e00
-        computeOrder: 3
-        position:
-          serializedVersion: 2
-          x: 34
-          y: 433.8501
-          width: 114
-          height: 85
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        Level: 0
-        NP_SequenceNodeData:
-          id: 3258676693467987971
-          LinkedIds: 020001003025392d010001003025392d
-          NodeDes: "\u5E8F\u5217\u7EC4\u5408\u5668"
-    - rid: 1564770063397158973
-      type: {class: NP_PrintDebugLogNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
-      data:
-        nodeCustomName: 
-        GUID: f387c646-ee90-463d-854f-fe7fa7d2fd37
-        computeOrder: 4
-        position:
-          serializedVersion: 2
-          x: -102.67752
-          y: 570
-          width: 114
-          height: 75
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        Level: 0
-        NP_ActionNodeData:
-          id: 3258676693467987970
-          LinkedIds: 
-          NodeDes: "\u6253\u5370\u65E5\u5FD7"
-          NpClassForStoreAction:
-            rid: 1564770063397158977
-    - rid: 1564770063397158974
-      type: {class: NP_WaitUntilStoppedNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
-      data:
-        nodeCustomName: 
-        GUID: 603d78a8-1c3a-417b-94f6-b3cb686a3651
-        computeOrder: 5
-        position:
-          serializedVersion: 2
-          x: 366
-          y: 309.00003
-          width: 202
-          height: 77
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        Level: 0
-        NpWaitUntilStoppedData:
-          id: 3258676693467987972
-          LinkedIds: 
-          NodeDes: "\u963B\u6B62\u8F6E\u8BE2\uFF0C\u63D0\u9AD8\u6548\u7387"
-    - rid: 1564770063397158975
-      type: {class: NP_WaitUntilStoppedNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
-      data:
-        nodeCustomName: 
-        GUID: d91db51a-6bfc-4457-afa7-350fbcb4598e
-        computeOrder: 6
-        position:
-          serializedVersion: 2
-          x: 138.00003
-          y: 570.0001
-          width: 202
-          height: 77
-        expanded: 0
-        debug: 0
-        nodeLock: 0
-        Level: 0
-        NpWaitUntilStoppedData:
-          id: 3258676693467987969
-          LinkedIds: 
-          NodeDes: "\u963B\u6B62\u8F6E\u8BE2\uFF0C\u63D0\u9AD8\u6548\u7387"
-    - rid: 1564770063397158976
-      type: {class: NP_BBValue_Bool, ns: Ebonor.DataCtrl, asm: Ebonor.DataCtrl}
-      data:
-        Value: 1
-    - rid: 1564770063397158977
-      type: {class: NP_PrintDebugLog, ns: Ebonor.GamePlay, asm: Ebonor.GamePlay}
-      data:
-        BelongToUnit: 0
-        DebugContent: Get Birth
+    RefIds: []

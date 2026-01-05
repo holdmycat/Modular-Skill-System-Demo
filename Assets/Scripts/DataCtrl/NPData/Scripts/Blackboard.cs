@@ -92,16 +92,16 @@ namespace Ebonor.DataCtrl
         public void Set<T>(string key, T value)
         {
             
-#if UNITY_EDITOR
-            if (key.Equals(ConstData.BB_ISIDLE))
-            {
-                if (value is bool valueBool && valueBool.Equals(false))
-                {
-                    log.DebugFormat("Script, SetBlackBoardValue, BBKey:{0}, BBValue:{1}", key, valueBool);
-                }
-               
-            }
-#endif
+// #if UNITY_EDITOR
+//             if (key.Equals(ConstData.BB_ISIDLE))
+//             {
+//                 if (value is bool valueBool && valueBool.Equals(false))
+//                 {
+//                     log.DebugFormat("Script, SetBlackBoardValue, BBKey:{0}, BBValue:{1}", key, valueBool);
+//                 }
+//                
+//             }
+// #endif
             
             if (this.parentBlackboard != null && this.parentBlackboard.Isset(key))
             {

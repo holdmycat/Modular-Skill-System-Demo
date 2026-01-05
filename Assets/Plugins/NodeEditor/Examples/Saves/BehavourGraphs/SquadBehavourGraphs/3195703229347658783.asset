@@ -17,25 +17,40 @@ MonoBehaviour:
     nodes:
     - type: Plugins.NodeEditor.NP_RootNode, NodeGraphProcessor.Examples, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-      jsonDatas: '{"nodeCustomName":"","GUID":"11f086f0-5b71-43b6-8f23-9decc2a959bc","computeOrder":0,"position":{"serializedVersion":"2","x":201.5,"y":61.0,"width":0.0,"height":0.0},"expanded":false,"debug":false,"nodeLock":false,"Level":0,"MRootNodeData":{"id":3195703229347658783,"LinkedIds":[3259122734411612166],"NodeDes":""}}'
+      jsonDatas: '{"nodeCustomName":"","GUID":"11f086f0-5b71-43b6-8f23-9decc2a959bc","computeOrder":0,"position":{"serializedVersion":"2","x":595.0,"y":61.0,"width":0.0,"height":0.0},"expanded":false,"debug":false,"nodeLock":false,"Level":0,"MRootNodeData":{"id":3195703229347658783,"LinkedIds":[3260505885679616010],"NodeDes":""}}'
     - type: Plugins.NodeEditor.NP_SelectorNode, NodeGraphProcessor.Examples, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"b179f973-31b1-42f0-870c-65993833b161\",\"computeOrder\":1,\"position\":{\"serializedVersion\":\"2\",\"x\":212.5,\"y\":186.0,\"width\":0.0,\"height\":0.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NP_SelectorNodeData\":{\"id\":3259122734411612166,\"LinkedIds\":[3259122734411612164,3259122734411612165],\"NodeDes\":\"\u9009\u62E9\u7EC4\u5408\u5668\"}}"
+      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"b179f973-31b1-42f0-870c-65993833b161\",\"computeOrder\":1,\"position\":{\"serializedVersion\":\"2\",\"x\":606.0,\"y\":186.0,\"width\":0.0,\"height\":0.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NP_SelectorNodeData\":{\"id\":3260505885679616010,\"LinkedIds\":[3260505885679616008,3260505885679616009],\"NodeDes\":\"\u9009\u62E9\u7EC4\u5408\u5668\"}}"
     - type: Plugins.NodeEditor.NP_BlackboardConditionNode, NodeGraphProcessor.Examples,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      jsonDatas: '{"nodeCustomName":"","GUID":"28e17526-678d-4a13-b42d-58cbef936bf7","computeOrder":2,"position":{"serializedVersion":"2","x":77.5,"y":321.0,"width":0.0,"height":0.0},"expanded":false,"debug":false,"nodeLock":false,"Level":0,"NP_BlackboardConditionNodeData":{"id":3259122734411612164,"LinkedIds":[3259122734411612163],"NodeDes":"IsGetBirth","Ope":2,"Stop":4,"NPBalckBoardRelationData":{"BBKey":"IsGetBirth","NP_BBValueType":"System.Boolean","WriteOrCompareToBB":true,"NP_BBValue":{"rid":1000}}},"references":{"version":2,"RefIds":[{"rid":1000,"type":{"class":"NP_BBValue_Bool","ns":"Ebonor.DataCtrl","asm":"Ebonor.DataCtrl"},"data":{"Value":true}}]}}'
+      jsonDatas: '{"nodeCustomName":"","GUID":"28e17526-678d-4a13-b42d-58cbef936bf7","computeOrder":2,"position":{"serializedVersion":"2","x":471.0,"y":321.0,"width":0.0,"height":0.0},"expanded":false,"debug":false,"nodeLock":false,"Level":0,"NP_BlackboardConditionNodeData":{"id":3260505885679616008,"LinkedIds":[3260505885679616007],"NodeDes":"Born","Ope":2,"Stop":4,"NPBalckBoardRelationData":{"BBKey":"BuffBindAnimStackState","NP_BBValueType":"Ebonor.DataCtrl.eBuffBindAnimStackState","WriteOrCompareToBB":true,"NP_BBValue":{"rid":1000}}},"references":{"version":2,"RefIds":[{"rid":1000,"type":{"class":"NP_BBValue_BuffBindAnimStackState","ns":"Ebonor.DataCtrl","asm":"Ebonor.DataCtrl"},"data":{"Value":2}}]}}'
     - type: Plugins.NodeEditor.NP_SequenceNode, NodeGraphProcessor.Examples, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
-      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"b8e04e82-f007-412b-a3e7-b8219bb44e00\",\"computeOrder\":3,\"position\":{\"serializedVersion\":\"2\",\"x\":88.5,\"y\":454.0,\"width\":0.0,\"height\":0.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NP_SequenceNodeData\":{\"id\":3259122734411612163,\"LinkedIds\":[3259122734411612161,3259122734411612162],\"NodeDes\":\"\u5E8F\u5217\u7EC4\u5408\u5668\"}}"
+      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"b8e04e82-f007-412b-a3e7-b8219bb44e00\",\"computeOrder\":3,\"position\":{\"serializedVersion\":\"2\",\"x\":482.0,\"y\":454.0,\"width\":0.0,\"height\":0.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NP_SequenceNodeData\":{\"id\":3260505885679616007,\"LinkedIds\":[3260505885679616001,3260505885679616002,3260505885679616003,3260505885679616004,3260505885679616006,3260505885679616005],\"NodeDes\":\"\u5E8F\u5217\u7EC4\u5408\u5668\"}}"
     - type: Plugins.NodeEditor.NP_PrintDebugLogNode, NodeGraphProcessor.Examples,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"f387c646-ee90-463d-854f-fe7fa7d2fd37\",\"computeOrder\":4,\"position\":{\"serializedVersion\":\"2\",\"x\":0.0,\"y\":589.0,\"width\":0.0,\"height\":0.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NP_ActionNodeData\":{\"id\":3259122734411612161,\"LinkedIds\":[],\"NodeDes\":\"\u6253\u5370\u65E5\u5FD7\",\"NpClassForStoreAction\":{\"rid\":1000}},\"references\":{\"version\":2,\"RefIds\":[{\"rid\":1000,\"type\":{\"class\":\"NP_PrintDebugLog\",\"ns\":\"Ebonor.GamePlay\",\"asm\":\"Ebonor.GamePlay\"},\"data\":{\"BelongToUnit\":0,\"DebugContent\":\"\u6B65\u5175\u51FA\u751F\"}}]}}"
+      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"f387c646-ee90-463d-854f-fe7fa7d2fd37\",\"computeOrder\":4,\"position\":{\"serializedVersion\":\"2\",\"x\":0.0,\"y\":589.0,\"width\":0.0,\"height\":0.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NP_ActionNodeData\":{\"id\":3260505885679616001,\"LinkedIds\":[],\"NodeDes\":\"\u6B65\u5175\u51FA\u751F\u5F00\u59CB\",\"NpClassForStoreAction\":{\"rid\":1000}},\"references\":{\"version\":2,\"RefIds\":[{\"rid\":1000,\"type\":{\"class\":\"NP_PrintDebugLog\",\"ns\":\"Ebonor.GamePlay\",\"asm\":\"Ebonor.GamePlay\"},\"data\":{\"BelongToUnit\":0,\"DebugContent\":\"\u6B65\u5175\u51FA\u751F\u5F00\u59CB\"}}]}}"
     - type: Plugins.NodeEditor.NP_WaitUntilStoppedNode, NodeGraphProcessor.Examples,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"603d78a8-1c3a-417b-94f6-b3cb686a3651\",\"computeOrder\":5,\"position\":{\"serializedVersion\":\"2\",\"x\":263.5,\"y\":321.0,\"width\":0.0,\"height\":0.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NpWaitUntilStoppedData\":{\"id\":3259122734411612165,\"LinkedIds\":[],\"NodeDes\":\"\u963B\u6B62\u8F6E\u8BE2\uFF0C\u63D0\u9AD8\u6548\u7387\"}}"
+      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"603d78a8-1c3a-417b-94f6-b3cb686a3651\",\"computeOrder\":5,\"position\":{\"serializedVersion\":\"2\",\"x\":657.0,\"y\":321.0,\"width\":0.0,\"height\":0.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NpWaitUntilStoppedData\":{\"id\":3260505885679616009,\"LinkedIds\":[],\"NodeDes\":\"\u963B\u6B62\u8F6E\u8BE2\uFF0C\u63D0\u9AD8\u6548\u7387\"}}"
+    - type: Plugins.NodeEditor.NP_ChangeSquadStackStateActionNode, NodeGraphProcessor.Examples,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"ff9fd9ae-69ad-462a-b754-0226206e3f8c\",\"computeOrder\":6,\"position\":{\"serializedVersion\":\"2\",\"x\":164.0,\"y\":589.0,\"width\":0.0,\"height\":0.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NP_ActionNodeData\":{\"id\":3260505885679616002,\"LinkedIds\":[],\"NodeDes\":\"\u5207\u6362Squad
+        Born\",\"NpClassForStoreAction\":{\"rid\":1000}},\"references\":{\"version\":2,\"RefIds\":[{\"rid\":1000,\"type\":{\"class\":\"NP_ChangeSquadStackStateAction\",\"ns\":\"Ebonor.GamePlay\",\"asm\":\"Ebonor.GamePlay\"},\"data\":{\"BelongToUnit\":0,\"TargetState\":{\"Value\":2}}}]}}"
+    - type: Plugins.NodeEditor.NP_WaitActionNode, NodeGraphProcessor.Examples, Version=0.0.0.0,
+        Culture=neutral, PublicKeyToken=null
+      jsonDatas: '{"nodeCustomName":"","GUID":"c290d11d-830b-4d48-8136-024c2d2db43f","computeOrder":7,"position":{"serializedVersion":"2","x":380.0,"y":589.0,"width":0.0,"height":0.0},"expanded":false,"debug":false,"nodeLock":false,"Level":0,"NP_ActionNodeData":{"id":3260505885679616003,"LinkedIds":[],"NodeDes":"0.5s","NpClassForStoreAction":{"rid":1000}},"references":{"version":2,"RefIds":[{"rid":1000,"type":{"class":"NP_WaitAction","ns":"Ebonor.GamePlay","asm":"Ebonor.GamePlay"},"data":{"BelongToUnit":0,"WaitDuration":0.5}}]}}'
+    - type: Plugins.NodeEditor.NP_RemoveSquadStackStateActionNode, NodeGraphProcessor.Examples,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"4e00ab0c-1ffd-4bad-9059-041fdacb4661\",\"computeOrder\":8,\"position\":{\"serializedVersion\":\"2\",\"x\":570.0,\"y\":589.0,\"width\":0.0,\"height\":0.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NP_ActionNodeData\":{\"id\":3260505885679616004,\"LinkedIds\":[],\"NodeDes\":\"\u79FB\u9664
+        Squad Born\",\"NpClassForStoreAction\":{\"rid\":1000}},\"references\":{\"version\":2,\"RefIds\":[{\"rid\":1000,\"type\":{\"class\":\"NP_RemoveSquadStackStateAction\",\"ns\":\"Ebonor.GamePlay\",\"asm\":\"Ebonor.GamePlay\"},\"data\":{\"BelongToUnit\":0,\"StateToRemove\":{\"Value\":2}}}]}}"
+    - type: Plugins.NodeEditor.NP_PrintDebugLogNode, NodeGraphProcessor.Examples,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"a31e1524-cb4b-4b66-9860-ed3e5ed9d65a\",\"computeOrder\":9,\"position\":{\"serializedVersion\":\"2\",\"x\":964.0,\"y\":589.0,\"width\":0.0,\"height\":0.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NP_ActionNodeData\":{\"id\":3260505885679616005,\"LinkedIds\":[],\"NodeDes\":\"\u6B65\u5175\u51FA\u751F\u7ED3\u675F\",\"NpClassForStoreAction\":{\"rid\":1000}},\"references\":{\"version\":2,\"RefIds\":[{\"rid\":1000,\"type\":{\"class\":\"NP_PrintDebugLog\",\"ns\":\"Ebonor.GamePlay\",\"asm\":\"Ebonor.GamePlay\"},\"data\":{\"BelongToUnit\":0,\"DebugContent\":\"\u6B65\u5175\u51FA\u751F\u7ED3\u675F\"}}]}}"
     - type: Plugins.NodeEditor.NP_ChangeBlackValueActionNode, NodeGraphProcessor.Examples,
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      jsonDatas: "{\"nodeCustomName\":\"\",\"GUID\":\"c87aadbc-4009-4332-9b2a-de965cf1c852\",\"computeOrder\":6,\"position\":{\"serializedVersion\":\"2\",\"x\":164.0,\"y\":589.0,\"width\":0.0,\"height\":0.0},\"expanded\":false,\"debug\":false,\"nodeLock\":false,\"Level\":0,\"NP_ActionNodeData\":{\"id\":3259122734411612162,\"LinkedIds\":[],\"NodeDes\":\"\u4FEE\u6539\u9ED1\u677F\u503C\",\"NpClassForStoreAction\":{\"rid\":1000}},\"references\":{\"version\":2,\"RefIds\":[{\"rid\":1000,\"type\":{\"class\":\"NP_ChangeBlackValueAction\",\"ns\":\"Ebonor.DataCtrl\",\"asm\":\"Ebonor.DataCtrl\"},\"data\":{\"BelongToUnit\":0,\"NPBalckBoardRelationData\":{\"BBKey\":\"IsGetBirth\",\"NP_BBValueType\":\"System.Boolean\",\"WriteOrCompareToBB\":true,\"NP_BBValue\":{\"rid\":1001}}}},{\"rid\":1001,\"type\":{\"class\":\"NP_BBValue_Bool\",\"ns\":\"Ebonor.DataCtrl\",\"asm\":\"Ebonor.DataCtrl\"},\"data\":{\"Value\":false}}]}}"
+      jsonDatas: '{"nodeCustomName":"","GUID":"4df6b9c2-b7e5-41c3-9cf6-829b12960424","computeOrder":10,"position":{"serializedVersion":"2","x":790.0,"y":589.0,"width":0.0,"height":0.0},"expanded":false,"debug":false,"nodeLock":false,"Level":0,"NP_ActionNodeData":{"id":3260505885679616006,"LinkedIds":[],"NodeDes":"Reset
+        Born","NpClassForStoreAction":{"rid":1000}},"references":{"version":2,"RefIds":[{"rid":1000,"type":{"class":"NP_ChangeBlackValueAction","ns":"Ebonor.DataCtrl","asm":"Ebonor.DataCtrl"},"data":{"BelongToUnit":0,"NPBalckBoardRelationData":{"BBKey":"BuffBindAnimStackState","NP_BBValueType":"Ebonor.DataCtrl.eBuffBindAnimStackState","WriteOrCompareToBB":true,"NP_BBValue":{"rid":1001}}}},{"rid":1001,"type":{"class":"NP_BBValue_BuffBindAnimStackState","ns":"Ebonor.DataCtrl","asm":"Ebonor.DataCtrl"},"data":{"Value":1}}]}}'
     edges:
     - GUID: 6e8120d2-bda9-4eb3-a1f8-9a231490f4e9
       owner: {fileID: 11400000}
@@ -77,9 +92,41 @@ MonoBehaviour:
       outputFieldName: NextNode
       inputPortIdentifier: 
       outputPortIdentifier: 
-    - GUID: 42404afa-3978-4c6c-80d9-6399828495ad
+    - GUID: 0dc19cac-75db-4712-a31b-649c7c2c9323
       owner: {fileID: 11400000}
-      inputNodeGUID: c87aadbc-4009-4332-9b2a-de965cf1c852
+      inputNodeGUID: ff9fd9ae-69ad-462a-b754-0226206e3f8c
+      outputNodeGUID: b8e04e82-f007-412b-a3e7-b8219bb44e00
+      inputFieldName: PrevNode
+      outputFieldName: NextNode
+      inputPortIdentifier: 
+      outputPortIdentifier: 
+    - GUID: 41037543-3dfa-4ed8-9fc8-6eb3ff3345e7
+      owner: {fileID: 11400000}
+      inputNodeGUID: c290d11d-830b-4d48-8136-024c2d2db43f
+      outputNodeGUID: b8e04e82-f007-412b-a3e7-b8219bb44e00
+      inputFieldName: PrevNode
+      outputFieldName: NextNode
+      inputPortIdentifier: 
+      outputPortIdentifier: 
+    - GUID: 62072ebb-84ab-4ed1-921a-aee85b6c48ab
+      owner: {fileID: 11400000}
+      inputNodeGUID: 4e00ab0c-1ffd-4bad-9059-041fdacb4661
+      outputNodeGUID: b8e04e82-f007-412b-a3e7-b8219bb44e00
+      inputFieldName: PrevNode
+      outputFieldName: NextNode
+      inputPortIdentifier: 
+      outputPortIdentifier: 
+    - GUID: 8b4d0ef5-9925-49f3-b058-0079e96518ec
+      owner: {fileID: 11400000}
+      inputNodeGUID: a31e1524-cb4b-4b66-9860-ed3e5ed9d65a
+      outputNodeGUID: b8e04e82-f007-412b-a3e7-b8219bb44e00
+      inputFieldName: PrevNode
+      outputFieldName: NextNode
+      inputPortIdentifier: 
+      outputPortIdentifier: 
+    - GUID: 866bf2ce-f64c-4b3a-90f4-d26b57d54c1c
+      owner: {fileID: 11400000}
+      inputNodeGUID: 4df6b9c2-b7e5-41c3-9cf6-829b12960424
       outputNodeGUID: b8e04e82-f007-412b-a3e7-b8219bb44e00
       inputFieldName: PrevNode
       outputFieldName: NextNode
@@ -89,16 +136,20 @@ MonoBehaviour:
     pinnedElements: []
     exposedParameters: []
     stickyNotes: []
-    position: {x: 261, y: -22, z: 0}
-    scale: {x: 0.7561437, y: 0.7561437, z: 1}
+    position: {x: 78, y: -42, z: 0}
+    scale: {x: 0.8695652, y: 0.8695652, z: 1}
   nodes:
-  - rid: 1564770070612672818
-  - rid: 1564770070612672819
-  - rid: 1564770070612672820
-  - rid: 1564770070612672821
-  - rid: 1564770070612672822
-  - rid: 1564770070612672823
-  - rid: 1564770070612672826
+  - rid: 1564770092116869815
+  - rid: 1564770092116869816
+  - rid: 1564770092116869817
+  - rid: 1564770092116869818
+  - rid: 1564770092116869819
+  - rid: 1564770092116869820
+  - rid: 1564770092116869821
+  - rid: 1564770092116869822
+  - rid: 1564770092116869823
+  - rid: 1564770092116869824
+  - rid: 1564770092116869825
   edges:
   - GUID: 6e8120d2-bda9-4eb3-a1f8-9a231490f4e9
     owner: {fileID: 11400000}
@@ -140,9 +191,41 @@ MonoBehaviour:
     outputFieldName: NextNode
     inputPortIdentifier: 
     outputPortIdentifier: 
-  - GUID: 42404afa-3978-4c6c-80d9-6399828495ad
+  - GUID: 0dc19cac-75db-4712-a31b-649c7c2c9323
     owner: {fileID: 11400000}
-    inputNodeGUID: c87aadbc-4009-4332-9b2a-de965cf1c852
+    inputNodeGUID: ff9fd9ae-69ad-462a-b754-0226206e3f8c
+    outputNodeGUID: b8e04e82-f007-412b-a3e7-b8219bb44e00
+    inputFieldName: PrevNode
+    outputFieldName: NextNode
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 41037543-3dfa-4ed8-9fc8-6eb3ff3345e7
+    owner: {fileID: 11400000}
+    inputNodeGUID: c290d11d-830b-4d48-8136-024c2d2db43f
+    outputNodeGUID: b8e04e82-f007-412b-a3e7-b8219bb44e00
+    inputFieldName: PrevNode
+    outputFieldName: NextNode
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 62072ebb-84ab-4ed1-921a-aee85b6c48ab
+    owner: {fileID: 11400000}
+    inputNodeGUID: 4e00ab0c-1ffd-4bad-9059-041fdacb4661
+    outputNodeGUID: b8e04e82-f007-412b-a3e7-b8219bb44e00
+    inputFieldName: PrevNode
+    outputFieldName: NextNode
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 8b4d0ef5-9925-49f3-b058-0079e96518ec
+    owner: {fileID: 11400000}
+    inputNodeGUID: a31e1524-cb4b-4b66-9860-ed3e5ed9d65a
+    outputNodeGUID: b8e04e82-f007-412b-a3e7-b8219bb44e00
+    inputFieldName: PrevNode
+    outputFieldName: NextNode
+    inputPortIdentifier: 
+    outputPortIdentifier: 
+  - GUID: 866bf2ce-f64c-4b3a-90f4-d26b57d54c1c
+    owner: {fileID: 11400000}
+    inputNodeGUID: 4df6b9c2-b7e5-41c3-9cf6-829b12960424
     outputNodeGUID: b8e04e82-f007-412b-a3e7-b8219bb44e00
     inputFieldName: PrevNode
     outputFieldName: NextNode
@@ -153,8 +236,8 @@ MonoBehaviour:
   exposedParameters: []
   serializedParameterList: []
   stickyNotes: []
-  position: {x: 261, y: -22, z: 0}
-  scale: {x: 0.7561437, y: 0.7561437, z: 1}
+  position: {x: 78, y: -42, z: 0}
+  scale: {x: 0.8695652, y: 0.8695652, z: 1}
   _name: 3195703229347658783
   _configPath: Assets/Resources/AllSquadBehavour
   _squadBehavourGraphdDataSupportor:
@@ -163,7 +246,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1564770070612672818
+    - rid: 1564770092116869815
       type: {class: NP_RootNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
       data:
         nodeCustomName: 
@@ -171,7 +254,7 @@ MonoBehaviour:
         computeOrder: 0
         position:
           serializedVersion: 2
-          x: 201.5
+          x: 595
           y: 61
           width: 0
           height: 0
@@ -181,9 +264,9 @@ MonoBehaviour:
         Level: 0
         MRootNodeData:
           id: 3195703229347658783
-          LinkedIds: 06000100dcba3a2d
+          LinkedIds: 0a000100d4a43f2d
           NodeDes: 
-    - rid: 1564770070612672819
+    - rid: 1564770092116869816
       type: {class: NP_SelectorNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
       data:
         nodeCustomName: 
@@ -191,7 +274,7 @@ MonoBehaviour:
         computeOrder: 1
         position:
           serializedVersion: 2
-          x: 212.5
+          x: 606
           y: 186
           width: 0
           height: 0
@@ -200,10 +283,10 @@ MonoBehaviour:
         nodeLock: 0
         Level: 0
         NP_SelectorNodeData:
-          id: 3259122734411612166
-          LinkedIds: 04000100dcba3a2d05000100dcba3a2d
+          id: 3260505885679616010
+          LinkedIds: 08000100d4a43f2d09000100d4a43f2d
           NodeDes: "\u9009\u62E9\u7EC4\u5408\u5668"
-    - rid: 1564770070612672820
+    - rid: 1564770092116869817
       type: {class: NP_BlackboardConditionNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
       data:
         nodeCustomName: 
@@ -211,7 +294,7 @@ MonoBehaviour:
         computeOrder: 2
         position:
           serializedVersion: 2
-          x: 77.5
+          x: 471
           y: 321
           width: 0
           height: 0
@@ -220,18 +303,18 @@ MonoBehaviour:
         nodeLock: 0
         Level: 0
         NP_BlackboardConditionNodeData:
-          id: 3259122734411612164
-          LinkedIds: 03000100dcba3a2d
-          NodeDes: IsGetBirth
+          id: 3260505885679616008
+          LinkedIds: 07000100d4a43f2d
+          NodeDes: Born
           Ope: 2
           Stop: 4
           NPBalckBoardRelationData:
-            BBKey: IsGetBirth
-            NP_BBValueType: System.Boolean
+            BBKey: BuffBindAnimStackState
+            NP_BBValueType: Ebonor.DataCtrl.eBuffBindAnimStackState
             WriteOrCompareToBB: 1
             NP_BBValue:
-              rid: 1564770070612672824
-    - rid: 1564770070612672821
+              rid: 1564770092116869826
+    - rid: 1564770092116869818
       type: {class: NP_SequenceNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
       data:
         nodeCustomName: 
@@ -239,7 +322,7 @@ MonoBehaviour:
         computeOrder: 3
         position:
           serializedVersion: 2
-          x: 88.5
+          x: 482
           y: 454
           width: 0
           height: 0
@@ -248,10 +331,10 @@ MonoBehaviour:
         nodeLock: 0
         Level: 0
         NP_SequenceNodeData:
-          id: 3259122734411612163
-          LinkedIds: 01000100dcba3a2d02000100dcba3a2d
+          id: 3260505885679616007
+          LinkedIds: 01000100d4a43f2d02000100d4a43f2d03000100d4a43f2d04000100d4a43f2d06000100d4a43f2d05000100d4a43f2d
           NodeDes: "\u5E8F\u5217\u7EC4\u5408\u5668"
-    - rid: 1564770070612672822
+    - rid: 1564770092116869819
       type: {class: NP_PrintDebugLogNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
       data:
         nodeCustomName: 
@@ -268,12 +351,12 @@ MonoBehaviour:
         nodeLock: 0
         Level: 0
         NP_ActionNodeData:
-          id: 3259122734411612161
+          id: 3260505885679616001
           LinkedIds: 
-          NodeDes: "\u6253\u5370\u65E5\u5FD7"
+          NodeDes: "\u6B65\u5175\u51FA\u751F\u5F00\u59CB"
           NpClassForStoreAction:
-            rid: 1564770070612672825
-    - rid: 1564770070612672823
+            rid: 1564770092116869827
+    - rid: 1564770092116869820
       type: {class: NP_WaitUntilStoppedNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
       data:
         nodeCustomName: 
@@ -281,7 +364,7 @@ MonoBehaviour:
         computeOrder: 5
         position:
           serializedVersion: 2
-          x: 263.5
+          x: 657
           y: 321
           width: 0
           height: 0
@@ -290,23 +373,14 @@ MonoBehaviour:
         nodeLock: 0
         Level: 0
         NpWaitUntilStoppedData:
-          id: 3259122734411612165
+          id: 3260505885679616009
           LinkedIds: 
           NodeDes: "\u963B\u6B62\u8F6E\u8BE2\uFF0C\u63D0\u9AD8\u6548\u7387"
-    - rid: 1564770070612672824
-      type: {class: NP_BBValue_Bool, ns: Ebonor.DataCtrl, asm: Ebonor.DataCtrl}
-      data:
-        Value: 1
-    - rid: 1564770070612672825
-      type: {class: NP_PrintDebugLog, ns: Ebonor.GamePlay, asm: Ebonor.GamePlay}
-      data:
-        BelongToUnit: 0
-        DebugContent: "\u6B65\u5175\u51FA\u751F"
-    - rid: 1564770070612672826
-      type: {class: NP_ChangeBlackValueActionNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
+    - rid: 1564770092116869821
+      type: {class: NP_ChangeSquadStackStateActionNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
       data:
         nodeCustomName: 
-        GUID: c87aadbc-4009-4332-9b2a-de965cf1c852
+        GUID: ff9fd9ae-69ad-462a-b754-0226206e3f8c
         computeOrder: 6
         position:
           serializedVersion: 2
@@ -319,22 +393,141 @@ MonoBehaviour:
         nodeLock: 0
         Level: 0
         NP_ActionNodeData:
-          id: 3259122734411612162
+          id: 3260505885679616002
           LinkedIds: 
-          NodeDes: "\u4FEE\u6539\u9ED1\u677F\u503C"
+          NodeDes: "\u5207\u6362Squad Born"
           NpClassForStoreAction:
-            rid: 1564770070612672827
-    - rid: 1564770070612672827
+            rid: 1564770092116869828
+    - rid: 1564770092116869822
+      type: {class: NP_WaitActionNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
+      data:
+        nodeCustomName: 
+        GUID: c290d11d-830b-4d48-8136-024c2d2db43f
+        computeOrder: 7
+        position:
+          serializedVersion: 2
+          x: 380
+          y: 589
+          width: 0
+          height: 0
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Level: 0
+        NP_ActionNodeData:
+          id: 3260505885679616003
+          LinkedIds: 
+          NodeDes: 0.5s
+          NpClassForStoreAction:
+            rid: 1564770092116869829
+    - rid: 1564770092116869823
+      type: {class: NP_RemoveSquadStackStateActionNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
+      data:
+        nodeCustomName: 
+        GUID: 4e00ab0c-1ffd-4bad-9059-041fdacb4661
+        computeOrder: 8
+        position:
+          serializedVersion: 2
+          x: 570
+          y: 589
+          width: 0
+          height: 0
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Level: 0
+        NP_ActionNodeData:
+          id: 3260505885679616004
+          LinkedIds: 
+          NodeDes: "\u79FB\u9664 Squad Born"
+          NpClassForStoreAction:
+            rid: 1564770092116869830
+    - rid: 1564770092116869824
+      type: {class: NP_PrintDebugLogNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
+      data:
+        nodeCustomName: 
+        GUID: a31e1524-cb4b-4b66-9860-ed3e5ed9d65a
+        computeOrder: 9
+        position:
+          serializedVersion: 2
+          x: 964
+          y: 589
+          width: 0
+          height: 0
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Level: 0
+        NP_ActionNodeData:
+          id: 3260505885679616005
+          LinkedIds: 
+          NodeDes: "\u6B65\u5175\u51FA\u751F\u7ED3\u675F"
+          NpClassForStoreAction:
+            rid: 1564770092116869831
+    - rid: 1564770092116869825
+      type: {class: NP_ChangeBlackValueActionNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
+      data:
+        nodeCustomName: 
+        GUID: 4df6b9c2-b7e5-41c3-9cf6-829b12960424
+        computeOrder: 10
+        position:
+          serializedVersion: 2
+          x: 790
+          y: 589
+          width: 0
+          height: 0
+        expanded: 0
+        debug: 0
+        nodeLock: 0
+        Level: 0
+        NP_ActionNodeData:
+          id: 3260505885679616006
+          LinkedIds: 
+          NodeDes: Reset Born
+          NpClassForStoreAction:
+            rid: 1564770092116869832
+    - rid: 1564770092116869826
+      type: {class: NP_BBValue_BuffBindAnimStackState, ns: Ebonor.DataCtrl, asm: Ebonor.DataCtrl}
+      data:
+        Value: 2
+    - rid: 1564770092116869827
+      type: {class: NP_PrintDebugLog, ns: Ebonor.GamePlay, asm: Ebonor.GamePlay}
+      data:
+        BelongToUnit: 0
+        DebugContent: "\u6B65\u5175\u51FA\u751F\u5F00\u59CB"
+    - rid: 1564770092116869828
+      type: {class: NP_ChangeSquadStackStateAction, ns: Ebonor.GamePlay, asm: Ebonor.GamePlay}
+      data:
+        BelongToUnit: 0
+        TargetState:
+          Value: 2
+    - rid: 1564770092116869829
+      type: {class: NP_WaitAction, ns: Ebonor.GamePlay, asm: Ebonor.GamePlay}
+      data:
+        BelongToUnit: 0
+        WaitDuration: 0.5
+    - rid: 1564770092116869830
+      type: {class: NP_RemoveSquadStackStateAction, ns: Ebonor.GamePlay, asm: Ebonor.GamePlay}
+      data:
+        BelongToUnit: 0
+        StateToRemove:
+          Value: 2
+    - rid: 1564770092116869831
+      type: {class: NP_PrintDebugLog, ns: Ebonor.GamePlay, asm: Ebonor.GamePlay}
+      data:
+        BelongToUnit: 0
+        DebugContent: "\u6B65\u5175\u51FA\u751F\u7ED3\u675F"
+    - rid: 1564770092116869832
       type: {class: NP_ChangeBlackValueAction, ns: Ebonor.DataCtrl, asm: Ebonor.DataCtrl}
       data:
         BelongToUnit: 0
         NPBalckBoardRelationData:
-          BBKey: IsGetBirth
-          NP_BBValueType: System.Boolean
+          BBKey: BuffBindAnimStackState
+          NP_BBValueType: Ebonor.DataCtrl.eBuffBindAnimStackState
           WriteOrCompareToBB: 1
           NP_BBValue:
-            rid: 1564770070612672831
-    - rid: 1564770070612672831
-      type: {class: NP_BBValue_Bool, ns: Ebonor.DataCtrl, asm: Ebonor.DataCtrl}
+            rid: 1564770092116869833
+    - rid: 1564770092116869833
+      type: {class: NP_BBValue_BuffBindAnimStackState, ns: Ebonor.DataCtrl, asm: Ebonor.DataCtrl}
       data:
-        Value: 0
+        Value: 1

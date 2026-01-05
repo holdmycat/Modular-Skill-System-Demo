@@ -5,12 +5,14 @@ namespace Ebonor.GamePlay
 {
     public abstract class SquadStateBase
     {
-        protected ServerSquad _context;
+        protected BaseSquad _context;
         protected ILog log = LogManager.GetLogger(typeof(SquadStateBase));
 
         public abstract eBuffBindAnimStackState StateId { get; }
 
-        public void Init(ServerSquad context)
+     
+        
+        public SquadStateBase(BaseSquad context)
         {
             _context = context;
         }
@@ -24,6 +26,11 @@ namespace Ebonor.GamePlay
         {
         }
 
+        public virtual void OnRemove()
+        {
+            log.Info($"[{this.GetType().Name}] OnRemove NetId:{_context.NetId}");
+        }
+        
         public virtual void OnExit()
         {
             log.Info($"[{this.GetType().Name}] OnExit NetId:{_context.NetId}");

@@ -3,7 +3,7 @@ using GraphProcessor;
 
 namespace Plugins.NodeEditor
 {
-    [NodeMenuItem("SlgSquad行为树/Task/NpBehave/等待直到收到停止指令", typeof (SlgSquadBehavourGraph))]
+    [NodeMenuItem("SLG 小队/任务/NpBehave 核心/等待直到收到停止指令", typeof (SlgSquadBehavourGraph))]
     public class NP_WaitUntilStoppedNode: NP_TaskNodeBase
     {
         public override string name => "一直等待，直到Stopped";

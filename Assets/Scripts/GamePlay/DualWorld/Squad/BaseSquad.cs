@@ -85,7 +85,7 @@ namespace Ebonor.GamePlay
             {
                 return false;
             }
-
+            
             _stackFsm = _stackFsmFactory.Create(classType.Value);
             log.Info($"[BaseSquad] StackFsm Created for NetId:{NetId} Type:{classType.Value}");
             return true;

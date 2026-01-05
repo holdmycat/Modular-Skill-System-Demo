@@ -111,6 +111,7 @@ namespace GraphProcessor
 
             var nodePaths = NodeProvider.GetNodeMenuEntries(graphView.graph);
 
+            /*
             tree.Add(new SearchTreeEntry(new GUIContent($"Relay", icon))
             {
                 level = 1,
@@ -123,6 +124,7 @@ namespace GraphProcessor
 			        portDisplayName = inputPortView != null ? "Out" : "In",
                 }
             });
+            */
 
             var sortedMenuItems = entries.Select(port => (port, nodePaths.FirstOrDefault(kp => kp.type == port.nodeType).path)).OrderBy(e => e.path);
 

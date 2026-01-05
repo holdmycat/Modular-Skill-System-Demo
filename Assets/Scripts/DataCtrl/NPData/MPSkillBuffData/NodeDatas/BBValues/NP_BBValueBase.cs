@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Ebonor.DataCtrl
 {
-  
+    [System.Serializable]
     public abstract class NP_BBValueBase<T> : ANP_BBValue, INP_BBValue<T>
     {
         

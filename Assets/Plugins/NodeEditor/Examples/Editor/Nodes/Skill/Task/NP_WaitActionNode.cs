@@ -5,7 +5,7 @@ using Ebonor.GamePlay;
 namespace Plugins.NodeEditor
 {
     
-    [NodeMenuItem("SlgSquad行为树/Task/Time/等待行为节点", typeof (SlgSquadBehavourGraph))]
+    [NodeMenuItem("SLG 小队/任务/时间/等待行为节点", typeof (SlgSquadBehavourGraph))]
     public class NP_WaitActionNode : NP_TaskNodeBase
     {
         public override string name => "等待行为节点";

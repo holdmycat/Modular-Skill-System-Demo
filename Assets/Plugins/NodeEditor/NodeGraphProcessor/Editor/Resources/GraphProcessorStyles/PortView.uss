@@ -76,7 +76,7 @@ PortView > #connector > #cap:hover
 }
 
 .Port_NP_NodeBase {
-    --port-color: #ff6d29;
+    --port-color: #C8C8C8;
 }
 
 .Port_BuffNodeBase {

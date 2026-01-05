@@ -3,7 +3,7 @@ using Ebonor.DataCtrl;
 namespace Plugins.NodeEditor
 {
     
-    [NodeMenuItem("SlgSquad行为树/Decorator/Service", typeof (SlgSquadBehavourGraph))]
+    [NodeMenuItem("SLG 小队/装饰/Service", typeof (SlgSquadBehavourGraph))]
     public class NP_ServiceNode: NP_DecoratorNodeBase
     {
         public override string name => "服务结点";

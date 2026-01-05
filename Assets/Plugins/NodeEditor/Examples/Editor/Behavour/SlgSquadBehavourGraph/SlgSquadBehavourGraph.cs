@@ -112,14 +112,9 @@ namespace Plugins.NodeEditor
 #if UNITY_EDITOR
             if (!Application.isPlaying)
             {
-                mgr.BBValues.TryAdd(ConstData.BB_ISGETDEAD, new NP_BBValue_Bool()
+                mgr.BBValues.TryAdd(ConstData.BB_BUFFBINDANIMSTACKSTATE, new NP_BBValue_BuffBindAnimStackState()
                 {
-                    Value = false,
-                });
-            
-                mgr.BBValues.TryAdd(ConstData.BB_ISGETBIRTH, new NP_BBValue_Bool()
-                {
-                    Value = false,
+                    Value = eBuffBindAnimStackState.NullStateID,
                 });
             }
 #endif

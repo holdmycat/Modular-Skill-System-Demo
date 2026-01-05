@@ -6,12 +6,17 @@ namespace Ebonor.GamePlay
     {
         public override eBuffBindAnimStackState StateId => eBuffBindAnimStackState.Idle;
 
+        public SquadState_Idle(BaseSquad context) : base(context)
+        {
+            
+        }
+        
         public override void OnEnter()
         {
             base.OnEnter();
             
             // Sync state to client
-            _context.SetStackStateOnServer(StateId, true);
+            //_context.SetStackStateOnServer(StateId, true);
         }
 
         public override void OnUpdate()

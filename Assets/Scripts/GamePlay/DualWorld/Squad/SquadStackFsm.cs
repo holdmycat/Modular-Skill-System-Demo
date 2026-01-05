@@ -8,7 +8,7 @@ namespace Ebonor.GamePlay
     /// <summary>
     /// Lightweight stack-style animation state machine for squads, keyed by UnitClassType.
     /// </summary>
-    public class SquadStackFsm : ISquadFsmHandler
+    public class SquadStackFsm : ISquadFsmHandler, IDisposable
     {
         public UnitClassType ClassType { get; }
 
@@ -25,25 +25,14 @@ namespace Ebonor.GamePlay
         {
             ClassType = classType;
         }
-
-        // /// <summary>
-        // /// Default birth flow: flag birth, fire Birth, then transition into Idle.
-        // /// </summary>
-        // public void BootstrapBirthThenIdle()
-        // {
-        //     if (IsBirthInitialized) return;
-        //
-        //     IsBirthInitialized = true;
-        //     SetState(eBuffBindAnimStackState.Birth, true);
-        //     //SetState(eBuffBindAnimStackState.Idle, true);
-        // }
-
+        
         /// <summary>
         /// Set the current stack state; fires change event if transitioned or forced.
         /// </summary>
         // Logic State Management
         private System.Collections.Generic.Dictionary<eBuffBindAnimStackState, SquadStateBase> _stateMap = new System.Collections.Generic.Dictionary<eBuffBindAnimStackState, SquadStateBase>();
         private SquadStateBase _currentLogicState;
+        private bool _disposed;
 
         public void RegisterState(SquadStateBase state)
         {
@@ -57,9 +46,25 @@ namespace Ebonor.GamePlay
                 _stateMap.Add(state.StateId, state);
             }
         }
+        
+        public void ClearStates()
+        {
+            if (_currentLogicState != null)
+            {
+                _currentLogicState.OnExit();
+            }
+            foreach (var kvp in _stateMap)
+            {
+                kvp.Value.OnRemove();
+            }
+            _currentLogicState = null;
+            _stateMap.Clear();
+            CurrentState = eBuffBindAnimStackState.NullStateID;
+        }
 
         private static readonly ILog log = LogManager.GetLogger(typeof(SquadStackFsm));
 
+        #region Explicit implementation for privileged state transition (BT only).
         /// <summary>
         /// Explicit implementation for privileged state transition (BT only).
         /// </summary>
@@ -68,20 +73,27 @@ namespace Ebonor.GamePlay
             InternalSetState(state, force);
         }
 
-        /// <summary>
-        /// Infrastructure method for syncing state from RPC (Client only).
-        /// </summary>
-        public void SyncStateFromRpc(eBuffBindAnimStackState state, bool force = false)
+        void ISquadFsmHandler.RemoveState(eBuffBindAnimStackState stateId)
         {
-            log.Info($"[SquadStackFsm] SyncStateFromRpc: {state}");
-            InternalSetState(state, force);
+            if (_stateMap.ContainsKey(stateId))
+            {
+                if (_currentLogicState != null && _currentLogicState.StateId == stateId)
+                {
+                    _currentLogicState.OnExit();
+                    _currentLogicState.OnRemove();
+                    _currentLogicState = null;
+                }
+                _stateMap.Remove(stateId);
+            }
         }
-
+        #endregion
+        
         /// <summary>
         /// Internal logic shared by Interface and RPC.
         /// </summary>
         private void InternalSetState(eBuffBindAnimStackState state, bool force)
         {
+            if (_disposed) return;
             if (!force && CurrentState == state) return;
             
             log.Info($"[SquadStackFsm] SetState: {CurrentState} -> {state} (Force:{force})");
@@ -93,6 +105,7 @@ namespace Ebonor.GamePlay
                 {
                     log.Info($"[SquadStackFsm] Exiting Logic State: {_currentLogicState.GetType().Name}");
                     _currentLogicState.OnExit();
+                    _currentLogicState.OnRemove();
                 }
             }
 
@@ -117,7 +130,16 @@ namespace Ebonor.GamePlay
 
         public void OnUpdate()
         {
+            if (_disposed) return;
             _currentLogicState?.OnUpdate();
+        }
+
+        public void Dispose()
+        {
+            if (_disposed) return;
+            ClearStates();
+            OnStateChanged = null;
+            _disposed = true;
         }
 
         public class Factory : PlaceholderFactory<UnitClassType, SquadStackFsm>

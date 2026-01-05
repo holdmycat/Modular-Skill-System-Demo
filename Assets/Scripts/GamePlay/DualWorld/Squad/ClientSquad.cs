@@ -147,6 +147,8 @@ namespace Ebonor.GamePlay
                 UnityEngine.Object.Destroy(_visualsRoot);
                 _visualsRoot = null;
             }
+            
+            _stackFsm?.Dispose();
 
             await base.ShutdownAsync();
         }
@@ -177,6 +179,7 @@ namespace Ebonor.GamePlay
             if (!TryInitStackFsm(rpc.ClassType)) return;
             log.Info($"[ClientSquad] ApplyRemoteStackState NetId:{NetId} State:{rpc.State} ClassType:{rpc.ClassType}");
             //_stackFsm.SetState(rpc.State, true);
+            _npRuntimeTree.GetBlackboard().Set(ConstData.BB_BUFFBINDANIMSTACKSTATE, rpc.State);
         }
 
         public override void OnRpc(IRpc rpc)

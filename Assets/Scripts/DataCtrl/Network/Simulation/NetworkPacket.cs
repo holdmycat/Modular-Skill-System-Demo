@@ -154,6 +154,16 @@ namespace Ebonor.DataCtrl
         public eBuffBindAnimStackState State;
     }
     
+    public struct RpcNotifyClientAllSquadsReady : IRpc
+    {
+        public uint NetId;
+    }
+
+    public struct RpcRequestStartBattle : IRpc
+    {
+        public uint NetId;
+    }
+    
     /// <summary>
     /// Network Interface for sending Commands and RPCs.
     /// This abstracts the underlying network layer (Socket/Photon/Mirror).

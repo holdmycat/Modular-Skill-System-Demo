@@ -32,9 +32,39 @@ namespace Plugins.NodeEditor
             public override string ToString() => $"{Tree}/{Behavior}/{Action}";
         }
 
-        private enum TreeType { SlgSquad }
-        private enum BehaviorCategory { Task }
-        private enum ActionCategory { NpBehave, System, Transform, Camera, Audio, Collider, Time, Buff }
+        private enum TreeType 
+        { 
+            [InspectorName("SLG 小队")]
+            SlgSquad 
+        }
+        
+        private enum BehaviorCategory 
+        { 
+            [InspectorName("任务")]
+            Task 
+        }
+        
+        private enum ActionCategory 
+        { 
+            [InspectorName("NpBehave 核心")]
+            NpBehave, 
+            [InspectorName("系统")]
+            System, 
+            [InspectorName("变换 (Transform)")]
+            Transform, 
+            [InspectorName("相机")]
+            Camera, 
+            [InspectorName("音频")]
+            Audio, 
+            [InspectorName("碰撞")]
+            Collider, 
+            [InspectorName("时间")]
+            Time, 
+            [InspectorName("Buff")]
+            Buff, 
+            [InspectorName("Squad 状态机")]
+            SquadFsm 
+        }
 
         private enum ActionNamespace
         {

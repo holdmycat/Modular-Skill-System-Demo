@@ -9,5 +9,7 @@ namespace Ebonor.GamePlay
     public interface ISquadFsmHandler
     {
         void TransitionState(eBuffBindAnimStackState newState, bool force = false);
+        
+        void RemoveState(eBuffBindAnimStackState newState);
     }
 }

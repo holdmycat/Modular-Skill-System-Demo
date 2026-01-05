@@ -37,12 +37,12 @@ namespace Ebonor.GamePlay
             if (EnsureStackFsm())
             {
                 // Register States directly to the FSM
-                _stackFsm.RegisterState(new SquadState_Born());
-                _stackFsm.RegisterState(new SquadState_Idle());
+                _stackFsm.RegisterState(new SquadState_Born(this));
+                _stackFsm.RegisterState(new SquadState_Idle(this));
                 
                 // Initial State: Born
                 // This calls SetState -> Calls Born.OnEnter
-                //_stackFsm.SetState(eBuffBindAnimStackState.Born, true);
+                _npRuntimeTree.GetBlackboard().Set(ConstData.BB_BUFFBINDANIMSTACKSTATE, eBuffBindAnimStackState.Born);
             }
         }
         
@@ -90,6 +90,9 @@ namespace Ebonor.GamePlay
             return true;
         }
 
+        public eventSystem.Action<ServerSquad> OnBornFinished;
+        private bool _hasBornFinished = false;
+
         private void OnServerStackStateChanged(eBuffBindAnimStackState state)
         {
             if (_networkBus == null || _stackFsm == null) return;
@@ -100,7 +103,14 @@ namespace Ebonor.GamePlay
                 ClassType = _stackFsm.ClassType,
                 State = state
             });
-            
+
+            // Check if Born finished (transition to Idle)
+            if (!_hasBornFinished && state == eBuffBindAnimStackState.Idle)
+            {
+                _hasBornFinished = true;
+                log.Info($"[ServerSquad] Born Finished (Idle Reached) NetId:{NetId}");
+                OnBornFinished?.Invoke(this);
+            }
         }
 
         /// <summary>
@@ -121,6 +131,7 @@ namespace Ebonor.GamePlay
         {
             log.Info("[ServerSquad] ShutdownAsync");
             await base.ShutdownAsync();
+            _stackFsm?.Dispose();
             _networkBus.UnRegisterSpawns(_netId, this);
         }
         

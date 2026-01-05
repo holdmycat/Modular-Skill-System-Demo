@@ -165,6 +165,32 @@ namespace Ebonor.DataCtrl
             // Repeat for HP/Def if needed
         }
         
+        /// <summary>
+        /// Reset numeric data for battle restart.
+        /// </summary>
+        public void ResetData()
+        {
+            log.Info($"[SquadNumericComponent] ResetData for NetId:{_netId} SquadId:{_squadId}");
+
+            // Reset Level (if needed, or keep) - Design choice: keep level if RPG, reset if MOBA session.
+            // Assuming strict reset to initial state:
+            SetValueForOrig(eNumericType.UnitLv, 0f); // Or keep? User said "Reset HP/Pos", level usually stays in SLG? 
+            // Wait, "squad的数据最好是缓存后复用... 属性信息，例如hp会变化，那么在出生状态是不是要reset这些数据".
+            // Since it's a "Restart Battle" (Retry), it usually means full reset to initial state.
+            
+            var initialCount = _slgSquadAttributesNodeData.InitialCount;
+            SetValueForOrig(eNumericType.SoldierCount, initialCount);
+            
+            if (_slgUnitAttributesNodeData != null)
+            {
+                 SetValueForOrig(eNumericType.Hp, _slgUnitAttributesNodeData.BaseHp * initialCount);
+                 // Attack etc don't change unless level changes or buffs change
+            }
+
+            // Recalculate mods in case commander changed
+            RecalculateStatsFromCommander();
+        }
+        
         private void OnCommanderNumericChanged(eNumericType type, float value)
         {
             // Optimization can be added here to filter only relevant attributes

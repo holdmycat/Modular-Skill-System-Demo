@@ -121,8 +121,8 @@ namespace Ebonor.DataCtrl
         /// <summary>
         /// Birth
         /// </summary>
-        [InspectorName("Birth")]
-        Birth = 1 << 0, // Lowest priority
+        [InspectorName("Born")]
+        Born = 1 << 0, // Lowest priority
         
         NullStateID = 0,
     }

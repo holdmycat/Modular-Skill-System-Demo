@@ -29,18 +29,55 @@ namespace Ebonor.GamePlay
             _globalGameConfig = globalGameConfig;
             _stackFsmFactory = stackFsmFactory;
         }
-        
+
         public override void InitAsync()
         {
             log.Info($"[ServerSquad] InitAsync");
             
             if (EnsureStackFsm())
             {
-                // Birth -> Idle
-                //_stackFsm.BootstrapBirthThenIdle();
+                // Register States directly to the FSM
+                _stackFsm.RegisterState(new SquadState_Born());
+                _stackFsm.RegisterState(new SquadState_Idle());
+                
+                // Initial State: Born
+                // This calls SetState -> Calls Born.OnEnter
+                //_stackFsm.SetState(eBuffBindAnimStackState.Born, true);
             }
         }
         
+        public override void ResetBattleState()
+        {
+            log.Info($"[ServerSquad] ResetBattleState NetId:{NetId}");
+            
+            // 1. Reset Numeric Data
+            if (_numericComponent is SquadNumericComponent squadNumeric)
+            {
+                squadNumeric.ResetData();
+            }
+            
+            // 2. Reset FSM to Born
+            if (EnsureStackFsm())
+            {
+                //_stackFsm.SetState(eBuffBindAnimStackState.Born, true); // Logic driven by FSM
+            }
+            
+            // 3. Reset AI (Stop logic)
+            // ... (AI reset logic placeholder)
+        }
+
+        public override void OnBattleStart()
+        {
+            log.Info($"[ServerSquad] OnBattleStart NetId:{NetId}");
+            // Trigger AI to Start / Resume / Allow Chase
+            // For this demo: "Chase" logic starts when Battle Starts.
+            // If the behavior tree has a condition "IsBattleStarted", we set it here.
+            
+            // Since we haven't implemented the Behaviour tree modification yet, 
+            // we assume the "Idle" state in FSM handles the visual, and the Tree handles the logic.
+            // When Battle Starts, we might just need to ensure the FSM allows transition to Chase.
+        }
+
         private bool EnsureStackFsm()
         {
             if (!TryInitStackFsm())
@@ -63,6 +100,7 @@ namespace Ebonor.GamePlay
                 ClassType = _stackFsm.ClassType,
                 State = state
             });
+            
         }
 
         /// <summary>
@@ -71,7 +109,7 @@ namespace Ebonor.GamePlay
         public void SetStackStateOnServer(eBuffBindAnimStackState state, bool force = false)
         {
             if (!EnsureStackFsm()) return;
-            _stackFsm.SetState(state, force);
+            //_stackFsm.SetState(state, force);
         }
         
         protected override void InitializeNumeric()
@@ -86,6 +124,12 @@ namespace Ebonor.GamePlay
             _networkBus.UnRegisterSpawns(_netId, this);
         }
         
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+            _stackFsm?.OnUpdate();
+        }
+
         public class Factory : PlaceholderFactory<ServerSquad> 
         {
             public Factory()

@@ -98,6 +98,35 @@ namespace Ebonor.GamePlay
             _contextData.SetNumericComponent(_numericComponent as CommanderNumericComponent);
         }
         
+        /// <summary>
+        /// Starts the battle logic for all squads.
+        /// </summary>
+        public void StartBattle()
+        {
+            log.Info("[ServerCommander] StartBattle");
+            foreach (var squad in _spawnedSquads)
+            {
+                squad.OnBattleStart();
+            }
+        }
+
+        /// <summary>
+        /// Resets the battle state for all squads (In-Place Reset).
+        /// </summary>
+        public void RestartBattle()
+        {
+            log.Info("[ServerCommander] RestartBattle");
+            
+            // 1. Reset Squads
+            foreach (var squad in _spawnedSquads)
+            {
+                squad.ResetBattleState();
+            }
+            
+            // 2. Reset Positions (Force re-layout to spawn points)
+            RecalculateSquadPositions();
+        }
+        
         public class Factory : PlaceholderFactory<ServerCommander> 
         {
             public Factory()

@@ -30,16 +30,18 @@ namespace Ebonor.GamePlay
             {
                 if (squad.StackFsm is ISquadFsmHandler fsmHandler)
                 {
-                    fsmHandler.TransitionState(TargetState.GetValue());//designer call
+                    var target = TargetState.GetValue();
+                    log.Info($"[Squad Behavior][NP_ChangeSquadStackStateAction] NetId:{squad.NetId} -> {target}");
+                    fsmHandler.TransitionState(target);//designer call
                 }
                 else
                 {
-                    log.Error($"[NP_ChangeSquadStackStateAction] Squad {squad.NetId} does not implement ISquadFsmHandler or StackFsm is null.");
+                    log.Error($"[Squad Behavior][NP_ChangeSquadStackStateAction] Squad {squad.NetId} does not implement ISquadFsmHandler or StackFsm is null.");
                 }
             }
             else
             {
-                 log.Error("[NP_ChangeSquadStackStateAction] executed on a non-BaseSquad unit.");
+                 log.Error("[Squad Behavior][NP_ChangeSquadStackStateAction] executed on a non-BaseSquad unit.");
             }
         }
     }

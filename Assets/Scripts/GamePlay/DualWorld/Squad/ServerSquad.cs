@@ -19,7 +19,7 @@ namespace Ebonor.GamePlay
             GlobalGameConfig globalGameConfig,
             CommanderContextData contextData)
         {
-            log.Info($"[ServerSquad] Construction");
+            log.Info($"[Squad Behavior][ServerSquad] Construction");
             
             _characterDataRepository = characterDataRepository;
             _networkBus = networkBus;
@@ -32,7 +32,7 @@ namespace Ebonor.GamePlay
 
         public override void InitAsync()
         {
-            log.Info($"[ServerSquad] InitAsync");
+            log.Info($"[Squad Behavior][ServerSquad] InitAsync");
             
             if (EnsureStackFsm())
             {
@@ -46,7 +46,7 @@ namespace Ebonor.GamePlay
         
         public override void ResetBattleState()
         {
-            log.Info($"[ServerSquad] ResetBattleState NetId:{NetId}");
+            log.Info($"[Squad Behavior][ServerSquad] ResetBattleState NetId:{NetId}");
             
             // 1. Reset Numeric Data
             if (_numericComponent is SquadNumericComponent squadNumeric)
@@ -66,7 +66,7 @@ namespace Ebonor.GamePlay
 
         public override void OnBattleStart()
         {
-            log.Info($"[ServerSquad] OnBattleStart NetId:{NetId}");
+            log.Info($"[Squad Behavior][ServerSquad] OnBattleStart NetId:{NetId}");
             // Trigger AI to Start / Resume / Allow Chase
             // For this demo: "Chase" logic starts when Battle Starts.
             // If the behavior tree has a condition "IsBattleStarted", we set it here.
@@ -106,19 +106,11 @@ namespace Ebonor.GamePlay
             if (!_hasBornFinished && state == eBuffBindAnimStackState.Idle)
             {
                 _hasBornFinished = true;
-                log.Info($"[ServerSquad] Born Finished (Idle Reached) NetId:{NetId}");
+                log.Info($"[Squad Behavior][ServerSquad] Born Finished (Idle Reached) NetId:{NetId}");
                 OnBornFinished?.Invoke(this);
             }
         }
 
-        /// <summary>
-        /// Server-only entry to drive stack state changes.
-        /// </summary>
-        public void SetStackStateOnServer(eBuffBindAnimStackState state, bool force = false)
-        {
-            if (!EnsureStackFsm()) return;
-            //_stackFsm.SetState(state, force);
-        }
         
         protected override void InitializeNumeric()
         {
@@ -127,7 +119,7 @@ namespace Ebonor.GamePlay
         
         public override async UniTask ShutdownAsync()
         {
-            log.Info("[ServerSquad] ShutdownAsync");
+            log.Info("[Squad Behavior][ServerSquad] ShutdownAsync");
             await base.ShutdownAsync();
             _stackFsm?.Dispose();
             _networkBus.UnRegisterSpawns(_netId, this);
@@ -143,8 +135,8 @@ namespace Ebonor.GamePlay
         {
             public Factory()
             {
-                log.Info($"[ServerSquad.Factory] Construction");
-            }
+                log.Info($"[Squad Behavior][ServerSquad.Factory] Construction");
         }
     }
+}
 }

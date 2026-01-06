@@ -41,7 +41,7 @@ namespace Ebonor.GamePlay
             Faction = factionType;
 
             BindId(netId);
-            log.Info($"[BaseSquad] Configure NetId:{NetId} Faction:{Faction} IsServer:{isServer}");
+            log.Info($"[Squad Behavior][BaseSquad] Configure NetId:{NetId} Faction:{Faction} IsServer:{isServer}");
 
             InitializeNumeric();
 
@@ -67,6 +67,8 @@ namespace Ebonor.GamePlay
             };
 
             _npRuntimeTree = _npRuntimeTreeFactory.Create(request);
+            
+            _npRuntimeTree.Start();
         }
 
         /// <summary>
@@ -91,9 +93,9 @@ namespace Ebonor.GamePlay
             _stackFsm.RegisterState(new SquadState_Born(this));
             _stackFsm.RegisterState(new SquadState_Idle(this));
             _stackFsm.RegisterState(new SquadState_Death(this));
-            log.Info($"[BaseSquad] StackFsm Created for NetId:{NetId} Type:{classType.Value}");
+            log.Info($"[Squad Behavior][BaseSquad] StackFsm Created for NetId:{NetId} Type:{classType.Value}");
             
-            _npRuntimeTree.Start();
+           
             return true;
         }
 

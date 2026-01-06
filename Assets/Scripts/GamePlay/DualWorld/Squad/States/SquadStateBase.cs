@@ -19,7 +19,7 @@ namespace Ebonor.GamePlay
 
         public virtual void OnEnter()
         {
-            log.Info($"[{this.GetType().Name}] OnEnter NetId:{_context.NetId}");
+            log.Info($"[Squad Behavior][{this.GetType().Name}] OnEnter NetId:{_context.NetId}");
             _context.Blackboard.Set(ConstData.BB_BUFFBINDANIMSTACKSTATE, StateId);
         }
 
@@ -29,12 +29,12 @@ namespace Ebonor.GamePlay
 
         public virtual void OnRemove()
         {
-            log.Info($"[{this.GetType().Name}] OnRemove NetId:{_context.NetId}");
+            log.Info($"[Squad Behavior][{this.GetType().Name}] OnRemove NetId:{_context.NetId}");
         }
         
         public virtual void OnExit()
         {
-            log.Info($"[{this.GetType().Name}] OnExit NetId:{_context.NetId}");
+            log.Info($"[Squad Behavior][{this.GetType().Name}] OnExit NetId:{_context.NetId}");
         }
     }
 }

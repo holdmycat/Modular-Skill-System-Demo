@@ -29,16 +29,18 @@ namespace Ebonor.GamePlay
             {
                 if (squad.StackFsm is ISquadFsmHandler fsmHandler)
                 {
-                    fsmHandler.RemoveState(StateToRemove.GetValue());
+                    var target = StateToRemove.GetValue();
+                    log.Info($"[Squad Behavior][NP_RemoveSquadStackStateAction] NetId:{squad.NetId} remove {target}");
+                    fsmHandler.RemoveState(target);
                 }
                 else
                 {
-                    log.Error($"[NP_RemoveSquadStackStateAction] Squad {squad.NetId} StackFsm is null.");
+                    log.Error($"[Squad Behavior][NP_RemoveSquadStackStateAction] Squad {squad.NetId} StackFsm is null.");
                 }
             }
             else
             {
-                log.Error("[NP_RemoveSquadStackStateAction] executed on a non-BaseSquad unit.");
+                log.Error("[Squad Behavior][NP_RemoveSquadStackStateAction] executed on a non-BaseSquad unit.");
             }
         }
     }

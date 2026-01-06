@@ -117,11 +117,11 @@ namespace Ebonor.GamePlay
                 return;
             }
 
-            log.Info($"[SquadStackFsm] SetState: {previousHead?.StateId.ToString() ?? "None"} -> {newHead?.StateId.ToString() ?? "None"} (Force:{force})");
+            log.Info($"[Squad Behavior][SquadStackFsm] SetState: {previousHead?.StateId.ToString() ?? "None"} -> {newHead?.StateId.ToString() ?? "None"} (Force:{force})");
 
             if (previousHead != null && previousHead != newHead)
             {
-                log.Info($"[SquadStackFsm] Exiting Logic State: {previousHead.GetType().Name}");
+                log.Info($"[Squad Behavior][SquadStackFsm] Exiting Logic State: {previousHead.GetType().Name}");
                 previousHead.OnExit();
             }
 
@@ -129,7 +129,7 @@ namespace Ebonor.GamePlay
             {
                 _currentLogicState = newHead;
                 CurrentState = newHead.StateId;
-                log.Info($"[SquadStackFsm] Entering Logic State: {_currentLogicState.GetType().Name}");
+                log.Info($"[Squad Behavior][SquadStackFsm] Entering Logic State: {_currentLogicState.GetType().Name}");
                 _currentLogicState.OnEnter();
             }
             else
@@ -241,11 +241,11 @@ namespace Ebonor.GamePlay
                     return 30;
                 case eBuffBindAnimStackState.NormalAttack:
                     return 25;
-                case eBuffBindAnimStackState.Born:
-                    return 20;
                 case eBuffBindAnimStackState.Chasing:
-                    return 15;
+                    return 20;
                 case eBuffBindAnimStackState.Idle:
+                    return 15;
+                case eBuffBindAnimStackState.Born:
                     return 10;
                 default:
                     return 0;

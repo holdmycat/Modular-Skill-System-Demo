@@ -57,13 +57,13 @@ MonoBehaviour:
     pinnedElements: []
     exposedParameters: []
     stickyNotes: []
-    position: {x: 240, y: 18, z: 0}
+    position: {x: 231, y: 68, z: 0}
     scale: {x: 0.8695652, y: 0.8695652, z: 1}
   nodes:
-  - rid: 1564770063397159126
-  - rid: 1564770063397159127
-  - rid: 1564770063397159128
-  - rid: 1564770063397159129
+  - rid: 1564770092116869876
+  - rid: 1564770092116869877
+  - rid: 1564770092116869878
+  - rid: 1564770092116869879
   edges:
   - GUID: 5c71b972-047f-4e98-91db-7c29dbb07f66
     owner: {fileID: 11400000}
@@ -94,7 +94,7 @@ MonoBehaviour:
   exposedParameters: []
   serializedParameterList: []
   stickyNotes: []
-  position: {x: 240, y: 18, z: 0}
+  position: {x: 231, y: 68, z: 0}
   scale: {x: 0.8695652, y: 0.8695652, z: 1}
   _name: 6490811058451001291
   _configPath: Assets/Resources/AllSquadBehavour
@@ -104,7 +104,7 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 1564770063397159126
+    - rid: 1564770092116869876
       type: {class: NP_RootNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
       data:
         nodeCustomName: 
@@ -124,7 +124,7 @@ MonoBehaviour:
           id: 6490811058451001291
           LinkedIds: 030001004057352d
           NodeDes: 
-    - rid: 1564770063397159127
+    - rid: 1564770092116869877
       type: {class: NP_SequenceNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
       data:
         nodeCustomName: 
@@ -144,7 +144,7 @@ MonoBehaviour:
           id: 3257605837862010883
           LinkedIds: 010001004057352d020001004057352d
           NodeDes: "\u5E8F\u5217\u7EC4\u5408\u5668"
-    - rid: 1564770063397159128
+    - rid: 1564770092116869878
       type: {class: NP_PrintDebugLogNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
       data:
         nodeCustomName: 
@@ -165,8 +165,8 @@ MonoBehaviour:
           LinkedIds: 
           NodeDes: "\u6253\u5370\u65E5\u5FD7"
           NpClassForStoreAction:
-            rid: 1564770063397159130
-    - rid: 1564770063397159129
+            rid: 1564770092116869880
+    - rid: 1564770092116869879
       type: {class: NP_WaitUntilStoppedNode, ns: Plugins.NodeEditor, asm: NodeGraphProcessor.Examples}
       data:
         nodeCustomName: 
@@ -186,7 +186,7 @@ MonoBehaviour:
           id: 3257605837862010882
           LinkedIds: 
           NodeDes: "\u963B\u6B62\u8F6E\u8BE2\uFF0C\u63D0\u9AD8\u6548\u7387"
-    - rid: 1564770063397159130
+    - rid: 1564770092116869880
       type: {class: NP_PrintDebugLog, ns: Ebonor.GamePlay, asm: Ebonor.GamePlay}
       data:
         BelongToUnit: 0

@@ -20,6 +20,8 @@ namespace Ebonor.GamePlay
 
         protected NP_RuntimeTree _npRuntimeTree;
 
+        public Blackboard Blackboard => _npRuntimeTree.GetBlackboard();
+        
 
         /// <summary>
         /// Bind net id and register to network bus. Call right after construction.
@@ -65,9 +67,6 @@ namespace Ebonor.GamePlay
             };
 
             _npRuntimeTree = _npRuntimeTreeFactory.Create(request);
-
-            // Kick off the behaviour tree
-            _npRuntimeTree.Start();
         }
 
         /// <summary>
@@ -87,7 +86,14 @@ namespace Ebonor.GamePlay
             }
             
             _stackFsm = _stackFsmFactory.Create(classType.Value);
+            // Register States directly to the FSM
+            //_stackFsm.RegisterState(new SquadState_NullState(this));
+            _stackFsm.RegisterState(new SquadState_Born(this));
+            _stackFsm.RegisterState(new SquadState_Idle(this));
+            _stackFsm.RegisterState(new SquadState_Death(this));
             log.Info($"[BaseSquad] StackFsm Created for NetId:{NetId} Type:{classType.Value}");
+            
+            _npRuntimeTree.Start();
             return true;
         }
 
@@ -136,9 +142,7 @@ namespace Ebonor.GamePlay
 
             return new Vector3(xOffset, 0, zOffset);
         }
-
-
-
+        
         public virtual void ResetBattleState()
         {
             // Override in subclasses

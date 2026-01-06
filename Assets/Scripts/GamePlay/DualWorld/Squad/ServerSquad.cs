@@ -36,13 +36,11 @@ namespace Ebonor.GamePlay
             
             if (EnsureStackFsm())
             {
-                // Register States directly to the FSM
-                _stackFsm.RegisterState(new SquadState_Born(this));
-                _stackFsm.RegisterState(new SquadState_Idle(this));
-                
-                // Initial State: Born
-                // This calls SetState -> Calls Born.OnEnter
-                _npRuntimeTree.GetBlackboard().Set(ConstData.BB_BUFFBINDANIMSTACKSTATE, eBuffBindAnimStackState.Born);
+                //start to enter born state
+                if (_stackFsm is ISquadFsmHandler fsmHandler)
+                {
+                    fsmHandler.TransitionState(eBuffBindAnimStackState.Born);//server system call
+                }
             }
         }
         
@@ -89,8 +87,8 @@ namespace Ebonor.GamePlay
             _stackFsm.OnStateChanged += OnServerStackStateChanged;
             return true;
         }
-
-        public eventSystem.Action<ServerSquad> OnBornFinished;
+        
+        public event System.Action<ServerSquad> OnBornFinished;
         private bool _hasBornFinished = false;
 
         private void OnServerStackStateChanged(eBuffBindAnimStackState state)

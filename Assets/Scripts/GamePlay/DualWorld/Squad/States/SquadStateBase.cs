@@ -20,6 +20,7 @@ namespace Ebonor.GamePlay
         public virtual void OnEnter()
         {
             log.Info($"[{this.GetType().Name}] OnEnter NetId:{_context.NetId}");
+            _context.Blackboard.Set(ConstData.BB_BUFFBINDANIMSTACKSTATE, StateId);
         }
 
         public virtual void OnUpdate()

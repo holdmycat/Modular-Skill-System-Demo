@@ -1,4 +1,5 @@
 using Ebonor.DataCtrl;
+using Ebonor.Framework;
 
 namespace Ebonor.GamePlay
 {
@@ -11,23 +12,6 @@ namespace Ebonor.GamePlay
         }
         
         public override eBuffBindAnimStackState StateId => eBuffBindAnimStackState.Born;
-
-        //private float _timer;
-        //private const float BORN_DURATION = 1.5f; // Hardcoded simulation duration
-
-        public override void OnEnter()
-        {
-            base.OnEnter();
-            //_timer = 0f;
-            
-            // Sync state to client
-            //_context.SetStackStateOnServer(StateId, true);
-        }
-        
-        public override void OnRemove()
-        {
-            
-        }
         
     }
 }

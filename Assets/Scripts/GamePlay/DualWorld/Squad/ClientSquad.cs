@@ -176,10 +176,15 @@ namespace Ebonor.GamePlay
         private void ApplyRemoteStackState(RpcSquadStackStateChanged rpc)
         {
             // Server is authoritative for class type when constructing FSM on client.
-            if (!TryInitStackFsm(rpc.ClassType)) return;
+            if (!TryInitStackFsm(rpc.ClassType)) 
+                return;
+            
             log.Info($"[ClientSquad] ApplyRemoteStackState NetId:{NetId} State:{rpc.State} ClassType:{rpc.ClassType}");
-            //_stackFsm.SetState(rpc.State, true);
-            _npRuntimeTree.GetBlackboard().Set(ConstData.BB_BUFFBINDANIMSTACKSTATE, rpc.State);
+            
+            if (_stackFsm is ISquadFsmHandler fsmHandler)
+            {
+                fsmHandler.TransitionState(rpc.State);//client system call
+            }
         }
 
         public override void OnRpc(IRpc rpc)

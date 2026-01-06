@@ -5,6 +5,7 @@ using Ebonor.GamePlay;
 using GraphProcessor;
 using UnityEditor;
 using UnityEngine;
+using System.Reflection;
 
 namespace Plugins.NodeEditor
 {
@@ -29,7 +30,7 @@ namespace Plugins.NodeEditor
                 Behavior = behavior;
                 Action = action;
             }
-            public override string ToString() => $"{Tree}/{Behavior}/{Action}";
+            public override string ToString() => $"{GetEnumDisplayName(Tree)}/{GetEnumDisplayName(Behavior)}/{GetEnumDisplayName(Action)}";
         }
 
         private enum TreeType 
@@ -207,7 +208,7 @@ namespace Plugins.NodeEditor
 
             if (_overrideAction)
             {
-                writer.AppendLine("        public override Action GetActionToBeDone()");
+                writer.AppendLine("        public override System.Action GetActionToBeDone()");
                 writer.AppendLine("        {");
                 writer.AppendLine("            Action = OnAction;"); 
                 writer.AppendLine("            return Action;");
@@ -281,6 +282,13 @@ namespace Plugins.NodeEditor
             writer.AppendLine("    }");
             writer.AppendLine("}");
             return writer.ToString();
+        }
+
+        private static string GetEnumDisplayName(Enum value)
+        {
+            var member = value.GetType().GetField(value.ToString());
+            var displayAttr = member?.GetCustomAttribute<InspectorNameAttribute>();
+            return displayAttr?.displayName ?? value.ToString();
         }
 
         private string BuildNodeContent(string nodeClassName, string actionClassName)

@@ -23,6 +23,11 @@ namespace Ebonor.GamePlay
            
         }
 
+        public void OnCommand(ICommand cmd)
+        {
+            
+        }
+
         public virtual void InitAsync()
         {
            

@@ -159,7 +159,7 @@ namespace Ebonor.DataCtrl
         public uint NetId;
     }
 
-    public struct RpcRequestStartBattle : IRpc
+    public struct CmdRequestStartBattle : ICommand
     {
         public uint NetId;
     }

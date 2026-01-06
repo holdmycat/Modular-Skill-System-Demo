@@ -11,5 +11,7 @@ namespace Ebonor.GamePlay
         void TransitionState(eBuffBindAnimStackState newState, bool force = false);
         
         void RemoveState(eBuffBindAnimStackState newState);
+        
+        void ClearStates(bool clearStateMap = false);
     }
 }

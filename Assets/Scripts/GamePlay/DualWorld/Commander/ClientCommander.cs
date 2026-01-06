@@ -111,9 +111,37 @@ namespace Ebonor.GamePlay
                 log.Info($"[ClientCommander] Spawned Squad {squad.NetId}");
                 
                 return;
+                return;
+            }
+            else if (rpc is RpcNotifyClientAllSquadsReady)
+            {
+                log.Info($"[ClientCommander] Received RpcNotifyClientAllSquadsReady! Can Start Battle.");
+                _showStartButton = true;
+                return;
             }
 
             base.OnRpc(rpc);
+        }
+        
+        private bool _showStartButton = false;
+        
+        private void OnGUI()
+        {
+            if (_showStartButton)
+            {
+                 // Center button
+                 float width = 200;
+                 float height = 60;
+                 float x = (UnityEngine.Screen.width - width) / 2;
+                 float y = UnityEngine.Screen.height * 0.2f; // Top 20%
+                 
+                 if (UnityEngine.GUI.Button(new UnityEngine.Rect(x, y, width, height), "Start Battle"))
+                 {
+                     log.Info("[ClientCommander] Start Battle Button Clicked. Sending Command.");
+                     _networkBus.SendCommand(NetId, new CmdRequestStartBattle { NetId = NetId });
+                     _showStartButton = false;
+                 }
+            }
         }
         
         public override async UniTask  ShutdownAsync()

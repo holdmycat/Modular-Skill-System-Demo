@@ -1312,6 +1312,8 @@ namespace GraphProcessor
 
 		public void RegisterCompleteObjectUndo(string name)
 		{
+			// Ensure packed data is up to date so Undo can restore nodes/edges reliably.
+			graph?.OnBeforeSerialize();
 			Undo.RegisterCompleteObjectUndo(graph, name);
 		}
 

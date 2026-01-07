@@ -642,6 +642,9 @@ namespace GraphProcessor
 					node.DisableInternal();
 			}
 
+			// Undo/redo may not rebuild SerializeReference data, so restore from packed data if needed.
+			RestoreNodesFromPackedDataIfNeeded();
+
 			MigrateGraphIfNeeded();
 
 			InitializeGraphElements();

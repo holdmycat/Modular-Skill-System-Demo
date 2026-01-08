@@ -176,6 +176,10 @@ namespace Plugins.NodeEditor
                 newVal = EditorGUILayout.Toggle("Value", cur is bool b && b);
             else if (fieldType == typeof(Vector3))
                 newVal = EditorGUILayout.Vector3Field("Value", cur is Vector3 v ? v : Vector3.zero);
+            else if (fieldType == typeof(eBuffBindAnimStackState))
+                newVal = EditorGUILayout.EnumPopup("Value", cur is eBuffBindAnimStackState e ? e : eBuffBindAnimStackState.NullStateID);
+            else if (fieldType == typeof(eMPNetPosition))
+                newVal = EditorGUILayout.EnumPopup("Value", cur is eMPNetPosition e ? e : eMPNetPosition.eNULL);
             else if (typeof(IList).IsAssignableFrom(fieldType))
                 newVal = DrawListField(fieldType, cur as IList);
             else

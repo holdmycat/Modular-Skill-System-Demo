@@ -1,8 +1,6 @@
 using System;
 using Ebonor.Framework;
 using UnityEngine;
-
-
 namespace Ebonor.DataCtrl
 {
     [System.Serializable]
@@ -56,6 +54,11 @@ namespace Ebonor.DataCtrl
         /// </summary>
         [HideInInspector]
         public NPRuntimeContext Context;
+
+        /// <summary>
+        /// Which network positions are allowed to execute this action.
+        /// </summary>
+        public eMPNetPosition ExecuteOn = eMPNetPosition.eServerOnly | eMPNetPosition.eLocalPlayer | eMPNetPosition.eHost;
         
         public virtual void SetContext(NPRuntimeContext context)
         {
@@ -110,30 +113,67 @@ namespace Ebonor.DataCtrl
             return 0f;
         }
 
+        private bool ShouldExecute()
+        {
+            if (ExecuteOn == eMPNetPosition.eNULL)
+                return false;
+            if (Context == null)
+                return true;
+            return (ExecuteOn & Context.netPosition) != 0;
+        }
+
+        private void ExecuteActionWrapper()
+        {
+            if (!ShouldExecute())
+                return;
+            Action?.Invoke();
+        }
+
+        private bool ExecuteFuncWrapper()
+        {
+            if (!ShouldExecute())
+                return true;
+            return Func == null || Func();
+        }
+
+        private bool ExecuteFunc1Wrapper()
+        {
+            if (!ShouldExecute())
+                return true;
+            return Func1 == null || Func1();
+        }
+
+        private Ebonor.DataCtrl.Action.Result ExecuteFunc2Wrapper(Ebonor.DataCtrl.Action.Request request)
+        {
+            if (!ShouldExecute())
+                return Ebonor.DataCtrl.Action.Result.SUCCESS;
+            return Func2?.Invoke(request) ?? Ebonor.DataCtrl.Action.Result.SUCCESS;
+        }
+
         public Action _CreateNPBehaveAction()
         {
             GetActionToBeDone();
             if (this.Action != null)
             {
-                return new Ebonor.DataCtrl.Action(Action);
+                return new Ebonor.DataCtrl.Action(ExecuteActionWrapper);
             }
 
             GetFuncToBeDone();
             if (this.Func != null)
             {
-                return new Ebonor.DataCtrl.Action(this.Func);
+                return new Ebonor.DataCtrl.Action(ExecuteFuncWrapper);
             }
             
             GetFunc1ToBeDone();
             if (this.Func != null)
             {
-                return new Ebonor.DataCtrl.Action(this.Func1);
+                return new Ebonor.DataCtrl.Action(ExecuteFunc1Wrapper);
             }
 
             GetFunc2ToBeDone();
             if (this.Func2 != null)
             {
-                return new Ebonor.DataCtrl.Action(this.Func2);
+                return new Ebonor.DataCtrl.Action(ExecuteFunc2Wrapper);
             }
 
             //log.Info($"{this.GetType()} _CreateNPBehaveAction失败，因为没有找到可以绑定的委托");

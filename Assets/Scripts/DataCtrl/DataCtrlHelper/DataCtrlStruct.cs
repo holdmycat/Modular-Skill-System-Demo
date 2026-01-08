@@ -52,79 +52,79 @@ namespace Ebonor.DataCtrl
         // [InspectorName("Teleport")]
         // Teleport = 1<<14, // Directly teleport the target to a position
 
-        [InspectorName("Frozen")]
-        Frozen = 1 << 13, // Frozen
-        
-        /// <summary>
-        /// Knock up
-        /// </summary>
-        [InspectorName("Knock Up")]
-        KnockUp = 1 << 12, // High priority
-
-        /// <summary>
-        /// Repulse
-        /// </summary>
-        [InspectorName("Repulse")]
-        Repulse = 1 << 11, // Medium priority
-
-        // [InspectorName("Drag")]
-        // Drag = 1<<10, // Drag target along a specific trajectory
-        
-        [InspectorName("Pull")]
-        Pull = 1 << 9, // Pull target to caster position
-        
-        /// <summary>
-        /// Stun
-        /// </summary>
-        [InspectorName("Stunned")]
-        Stunned = 1 << 8, // Medium priority
-
-        /// <summary>
-        /// Hurt
-        /// </summary>
-        [InspectorName("Hurt")]
-        GetHurt = 1 << 7, // Medium priority
-
-        /// <summary>
-        /// Disarm
-        /// </summary>
-        [InspectorName("Disarmed")]
-        Disarmed = 1 << 6, // Medium priority
-        
-        // [InspectorName("Request Cast Skill")]
-        // RequestCastSkill = 1<<5,  // Low priority
-        
+        // [InspectorName("Frozen")]
+        // Frozen = 1 << 13, // Frozen
+        //
+        // /// <summary>
+        // /// Knock up
+        // /// </summary>
+        // [InspectorName("Knock Up")]
+        // KnockUp = 1 << 12, // High priority
+        //
+        // /// <summary>
+        // /// Repulse
+        // /// </summary>
+        // [InspectorName("Repulse")]
+        // Repulse = 1 << 11, // Medium priority
+        //
+        // // [InspectorName("Drag")]
+        // // Drag = 1<<10, // Drag target along a specific trajectory
+        //
+        // [InspectorName("Pull")]
+        // Pull = 1 << 9, // Pull target to caster position
+        //
+        // /// <summary>
+        // /// Stun
+        // /// </summary>
+        // [InspectorName("Stunned")]
+        // Stunned = 1 << 8, // Medium priority
+        //
+        // /// <summary>
+        // /// Hurt
+        // /// </summary>
+        // [InspectorName("Hurt")]
+        // GetHurt = 1 << 7, // Medium priority
+        //
+        // /// <summary>
+        // /// Disarm
+        // /// </summary>
+        // [InspectorName("Disarmed")]
+        // Disarmed = 1 << 6, // Medium priority
+        //
+        // // [InspectorName("Request Cast Skill")]
+        // // RequestCastSkill = 1<<5,  // Low priority
+        //
         /// <summary>
         /// Cast skill
         /// </summary>
         [InspectorName("Cast Skill")]
-        CastSkill = 1 << 4, // Low priority
+        CastSkill = 1 << 5, // Low priority
 
         /// <summary>
         /// Normal attack
         /// </summary>
         [InspectorName("Normal Attack")]
-        NormalAttack = 1 << 3, // Low priority
+        NormalAttack = 1 << 4, // Low priority
 
         /// <summary>
         /// Move
         /// </summary>
         [InspectorName("Move")]
-        Chasing = 1 << 2, // Low priority
+        Chasing = 1 << 3, // Low priority
 
         /// <summary>
         /// Idle: can move and play movement animation
         /// </summary>
         [InspectorName("Idle")]
-        Idle = 1 << 1, // Low priority
+        Idle = 1 << 2, // Low priority
 
         /// <summary>
         /// Birth
         /// </summary>
-        [InspectorName("Birth")]
-        Birth = 1 << 0, // Lowest priority
+        [InspectorName("Born")]
+        Born = 1 << 1, // Lowest priority
         
-        NullStateID = 0,
+        NullStateID = 1,
     }
     
     /// <summary>

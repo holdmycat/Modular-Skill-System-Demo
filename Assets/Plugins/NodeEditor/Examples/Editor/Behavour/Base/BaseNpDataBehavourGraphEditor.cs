@@ -22,9 +22,10 @@ namespace Plugins.NodeEditor
             typeof(NP_BBValue_Float), 
             typeof(NP_BBValue_String), 
             typeof(NP_BBValue_Vector3),
-            typeof(NP_BBValue_List_Long)
+            typeof(NP_BBValue_List_Long),
+            typeof(NP_BBValue_MPNetPosition)
         };
-        private string[] _availableTypeNames = { "Bool", "Int", "Float", "String", "Vector3", "List<Long>" };
+        private string[] _availableTypeNames = { "Bool", "Int", "Float", "String", "Vector3", "List<Long>", "MPNetPosition" };
 
         // Helper inputs for ID
         private string _newIdKey = "";

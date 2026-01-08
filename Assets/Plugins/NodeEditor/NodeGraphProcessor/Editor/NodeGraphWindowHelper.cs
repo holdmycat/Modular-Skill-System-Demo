@@ -13,8 +13,15 @@ namespace GraphProcessor
         {
             if (AllNodeGraphWindows.TryGetValue(path, out var universalGraphWindow))
             {
-                universalGraphWindow.Focus();
-                return universalGraphWindow as T;
+                if (universalGraphWindow == null)
+                {
+                    AllNodeGraphWindows.Remove(path);
+                }
+                else
+                {
+                    universalGraphWindow.Focus();
+                    return universalGraphWindow as T;
+                }
             }
 
 #if UNITY_2020_1_OR_NEWER
@@ -37,17 +44,28 @@ namespace GraphProcessor
 
         public static void AddNodeGraphWindow(BaseGraph owner, BaseGraphWindow universalGraphWindow)
         {
-            AllNodeGraphWindows[AssetDatabase.GetAssetPath(owner)] = universalGraphWindow;
+            var path = AssetDatabase.GetAssetPath(owner);
+            if (string.IsNullOrEmpty(path))
+                return;
+
+            AllNodeGraphWindows[path] = universalGraphWindow;
         }
         
         public static void RemoveNodeGraphWindow(string path)
         {
+            if (string.IsNullOrEmpty(path))
+                return;
+
             AllNodeGraphWindows.Remove(path);
         }
         
         public static void RemoveNodeGraphWindow(BaseGraph owner)
         {
-            AllNodeGraphWindows.Remove(AssetDatabase.GetAssetPath(owner));
+            var path = AssetDatabase.GetAssetPath(owner);
+            if (string.IsNullOrEmpty(path))
+                return;
+
+            AllNodeGraphWindows.Remove(path);
         }
     }
 }

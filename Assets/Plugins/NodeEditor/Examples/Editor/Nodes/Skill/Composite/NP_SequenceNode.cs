@@ -3,7 +3,7 @@ using Ebonor.DataCtrl;
 
 namespace Plugins.NodeEditor
 {
-    [NodeMenuItem("SlgSquad行为树/Composite/Sequence", typeof (SlgSquadBehavourGraph))]
+    [NodeMenuItem("SLG 小队/组合/Sequence", typeof (SlgSquadBehavourGraph))]
     public class NP_SequenceNode: NP_CompositeNodeBase
     {
         public override string name => "序列结点";

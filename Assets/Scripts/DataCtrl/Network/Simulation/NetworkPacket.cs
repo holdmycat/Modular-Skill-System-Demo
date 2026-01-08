@@ -15,6 +15,7 @@ namespace Ebonor.DataCtrl
         eServerOnly = 1 << 0,
         eLocalPlayer = 1 << 1,
         eHost = 1 << 2,
+        eEverything = eServerOnly + eLocalPlayer + eHost,
     }
     
     public enum FactionType
@@ -152,6 +153,16 @@ namespace Ebonor.DataCtrl
         public uint NetId;
         public UnitClassType ClassType;
         public eBuffBindAnimStackState State;
+    }
+    
+    public struct RpcNotifyClientAllSquadsReady : IRpc
+    {
+        public uint NetId;
+    }
+
+    public struct CmdRequestStartBattle : ICommand
+    {
+        public uint NetId;
     }
     
     /// <summary>

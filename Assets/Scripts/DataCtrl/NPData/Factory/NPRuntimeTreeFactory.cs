@@ -94,6 +94,9 @@ namespace Ebonor.DataCtrl
                 _resolver);
 
             BuildTree(runtimeTree, data);
+            
+            // Ensure runtime net position is reflected into the blackboard for ExecuteOn/BB conditions.
+            runtimeTree.GetBlackboard().Set(ConstData.BB_NETPOSITION, request.NetPosition);
 
             return runtimeTree;
         }

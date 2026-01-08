@@ -16,15 +16,9 @@ namespace Ebonor.Framework
         #endregion
          
         #region blackboard consts
-        public const string BB_ISGETBIRTH = "IsGetBirth";
-        public const string BB_ISCASTSKILL = "IsCastSkill";
-        public const string BB_ISBUFFRUNNING = "IsBuffRunning";
-        public const string BB_ISCHASETARGET = "IsChaseTarget";
-        public const string BB_ISIDLE = "IsIdle";
-        public const string BB_ISBOSSATTACK = "IsBossAttack";
-        public const string BB_ISTARGETWITHINNPCATTACKRADIUS= "IsTargetWithinNpcAttackRadius";
-        public const string BB_ISTreeStoped = "IsTreeStoped";
-        public const string BB_ISGETDEAD = "IsGetDead";
+       
+        public const string BB_BUFFBINDANIMSTACKSTATE = "BuffBindAnimStackState";
+        public const string BB_NETPOSITION = "NetPosition";
         
         public const string BELONGTOSKILLID = "BelongToSkillId";
         

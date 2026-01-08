@@ -10,9 +10,9 @@ namespace Plugins.NodeEditor
         public override bool needsInspector => true;
 
         /// <summary>
-        /// For compatibility with BaseGraphView inspector logic (expects UnitAttributesData_GetNodeData).
+        /// For compatibility with BaseGraphView inspector logic (expects NP_GetNodeDataBase).
         /// </summary>
-        public virtual SlgUnitAttributesNodeData UnitAttributesData_GetNodeData()
+        public virtual SlgUnitAttributesNodeData NP_GetNodeDataBase()
         {
             return SlgAttributesData_GetNodeData();
         }

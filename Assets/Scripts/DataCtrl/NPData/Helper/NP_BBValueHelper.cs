@@ -53,6 +53,12 @@ namespace Ebonor.DataCtrl
                 case "System.Numerics.Vector3":
                     blackboard.Set(key, (anpBbValue as NP_BBValue_Vector3).GetValue());
                     break;
+                case "Ebonor.DataCtrl.eBuffBindAnimStackState":
+                    blackboard.Set(key, (anpBbValue as NP_BBValue_BuffBindAnimStackState).GetValue());
+                    break;
+                case "Ebonor.DataCtrl.eMPNetPosition":
+                    blackboard.Set(key, (anpBbValue as NP_BBValue_MPNetPosition).GetValue());
+                    break;
             }
         }
 
@@ -97,6 +103,12 @@ namespace Ebonor.DataCtrl
                     break;
                 case "System.Numerics.Vector3":
                     anpBbValue = new NP_BBValue_Vector3() {Value = (Vector3) boxedValue};
+                    break;
+                case "Ebonor.DataCtrl.eBuffBindAnimStackState":
+                    anpBbValue = new NP_BBValue_BuffBindAnimStackState() {Value = (Ebonor.DataCtrl.eBuffBindAnimStackState) boxedValue};
+                    break;
+                case "Ebonor.DataCtrl.eMPNetPosition":
+                    anpBbValue = new NP_BBValue_MPNetPosition() {Value = (Ebonor.DataCtrl.eMPNetPosition) boxedValue};
                     break;
             }
             
@@ -165,6 +177,10 @@ namespace Ebonor.DataCtrl
                             return npBbValue == rhs as NP_BBValue_Long;
                         case NP_BBValue_List_Long npBbValue:
                             return npBbValue == rhs as NP_BBValue_List_Long;
+                        case NP_BBValue_BuffBindAnimStackState npBbValue:
+                            return npBbValue == rhs as NP_BBValue_BuffBindAnimStackState;
+                        case NP_BBValue_MPNetPosition npBbValue:
+                            return npBbValue == rhs as NP_BBValue_MPNetPosition;
                         default:
                             log.Error($"Type {lhs.GetType()} is not registered as NP_BBValue");
                             return false;
@@ -190,6 +206,10 @@ namespace Ebonor.DataCtrl
                             return npBbValue != rhs as NP_BBValue_List_Long;
                         case NP_BBValue_List_Byte npBbValue:
                             return npBbValue != rhs as NP_BBValue_List_Byte;
+                        case NP_BBValue_BuffBindAnimStackState npBbValue:
+                            return npBbValue != rhs as NP_BBValue_BuffBindAnimStackState;
+                        case NP_BBValue_MPNetPosition npBbValue:
+                            return npBbValue != rhs as NP_BBValue_MPNetPosition;
                         default:
                             log.Error($"Type {lhs.GetType()} is not registered as NP_BBValue");
                             return false;
@@ -214,6 +234,10 @@ namespace Ebonor.DataCtrl
                             return (rhs as NP_BBValue_Vector3) >= npBbValue;
                         case NP_BBValue_List_Long npBbValue:
                             return (rhs as NP_BBValue_List_Long) >= npBbValue;
+                        case NP_BBValue_BuffBindAnimStackState npBbValue:
+                            return (rhs as NP_BBValue_BuffBindAnimStackState) >= npBbValue;
+                        case NP_BBValue_MPNetPosition npBbValue:
+                            return (rhs as NP_BBValue_MPNetPosition) >= npBbValue;
                         default:
                             log.Error($"Type {lhs.GetType()} is not registered as NP_BBValue");
                             return false;
@@ -240,6 +264,10 @@ namespace Ebonor.DataCtrl
                             return (rhs as NP_BBValue_Vector3) > npBbValue;
                         case NP_BBValue_List_Long npBbValue:
                             return (rhs as NP_BBValue_List_Long) > npBbValue;
+                        case NP_BBValue_BuffBindAnimStackState npBbValue:
+                            return (rhs as NP_BBValue_BuffBindAnimStackState) > npBbValue;
+                        case NP_BBValue_MPNetPosition npBbValue:
+                            return (rhs as NP_BBValue_MPNetPosition) > npBbValue;
                         default:
                             log.Error($"Type {lhs.GetType()} is not registered as NP_BBValue");
                             return false;
@@ -263,6 +291,10 @@ namespace Ebonor.DataCtrl
                             return (rhs as NP_BBValue_Long) <= npBbValue;
                         case NP_BBValue_Vector3 npBbValue:
                             return (rhs as NP_BBValue_Vector3) <= npBbValue;
+                        case NP_BBValue_BuffBindAnimStackState npBbValue:
+                            return (rhs as NP_BBValue_BuffBindAnimStackState) <= npBbValue;
+                        case NP_BBValue_MPNetPosition npBbValue:
+                            return (rhs as NP_BBValue_MPNetPosition) <= npBbValue;
                         default:
                             log.Error($"Type {lhs.GetType()} is not registered as NP_BBValue");
                             return false;
@@ -282,6 +314,10 @@ namespace Ebonor.DataCtrl
                             return (rhs as NP_BBValue_Long) < npBbValue;
                         case NP_BBValue_Vector3 npBbValue:
                             return (rhs as NP_BBValue_Vector3) < npBbValue;
+                        case NP_BBValue_BuffBindAnimStackState npBbValue:
+                            return (rhs as NP_BBValue_BuffBindAnimStackState) < npBbValue;
+                        case NP_BBValue_MPNetPosition npBbValue:
+                            return (rhs as NP_BBValue_MPNetPosition) < npBbValue;
                         default:
                             log.Error($"Type {lhs.GetType()} is not registered as NP_BBValue");
                             return false;

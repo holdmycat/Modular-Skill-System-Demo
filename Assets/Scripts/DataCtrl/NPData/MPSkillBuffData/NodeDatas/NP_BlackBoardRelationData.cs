@@ -27,8 +27,8 @@ namespace Ebonor.DataCtrl
 
         [BsonIgnore]
         public bool WriteOrCompareToBB;
-        
-        [SerializeReference]
+
+        [SerializeReference] 
         public ANP_BBValue NP_BBValue;
 
 #if UNITY_EDITOR
@@ -85,16 +85,16 @@ namespace Ebonor.DataCtrl
         public void SetBlackBoardValue(Blackboard blackboard)
         {
             
-#if UNITY_EDITOR
-            if (BBKey.Equals(ConstData.BB_ISIDLE))
-            {
-                if (NP_BBValue is NP_BBValue_Bool valueBool && valueBool.Value == false)
-                {
-                    log.DebugFormat("SetBlackBoardValue, BBKey:{0}, BBValue:{1}", BBKey, valueBool.Value);
-                }
-               
-            }
-#endif
+// #if UNITY_EDITOR
+//             if (BBKey.Equals(ConstData.BB_ISIDLE))
+//             {
+//                 if (NP_BBValue is NP_BBValue_Bool valueBool && valueBool.Value == false)
+//                 {
+//                     log.DebugFormat("SetBlackBoardValue, BBKey:{0}, BBValue:{1}", BBKey, valueBool.Value);
+//                 }
+//                
+//             }
+// #endif
             NP_BBValueHelper.SetTargetBlackboardUseANP_BBValue(this.NP_BBValue, blackboard, BBKey);
         }
 

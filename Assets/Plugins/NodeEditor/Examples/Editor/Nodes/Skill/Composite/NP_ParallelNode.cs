@@ -2,7 +2,7 @@ using GraphProcessor;
 using Ebonor.DataCtrl;
 namespace Plugins.NodeEditor
 {
-    [NodeMenuItem("SlgSquad行为树/Composite/Parallel", typeof (SlgSquadBehavourGraph))]
+    [NodeMenuItem("SLG 小队/组合/Parallel", typeof (SlgSquadBehavourGraph))]
     public class NP_ParallelNode: NP_CompositeNodeBase
     {
         public override string name => "并行节点";

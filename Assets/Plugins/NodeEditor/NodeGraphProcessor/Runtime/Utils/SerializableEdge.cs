@@ -54,6 +54,8 @@ using System.Collections.Generic;
 			edge.outputPort = outputPort;
 			edge.inputPortIdentifier = inputPort.portData.identifier;
 			edge.outputPortIdentifier = outputPort.portData.identifier;
+			edge.inputNodeGUID = inputPort.owner.GUID;
+			edge.outputNodeGUID = outputPort.owner.GUID;
 
 			return edge;
 		}

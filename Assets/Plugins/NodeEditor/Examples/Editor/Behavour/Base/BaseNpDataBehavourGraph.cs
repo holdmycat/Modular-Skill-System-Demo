@@ -203,42 +203,6 @@ namespace Plugins.NodeEditor
         
         protected readonly StringBuilder mStrBld = new StringBuilder();
         
-        /// <summary>
-        /// 生成新的节点key和value
-        /// 动态加载buffnode节点id可能重复，根据技能节点出现次数对id进行递增
-        /// </summary>
-        /// <param name="ids">当前技能书所有的id</param>
-        /// <param name="currentKey"></param>
-        /// <param name="currentValue"></param>
-        /// <returns></returns>
-        protected string GetNextAvailableKey(Dictionary<string, long> ids, ref string currentKey, ref long currentValue)
-        {
-            if (!ids.ContainsKey(currentKey))
-            {
-                return currentKey;
-            }
-
-            currentValue = IncrementDefaultValue(currentValue);
-            currentKey = currentValue.ToString();//GenerateNewKey(currentKey, currentValue);
-            return GetNextAvailableKey(ids, ref currentKey, ref currentValue);
-            
-            long IncrementDefaultValue(long defaultValue)
-            {
-                // Extract SkillTailSeqId from defaultValue
-                long defaultValue1 = defaultValue / 10000;
-                long skillTailSeqId = defaultValue % 10000;
-
-                // Increment defaultValue1 by 1
-                defaultValue1 += 1;
-
-                // Combine the new SkillTailSeqId back to form defaultValue1
-                long newDefaultValue1 = defaultValue1 * 10000 + skillTailSeqId;
-
-                return newDefaultValue1;
-            }
-        }
-        
-        
         // 准备所有节点的数据
         protected void PrepareAllNodeData()
         {

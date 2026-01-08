@@ -2,7 +2,7 @@ using GraphProcessor;
 using Ebonor.DataCtrl;
 namespace Plugins.NodeEditor
 {
-    [NodeMenuItem("SlgSquad行为树/Task/Time/Wait", typeof (SlgSquadBehavourGraph))]
+    [NodeMenuItem("SLG 小队/任务/时间/Wait", typeof (SlgSquadBehavourGraph))]
     public class NP_WaitNode: NP_TaskNodeBase
     {
         public override string name => "等待节点";

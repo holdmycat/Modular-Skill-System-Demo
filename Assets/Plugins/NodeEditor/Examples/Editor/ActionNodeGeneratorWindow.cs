@@ -5,6 +5,7 @@ using Ebonor.GamePlay;
 using GraphProcessor;
 using UnityEditor;
 using UnityEngine;
+using System.Reflection;
 
 namespace Plugins.NodeEditor
 {
@@ -29,12 +30,42 @@ namespace Plugins.NodeEditor
                 Behavior = behavior;
                 Action = action;
             }
-            public override string ToString() => $"{Tree}/{Behavior}/{Action}";
+            public override string ToString() => $"{GetEnumDisplayName(Tree)}/{GetEnumDisplayName(Behavior)}/{GetEnumDisplayName(Action)}";
         }
 
-        private enum TreeType { SlgSquad }
-        private enum BehaviorCategory { Task }
-        private enum ActionCategory { NpBehave, System, Transform, Camera, Audio, Collider, Time, Buff }
+        private enum TreeType 
+        { 
+            [InspectorName("SLG 小队")]
+            SlgSquad 
+        }
+        
+        private enum BehaviorCategory 
+        { 
+            [InspectorName("任务")]
+            Task 
+        }
+        
+        private enum ActionCategory 
+        { 
+            [InspectorName("NpBehave 核心")]
+            NpBehave, 
+            [InspectorName("系统")]
+            System, 
+            [InspectorName("变换 (Transform)")]
+            Transform, 
+            [InspectorName("相机")]
+            Camera, 
+            [InspectorName("音频")]
+            Audio, 
+            [InspectorName("碰撞")]
+            Collider, 
+            [InspectorName("时间")]
+            Time, 
+            [InspectorName("Buff")]
+            Buff, 
+            [InspectorName("Squad 状态机")]
+            SquadFsm 
+        }
 
         private enum ActionNamespace
         {
@@ -177,7 +208,7 @@ namespace Plugins.NodeEditor
 
             if (_overrideAction)
             {
-                writer.AppendLine("        public override Action GetActionToBeDone()");
+                writer.AppendLine("        public override System.Action GetActionToBeDone()");
                 writer.AppendLine("        {");
                 writer.AppendLine("            Action = OnAction;"); 
                 writer.AppendLine("            return Action;");
@@ -251,6 +282,13 @@ namespace Plugins.NodeEditor
             writer.AppendLine("    }");
             writer.AppendLine("}");
             return writer.ToString();
+        }
+
+        private static string GetEnumDisplayName(Enum value)
+        {
+            var member = value.GetType().GetField(value.ToString());
+            var displayAttr = member?.GetCustomAttribute<InspectorNameAttribute>();
+            return displayAttr?.displayName ?? value.ToString();
         }
 
         private string BuildNodeContent(string nodeClassName, string actionClassName)

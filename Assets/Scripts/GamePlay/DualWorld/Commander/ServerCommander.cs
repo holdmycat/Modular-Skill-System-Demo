@@ -72,6 +72,8 @@ namespace Ebonor.GamePlay
                 }.Serialize();
                  
                 SpawnChild(_networkBus, baseSquad, squadPayload, NetworkPrefabType.Squad, true);
+                
+                baseSquad.OnBornFinished += OnSquadBornFinished;
             }
             
             // Recalculate positions
@@ -96,6 +98,65 @@ namespace Ebonor.GamePlay
         {
             _numericComponent = _numericFactory.CreateCommander(_netId);
             _contextData.SetNumericComponent(_numericComponent as CommanderNumericComponent);
+        }
+        
+        private int _readySquadCount = 0;
+
+        public override void OnRpc(IRpc rpc)
+        {
+            base.OnRpc(rpc);
+        }
+
+        public override void OnCommand(ICommand cmd)
+        {
+            if (cmd is CmdRequestStartBattle)
+            {
+                log.Info($"[ServerCommander] Received CmdRequestStartBattle from Client {NetId}");
+                StartBattle();
+                return;
+            }
+            base.OnCommand(cmd);
+        }
+
+        private void OnSquadBornFinished(ServerSquad squad)
+        {
+            _readySquadCount++;
+            log.Info($"[ServerCommander] Squad {squad.NetId} Ready. Progress: {_readySquadCount}/{_spawnedSquads.Count}");
+            
+            if (_readySquadCount >= _spawnedSquads.Count)
+            {
+                log.Info($"[ServerCommander] All Squads Ready! Notifying Client {NetId}");
+                _networkBus.SendRpc(NetId, new RpcNotifyClientAllSquadsReady { NetId = NetId });
+            }
+        }
+
+        /// <summary>
+        /// Starts the battle logic for all squads.
+        /// </summary>
+        public void StartBattle()
+        {
+            log.Info("[ServerCommander] StartBattle");
+            foreach (var squad in _spawnedSquads)
+            {
+                squad.OnBattleStart();
+            }
+        }
+
+        /// <summary>
+        /// Resets the battle state for all squads (In-Place Reset).
+        /// </summary>
+        public void RestartBattle()
+        {
+            log.Info("[ServerCommander] RestartBattle");
+            
+            // 1. Reset Squads
+            foreach (var squad in _spawnedSquads)
+            {
+                squad.ResetBattleState();
+            }
+            
+            // 2. Reset Positions (Force re-layout to spawn points)
+            RecalculateSquadPositions();
         }
         
         public class Factory : PlaceholderFactory<ServerCommander> 

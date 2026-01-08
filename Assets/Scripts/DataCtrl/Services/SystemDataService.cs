@@ -42,6 +42,7 @@ namespace Ebonor.DataCtrl
             if (!BsonClassMap.IsClassMapRegistered(typeof(NP_BBValue_Long))) BsonClassMap.LookupClassMap(typeof(NP_BBValue_Long));
             if (!BsonClassMap.IsClassMapRegistered(typeof(NP_BBValue_List_Long))) BsonClassMap.LookupClassMap(typeof(NP_BBValue_List_Long));
             if (!BsonClassMap.IsClassMapRegistered(typeof(NP_BBValue_List_Byte))) BsonClassMap.LookupClassMap(typeof(NP_BBValue_List_Byte));
+            if (!BsonClassMap.IsClassMapRegistered(typeof(NP_BBValue_MPNetPosition))) BsonClassMap.LookupClassMap(typeof(NP_BBValue_MPNetPosition));
 
             // Custom Serializers (guarded to avoid duplicate registration)
             RegisterSerializerOnce(typeof(System.Numerics.Vector2), new StructBsonSerialize<System.Numerics.Vector2>());

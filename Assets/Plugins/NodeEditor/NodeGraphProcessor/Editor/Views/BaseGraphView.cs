@@ -943,11 +943,11 @@ namespace GraphProcessor
 			if ((nodeInspector.hideFlags & HideFlags.NotEditable) != 0)
 				nodeInspector.hideFlags = HideFlags.HideAndDontSave;
 
-			// Populate currentData when exactly one node exposes UnitAttributesData_GetNodeData
+			// Populate currentData when exactly one node exposes NP_GetNodeDataBase
 			if (selectedNodeViews.Count == 1)
 			{
 				var node = selectedNodeViews[0].nodeTarget;
-				var dataGetter = node.GetType().GetMethod("UnitAttributesData_GetNodeData", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
+				var dataGetter = node.GetType().GetMethod("NP_GetNodeDataBase", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.NonPublic);
 				if (dataGetter != null)
 				{
 					nodeInspector.currentData = dataGetter.Invoke(node, null);
@@ -961,6 +961,9 @@ namespace GraphProcessor
 			{
 				nodeInspector.currentData = null;
 			}
+
+            // Persist selection/data so SerializedObject can display it
+            UnityEditor.EditorUtility.SetDirty(nodeInspector);
 
 			// Show the inspector object itself (SerializeReference drawer will render selectedNodeData / currentData)
 			Selection.activeObject = nodeInspector.selectedNodeData.Count > 0 ? nodeInspector : null;
@@ -1309,6 +1312,8 @@ namespace GraphProcessor
 
 		public void RegisterCompleteObjectUndo(string name)
 		{
+			// Ensure packed data is up to date so Undo can restore nodes/edges reliably.
+			graph?.OnBeforeSerialize();
 			Undo.RegisterCompleteObjectUndo(graph, name);
 		}
 

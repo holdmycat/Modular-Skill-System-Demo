@@ -127,6 +127,7 @@ namespace Ebonor.DataCtrl
         /// </summary>
         public void Start()
         {
+            log.Info($"[Squad Behavior][BaseSquad] StackFsm Start for NetId:{BelongToUnit}");
             this.m_RootNode.Start();
         }
         

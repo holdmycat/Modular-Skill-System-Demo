@@ -57,6 +57,9 @@ namespace Ebonor.Manager
             
             // Bind Context (Data Layer)
             Container.Bind<ShowcaseContext>().AsSingle();
+
+            // Battle State (Data Layer)
+            Container.BindInterfacesAndSelfTo<BattleStateManager>().AsSingle();
             
             // Bind ViewModels (Logic Layer)
             Container.Bind<ShowcaseViewModel>().AsTransient();

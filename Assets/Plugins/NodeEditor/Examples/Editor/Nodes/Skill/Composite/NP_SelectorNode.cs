@@ -2,7 +2,7 @@ using GraphProcessor;
 using Ebonor.DataCtrl;
 namespace Plugins.NodeEditor
 {
-    [NodeMenuItem("SlgSquad行为树/Composite/Selector", typeof (SlgSquadBehavourGraph))]
+    [NodeMenuItem("SLG 小队/组合/Selector", typeof (SlgSquadBehavourGraph))]
     public class NP_SelectorNode: NP_CompositeNodeBase
     {
         public override string name => "选择结点";

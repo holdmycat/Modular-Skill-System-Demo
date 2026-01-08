@@ -19,7 +19,7 @@ namespace Ebonor.GamePlay
             GlobalGameConfig globalGameConfig,
             CommanderContextData contextData)
         {
-            log.Info($"[ServerSquad] Construction");
+            log.Info($"[Squad Behavior][ServerSquad] Construction");
             
             _characterDataRepository = characterDataRepository;
             _networkBus = networkBus;
@@ -29,18 +29,53 @@ namespace Ebonor.GamePlay
             _globalGameConfig = globalGameConfig;
             _stackFsmFactory = stackFsmFactory;
         }
-        
+
         public override void InitAsync()
         {
-            log.Info($"[ServerSquad] InitAsync");
+            log.Info($"[Squad Behavior][ServerSquad] InitAsync");
             
             if (EnsureStackFsm())
             {
-                // Birth -> Idle
-                //_stackFsm.BootstrapBirthThenIdle();
+                //start to enter born state
+                if (_stackFsm is ISquadFsmHandler fsmHandler)
+                {
+                    fsmHandler.TransitionState(eBuffBindAnimStackState.Born);//server system call
+                }
             }
         }
         
+        public override void ResetBattleState()
+        {
+            log.Info($"[Squad Behavior][ServerSquad] ResetBattleState NetId:{NetId}");
+            
+            // 1. Reset Numeric Data
+            if (_numericComponent is SquadNumericComponent squadNumeric)
+            {
+                squadNumeric.ResetData();
+            }
+            
+            // 2. Reset FSM to Born
+            if (EnsureStackFsm())
+            {
+                //_stackFsm.SetState(eBuffBindAnimStackState.Born, true); // Logic driven by FSM
+            }
+            
+            // 3. Reset AI (Stop logic)
+            // ... (AI reset logic placeholder)
+        }
+
+        public override void OnBattleStart()
+        {
+            log.Info($"[Squad Behavior][ServerSquad] OnBattleStart NetId:{NetId}");
+            // Trigger AI to Start / Resume / Allow Chase
+            // For this demo: "Chase" logic starts when Battle Starts.
+            // If the behavior tree has a condition "IsBattleStarted", we set it here.
+            
+            // Since we haven't implemented the Behaviour tree modification yet, 
+            // we assume the "Idle" state in FSM handles the visual, and the Tree handles the logic.
+            // When Battle Starts, we might just need to ensure the FSM allows transition to Chase.
+        }
+
         private bool EnsureStackFsm()
         {
             if (!TryInitStackFsm())
@@ -52,6 +87,9 @@ namespace Ebonor.GamePlay
             _stackFsm.OnStateChanged += OnServerStackStateChanged;
             return true;
         }
+        
+        public event System.Action<ServerSquad> OnBornFinished;
+        private bool _hasBornFinished = false;
 
         private void OnServerStackStateChanged(eBuffBindAnimStackState state)
         {
@@ -63,16 +101,16 @@ namespace Ebonor.GamePlay
                 ClassType = _stackFsm.ClassType,
                 State = state
             });
+
+            // Check if Born finished (transition to Idle)
+            if (!_hasBornFinished && state == eBuffBindAnimStackState.Idle)
+            {
+                _hasBornFinished = true;
+                log.Info($"[Squad Behavior][ServerSquad] Born Finished (Idle Reached) NetId:{NetId}");
+                OnBornFinished?.Invoke(this);
+            }
         }
 
-        /// <summary>
-        /// Server-only entry to drive stack state changes.
-        /// </summary>
-        public void SetStackStateOnServer(eBuffBindAnimStackState state, bool force = false)
-        {
-            if (!EnsureStackFsm()) return;
-            _stackFsm.SetState(state, force);
-        }
         
         protected override void InitializeNumeric()
         {
@@ -81,17 +119,24 @@ namespace Ebonor.GamePlay
         
         public override async UniTask ShutdownAsync()
         {
-            log.Info("[ServerSquad] ShutdownAsync");
+            log.Info("[Squad Behavior][ServerSquad] ShutdownAsync");
             await base.ShutdownAsync();
+            _stackFsm?.Dispose();
             _networkBus.UnRegisterSpawns(_netId, this);
         }
         
+        public override void OnUpdate()
+        {
+            base.OnUpdate();
+            _stackFsm?.OnUpdate();
+        }
+
         public class Factory : PlaceholderFactory<ServerSquad> 
         {
             public Factory()
             {
-                log.Info($"[ServerSquad.Factory] Construction");
-            }
+                log.Info($"[Squad Behavior][ServerSquad.Factory] Construction");
         }
     }
+}
 }

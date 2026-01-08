@@ -22,7 +22,7 @@ namespace Ebonor.GamePlay
             GlobalGameConfig globalGameConfig,
             CommanderContextData contextData, ShowcaseContext showcaseContext)
         {
-            log.Info($"[ClientSquad] Construction");
+            log.Info($"[Squad Behavior][ClientSquad] Construction");
             
             _networkBus = networkBus;
             _characterDataRepository = characterDataRepository;
@@ -45,14 +45,14 @@ namespace Ebonor.GamePlay
             _debugRoot = root;
             if (_debugVisual != null)
             {
-                log.Info($"[ClientSquad] Reparenting Visual {_debugVisual.name} to Root {root.name}");
+                log.Info($"[Squad Behavior][ClientSquad] Reparenting Visual {_debugVisual.name} to Root {root.name}");
                 _debugVisual.transform.SetParent(_debugRoot);
             }
         }
 
         public override async void InitAsync()
         {
-            log.Info($"[ClientSquad] InitAsync");
+            log.Info($"[Squad Behavior][ClientSquad] InitAsync");
             
 #if UNITY_EDITOR
             if (_globalGameConfig != null && _globalGameConfig.IsDebugVisualsEnabled && _globalGameConfig.ShowSquadVisual)
@@ -60,7 +60,7 @@ namespace Ebonor.GamePlay
                 var prefab = await UnityEngine.Resources.LoadAsync<UnityEngine.GameObject>("Models/DebugSquad") as UnityEngine.GameObject;
                 if (prefab != null)
                 {
-                   log.Info($"[ClientSquad] Instantiating Debug Visual for NetId {NetId}");
+                   log.Info($"[Squad Behavior][ClientSquad] Instantiating Debug Visual for NetId {NetId}");
                    _debugVisual = UnityEngine.Object.Instantiate(prefab);
                    if (_debugRoot != null)
                    {
@@ -71,11 +71,11 @@ namespace Ebonor.GamePlay
                    
                    string unitName = _unitAttr != null ? _unitAttr.UnitName : "Unknown";
                    _debugVisual.name = $"Squad_{_faction}_{unitName}_{NetId}";
-                   log.Info($"[ClientSquad] Debug Visual Created: {_debugVisual.name}");
+                   log.Info($"[Squad Behavior][ClientSquad] Debug Visual Created: {_debugVisual.name}");
                 }
                 else
                 {
-                    log.Warn("[ClientSquad] Failed to load DebugSquad prefab.");
+                    log.Warn("[Squad Behavior][ClientSquad] Failed to load DebugSquad prefab.");
                 }
             }
 #endif
@@ -90,19 +90,19 @@ namespace Ebonor.GamePlay
         {
             if (_unitAttr == null)
             {
-                log.Warn($"[ClientSquad] UnitAttr is null, cannot load soldiers.");
+                log.Warn($"[Squad Behavior][ClientSquad] UnitAttr is null, cannot load soldiers.");
                 return;
             }
 
             string avatar = _unitAttr.UnitAvatar;
-            log.Info($"[ClientSquad] Loading Soldier Model: {avatar} for Unit: {_unitAttr.UnitName}");
+            log.Info($"[Squad Behavior][ClientSquad] Loading Soldier Model: {avatar} for Unit: {_unitAttr.UnitName}");
 
             var avatarName = avatar + "_" + _faction;
             
             var prefab = await _resourceLoader.LoadAsset<UnityEngine.GameObject>(avatarName, ResourceAssetType.HeroModelPrefab);
             if (prefab == null)
             {
-                log.Error($"[ClientSquad] Failed to load soldier model: {avatarName}");
+                log.Error($"[Squad Behavior][ClientSquad] Failed to load soldier model: {avatarName}");
                 return;
             }
 
@@ -117,7 +117,7 @@ namespace Ebonor.GamePlay
                 soldier.transform.localPosition = GetSoldierLocalPosition(i);
                 soldier.transform.localRotation = UnityEngine.Quaternion.identity;
             }
-            log.Info($"[ClientSquad] Loaded {count} soldiers.");
+            log.Info($"[Squad Behavior][ClientSquad] Loaded {count} soldiers.");
         }
 
         protected override void InitializeNumeric()
@@ -133,11 +133,11 @@ namespace Ebonor.GamePlay
         
         public override async UniTask ShutdownAsync()
         {
-            log.Info($"[ClientSquad] ShutdownAsync");
+            log.Info($"[Squad Behavior][ClientSquad] ShutdownAsync");
             
             if (_debugVisual != null)
             {
-                log.Info($"[ClientSquad] Destroying Debug Visual {_debugVisual.name}");
+                log.Info($"[Squad Behavior][ClientSquad] Destroying Debug Visual {_debugVisual.name}");
                 UnityEngine.Object.Destroy(_debugVisual);
                 _debugVisual = null;
             }
@@ -147,6 +147,8 @@ namespace Ebonor.GamePlay
                 UnityEngine.Object.Destroy(_visualsRoot);
                 _visualsRoot = null;
             }
+            
+            _stackFsm?.Dispose();
 
             await base.ShutdownAsync();
         }
@@ -174,8 +176,22 @@ namespace Ebonor.GamePlay
         private void ApplyRemoteStackState(RpcSquadStackStateChanged rpc)
         {
             // Server is authoritative for class type when constructing FSM on client.
-            if (!TryInitStackFsm(rpc.ClassType)) return;
-            _stackFsm.SetState(rpc.State, true);
+            if (!TryInitStackFsm(rpc.ClassType)) 
+                return;
+            
+            log.Info($"[Squad Behavior][ClientSquad] ApplyRemoteStackState NetId:{NetId} State:{rpc.State} ClassType:{rpc.ClassType}");
+            
+            // if (_stackFsm is ISquadFsmHandler fsmHandler &&
+            //     (rpc.State == eBuffBindAnimStackState.Born || rpc.State == eBuffBindAnimStackState.Die))
+            if (_stackFsm is ISquadFsmHandler fsmHandler)
+            {
+                fsmHandler.TransitionState(rpc.State, true);//client system call
+            }
+
+            if (rpc.State == eBuffBindAnimStackState.Idle)
+            {
+                DataEventManager.OnValueChange(new ClientSquadIdleEvent { NetId = NetId });
+            }
         }
 
         public override void OnRpc(IRpc rpc)
@@ -193,7 +209,7 @@ namespace Ebonor.GamePlay
         {
             public Factory()
             {
-                log.Info($"[ClientSquad.Factory] Construction");
+                log.Info($"[Squad Behavior][ClientSquad.Factory] Construction");
             }
         }
         

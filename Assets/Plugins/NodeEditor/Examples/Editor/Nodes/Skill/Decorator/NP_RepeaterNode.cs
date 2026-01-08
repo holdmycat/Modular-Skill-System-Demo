@@ -3,7 +3,7 @@ using Ebonor.DataCtrl;
 
 namespace Plugins.NodeEditor
 {
-    [NodeMenuItem("SlgSquad行为树/Decorator/Repeater", typeof (SlgSquadBehavourGraph))]
+    [NodeMenuItem("SLG 小队/装饰/Repeater", typeof (SlgSquadBehavourGraph))]
     public class NP_RepeaterNode: NP_DecoratorNodeBase
     {
         public override string name => "重复执行结点";

@@ -65,6 +65,11 @@ namespace Ebonor.DataCtrl
             log.Warn($"[NetworkBehaviour] Unhandled RPC: {rpc?.GetType().Name} on NetId:{NetId}");
         }
 
+        public virtual void OnCommand(ICommand cmd)
+        {
+            log.Warn($"[NetworkBehaviour] Unhandled Command: {cmd?.GetType().Name} on NetId:{NetId}");
+        }
+
         /// <summary>
         /// Safely spawns a child network object by ensuring the RPC is sent BEFORE server-side initialization.
         /// This prevents race conditions where the child tries to spawn sub-children before the client knows about the parent.

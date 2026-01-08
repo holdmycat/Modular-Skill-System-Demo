@@ -3,7 +3,7 @@ using Ebonor.DataCtrl;
 
 namespace Plugins.NodeEditor
 {
-    [NodeMenuItem("SlgSquad行为树/Task/NpBehave/修改黑板值", typeof(SlgSquadBehavourGraph))]
+    [NodeMenuItem("SLG 小队/任务/NpBehave 核心/修改黑板值", typeof(SlgSquadBehavourGraph))]
     public class NP_ChangeBlackValueActionNode : NP_TaskNodeBase
     {
         public override string name => "修改黑板值";

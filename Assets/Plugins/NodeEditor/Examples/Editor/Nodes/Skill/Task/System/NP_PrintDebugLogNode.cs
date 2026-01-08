@@ -4,7 +4,7 @@ using Ebonor.GamePlay;
 
 namespace Plugins.NodeEditor
 {
-    [NodeMenuItem("SlgSquad行为树/Task/System/打印日志", typeof(SlgSquadBehavourGraph))]
+    [NodeMenuItem("SLG 小队/任务/系统/打印日志", typeof(SlgSquadBehavourGraph))]
     public class NP_PrintDebugLogNode : NP_TaskNodeBase
     {
         public override string name => "打印日志";

@@ -15,6 +15,7 @@ namespace Ebonor.DataCtrl
         eServerOnly = 1 << 0,
         eLocalPlayer = 1 << 1,
         eHost = 1 << 2,
+        eEverything = eServerOnly + eLocalPlayer + eHost,
     }
     
     public enum FactionType

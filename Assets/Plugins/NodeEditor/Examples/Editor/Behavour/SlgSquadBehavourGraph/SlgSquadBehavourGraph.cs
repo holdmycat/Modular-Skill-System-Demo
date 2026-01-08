@@ -116,6 +116,11 @@ namespace Plugins.NodeEditor
                 {
                     Value = eBuffBindAnimStackState.NullStateID,
                 });
+
+                mgr.BBValues.TryAdd(ConstData.BB_NETPOSITION, new NP_BBValue_MPNetPosition()
+                {
+                    Value = eMPNetPosition.eEverything,
+                });
             }
 #endif
             

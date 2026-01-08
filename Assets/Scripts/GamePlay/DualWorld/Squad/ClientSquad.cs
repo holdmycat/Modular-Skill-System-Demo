@@ -181,10 +181,16 @@ namespace Ebonor.GamePlay
             
             log.Info($"[Squad Behavior][ClientSquad] ApplyRemoteStackState NetId:{NetId} State:{rpc.State} ClassType:{rpc.ClassType}");
             
-            if (_stackFsm is ISquadFsmHandler fsmHandler &&
-                (rpc.State == eBuffBindAnimStackState.Born || rpc.State == eBuffBindAnimStackState.Die))
+            // if (_stackFsm is ISquadFsmHandler fsmHandler &&
+            //     (rpc.State == eBuffBindAnimStackState.Born || rpc.State == eBuffBindAnimStackState.Die))
+            if (_stackFsm is ISquadFsmHandler fsmHandler)
             {
                 fsmHandler.TransitionState(rpc.State, true);//client system call
+            }
+
+            if (rpc.State == eBuffBindAnimStackState.Idle)
+            {
+                DataEventManager.OnValueChange(new ClientSquadIdleEvent { NetId = NetId });
             }
         }
 

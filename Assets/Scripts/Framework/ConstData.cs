@@ -18,6 +18,7 @@ namespace Ebonor.Framework
         #region blackboard consts
        
         public const string BB_BUFFBINDANIMSTACKSTATE = "BuffBindAnimStackState";
+        public const string BB_NETPOSITION = "NetPosition";
         
         public const string BELONGTOSKILLID = "BelongToSkillId";
         

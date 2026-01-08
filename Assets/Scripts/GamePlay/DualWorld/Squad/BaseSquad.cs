@@ -89,7 +89,6 @@ namespace Ebonor.GamePlay
             
             _stackFsm = _stackFsmFactory.Create(classType.Value);
             // Register States directly to the FSM
-            //_stackFsm.RegisterState(new SquadState_NullState(this));
             _stackFsm.RegisterState(new SquadState_Born(this));
             _stackFsm.RegisterState(new SquadState_Idle(this));
             _stackFsm.RegisterState(new SquadState_Death(this));

@@ -118,6 +118,13 @@ namespace Plugins.NodeEditor
                         data.NPBalckBoardRelationData.BBKey = bbKeys[0];
                     }
 
+                    var bbValueContainer = new VisualElement();
+                    bbValueContainer.style.marginTop = 2;
+                    RebuildBbValueUI(bbValueContainer, data.NPBalckBoardRelationData.NP_BBValue, () =>
+                    {
+                        owner.graph.NotifyNodeChanged(nodeTarget);
+                    });
+
                     var popup = new PopupField<string>("BB Key", bbKeys, data.NPBalckBoardRelationData.BBKey);
                     popup.RegisterValueChangedCallback(evt =>
                     {
@@ -126,10 +133,16 @@ namespace Plugins.NodeEditor
                         {
                             data.NPBalckBoardRelationData.NP_BBValue = bbVal.DeepCopy();
                             data.NPBalckBoardRelationData.NP_BBValueType = data.NPBalckBoardRelationData.NP_BBValue.NP_BBValueType.ToString();
+                            RebuildBbValueUI(bbValueContainer, data.NPBalckBoardRelationData.NP_BBValue, () =>
+                            {
+                                owner.graph.NotifyNodeChanged(nodeTarget);
+                            });
                         }
                         owner.graph.NotifyNodeChanged(nodeTarget);
                     });
                     controlsContainer.Add(popup);
+
+                    controlsContainer.Add(bbValueContainer);
                 }
                 else
                 {
@@ -159,6 +172,139 @@ namespace Plugins.NodeEditor
                 });
                 controlsContainer.Add(stopField);
             }
+        }
+
+        private static void RebuildBbValueUI(VisualElement container, ANP_BBValue bbValue, System.Action onChanged)
+        {
+            container.Clear();
+            if (bbValue == null)
+            {
+                container.Add(new Label("BB Value: (null)"));
+                return;
+            }
+
+            var valueField = bbValue.GetType().GetField("Value", System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Instance);
+            if (valueField == null)
+            {
+                container.Add(new Label("BB Value: (uneditable)"));
+                return;
+            }
+
+            object cur = valueField.GetValue(bbValue);
+            var fieldType = valueField.FieldType;
+
+            if (fieldType == typeof(string))
+            {
+                var field = new TextField("BB Value") { value = cur as string ?? string.Empty };
+                field.RegisterValueChangedCallback(evt =>
+                {
+                    valueField.SetValue(bbValue, evt.newValue);
+                    onChanged?.Invoke();
+                });
+                container.Add(field);
+                return;
+            }
+
+            if (fieldType == typeof(int))
+            {
+                var field = new IntegerField("BB Value") { value = cur is int i ? i : 0 };
+                field.RegisterValueChangedCallback(evt =>
+                {
+                    valueField.SetValue(bbValue, evt.newValue);
+                    onChanged?.Invoke();
+                });
+                container.Add(field);
+                return;
+            }
+
+            if (fieldType == typeof(long))
+            {
+                var field = new LongField("BB Value") { value = cur is long l ? l : 0L };
+                field.RegisterValueChangedCallback(evt =>
+                {
+                    valueField.SetValue(bbValue, evt.newValue);
+                    onChanged?.Invoke();
+                });
+                container.Add(field);
+                return;
+            }
+
+            if (fieldType == typeof(uint))
+            {
+                var field = new LongField("BB Value") { value = cur is uint ui ? ui : 0 };
+                field.RegisterValueChangedCallback(evt =>
+                {
+                    long val = evt.newValue;
+                    if (val < 0) val = 0;
+                    if (val > uint.MaxValue) val = uint.MaxValue;
+                    valueField.SetValue(bbValue, (uint)val);
+                    onChanged?.Invoke();
+                });
+                container.Add(field);
+                return;
+            }
+
+            if (fieldType == typeof(float))
+            {
+                var field = new FloatField("BB Value") { value = cur is float f ? f : 0f };
+                field.RegisterValueChangedCallback(evt =>
+                {
+                    valueField.SetValue(bbValue, evt.newValue);
+                    onChanged?.Invoke();
+                });
+                container.Add(field);
+                return;
+            }
+
+            if (fieldType == typeof(bool))
+            {
+                var field = new Toggle("BB Value") { value = cur is bool b && b };
+                field.RegisterValueChangedCallback(evt =>
+                {
+                    valueField.SetValue(bbValue, evt.newValue);
+                    onChanged?.Invoke();
+                });
+                container.Add(field);
+                return;
+            }
+
+            if (fieldType == typeof(UnityEngine.Vector3))
+            {
+                var field = new Vector3Field("BB Value") { value = cur is UnityEngine.Vector3 v ? v : UnityEngine.Vector3.zero };
+                field.RegisterValueChangedCallback(evt =>
+                {
+                    valueField.SetValue(bbValue, evt.newValue);
+                    onChanged?.Invoke();
+                });
+                container.Add(field);
+                return;
+            }
+
+            if (fieldType == typeof(eBuffBindAnimStackState))
+            {
+                var field = new EnumField("BB Value", cur is eBuffBindAnimStackState e ? e : eBuffBindAnimStackState.NullStateID);
+                field.RegisterValueChangedCallback(evt =>
+                {
+                    valueField.SetValue(bbValue, (eBuffBindAnimStackState)evt.newValue);
+                    onChanged?.Invoke();
+                });
+                container.Add(field);
+                return;
+            }
+
+            if (fieldType == typeof(eMPNetPosition))
+            {
+                var field = new EnumField("BB Value", cur is eMPNetPosition e ? e : eMPNetPosition.eNULL);
+                field.RegisterValueChangedCallback(evt =>
+                {
+                    valueField.SetValue(bbValue, (eMPNetPosition)evt.newValue);
+                    onChanged?.Invoke();
+                });
+                container.Add(field);
+                return;
+            }
+
+            container.Add(new Label($"BB Value: (unsupported type: {fieldType.Name})"));
         }
     }
 

@@ -23,7 +23,7 @@ namespace Ebonor.GamePlay
             #if UNITY_EDITOR
             if (string.IsNullOrEmpty(DebugContent))
                 return;
-            log.DebugFormat("[{0}][StarterId:{1}]-打印日志：{2}", BelongtoRuntimeTree.Context.netPosition, Context.StarterId, DebugContent);
+            log.DebugFormat("[{0}][{1}][StarterId:{2}]-打印日志：{3}", ExecuteOn, BelongtoRuntimeTree.Context.netPosition, Context.StarterId, DebugContent);
             #endif
         }
     }

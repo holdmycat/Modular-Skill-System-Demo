@@ -15,6 +15,7 @@ namespace Ebonor.GamePlay
             ClientSquad.Factory squadFactory,
             CommanderContextData contextData,
             ICharacterDataRepository characterDataRepository,
+            BattleStateManager battleStateManager,
             ShowcaseContext showcaseContext) // Inject ShowcaseContext
         {
             log.Info($"[ClientCommander] Construction");
@@ -24,11 +25,13 @@ namespace Ebonor.GamePlay
             _characterDataRepository = characterDataRepository;
             _dataLoaderService = dataLoaderService;
             _contextData = contextData;
+            _battleStateManager = battleStateManager;
             _showcaseContext = showcaseContext;
         }
         
         private UnityEngine.GameObject _debugVisual;
         private UnityEngine.Transform _debugRoot;
+        private BattleStateManager _battleStateManager;
 
         public void SetDebugVisualRoot(UnityEngine.Transform root)
         {
@@ -138,6 +141,8 @@ namespace Ebonor.GamePlay
                  if (UnityEngine.GUI.Button(new UnityEngine.Rect(x, y, width, height), "Start Battle"))
                  {
                      log.Info("[ClientCommander] Start Battle Button Clicked. Sending Command.");
+                     _battleStateManager?.ResetTime();
+                     _battleStateManager?.SetState(BattleState.Running);
                      _networkBus.SendCommand(NetId, new CmdRequestStartBattle { NetId = NetId });
                      _showStartButton = false;
                  }

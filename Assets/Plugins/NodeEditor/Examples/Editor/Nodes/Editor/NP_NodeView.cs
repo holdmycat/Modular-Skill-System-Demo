@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using Ebonor.DataCtrl;
 using GraphProcessor;
+using UnityEditor;
+using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -41,6 +43,27 @@ namespace Plugins.NodeEditor
             textField.style.marginBottom = 4;
             textField.RegisterValueChangedCallback((changedDes) => { nodeDataBase.NodeDes = changedDes.newValue; });
             controlsContainer.Add(textField);
+
+            if (nodeDataBase is NP_ActionNodeData actionNodeData && actionNodeData.NpClassForStoreAction != null)
+            {
+                var executeField = new EnumFlagsField("执行端", actionNodeData.NpClassForStoreAction.ExecuteOn);
+                executeField.RegisterValueChangedCallback(evt =>
+                {
+                    actionNodeData.NpClassForStoreAction.ExecuteOn = (eMPNetPosition)evt.newValue;
+                    owner.graph.NotifyNodeChanged(nodeTarget);
+                });
+                controlsContainer.Add(executeField);
+            }
+            else if (nodeDataBase is INPExecuteOnData execData)
+            {
+                var executeField = new EnumFlagsField("执行端", execData.ExecuteOn);
+                executeField.RegisterValueChangedCallback(evt =>
+                {
+                    execData.ExecuteOn = (eMPNetPosition)evt.newValue;
+                    owner.graph.NotifyNodeChanged(nodeTarget);
+                });
+                controlsContainer.Add(executeField);
+            }
         }
     }
 }

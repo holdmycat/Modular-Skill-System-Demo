@@ -94,6 +94,11 @@ namespace Ebonor.GamePlay
             return _spawnedSquads;
         }
 
+        public int GetExpectedSquadCount()
+        {
+            return _bootstrapInfo?.LegionConfig?.SquadIds?.Count ?? _spawnedSquads.Count;
+        }
+
         protected void RecalculateSquadPositions()
         {
             if (_spawnedSquads == null || _spawnedSquads.Count == 0) return;

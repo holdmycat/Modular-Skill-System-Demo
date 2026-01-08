@@ -105,6 +105,8 @@ namespace Ebonor.GamePlay
         
         private INetworkBus _networkBus;
         private readonly List<BaseCommander> _listBaseCommander = new List<BaseCommander>();
+        private readonly HashSet<uint> _idleSquadIds = new HashSet<uint>();
+        private bool _allSquadsIdleBroadcasted;
         private ClientCommander.Factory _factory; 
         private Clock _clock; 
         
@@ -130,6 +132,7 @@ namespace Ebonor.GamePlay
             // Register listener for the Bootstrap Channel (NetId 1)
             //_networkBus.RegisterRpcListener(NetId, OnRpcReceived);
             _networkBus.OnTickSync += Tick;
+            DataEventManager.OnAttach<ClientSquadIdleEvent>(OnClientSquadIdle);
             
 #if UNITY_EDITOR
             if (_globalGameConfig != null && _globalGameConfig.IsDebugVisualsEnabled)
@@ -163,6 +166,9 @@ namespace Ebonor.GamePlay
         
         public override async UniTask ShutdownAsync()
         {
+            DataEventManager.OnDetach<ClientSquadIdleEvent>(OnClientSquadIdle);
+            _idleSquadIds.Clear();
+            _allSquadsIdleBroadcasted = false;
             foreach (var variable in _listBaseCommander)
             {
                 await variable.ShutdownAsync();
@@ -173,6 +179,58 @@ namespace Ebonor.GamePlay
             //     _networkBus.UnregisterRpcListener(NetId, OnRpcReceived, false);
             
             log.Info("[ClientRoomManager] ShutdownAsync");
+        }
+
+        private void OnClientSquadIdle(ClientSquadIdleEvent evt)
+        {
+            if (_allSquadsIdleBroadcasted)
+            {
+                return;
+            }
+
+            var totalExpected = 0;
+            var totalSpawned = 0;
+            var belongsToRoom = false;
+            foreach (var commander in _listBaseCommander)
+            {
+                if (commander == null)
+                {
+                    continue;
+                }
+
+                totalExpected += commander.GetExpectedSquadCount();
+                var squads = commander.GetSpawnedSquads();
+                if (squads == null)
+                {
+                    continue;
+                }
+
+                totalSpawned += squads.Count;
+                foreach (var squad in squads)
+                {
+                    if (squad != null && squad.NetId == evt.NetId)
+                    {
+                        belongsToRoom = true;
+                    }
+                }
+            }
+
+            if (!belongsToRoom || totalExpected <= 0 || totalSpawned < totalExpected)
+            {
+                return;
+            }
+
+            _idleSquadIds.Add(evt.NetId);
+            if (_idleSquadIds.Count >= totalExpected)
+            {
+                _allSquadsIdleBroadcasted = true;
+                DataEventManager.OnValueChange(new ClientAllSquadsIdleEvent
+                {
+                    CommanderNetId = NetId,
+                    SquadCount = totalExpected
+                });
+                log.Info($"[Squad Behavior][ClientRoomManager] All squads idle. Room:{NetId} Count:{totalExpected}");
+            }
         }
 
         private void OnDrawGizmos()
